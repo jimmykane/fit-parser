@@ -78,6 +78,8 @@ export default class FitParser {
     const records = [];
     const events = [];
     const hrv = [];
+    const hr_zone = [];
+    const power_zone = [];
     const devices = [];
     const applications = [];
     const fieldDescriptions = [];
@@ -133,6 +135,12 @@ export default class FitParser {
         case 'hrv':
           hrv.push(message);
           break;
+        case 'hr_zone':
+          hr_zone.push(message);
+          break;
+        case 'power_zone':
+          power_zone.push(message);
+          break;          
         case 'record':
           if (!startDate) {
             startDate = message.timestamp;
@@ -203,6 +211,8 @@ export default class FitParser {
       fitObj.activity.sessions = sessions;
       fitObj.activity.events = events;
       fitObj.activity.hrv = hrv;
+      fitObj.hr_zone = hr_zone;
+      fitObj.power_zone = power_zone;
       fitObj.activity.device_infos = devices;
       fitObj.activity.developer_data_ids = applications;
       fitObj.activity.field_descriptions = fieldDescriptions;
@@ -218,6 +228,8 @@ export default class FitParser {
       fitObj.developer_data_ids = applications;
       fitObj.field_descriptions = fieldDescriptions;
       fitObj.hrv = hrv;
+      fitObj.hr_zone = hr_zone;
+      fitObj.power_zone = power_zone;
       fitObj.dive_gases = dive_gases;
       fitObj.course_points = course_points;
       fitObj.sports = sports;
