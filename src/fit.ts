@@ -1,19 +1,11 @@
-// some unit conversion constants
+import type { FitOptions, MesgNum } from './fit_types.js'
+
 const metersInOneKilometer = 1000
 const secondsInOneHour = 3600
 // according to https://en.wikipedia.org/wiki/Mile
 const metersInOneMile = 1609.344
 const centiBarsInOneBar = 100
 const psiInOneBar = 14.5037738
-
-export type SpeedUnits = 'm/s' | 'mph' | 'km/h'
-export type LengthUnits = 'm' | 'mi' | 'km'
-export type TemperatureUnits = '°C' | 'kelvin' | 'fahrenheit'
-export type PressureUnits = 'cbar' | 'bar' | 'psi'
-
-export type MessageName = 'file_id' | 'file_creator' | 'timestamp_correlation' | 'o_hr_settings' | 'software' | 'slave_device' | 'capabilities' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'connectivity' | 'watchface_settings' | 'ohr_settings' | 'time_in_zone' | 'zones_target' | 'sport' | 'hr_zone' | 'speed_zone' | 'cadence_zone' | 'power_zone' | 'met_zone' | 'dive_settings' | 'dive_alarm' | 'dive_gas' | 'goal' | 'activity' | 'session' | 'lap' | 'length' | 'record' | 'event' | 'device_info' | 'device_aux_battery_info' | 'training_file' | 'weather_conditions' | 'weather_alert' | 'gps_metadata' | 'camera_event' | 'gyroscope_data' | 'accelerometer_data' | 'magnetometer_data' | 'barometer_data' | 'three_d_sensor_calibration' | 'one_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'set' | 'jump' | 'course' | 'course_point' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_lap' | 'segment_file' | 'workout' | 'workout_session' | 'workout_step' | 'exercise_title' | 'schedule' | 'totals' | 'weight_scale' | 'blood_pressure' | 'monitoring_info' | 'monitoring' | 'monitoring_hr_data' | 'hr' | 'memo_glob' | 'stress_level' | 'dive_summary' | 'hrv' | 'beat_intervals' | 'respiration_rate' | 'spo2_data' | 'sleep_level' | 'pad' | 'field_description' | 'developer_data_id' | 'definition' | 'tank_update' | 'tank_summary'
-
-export type Unit<T extends string> = Record<T, { multiplier: number, offset: number }>
 
 export interface FieldDefinition {
   type: string | number
@@ -36,21 +28,14 @@ export interface MessageObject {
   offset: number
   units: string
 }
-interface Message {
-  name: MessageName
+export interface Message {
+  name: MesgNum
   [fieldId: number]: MessageObject
-}
-
-export interface FitTypeOptions {
-  speedUnits: Unit<SpeedUnits>
-  lengthUnits: Unit<LengthUnits>
-  temperatureUnits: Unit<TemperatureUnits>
-  pressureUnits: Unit<PressureUnits>
 }
 
 export interface FitType {
   scConst: number
-  options: FitTypeOptions
+  options: FitOptions
   messages: {
     [messageId: number]: Message
   }

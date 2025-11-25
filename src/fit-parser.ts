@@ -1,13 +1,28 @@
 import type { Buffer } from 'node:buffer'
 import type {
   ParsedActivity,
-  ParsedElement,
+  ParsedCoursePoint,
+  ParsedDeveloperDataId,
+  ParsedDeviceInfo,
+  ParsedDiveGas,
+  ParsedEvent,
+  ParsedFieldDescription,
+  ParsedFileId,
   ParsedFit,
   ParsedHrv,
+  ParsedHrZone,
   ParsedLap,
+  ParsedLength,
+  ParsedMonitoring,
+  ParsedMonitoringInfo,
+  ParsedPowerZone,
+  ParsedRecord,
   ParsedSession,
-  ParsedTimestampableElement,
-} from './types.js'
+  ParsedSport,
+  ParsedStressLevel,
+  ParsedTankSummary,
+  ParsedTankUpdate,
+} from './fit_types.js'
 import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
 import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
 
@@ -119,25 +134,25 @@ export default class FitParser {
 
     let sessions: ParsedSession[] = []
     let laps: ParsedLap[] = []
-    const records: ParsedTimestampableElement[] = []
-    const events: ParsedTimestampableElement[] = []
-    const hr_zone: ParsedElement[] = []
-    const power_zone: ParsedElement[] = []
+    const records: ParsedRecord[] = []
+    const events: ParsedEvent[] = []
+    const hr_zone: ParsedHrZone[] = []
+    const power_zone: ParsedPowerZone[] = []
     const hrv: ParsedHrv[] = []
-    const devices: ParsedTimestampableElement[] = []
-    const applications: ParsedElement[] = []
-    const fieldDescriptions: ParsedElement[] = []
-    const dive_gases: ParsedTimestampableElement[] = []
-    const course_points: ParsedElement[] = []
-    const sports: ParsedElement[] = []
-    const monitors: ParsedElement[] = []
-    const stress: ParsedElement[] = []
-    const definitions: ParsedElement[] = []
-    const file_ids: ParsedElement[] = []
-    const monitor_info: ParsedElement[] = []
-    const lengths: ParsedTimestampableElement[] = []
-    const tank_updates: ParsedElement[] = []
-    const tank_summaries: ParsedElement[] = []
+    const device_infos: ParsedDeviceInfo[] = []
+    const applications: ParsedDeveloperDataId[] = []
+    const fieldDescriptions: ParsedFieldDescription[] = []
+    const dive_gases: ParsedDiveGas[] = []
+    const course_points: ParsedCoursePoint[] = []
+    const sports: ParsedSport[] = []
+    const monitors: ParsedMonitoring[] = []
+    const stress: ParsedStressLevel[] = []
+    const definitions: unknown[] = []
+    const file_ids: ParsedFileId[] = []
+    const monitor_info: ParsedMonitoringInfo[] = []
+    const lengths: ParsedLength[] = []
+    const tank_updates: ParsedTankUpdate[] = []
+    const tank_summaries: ParsedTankSummary[] = []
 
     let loopIndex = headerLength
     const messageTypes: any[] = []
@@ -204,7 +219,7 @@ export default class FitParser {
           fieldDescriptions.push(message)
           break
         case 'device_info':
-          devices.push(message)
+          device_infos.push(message)
           break
         case 'developer_data_id':
           applications.push(message)
@@ -254,47 +269,46 @@ export default class FitParser {
       }
     }
 
+    fitObj.hr_zone = hr_zone
+    fitObj.power_zone = power_zone
+    fitObj.dive_gases = dive_gases
+    fitObj.course_points = course_points
+    fitObj.sports = sports
+    fitObj.monitors = monitors
+    fitObj.stress = stress
+    fitObj.file_ids = file_ids
+    fitObj.monitor_info = monitor_info
+    fitObj.definitions = definitions
+    fitObj.tank_updates = tank_updates
+    fitObj.tank_summaries = tank_summaries
+
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)
       laps = mapDataIntoLap(laps, 'lengths', lengths)
       sessions = mapDataIntoSession(sessions, laps)
 
-      fitObj.hr_zone = hr_zone
-      fitObj.power_zone = power_zone
       fitObj.activity = {
-        ...(fitObj.activity ?? {}) as ParsedActivity, // ugly but we assume the activity was parsed correctly with all other members correctly
+        ...(fitObj.activity ?? {} as ParsedActivity), // ugly but we assume the activity was parsed correctly with all other members correctly
         sessions,
         events,
         hrv,
-        device_infos: devices,
+        device_infos,
         developer_data_ids: applications,
         field_descriptions: fieldDescriptions,
         sports,
       }
     }
+
     if (!isModeCascade) {
       fitObj.sessions = sessions
       fitObj.laps = laps
       fitObj.lengths = lengths
       fitObj.records = records
       fitObj.events = events
-      fitObj.device_infos = devices
+      fitObj.device_infos = device_infos
       fitObj.developer_data_ids = applications
       fitObj.field_descriptions = fieldDescriptions
       fitObj.hrv = hrv
-      fitObj.hr_zone = hr_zone
-      fitObj.power_zone = power_zone
-      fitObj.dive_gases = dive_gases
-      fitObj.course_points = course_points
-      fitObj.sports = sports
-      fitObj.devices = devices
-      fitObj.monitors = monitors
-      fitObj.stress = stress
-      fitObj.file_ids = file_ids
-      fitObj.monitor_info = monitor_info
-      fitObj.definitions = definitions
-      fitObj.tank_updates = tank_updates
-      fitObj.tank_summaries = tank_summaries
     }
 
     callback(undefined, fitObj as ParsedFit)

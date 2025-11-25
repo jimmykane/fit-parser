@@ -1,4 +1,4 @@
-import type { ParsedLap, ParsedSession } from './types.js'
+import type { ParsedLap, ParsedSession } from './fit_types.js'
 
 export function mapDataIntoLap(
   inputLaps: ParsedLap[],
