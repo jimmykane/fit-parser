@@ -3,6 +3,7 @@
   "type": "module",
   "private": false,
   "description": "Parse your .FIT files easily, directly from JS (Garmin, Polar, Suunto)",
+  "version": "2.0.0",
   "author": {
     "name": "jimmykane"
   },
@@ -51,7 +52,6 @@
     "example-output-summary-last": "node examples/parse.js examples/triathlon_summary_last.fit > examples/output_summary_last.json",
     "pre-examples": "npm run build",
     "examples": "npm run example-output && npm run example-output-tank && npm run example-output-summary-first && npm run example-output-summary-last",
-
     "test": "vitest",
     "lint": "eslint .",
     "fmt": "eslint --fix .",
