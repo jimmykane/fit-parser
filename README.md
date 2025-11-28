@@ -1,8 +1,7 @@
 # fit-file-parser
 
 > Parse your .FIT files easily, directly from JS.
-> Written in ES6. (Hope to change)
-
+> Written in Typescript
 
 ## Install
 
@@ -14,16 +13,18 @@ $ npm install fit-file-parser --save
 
 See in [examples](./examples) folder:
 
+### using callbacks
+
 ```javascript
-// Require the module
-var FitParser = require('./../dist/fit-file-parser.js').default;
+import fs from 'node:fs/promises'
+import FitParser from 'fit-file-parser'
 
-// Read a .FIT file
-var fs = require('fs');
-fs.readFile('./example.fit', function (err, content) {
-
+fs.readFile('./example.fit', (err, content) => {
   // Create a FitParser instance (options argument is optional)
-  var fitParser = new FitParser({
+  if (err) {
+    console.error(err)
+  }
+  const fitParser = new FitParser({
     force: true,
     speedUnit: 'km/h',
     lengthUnit: 'km',
@@ -31,28 +32,39 @@ fs.readFile('./example.fit', function (err, content) {
     pressureUnit: 'bar', // accept bar, cbar and psi (default is bar)
     elapsedRecordField: true,
     mode: 'cascade',
-  });
-  
+  })
+
   // Parse your file
-  fitParser.parse(content, function (error, data) {
-  
+  fitParser.parse(content, (error, data) => {
     // Handle result of parse method
     if (error) {
-      console.log(error);
-    } else {
-      console.log(JSON.stringify(data));
+      console.error(error)
     }
-    
-  });
-  
-});
+    else {
+      console.log(JSON.stringify(data))
+    }
+  })
+})
 ```
 
-## API Documentation
+### using async/await
+
+```javascript
+import fs from 'node:fs/promises'
+import FitParser from 'fit-file-parser'
+
+const buffer = await fs.readFile('./example.fit')
+const fitObject = await fitParser.parseAsync(buffer)
+```
+
+## API Documentation
+
 ### new FitParser(Object _options_)
+
 Needed to create a new instance. _options_ is optional, and is used to customize the returned object.
 
 Allowed properties :
+
 - `mode`: String
   - `cascade`: Returned object is organized as a tree, eg. each lap contains a `records` fields, that is an array of its records (**default**)
   - `list`: Returned object is organized as lists of sessions, laps, records, etc..., without parent-child relation
@@ -77,9 +89,15 @@ Allowed properties :
   - `false` (**default**)
 
 ### fitParser.parse(Buffer _file_, Function _callback_)
+
 _callback_ receives two arguments, the first as a error String, and the second as Object, result of parsing.
 
+### fitParser.parseAsync(Buffer _file_)
+
+returns a Promise that resolves to the result of parsing.
+
 ## Contributors
+
 All started thanks to [Pierre Jacquier](https://github.com/pierremtb)
 
 Big thanks to [Mikael Lofjärd](https://github.com/mlofjard) for [his early prototype](https://github.com/mlofjard/jsonfit).
