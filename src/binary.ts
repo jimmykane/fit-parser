@@ -1,14 +1,8 @@
 import type { FitParserOptions } from './fit-parser.js'
 import type {
   FieldDefinition,
-  FitTypeOptions,
-  LengthUnits,
-  MessageName,
-  PressureUnits,
-  SpeedUnits,
-  TemperatureUnits,
-  Unit,
 } from './fit.js'
+import type { FitOptions, LengthUnits, MesgNum, PressureUnits, SpeedUnits, TemperatureUnits, Unit } from './fit_types.js'
 import { Buffer } from 'node:buffer'
 import { FIT } from './fit.js'
 import { getFitMessage, getFitMessageBaseType } from './messages.js'
@@ -203,7 +197,7 @@ function isInvalidValue(data: any, type: string): boolean {
 
 function convertTo<T extends string>(
   data: number,
-  unitsList: keyof FitTypeOptions,
+  unitsList: keyof FitOptions,
   unitName: T,
 ): number {
   const options = FIT.options[unitsList] as Unit<T>
@@ -269,7 +263,7 @@ export function readRecord(
   startDate: number | undefined,
   pausedTime: number,
 ): {
-  messageType: MessageName | ''
+  messageType: MesgNum | ''
   nextIndex: number
   message?: any
 } {
