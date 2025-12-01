@@ -21,7 +21,7 @@ describe('fit parser tests', () => {
     expect(
       fitObject.records && fitObject.records
         .map(r => r.position_long)
-        .filter(l => l > 180 || l < -180),
+        .filter(l => l && (l > 180 || l < -180)),
     ).toEqual([])
   })
 
@@ -50,5 +50,16 @@ describe('fit parser tests', () => {
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('sensor')
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('start_pressure')
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('end_pressure')
+  })
+
+  it('expects fit with data nested into the activity', async () => {
+    const fitParser = new FitParser({ force: true, mode: 'both' })
+    const buffer = await fs.readFile('./test/test-diving.fit')
+    const fitObject = await fitParser.parseAsync(buffer)
+
+    expect(fitObject).toHaveProperty('activity')
+    expect(fitObject.activity.sessions?.[0]).toHaveProperty('timestamp')
+    expect(fitObject.activity.sessions?.[0].laps?.[0]).toHaveProperty('timestamp')
+    expect(fitObject.activity.sessions?.[0].laps?.[0].records?.[0]).toHaveProperty('timestamp')
   })
 })

@@ -20,10 +20,21 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npm run build
-      - run: npm run test
+      - run: npm run test -- --coverage
       - run: npm run lint
         if: matrix.node-version == '25.x'
       - run: npm run type-check
+        if: matrix.node-version == '25.x'
+      - run: |
+          npm run codegen
+          if git diff --exit-code src/fit_types.ts; then
+            echo "✓ src/fit_types.ts is unchanged after codegen"
+          else
+            echo "✗ src/fit_types.ts has been modified - please commit the changes"
+            exit 1
+          fi
         if: matrix.node-version == '25.x'
