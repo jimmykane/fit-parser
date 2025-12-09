@@ -3,3 +3,4 @@
 .directory
 /dist
 /coverage
+.vscode
