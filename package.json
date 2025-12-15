@@ -60,7 +60,7 @@
     "lint": "eslint .",
     "fmt": "eslint --fix .",
     "type-check": "tsc --noEmit",
-    "build": "tsc --noCheck"
+    "build": "tsc --noCheck && tsc --project tsconfig.cjs.json --noCheck && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json"
   },
   "test": "vitest",
   "dependencies": {
