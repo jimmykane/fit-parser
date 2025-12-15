@@ -36,11 +36,10 @@
     ".": {
       "types": "./dist/fit-parser.d.ts",
       "import": "./dist/fit-parser.js",
-      "require": "./dist/fit-parser.js",
-      "default": "./dist/fit-parser.js"
+      "require": "./dist/cjs/fit-parser.js"
     }
   },
-  "main": "dist/fit-parser.js",
+  "main": "dist/cjs/fit-parser.js",
   "maintainers": [
     {
       "email": "jimmykane9@gmail.com",
