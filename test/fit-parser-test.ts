@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
 import FitParser from '../src/fit-parser.js'
+import { FIT } from '../src/fit.js'
 
 describe('fit parser tests', () => {
   it('expects to retrieve a FIT object', async () => {
@@ -61,5 +62,34 @@ describe('fit parser tests', () => {
     expect(fitObject.activity.sessions?.[0]).toHaveProperty('timestamp')
     expect(fitObject.activity.sessions?.[0].laps?.[0]).toHaveProperty('timestamp')
     expect(fitObject.activity.sessions?.[0].laps?.[0].records?.[0]).toHaveProperty('timestamp')
+  })
+
+  it('has Garmin proprietary field definitions for record message', () => {
+    const recordMessage = FIT.messages[20]
+
+    expect(recordMessage[90].field).toBe('performance_condition')
+    expect(recordMessage[90].type).toBe('sint8')
+
+    expect(recordMessage[136].field).toBe('wrist_heart_rate')
+    expect(recordMessage[136].type).toBe('uint8')
+    expect(recordMessage[136].units).toBe('bpm')
+
+    expect(recordMessage[137].field).toBe('stamina_potential')
+    expect(recordMessage[137].scale).toBe(10)
+    expect(recordMessage[137].units).toBe('percent')
+
+    expect(recordMessage[138].field).toBe('stamina')
+    expect(recordMessage[138].scale).toBe(10)
+    expect(recordMessage[138].units).toBe('percent')
+
+    expect(recordMessage[140].field).toBe('grade_adjusted_speed')
+    expect(recordMessage[140].scale).toBe(1000)
+    expect(recordMessage[140].units).toBe('m/s')
+
+    expect(recordMessage[143].field).toBe('body_battery')
+    expect(recordMessage[143].units).toBe('percent')
+
+    expect(recordMessage[144].field).toBe('external_heart_rate')
+    expect(recordMessage[144].units).toBe('bpm')
   })
 })
