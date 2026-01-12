@@ -8,18 +8,16 @@ export function mapDataIntoLap(
   const laps = [...inputLaps]
   let index = 0
   for (let i = 0; i < laps.length; i++) {
-    const lap = laps[i]
     const nextLap = laps[i + 1]
     const tempData = []
-    const lapStartTime = new Date(lap.start_time).getTime()
     const nextLapStartTime = nextLap
       ? new Date(nextLap.start_time).getTime()
       : null
     for (let j = index; j < data.length; j++) {
       const row = data[j]
       if (nextLap && nextLapStartTime) {
-        const timestamp = new Date(row.timestamp).getTime()
-        if (lapStartTime <= timestamp && nextLapStartTime > timestamp) {
+        const timestamp = new Date(row.timestamp || row.start_time).getTime()
+        if (nextLapStartTime > timestamp) {
           tempData.push(row)
         }
         else if (nextLapStartTime <= timestamp) {
@@ -47,10 +45,8 @@ export function mapDataIntoSession(
   const sessions = [...inputSessions]
   let lapIndex = 0
   for (let i = 0; i < sessions.length; i++) {
-    const session = sessions[i]
     const nextSession = sessions[i + 1]
     const tempLaps = []
-    const sessionStartTime = new Date(session.start_time).getTime()
     const nextSessionStartTime = nextSession
       ? new Date(nextSession.start_time).getTime()
       : null
@@ -58,10 +54,7 @@ export function mapDataIntoSession(
       const lap = laps[j]
       if (nextSession && nextSessionStartTime) {
         const lapStartTime = new Date(lap.start_time).getTime()
-        if (
-          sessionStartTime <= lapStartTime
-          && nextSessionStartTime > lapStartTime
-        ) {
+        if (nextSessionStartTime > lapStartTime) {
           tempLaps.push(lap)
         }
         else if (nextSessionStartTime <= lapStartTime) {
