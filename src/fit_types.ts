@@ -632,6 +632,7 @@ export interface ParsedRecord {
   vertical_ratio?: number
   stance_time_balance?: number
   step_length?: number
+  performance_condition?: number
   absolute_pressure?: number
   depth?: number
   next_stop_depth?: number
@@ -640,6 +641,12 @@ export interface ParsedRecord {
   ndl_time?: number
   cns_load?: number
   n2_load?: number
+  wrist_heart_rate?: number
+  stamina_potential?: number
+  stamina?: number
+  grade_adjusted_speed?: number
+  body_battery?: number
+  external_heart_rate?: number
   timestamp: string
 }
 export interface ParsedEvent {
