@@ -3037,6 +3037,13 @@ export const FIT: FitType = {
         offset: 0,
         units: 'V',
       },
+      32: {
+        field: 'battery_level',
+        type: 'uint8',
+        scale: null,
+        offset: 0,
+        units: 'percent',
+      },
       11: {
         field: 'battery_status',
         type: 'battery_status',
