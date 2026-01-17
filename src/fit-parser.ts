@@ -23,6 +23,7 @@ import type {
   ParsedTankSummary,
   ParsedTankUpdate,
   ParsedJump,
+  ParsedTimeInZone,
 } from './fit_types.js'
 import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
 import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
@@ -155,6 +156,7 @@ export default class FitParser {
     const tank_updates: ParsedTankUpdate[] = []
     const tank_summaries: ParsedTankSummary[] = []
     const jumps: ParsedJump[] = []
+    const time_in_zone: ParsedTimeInZone[] = []
 
 
     let loopIndex = headerLength
@@ -267,6 +269,9 @@ export default class FitParser {
         case 'jump':
           jumps.push(message)
           break
+        case 'time_in_zone':
+          time_in_zone.push(message)
+          break
         default:
           if (messageType !== '') {
             fitObj[messageType as keyof ParsedFit] = message
@@ -288,6 +293,7 @@ export default class FitParser {
     fitObj.tank_updates = tank_updates
     fitObj.tank_summaries = tank_summaries
     fitObj.jumps = jumps
+    fitObj.time_in_zone = time_in_zone
 
 
     if (isCascadeNeeded) {

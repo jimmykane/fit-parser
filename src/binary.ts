@@ -29,6 +29,14 @@ function readData(
   startIndex: number,
   options: FitParserOptions,
 ): any {
+  if (fDef.type === 'uint8_array') {
+    const array8: number[] = []
+    for (let i = 0; i < fDef.size; i++) {
+      array8.push(blob[startIndex + i])
+    }
+    return array8
+  }
+
   if (fDef.endianAbility) {
     const temp: number[] = []
     for (let i = 0; i < fDef.size; i++) {
@@ -62,11 +70,11 @@ function readData(
           return array32
         }
         case 'uint16_array': {
-          const array: number[] = []
+          const array16: number[] = []
           for (let i = 0; i < fDef.size; i += 2) {
-            array.push(dataView.getUint16(i, fDef.littleEndian))
+            array16.push(dataView.getUint16(i, fDef.littleEndian))
           }
-          return array
+          return array16
         }
       }
     }
@@ -119,9 +127,13 @@ function formatByType(
       return scale ? data / scale + offset : data
     case 'uint32_array':
     case 'uint16_array':
-      return data.map((dataItem: number) =>
-        scale ? dataItem / scale + offset : dataItem,
-      )
+    case 'uint8_array':
+      if (Array.isArray(data)) {
+        return data.map((dataItem: number) =>
+          scale ? dataItem / scale + offset : dataItem,
+        )
+      }
+      return scale ? data / scale + offset : data
     default:
       {
         if (!FIT.types[type]) {
@@ -402,6 +414,9 @@ export function readRecord(
 
 
         if (field !== 'unknown' && field !== '' && field !== undefined) {
+          // if (message.name === 'time_in_zone') {
+          //   console.log(`DEBUG: time_in_zone field ${fDef.fDefNo} (${field}). Size: ${fDef.size}. Data:`, data);
+          // }
           fields[field] = applyOptions(
             formatByType(data, type, scale, offset),
             field,

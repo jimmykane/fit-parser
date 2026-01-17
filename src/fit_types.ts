@@ -22,7 +22,7 @@ export interface MessageIndex {
 // parsed from Fit.types
 
 export type File = 'device' | 'settings' | 'sport' | 'activity' | 'workout' | 'course' | 'schedules' | 'weight' | 'totals' | 'goals' | 'blood_pressure' | 'monitoring_a' | 'activity_summary' | 'monitoring_daily' | 'monitoring_b' | 'segment' | 'segment_list' | 'exd_configuration' | 'mfg_range_min' | 'mfg_range_max'
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_pressure' | 'tank_summary' | 'mfg_range_min' | 'mfg_range_max' | 'o_hr_settings' | 'tank_update' | 'definition'
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_pressure' | 'tank_summary' | 'time_in_zone' | 'mfg_range_min' | 'mfg_range_max' | 'o_hr_settings' | 'tank_update' | 'definition'
 export type Checksum = 'clear' | 'ok'
 export type FileFlags = '0' | 'read' | 'write' | 'erase'
 export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type'
@@ -966,6 +966,24 @@ export interface ParsedTankSummary {
   volume_used?: number
 }
 
+export interface ParsedTimeInZone {
+  timestamp: string
+  reference_mesg?: number
+  reference_index?: number
+  time_in_hr_zone?: number[]
+  time_in_speed_zone?: number[]
+  time_in_power_zone?: number[]
+  hr_zone_high_boundary?: number[]
+  speed_zone_high_boundary?: number[]
+  power_zone_high_boundary?: number[]
+  hr_calc_type?: HrZoneCalc
+  max_heart_rate?: number
+  resting_heart_rate?: number
+  threshold_heart_rate?: number
+  pwr_calc_type?: PwrZoneCalc
+  functional_threshold_power?: number
+}
+
 // the returned type after parsing a .fit file
 
 export interface ParsedFit {
@@ -1001,4 +1019,5 @@ export interface ParsedFit {
   tank_updates?: ParsedTankUpdate[]
   tank_summaries?: ParsedTankSummary[]
   jumps?: ParsedJump[]
+  time_in_zone?: ParsedTimeInZone[]
 }
