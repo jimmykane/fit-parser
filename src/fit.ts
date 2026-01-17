@@ -1701,6 +1701,48 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
+      168: {
+        field: 'total_grit',
+        type: 'float32',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      169: {
+        field: 'total_flow',
+        type: 'float32',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      214: {
+        field: 'avg_grit',
+        type: 'float32',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      215: {
+        field: 'avg_flow',
+        type: 'float32',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      26: {
+        field: 'vo2_max_cycling',
+        type: 'uint8',
+        scale: 1, // Usually integer ml/kg/min
+        offset: 0,
+        units: 'ml/kg/min',
+      },
+      140: { // From forums/guess, often recovery advisor used here or in event
+        field: 'recovery_advisor',
+        type: 'uint16', // Minutes?
+        scale: 1,
+        offset: 0,
+        units: 'min',
+      },
     },
     19: {
       name: 'lap',
@@ -2444,6 +2486,20 @@ export const FIT: FitType = {
         offset: 0,
         units: 's',
       },
+      114: {
+        field: 'grit',
+        type: 'float32',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      115: {
+        field: 'flow',
+        type: 'float32',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
       0: {
         field: 'position_lat',
         type: 'sint32',
@@ -2894,6 +2950,14 @@ export const FIT: FitType = {
         offset: 0,
         units: 'percent',
       },
+    },
+    140: {
+      name: 'jump',
+      253: { field: 'timestamp', type: 'date_time', scale: null, offset: 0, units: 's' },
+      9: { field: 'distance', type: 'uint16', scale: 100, offset: 0, units: 'm' },
+      10: { field: 'height', type: 'uint16', scale: 1000, offset: 0, units: 'm' },
+      37: { field: 'score', type: 'sint32', scale: null, offset: 0, units: '' },
+      7: { field: 'enhanced_mets', type: 'uint32', scale: 65536, offset: 0, units: 'METs' },
     },
     21: {
       name: 'event',

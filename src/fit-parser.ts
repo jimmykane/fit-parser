@@ -22,6 +22,7 @@ import type {
   ParsedStressLevel,
   ParsedTankSummary,
   ParsedTankUpdate,
+  ParsedJump,
 } from './fit_types.js'
 import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
 import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
@@ -153,6 +154,8 @@ export default class FitParser {
     const lengths: ParsedLength[] = []
     const tank_updates: ParsedTankUpdate[] = []
     const tank_summaries: ParsedTankSummary[] = []
+    const jumps: ParsedJump[] = []
+
 
     let loopIndex = headerLength
     const messageTypes: any[] = []
@@ -261,6 +264,9 @@ export default class FitParser {
         case 'tank_summary':
           tank_summaries.push(message)
           break
+        case 'jump':
+          jumps.push(message)
+          break
         default:
           if (messageType !== '') {
             fitObj[messageType as keyof ParsedFit] = message
@@ -281,6 +287,8 @@ export default class FitParser {
     fitObj.definitions = definitions
     fitObj.tank_updates = tank_updates
     fitObj.tank_summaries = tank_summaries
+    fitObj.jumps = jumps
+
 
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)

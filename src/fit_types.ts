@@ -457,8 +457,12 @@ export interface ParsedSession {
   avg_step_length?: number
   total_anaerobic_effect?: number
   avg_vam?: number
+  total_grit?: number
+  total_flow?: number
   workout_feel?: number
   workout_rpe?: number
+  avg_grit?: number
+  avg_flow?: number
   timestamp: string
   message_index?: MessageIndex
   laps?: ParsedLap[]
@@ -640,6 +644,8 @@ export interface ParsedRecord {
   ndl_time?: number
   cns_load?: number
   n2_load?: number
+  grit?: number
+  flow?: number
   timestamp: string
 }
 export interface ParsedEvent {
@@ -675,6 +681,7 @@ export interface ParsedDeviceInfo {
   ant_network?: AntNetwork
   source_type?: SourceType
   product_name?: string
+  battery_level?: number
   timestamp: string
 }
 export interface ParsedWorkout {
@@ -863,6 +870,12 @@ export interface ParsedOHrSettings {
   enabled?: number
   timestamp: string
 }
+export interface ParsedJump {
+  distance?: number
+  height?: number
+  score?: number
+  timestamp: string
+}
 export interface ParsedFieldDescription {
   developer_data_index?: number
   field_definition_number?: number
@@ -987,4 +1000,5 @@ export interface ParsedFit {
   definitions?: unknown[]
   tank_updates?: ParsedTankUpdate[]
   tank_summaries?: ParsedTankSummary[]
+  jumps?: ParsedJump[]
 }
