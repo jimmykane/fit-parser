@@ -1701,6 +1701,13 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
+      108: {
+        field: 'avg_vam',
+        type: 'uint16',
+        scale: 100,
+        offset: 0,
+        units: '',
+      },
       168: {
         field: 'total_grit',
         type: 'float32',
