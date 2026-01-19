@@ -3229,6 +3229,13 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
+      24: {
+        field: 'ant_id',
+        type: 'uint32z',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
       25: {
         field: 'source_type',
         type: 'source_type',
