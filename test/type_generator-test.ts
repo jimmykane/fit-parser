@@ -184,6 +184,7 @@ export interface FitOptions {
     definitions?: unknown[];
     tank_updates?: ParsedTankUpdate[];
     tank_summaries?: ParsedTankSummary[];
+    jumps?: ParsedJump[];
 }
 `)
   })

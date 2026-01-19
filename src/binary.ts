@@ -263,6 +263,13 @@ function applyOptions(data: any, field: string, options: any): any {
     case 'start_pressure':
     case 'end_pressure':
       return convertTo<PressureUnits>(data, 'pressureUnits', options.pressureUnit)
+    case 'ant_id': {
+      const n1 = (data >>> 28) & 0xf
+      const n2 = (data >>> 24) & 0xf
+      const n3 = (data >>> 16) & 0xff
+      const n4 = data & 0xffff
+      return `${n1.toString(16).toUpperCase()}-${n2.toString(16).toUpperCase()}-${n3.toString(16).toUpperCase().padStart(2, '0')}-${n4.toString(16).toUpperCase().padStart(4, '0')}`
+    }
     default:
       return data
   }
