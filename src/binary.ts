@@ -413,10 +413,8 @@ export function readRecord(
         )
 
 
+
         if (field !== 'unknown' && field !== '' && field !== undefined) {
-          // if (message.name === 'time_in_zone') {
-          //   console.log(`DEBUG: time_in_zone field ${fDef.fDefNo} (${field}). Size: ${fDef.size}. Data:`, data);
-          // }
           fields[field] = applyOptions(
             formatByType(data, type, scale, offset),
             field,

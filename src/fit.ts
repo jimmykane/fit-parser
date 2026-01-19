@@ -1120,6 +1120,20 @@ export const FIT: FitType = {
         offset: 0,
         units: '%',
       },
+      38: {
+        field: 'end_position_lat',
+        type: 'sint32',
+        scale: null,
+        offset: 0,
+        units: 'semicircles',
+      },
+      39: {
+        field: 'end_position_long',
+        type: 'sint32',
+        scale: null,
+        offset: 0,
+        units: 'semicircles',
+      },
       41: {
         field: 'avg_stroke_count',
         type: 'uint32',
@@ -1674,18 +1688,19 @@ export const FIT: FitType = {
         units: 'mm',
       },
       137: {
-        field: 'total_anaerobic_effect',
+        field: 'total_anaerobic_training_effect',
         type: 'uint8',
         scale: 10,
         offset: 0,
         units: '',
       },
       139: {
+
         field: 'avg_vam',
         type: 'uint16',
-        scale: 1000,
+        scale: 1, // Raw 100 -> 100 (User specific m/h)
         offset: 0,
-        units: 'm/s',
+        units: 'm/h',
       },
       192: {
         field: 'workout_feel',
@@ -1701,26 +1716,89 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
-      108: {
-        field: 'avg_vam',
-        type: 'uint16',
-        scale: 100,
+      110: {
+        field: 'sport_profile_name',
+        type: 'string',
+        scale: null,
         offset: 0,
         units: '',
       },
       168: {
-        field: 'total_grit',
-        type: 'float32',
-        scale: null,
+        field: 'training_load_peak',
+        type: 'uint32',
+        scale: 1,
         offset: 0,
         units: '',
       },
       169: {
-        field: 'total_flow',
-        type: 'float32',
+        field: 'enhanced_avg_respiration_rate',
+        type: 'uint16',
+        scale: 100,
+        offset: 0,
+        units: 'breaths/min',
+      },
+      150: {
+        field: 'min_temperature',
+        type: 'sint8',
         scale: null,
         offset: 0,
+        units: 'C',
+      },
+      170: {
+        field: 'enhanced_max_respiration_rate',
+        type: 'uint16',
+        scale: 100,
+        offset: 0,
+        units: 'breaths/min',
+      },
+      178: {
+        field: 'est_sweat_loss',
+        type: 'uint16',
+        scale: 1, // ml
+        offset: 0,
+        units: 'ml',
+      },
+      180: {
+        field: 'enhanced_min_respiration_rate',
+        type: 'uint16',
+        scale: 100,
+        offset: 0,
+        units: 'breaths/min',
+      },
+      181: {
+        field: 'total_grit',
+        type: 'float32',
+        scale: 1,
+        offset: 0,
+        units: 'kGrit',
+      },
+      183: {
+        field: 'jump_count',
+        type: 'uint16',
+        scale: 1,
+        offset: 0,
         units: '',
+      },
+      187: {
+        field: 'avg_flow',
+        type: 'float32',
+        scale: 1,
+        offset: 0,
+        units: 'Flow',
+      },
+      188: {
+        field: 'primary_benefit',
+        type: 'uint8',
+        scale: 1,
+        offset: 0,
+        units: '',
+      },
+      196: {
+        field: 'resting_calories',
+        type: 'uint16',
+        scale: 1,
+        offset: 0,
+        units: 'kcal',
       },
       214: {
         field: 'avg_grit',
@@ -1736,13 +1814,7 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
-      26: {
-        field: 'vo2_max_cycling',
-        type: 'uint8',
-        scale: 1, // Usually integer ml/kg/min
-        offset: 0,
-        units: 'ml/kg/min',
-      },
+
       140: { // From forums/guess, often recovery advisor used here or in event
         field: 'recovery_advisor',
         type: 'uint16', // Minutes?
