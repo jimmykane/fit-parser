@@ -1772,12 +1772,26 @@ export const FIT: FitType = {
         offset: 0,
         units: 'kGrit',
       },
+      182: {
+        field: 'total_flow',
+        type: 'float32',
+        scale: 1,
+        offset: 0,
+        units: 'Flow',
+      },
       183: {
         field: 'jump_count',
         type: 'uint16',
         scale: 1,
         offset: 0,
         units: '',
+      },
+      186: {
+        field: 'avg_grit',
+        type: 'float32',
+        scale: 1,
+        offset: 0,
+        units: 'kGrit',
       },
       187: {
         field: 'avg_flow',

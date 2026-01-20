@@ -468,14 +468,14 @@ export interface ParsedSession {
   est_sweat_loss?: number
   enhanced_min_respiration_rate?: number
   total_grit?: number
+  total_flow?: number
   jump_count?: number
+  avg_grit?: number
   avg_flow?: number
   primary_benefit?: number
   workout_feel?: number
   workout_rpe?: number
   resting_calories?: number
-  avg_grit?: number
-  avg_flow?: number
   timestamp: string
   message_index?: MessageIndex
   laps?: ParsedLap[]
