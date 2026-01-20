@@ -60,9 +60,15 @@ export function generateArrayProperty(name: string, type: TypeNode, optional = t
 
 export function generateTypeFromField(def: MessageObject): TypeNode {
   switch (def.type) {
+    case 'uint32_array':
+    case 'uint16_array':
+    case 'uint8_array':
+    case 'sint32_array':
+    case 'sint16_array':
+    case 'sint8_array':
     case 'byte_array':
       return ts.factory.createArrayTypeNode(
-        ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
       )
     case 'bool':
       return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword)
@@ -113,11 +119,7 @@ export function generateTypes(types: { [typeName: string]: Record<number, string
       [...names.map(n => ts.factory.createLiteralTypeNode(
         ts.factory.createStringLiteral(String(n)),
       )), ...(name === 'mesg_num'
-        // TODO those are somehow missing in the FIT.types.mesg_num definition
-        // especially 'tank_update' (319 in messages) is mapped to 'tank_pressure' a bug?
         ? [
-            ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('o_hr_settings')),
-            ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('tank_update')),
             ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
           ]
         : [])],
@@ -261,6 +263,7 @@ export function generateFitType(): Statement {
     tank_updates: 'parsed_tank_update',
     tank_summaries: 'parsed_tank_summary',
     jumps: 'parsed_jump',
+    time_in_zone: 'parsed_time_in_zone',
   }
   const referenceProperties: Record<string, string> = {
     file_creator: 'parsed_file_creator',

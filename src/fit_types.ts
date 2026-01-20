@@ -22,7 +22,7 @@ export interface MessageIndex {
 // parsed from Fit.types
 
 export type File = 'device' | 'settings' | 'sport' | 'activity' | 'workout' | 'course' | 'schedules' | 'weight' | 'totals' | 'goals' | 'blood_pressure' | 'monitoring_a' | 'activity_summary' | 'monitoring_daily' | 'monitoring_b' | 'segment' | 'segment_list' | 'exd_configuration' | 'mfg_range_min' | 'mfg_range_max'
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_pressure' | 'tank_summary' | 'time_in_zone' | 'mfg_range_min' | 'mfg_range_max' | 'o_hr_settings' | 'tank_update' | 'definition'
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
 export type Checksum = 'clear' | 'ok'
 export type FileFlags = '0' | 'read' | 'write' | 'erase'
 export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type'
@@ -376,6 +376,8 @@ export interface ParsedSession {
   training_stress_score?: number
   intensity_factor?: number
   left_right_balance?: LeftRightBalance100
+  end_position_lat?: number
+  end_position_long?: number
   avg_stroke_count?: number
   avg_stroke_distance?: number
   swim_stroke?: SwimStroke
@@ -400,10 +402,10 @@ export interface ParsedSession {
   max_pos_vertical_speed?: number
   max_neg_vertical_speed?: number
   min_heart_rate?: number
-  time_in_hr_zone?: Uint32Array
-  time_in_speed_zone?: Uint32Array
-  time_in_cadence_zone?: Uint32Array
-  time_in_power_zone?: Uint32Array
+  time_in_hr_zone?: number[]
+  time_in_speed_zone?: number[]
+  time_in_cadence_zone?: number[]
+  time_in_power_zone?: number[]
   avg_lap_time?: number
   best_lap_index?: number
   min_altitude?: number
@@ -431,6 +433,7 @@ export interface ParsedSession {
   avg_left_pedal_smoothness?: number
   avg_right_pedal_smoothness?: number
   avg_combined_pedal_smoothness?: number
+  sport_profile_name?: string
   sport_index?: number
   time_standing?: number
   stand_count?: number
@@ -455,12 +458,22 @@ export interface ParsedSession {
   avg_vertical_ratio?: number
   avg_stance_time_balance?: number
   avg_step_length?: number
-  total_anaerobic_effect?: number
+  total_anaerobic_training_effect?: number
   avg_vam?: number
+  recovery_advisor?: number
+  min_temperature?: number
+  training_load_peak?: number
+  enhanced_avg_respiration_rate?: number
+  enhanced_max_respiration_rate?: number
+  est_sweat_loss?: number
+  enhanced_min_respiration_rate?: number
   total_grit?: number
-  total_flow?: number
+  jump_count?: number
+  avg_flow?: number
+  primary_benefit?: number
   workout_feel?: number
   workout_rpe?: number
+  resting_calories?: number
   avg_grit?: number
   avg_flow?: number
   timestamp: string
@@ -519,10 +532,10 @@ export interface ParsedLap {
   avg_neg_vertical_speed?: number
   max_pos_vertical_speed?: number
   max_neg_vertical_speed?: number
-  time_in_hr_zone?: Uint32Array
-  time_in_speed_zone?: Uint32Array
-  time_in_cadence_zone?: Uint32Array
-  time_in_power_zone?: Uint32Array
+  time_in_hr_zone?: number[]
+  time_in_speed_zone?: number[]
+  time_in_cadence_zone?: number[]
+  time_in_power_zone?: number[]
   repetition_num?: number
   min_altitude?: number
   min_heart_rate?: number
@@ -679,6 +692,7 @@ export interface ParsedDeviceInfo {
   ant_transmission_type?: number
   ant_device_number?: number
   ant_network?: AntNetwork
+  ant_id?: number
   source_type?: SourceType
   product_name?: string
   battery_level?: number
@@ -836,7 +850,7 @@ export interface ParsedMonitoring {
   timestamp: number
 }
 export interface ParsedHrv {
-  time?: Uint16Array
+  time?: number[]
 }
 export interface ParsedLength {
   event?: Event
@@ -871,6 +885,7 @@ export interface ParsedOHrSettings {
   timestamp: string
 }
 export interface ParsedJump {
+  enhanced_mets?: number
   distance?: number
   height?: number
   score?: number
@@ -888,10 +903,29 @@ export interface ParsedFieldDescription {
 }
 export interface ParsedDeveloperDataId {
   developer_id?: number
-  application_id?: unknown[]
+  application_id?: number[]
   manufacturer_id?: Manufacturer
   developer_data_index?: number
   application_version?: number
+}
+export interface ParsedTimeInZone {
+  reference_mesg?: number
+  reference_index?: number
+  time_in_hr_zone?: number[]
+  time_in_speed_zone?: number[]
+  time_in_power_zone?: number[]
+  hr_zone_high_boundary_deprecated?: number[]
+  hr_zone_high_boundary?: number[]
+  speed_zone_high_boundary?: number[]
+  power_zone_high_boundary?: number[]
+  hr_calc_type?: HrZoneCalc
+  max_heart_rate_deprecated?: number
+  max_heart_rate?: number
+  resting_heart_rate?: number
+  threshold_heart_rate?: number
+  pwr_calc_type?: PwrZoneCalc
+  functional_threshold_power?: number
+  timestamp: string
 }
 export interface ParsedStressLevel {
   stress_level_value?: number
@@ -964,24 +998,6 @@ export interface ParsedTankSummary {
   start_pressure?: number
   end_pressure?: number
   volume_used?: number
-}
-
-export interface ParsedTimeInZone {
-  timestamp: string
-  reference_mesg?: number
-  reference_index?: number
-  time_in_hr_zone?: number[]
-  time_in_speed_zone?: number[]
-  time_in_power_zone?: number[]
-  hr_zone_high_boundary?: number[]
-  speed_zone_high_boundary?: number[]
-  power_zone_high_boundary?: number[]
-  hr_calc_type?: HrZoneCalc
-  max_heart_rate?: number
-  resting_heart_rate?: number
-  threshold_heart_rate?: number
-  pwr_calc_type?: PwrZoneCalc
-  functional_threshold_power?: number
 }
 
 // the returned type after parsing a .fit file
