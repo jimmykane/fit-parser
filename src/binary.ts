@@ -135,33 +135,33 @@ function formatByType(
       }
       return scale ? data / scale + offset : data
     default:
-      {
-        if (!FIT.types[type]) {
-          return data
-        }
-        // Quick check for a mask
-        const values: string[] = []
-        for (const key in FIT.types[type]) {
-          if (key in FIT.types[type]) {
-            values.push(String(FIT.types[type][key]))
-          }
-        }
-        if (!values.includes('mask')) {
-          return FIT.types[type][data]
-        }
-        const dataItem: any = {}
-        for (const key in FIT.types[type]) {
-          if (key in FIT.types[type]) {
-            if (FIT.types[type][key] === 'mask') {
-              dataItem.value = data & Number(key)
-            }
-            else {
-              dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
-            }
-          }
-        }
-        return dataItem
+    {
+      if (!FIT.types[type]) {
+        return data
       }
+      // Quick check for a mask
+      const values: string[] = []
+      for (const key in FIT.types[type]) {
+        if (key in FIT.types[type]) {
+          values.push(String(FIT.types[type][key]))
+        }
+      }
+      if (!values.includes('mask')) {
+        return FIT.types[type][data]
+      }
+      const dataItem: any = {}
+      for (const key in FIT.types[type]) {
+        if (key in FIT.types[type]) {
+          if (FIT.types[type][key] === 'mask') {
+            dataItem.value = data & Number(key)
+          }
+          else {
+            dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+          }
+        }
+      }
+      return dataItem
+    }
   }
 }
 
@@ -264,10 +264,10 @@ function applyOptions(data: any, field: string, options: any): any {
     case 'end_pressure':
       return convertTo<PressureUnits>(data, 'pressureUnits', options.pressureUnit)
     case 'ant_id': {
-      const n1 = (data >>> 28) & 0xf
-      const n2 = (data >>> 24) & 0xf
-      const n3 = (data >>> 16) & 0xff
-      const n4 = data & 0xffff
+      const n1 = (data >>> 28) & 0xF
+      const n2 = (data >>> 24) & 0xF
+      const n3 = (data >>> 16) & 0xFF
+      const n4 = data & 0xFFFF
       return `${n1.toString(16).toUpperCase()}-${n2.toString(16).toUpperCase()}-${n3.toString(16).toUpperCase().padStart(2, '0')}-${n4.toString(16).toUpperCase().padStart(4, '0')}`
     }
     default:
@@ -418,8 +418,6 @@ export function readRecord(
         const { field, type, scale, offset } = message.getAttributes(
           fDef.fDefNo,
         )
-
-
 
         if (field !== 'unknown' && field !== '' && field !== undefined) {
           fields[field] = applyOptions(

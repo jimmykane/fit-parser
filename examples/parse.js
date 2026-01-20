@@ -26,7 +26,6 @@ fs.readFile(file, (err, content) => {
       console.error(error)
     }
     else {
-      // eslint-disable-next-line no-console
       console.log(JSON.stringify(data, null, 2))
     }
   })

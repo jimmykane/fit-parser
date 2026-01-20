@@ -12,4 +12,9 @@ export default antfu({
   rules: {
     'unicorn/prefer-node-protocol': 'off',
   },
+}, {
+  files: ['**/examples/*.js', '**/codegen/*.ts', '**/probe_session.js'],
+  rules: {
+    'no-console': 'off',
+  },
 })

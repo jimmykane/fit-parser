@@ -11,6 +11,7 @@ import type {
   ParsedFit,
   ParsedHrv,
   ParsedHrZone,
+  ParsedJump,
   ParsedLap,
   ParsedLength,
   ParsedMonitoring,
@@ -22,7 +23,6 @@ import type {
   ParsedStressLevel,
   ParsedTankSummary,
   ParsedTankUpdate,
-  ParsedJump,
   ParsedTimeInZone,
 } from './fit_types.js'
 import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
@@ -157,7 +157,6 @@ export default class FitParser {
     const tank_summaries: ParsedTankSummary[] = []
     const jumps: ParsedJump[] = []
     const time_in_zone: ParsedTimeInZone[] = []
-
 
     let loopIndex = headerLength
     const messageTypes: any[] = []
@@ -294,7 +293,6 @@ export default class FitParser {
     fitObj.tank_summaries = tank_summaries
     fitObj.jumps = jumps
     fitObj.time_in_zone = time_in_zone
-
 
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)
