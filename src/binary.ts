@@ -105,6 +105,11 @@ function readData(
     return temp
   }
 
+  if (fDef.type === 'sint8') {
+    const val = blob[startIndex]
+    return val > 127 ? val - 256 : val
+  }
+
   return blob[startIndex]
 }
 
@@ -135,33 +140,33 @@ function formatByType(
       }
       return scale ? data / scale + offset : data
     default:
-    {
-      if (!FIT.types[type]) {
-        return data
-      }
-      // Quick check for a mask
-      const values: string[] = []
-      for (const key in FIT.types[type]) {
-        if (key in FIT.types[type]) {
-          values.push(String(FIT.types[type][key]))
+      {
+        if (!FIT.types[type]) {
+          return data
         }
-      }
-      if (!values.includes('mask')) {
-        return FIT.types[type][data]
-      }
-      const dataItem: any = {}
-      for (const key in FIT.types[type]) {
-        if (key in FIT.types[type]) {
-          if (FIT.types[type][key] === 'mask') {
-            dataItem.value = data & Number(key)
-          }
-          else {
-            dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+        // Quick check for a mask
+        const values: string[] = []
+        for (const key in FIT.types[type]) {
+          if (key in FIT.types[type]) {
+            values.push(String(FIT.types[type][key]))
           }
         }
+        if (!values.includes('mask')) {
+          return FIT.types[type][data]
+        }
+        const dataItem: any = {}
+        for (const key in FIT.types[type]) {
+          if (key in FIT.types[type]) {
+            if (FIT.types[type][key] === 'mask') {
+              dataItem.value = data & Number(key)
+            }
+            else {
+              dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+            }
+          }
+        }
+        return dataItem
       }
-      return dataItem
-    }
   }
 }
 
