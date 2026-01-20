@@ -13,7 +13,7 @@ export default antfu({
     'unicorn/prefer-node-protocol': 'off',
   },
 }, {
-  files: ['**/examples/*.js', '**/codegen/*.ts', '**/probe_session.js'],
+  files: ['**/examples/*.js', '**/codegen/*.ts', '**/probe_session.js', '**/deep_probe.js'],
   rules: {
     'no-console': 'off',
   },
