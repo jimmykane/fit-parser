@@ -3044,13 +3044,18 @@ export const FIT: FitType = {
         units: 'percent',
       },
     },
-    140: {
+    285: {
       name: 'jump',
       253: { field: 'timestamp', type: 'date_time', scale: null, offset: 0, units: 's' },
-      9: { field: 'distance', type: 'uint16', scale: 100, offset: 0, units: 'm' },
-      10: { field: 'height', type: 'uint16', scale: 1000, offset: 0, units: 'm' },
-      37: { field: 'score', type: 'sint32', scale: null, offset: 0, units: '' },
-      7: { field: 'enhanced_mets', type: 'uint32', scale: 65536, offset: 0, units: 'METs' },
+      0: { field: 'distance', type: 'float32', scale: null, offset: 0, units: 'm' },
+      1: { field: 'height', type: 'float32', scale: null, offset: 0, units: 'm' },
+      2: { field: 'rotations', type: 'uint8', scale: null, offset: 0, units: '' },
+      3: { field: 'hang_time', type: 'float32', scale: null, offset: 0, units: 's' },
+      4: { field: 'score', type: 'float32', scale: null, offset: 0, units: '' },
+      5: { field: 'position_lat', type: 'sint32', scale: null, offset: 0, units: 'semicircles' },
+      6: { field: 'position_long', type: 'sint32', scale: null, offset: 0, units: 'semicircles' },
+      7: { field: 'speed', type: 'uint16', scale: 1000, offset: 0, units: 'm/s' },
+      8: { field: 'enhanced_speed', type: 'uint32', scale: 1000, offset: 0, units: 'm/s' },
     },
     21: {
       name: 'event',

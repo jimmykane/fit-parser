@@ -884,13 +884,6 @@ export interface ParsedOHrSettings {
   enabled?: number
   timestamp: string
 }
-export interface ParsedJump {
-  enhanced_mets?: number
-  distance?: number
-  height?: number
-  score?: number
-  timestamp: string
-}
 export interface ParsedFieldDescription {
   developer_data_index?: number
   field_definition_number?: number
@@ -986,6 +979,18 @@ export interface ParsedDiveSummary {
   o2_toxicity?: number
   dive_number?: number
   bottom_time?: number
+  timestamp: string
+}
+export interface ParsedJump {
+  distance?: number
+  height?: number
+  rotations?: number
+  hang_time?: number
+  score?: number
+  position_lat?: number
+  position_long?: number
+  speed?: number
+  enhanced_speed?: number
   timestamp: string
 }
 export interface ParsedTankUpdate {
