@@ -1,7 +1,7 @@
 {
   "name": "fit-file-parser",
   "type": "module",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "private": false,
   "description": "Parse your .FIT files easily, directly from JS (Garmin, Polar, Suunto)",
   "author": {
