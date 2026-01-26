@@ -5,7 +5,7 @@ import FitParser from '../src/fit-parser.js'
 describe('jump message tests', () => {
   it('expects jump message to be parsed with all fields', async () => {
     const fitParser = new FitParser({ force: true })
-    const buffer = await fs.readFile('./examples/jumps-mtb.fit')
+    const buffer = await fs.readFile('./test/jumps-mtb.fit')
     const fitObject = await fitParser.parseAsync(buffer)
 
     expect(fitObject).toHaveProperty('jumps')
@@ -26,7 +26,7 @@ describe('jump message tests', () => {
 
   it('expects first jump to have correct values', async () => {
     const fitParser = new FitParser({ force: true })
-    const buffer = await fs.readFile('./examples/jumps-mtb.fit')
+    const buffer = await fs.readFile('./test/jumps-mtb.fit')
     const fitObject = await fitParser.parseAsync(buffer)
 
     const firstJump = fitObject.jumps![0]
@@ -49,7 +49,7 @@ describe('jump message tests', () => {
 
   it('expects session to have jump_count field', async () => {
     const fitParser = new FitParser({ force: true, mode: 'both' })
-    const buffer = await fs.readFile('./examples/jumps-mtb.fit')
+    const buffer = await fs.readFile('./test/jumps-mtb.fit')
     const fitObject = await fitParser.parseAsync(buffer)
 
     expect(fitObject).toHaveProperty('activity')

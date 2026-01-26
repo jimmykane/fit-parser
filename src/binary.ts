@@ -140,33 +140,33 @@ function formatByType(
       }
       return scale ? data / scale + offset : data
     default:
-    {
-      if (!FIT.types[type]) {
-        return data
-      }
-      // Quick check for a mask
-      const values: string[] = []
-      for (const key in FIT.types[type]) {
-        if (key in FIT.types[type]) {
-          values.push(String(FIT.types[type][key]))
+      {
+        if (!FIT.types[type]) {
+          return data
         }
-      }
-      if (!values.includes('mask')) {
-        return FIT.types[type][data]
-      }
-      const dataItem: any = {}
-      for (const key in FIT.types[type]) {
-        if (key in FIT.types[type]) {
-          if (FIT.types[type][key] === 'mask') {
-            dataItem.value = data & Number(key)
-          }
-          else {
-            dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+        // Quick check for a mask
+        const values: string[] = []
+        for (const key in FIT.types[type]) {
+          if (key in FIT.types[type]) {
+            values.push(String(FIT.types[type][key]))
           }
         }
+        if (!values.includes('mask')) {
+          return FIT.types[type][data]
+        }
+        const dataItem: any = {}
+        for (const key in FIT.types[type]) {
+          if (key in FIT.types[type]) {
+            if (FIT.types[type][key] === 'mask') {
+              dataItem.value = data & Number(key)
+            }
+            else {
+              dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+            }
+          }
+        }
+        return dataItem
       }
-      return dataItem
-    }
   }
 }
 
@@ -224,8 +224,24 @@ function convertTo<T extends string>(
   return unit ? data * unit.multiplier + unit.offset : data
 }
 
-function applyOptions(data: any, field: string, options: any): any {
+function applyOptions(data: any, field: string, options: any, fields: any): any {
   switch (field) {
+    case 'device_type': {
+      const isLocal = fields.source_type === 'local' || fields.source_type === 5
+      const isBLE = fields.source_type === 'bluetooth_low_energy' || fields.source_type === 3 || fields.source_type === 'bluetooth' || fields.source_type === 2
+      const isANT = fields.source_type === 'antplus' || fields.source_type === 1 || fields.source_type === 'ant' || fields.source_type === 0
+
+      if (isLocal) {
+        return FIT.types.local_device_type[data] || data
+      }
+      if (isBLE) {
+        return FIT.types.ble_device_type[data] || data
+      }
+      if (isANT) {
+        return FIT.types.antplus_device_type[data] || data
+      }
+      return data
+    }
     case 'speed':
     case 'enhanced_speed':
     case 'vertical_speed':
@@ -402,45 +418,59 @@ export function readRecord(
   const fields: any = {}
   const message = getFitMessage(messageType.globalMessageNumber)
 
+  const rawFields: { fDef: FieldDefinition, data: any }[] = []
   for (let i = 0; i < messageType.fieldDefs.length; i++) {
     const fDef = messageType.fieldDefs[i]
     const data = readData(blob, fDef, readDataFromIndex, options)
 
     if (!isInvalidValue(data, fDef.type)) {
-      if (fDef.isDeveloperField) {
-        const field = fDef.name
-        const { type } = fDef
-        const { scale } = fDef
-        const { offset } = fDef
-
-        fields[fDef.name] = applyOptions(
-          formatByType(data, type, scale, offset),
-          field,
-          options,
-        )
-      }
-      else {
-        const { field, type, scale, offset } = message.getAttributes(
-          fDef.fDefNo,
-        )
-
-        if (field !== 'unknown' && field !== '' && field !== undefined) {
-          fields[field] = applyOptions(
-            formatByType(data, type, scale, offset),
-            field,
-            options,
-          )
-        }
-      }
-
-      if (message.name === 'record' && options.elapsedRecordField) {
-        fields.elapsed_time = (fields.timestamp - (startDate || 0)) / 1000
-        fields.timer_time = fields.elapsed_time - pausedTime
-      }
+      rawFields.push({ fDef, data })
     }
 
     readDataFromIndex += fDef.size
     messageSize += fDef.size
+  }
+
+  for (const { fDef, data } of rawFields) {
+    const { field } = fDef.isDeveloperField ? { field: fDef.name } : message.getAttributes(fDef.fDefNo)
+    if (field !== 'unknown' && field !== '' && field !== undefined) {
+      fields[field] = data
+    }
+  }
+
+  for (const { fDef, data } of rawFields) {
+    if (fDef.isDeveloperField) {
+      const field = fDef.name
+      const { type } = fDef
+      const { scale } = fDef
+      const { offset } = fDef
+
+      fields[fDef.name] = applyOptions(
+        formatByType(data, type, scale, offset),
+        field,
+        options,
+        fields,
+      )
+    }
+    else {
+      const { field, type, scale, offset } = message.getAttributes(
+        fDef.fDefNo,
+      )
+
+      if (field !== 'unknown' && field !== '' && field !== undefined) {
+        fields[field] = applyOptions(
+          formatByType(data, type, scale, offset),
+          field,
+          options,
+          fields,
+        )
+      }
+    }
+
+    if (message.name === 'record' && options.elapsedRecordField) {
+      fields.elapsed_time = ((fields.timestamp as any) - (startDate || 0)) / 1000
+      fields.timer_time = fields.elapsed_time - pausedTime
+    }
   }
 
   if (message.name === 'field_description') {
