@@ -4744,11 +4744,11 @@ export const FIT: FitType = {
         units: 's',
       },
       5: {
-        field: 'hr_zone_high_boundary_deprecated',
-        type: 'uint8_array',
-        scale: null,
+        field: 'time_in_power_zone',
+        type: 'uint32_array',
+        scale: 1000,
         offset: 0,
-        units: '',
+        units: 's',
       },
       6: {
         field: 'hr_zone_high_boundary',
@@ -4772,11 +4772,11 @@ export const FIT: FitType = {
         units: 'watts',
       },
       9: {
-        field: 'hr_calc_type',
-        type: 'hr_zone_calc',
+        field: 'power_zone_high_boundary',
+        type: 'uint16_array',
         scale: null,
         offset: 0,
-        units: '',
+        units: 'watts',
       },
       10: {
         field: 'max_heart_rate_deprecated',

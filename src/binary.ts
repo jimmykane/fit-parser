@@ -388,14 +388,15 @@ export function readRecord(
         }
 
         mTypeDef.fieldDefs.push(fDef)
-      }
-      catch (e) {
+      } catch (e) {
         if (options.force) {
           continue
         }
         throw e
       }
     }
+
+
 
     messageTypes[localMessageType] = mTypeDef
 
@@ -430,6 +431,8 @@ export function readRecord(
     readDataFromIndex += fDef.size
     messageSize += fDef.size
   }
+
+
 
   for (const { fDef, data } of rawFields) {
     const { field } = fDef.isDeveloperField ? { field: fDef.name } : message.getAttributes(fDef.fDefNo)
