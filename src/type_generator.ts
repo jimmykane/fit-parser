@@ -5,8 +5,8 @@ import { FIT } from './fit.js'
 
 type SnakeToCamelCase<S extends string>
   = S extends `${infer T}_${infer U}`
-    ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
-    : S
+  ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
+  : S
 
 export function line(): ts.Node {
   return ts.factory.createIdentifier('\n')
@@ -120,8 +120,8 @@ export function generateTypes(types: { [typeName: string]: Record<number, string
         ts.factory.createStringLiteral(String(n)),
       )), ...(name === 'mesg_num'
         ? [
-            ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
-          ]
+          ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
+        ]
         : [])],
     ))
 
@@ -264,6 +264,7 @@ export function generateFitType(): Statement {
     tank_summaries: 'parsed_tank_summary',
     jumps: 'parsed_jump',
     time_in_zone: 'parsed_time_in_zone',
+    activity_metrics: 'parsed_activity_metrics',
   }
   const referenceProperties: Record<string, string> = {
     file_creator: 'parsed_file_creator',
@@ -284,8 +285,8 @@ export function generateFitType(): Statement {
     ...Object.keys(collectionProperties).map(prop => generateArrayProperty(prop, collectionProperties[prop] === 'unknown'
       ? ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
       : ts.factory.createTypeReferenceNode(
-          snakeToCamel(collectionProperties[prop]),
-        ))),
+        snakeToCamel(collectionProperties[prop]),
+      ))),
   ])
 }
 export function generateMessages(messages: { [messageId: number]: Message }): Statement[] {

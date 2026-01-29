@@ -22,7 +22,7 @@ export interface MessageIndex {
 // parsed from Fit.types
 
 export type File = 'device' | 'settings' | 'sport' | 'activity' | 'workout' | 'course' | 'schedules' | 'weight' | 'totals' | 'goals' | 'blood_pressure' | 'monitoring_a' | 'activity_summary' | 'monitoring_daily' | 'monitoring_b' | 'segment' | 'segment_list' | 'exd_configuration' | 'mfg_range_min' | 'mfg_range_max'
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
 export type Checksum = 'clear' | 'ok'
 export type FileFlags = '0' | 'read' | 'write' | 'erase'
 export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type'
@@ -78,9 +78,9 @@ export type Schedule = 'workout' | 'course'
 export type CoursePoint = 'generic' | 'summit' | 'valley' | 'water' | 'food' | 'danger' | 'left' | 'right' | 'straight' | 'first_aid' | 'fourth_category' | 'third_category' | 'second_category' | 'first_category' | 'hors_category' | 'sprint' | 'left_fork' | 'right_fork' | 'middle_fork' | 'slight_left' | 'sharp_left' | 'slight_right' | 'sharp_right' | 'u_turn' | 'segment_start' | 'segment_end'
 export type Manufacturer = '0' | 'garmin' | 'garmin_fr405_antfs' | 'zephyr' | 'dayton' | 'idt' | 'srm' | 'quarq' | 'ibike' | 'saris' | 'spark_hk' | 'tanita' | 'echowell' | 'dynastream_oem' | 'nautilus' | 'dynastream' | 'timex' | 'metrigear' | 'xelic' | 'beurer' | 'cardiosport' | 'a_and_d' | 'hmm' | 'suunto' | 'thita_elektronik' | 'gpulse' | 'clean_mobile' | 'pedal_brain' | 'peaksware' | 'saxonar' | 'lemond_fitness' | 'dexcom' | 'wahoo_fitness' | 'octane_fitness' | 'archinoetics' | 'the_hurt_box' | 'citizen_systems' | 'magellan' | 'osynce' | 'holux' | 'concept2' | 'one_giant_leap' | 'ace_sensor' | 'brim_brothers' | 'xplova' | 'perception_digital' | 'bf1systems' | 'pioneer' | 'spantec' | 'metalogics' | '4iiiis' | 'seiko_epson' | 'seiko_epson_oem' | 'ifor_powell' | 'maxwell_guider' | 'star_trac' | 'breakaway' | 'alatech_technology_ltd' | 'mio_technology_europe' | 'rotor' | 'geonaute' | 'id_bike' | 'specialized' | 'wtek' | 'physical_enterprises' | 'north_pole_engineering' | 'bkool' | 'cateye' | 'stages_cycling' | 'sigmasport' | 'tomtom' | 'peripedal' | 'wattbike' | 'moxy' | 'ciclosport' | 'powerbahn' | 'acorn_projects_aps' | 'lifebeam' | 'bontrager' | 'wellgo' | 'scosche' | 'magura' | 'woodway' | 'elite' | 'nielsen_kellerman' | 'dk_city' | 'tacx' | 'direction_technology' | 'magtonic' | '1partcarbon' | 'inside_ride_technologies' | 'sound_of_motion' | 'stryd' | 'icg' | 'mipulse' | 'bsx_athletics' | 'look' | 'campagnolo_srl' | 'body_bike_smart' | 'praxisworks' | 'limits_technology' | 'topaction_technology' | 'cosinuss' | 'fitcare' | 'magene' | 'giant_manufacturing_co' | 'tigrasport' | 'salutron' | 'technogym' | 'bryton_sensors' | 'latitude_limited' | 'soaring_technology' | 'igpsport' | 'thinkrider' | 'gopher_sport' | 'waterrower' | 'orangetheory' | 'inpeak' | 'kinetic' | 'johnson_health_tech' | 'polar_electro' | 'seesense' | 'nci_technology' | 'development' | 'healthandlife' | 'lezyne' | 'scribe_labs' | 'zwift' | 'watteam' | 'recon' | 'favero_electronics' | 'dynovelo' | 'strava' | 'precor' | 'bryton' | 'sram' | 'navman' | 'cobi' | 'spivi' | 'mio_magellan' | 'evesports' | 'sensitivus_gauge' | 'podoon' | 'life_time_fitness' | 'falco_e_motors' | 'minoura' | 'cycliq' | 'luxottica' | 'trainer_road' | 'the_sufferfest' | 'fullspeedahead' | 'virtualtraining' | 'feedbacksports' | 'omata' | 'vdo' | 'magneticdays' | 'hammerhead' | 'kinetic_by_kurt' | 'shapelog' | 'dabuziduo' | 'jetblack' | 'coros' | 'virtugo' | 'velosense' | 'actigraphcorp'
 export type GarminProduct = 'hrm_bike' | 'hrm1' | 'axh01' | 'axb01' | 'axb02' | 'hrm2ss' | 'dsi_alf02' | 'hrm3ss' | 'hrm_run_single_byte_product_id' | 'bsm' | 'bcm' | 'axs01' | 'hrm_tri_single_byte_product_id' | 'fr225_single_byte_product_id' | 'fr301_china' | 'fr301_japan' | 'fr301_korea' | 'fr301_taiwan' | 'fr405' | 'fr50' | 'fr405_japan' | 'fr60' | 'dsi_alf01' | 'fr310xt' | 'edge500' | 'fr110' | 'edge800' | 'edge500_taiwan' | 'edge500_japan' | 'chirp' | 'fr110_japan' | 'edge200' | 'fr910xt' | 'edge800_taiwan' | 'edge800_japan' | 'alf04' | 'fr610' | 'fr210_japan' | 'vector_ss' | 'vector_cp' | 'edge800_china' | 'edge500_china' | 'fr610_japan' | 'edge500_korea' | 'fr70' | 'fr310xt_4t' | 'amx' | 'fr10' | 'edge800_korea' | 'swim' | 'fr910xt_china' | 'fenix' | 'edge200_taiwan' | 'edge510' | 'edge810' | 'tempe' | 'fr910xt_japan' | 'fr620' | 'fr220' | 'fr910xt_korea' | 'fr10_japan' | 'edge810_japan' | 'virb_elite' | 'edge_touring' | 'edge510_japan' | 'hrm_tri' | 'hrm_run' | 'fr920xt' | 'edge510_asia' | 'edge810_china' | 'edge810_taiwan' | 'edge1000' | 'vivo_fit' | 'virb_remote' | 'vivo_ki' | 'fr15' | 'vivo_active' | 'edge510_korea' | 'fr620_japan' | 'fr620_china' | 'fr220_japan' | 'fr220_china' | 'approach_s6' | 'vivo_smart' | 'fenix2' | 'epix' | 'fenix3' | 'edge1000_taiwan' | 'edge1000_japan' | 'fr15_japan' | 'edge520' | 'edge1000_china' | 'fr620_russia' | 'fr220_russia' | 'vector_s' | 'edge1000_korea' | 'fr920xt_taiwan' | 'fr920xt_china' | 'fr920xt_japan' | 'virbx' | 'vivo_smart_apac' | 'etrex_touch' | 'edge25' | 'fr25' | 'vivo_fit2' | 'fr225' | 'fr630' | 'fr230' | 'fr735xt' | 'vivo_active_apac' | 'vector_2' | 'vector_2s' | 'virbxe' | 'fr620_taiwan' | 'fr220_taiwan' | 'truswing' | 'fenix3_china' | 'fenix3_twn' | 'varia_headlight' | 'varia_taillight_old' | 'edge_explore_1000' | 'fr225_asia' | 'varia_radar_taillight' | 'varia_radar_display' | 'edge20' | 'd2_bravo' | 'approach_s20' | 'varia_remote' | 'hrm4_run' | 'vivo_active_hr' | 'vivo_smart_hr' | 'vivo_move' | 'varia_vision' | 'vivo_fit3' | 'fenix3_hr' | 'virb_ultra_30' | 'index_smart_scale' | 'fr235' | 'fenix3_chronos' | 'oregon7xx' | 'rino7xx' | 'nautix' | 'edge_820' | 'edge_explore_820' | 'fenix5s' | 'd2_bravo_titanium' | 'varia_ut800' | 'running_dynamics_pod' | 'fenix5x' | 'vivo_fit_jr' | 'fr935' | 'fenix5' | 'descent' | 'sdm4' | 'edge_remote' | 'training_center' | 'connectiq_simulator' | 'android_antplus_plugin' | 'connect'
-export type AntplusDeviceType = '0' | 'antfs' | 'bike_power' | 'environment_sensor_legacy' | 'multi_sport_speed_distance' | 'control' | 'fitness_equipment' | 'blood_pressure' | 'geocache_node' | 'light_electric_vehicle' | 'env_sensor' | 'racquet' | 'control_hub' | 'muscle_oxygen' | 'shifting' | 'bike_light_main' | 'bike_light_shared' | 'exd' | 'bike_radar' | 'weight_scale' | 'heart_rate' | 'bike_speed_cadence' | 'bike_cadence' | 'bike_speed' | 'stride_speed_distance'
-export type LocalDeviceType = 'gps' | 'glonass' | 'beidou' | 'galileo' | 'waas_egnos' | 'local' | 'barometer' | 'accelerometer' | 'gyroscope' | 'compass'
-export type BleDeviceType = '0' | 'heart_rate' | 'cycling_speed_cadence' | 'cycling_power'
+export type AntplusDeviceType = 'antfs' | 'bike_power' | 'environment_sensor_legacy' | 'multi_sport_speed_distance' | 'control' | 'fitness_equipment' | 'blood_pressure' | 'geocache_node' | 'light_electric_vehicle' | 'env_sensor' | 'racquet' | 'control_hub' | 'muscle_oxygen' | 'shifting' | 'bike_light_main' | 'bike_light_shared' | 'exd' | 'bike_radar' | 'bike_aero' | 'weight_scale' | 'heart_rate' | 'bike_speed_cadence' | 'bike_cadence' | 'bike_speed' | 'stride_speed_distance'
+export type LocalDeviceType = 'gps' | 'glonass' | 'gps_glonass' | 'accelerometer' | 'barometer' | 'temperature' | 'whr' | 'sensor_hub'
+export type BleDeviceType = 'connected_gps' | 'heart_rate' | 'bike_power' | 'bike_speed_cadence' | 'bike_speed' | 'bike_cadence' | 'footpod' | 'bike_trainer'
 export type AntNetwork = 'public' | 'antplus' | 'antfs' | 'private'
 export type WorkoutCapabilities = '0' | 'interval' | 'custom' | 'fitness_equipment' | 'firstbeat' | 'new_leaf' | 'tcx' | 'speed' | 'heart_rate' | 'distance' | 'cadence' | 'power' | 'grade' | 'resistance' | 'protected'
 export type BatteryStatus = '0' | 'new' | 'good' | 'ok' | 'low' | 'critical' | 'charging' | 'unknown'
@@ -680,7 +680,7 @@ export interface ParsedEvent {
 }
 export interface ParsedDeviceInfo {
   device_index?: number
-  device_type?: AntplusDeviceType
+  device_type?: number
   manufacturer?: Manufacturer
   serial_number?: number
   product?: number
@@ -886,6 +886,20 @@ export interface ParsedOHrSettings {
   enabled?: number
   timestamp: string
 }
+export interface ParsedActivityMetrics {
+  new_max_heart_rate?: number
+  aerobic_training_effect?: number
+  vo2_max?: number
+  recovery_time?: number
+  sport?: Sport
+  anaerobic_training_effect?: number
+  first_vo2_max?: number
+  primary_benefit?: number
+  total_ascent?: number
+  total_descent?: number
+  avg_power?: number
+  avg_heart_rate?: number
+}
 export interface ParsedFieldDescription {
   developer_data_index?: number
   field_definition_number?: number
@@ -909,11 +923,9 @@ export interface ParsedTimeInZone {
   time_in_hr_zone?: number[]
   time_in_speed_zone?: number[]
   time_in_power_zone?: number[]
-  hr_zone_high_boundary_deprecated?: number[]
   hr_zone_high_boundary?: number[]
   speed_zone_high_boundary?: number[]
   power_zone_high_boundary?: number[]
-  hr_calc_type?: HrZoneCalc
   max_heart_rate_deprecated?: number
   max_heart_rate?: number
   resting_heart_rate?: number
@@ -1043,4 +1055,5 @@ export interface ParsedFit {
   tank_summaries?: ParsedTankSummary[]
   jumps?: ParsedJump[]
   time_in_zone?: ParsedTimeInZone[]
+  activity_metrics?: ParsedActivityMetrics[]
 }
