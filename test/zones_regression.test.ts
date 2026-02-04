@@ -35,4 +35,20 @@ describe('zones regression tests', () => {
         expect(msgWithPower.time_in_power_zone.length).toBeGreaterThanOrEqual(7)
         expect(msgWithPower.power_zone_high_boundary.length).toBeGreaterThanOrEqual(7)
     })
+
+    it('expects time_in_power_zone to NOT contain sentinel values in downhill.fit', async () => {
+        const fitParser = new FitParser({ force: true })
+        const buffer = await fs.readFile('./examples/downhill.fit')
+        const fitObject = await fitParser.parseAsync(buffer)
+
+        // Check sessions
+        if (fitObject.sessions && fitObject.sessions.length > 0) {
+            const session = fitObject.sessions[0];
+            if (session.time_in_power_zone) {
+                const invalidValue = 4294967.295;
+                const hasInvalid = session.time_in_power_zone.some((v: any) => Math.abs(v - invalidValue) < 0.1);
+                expect(hasInvalid).toBe(false);
+            }
+        }
+    })
 })

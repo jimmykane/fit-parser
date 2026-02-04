@@ -12,6 +12,8 @@ const CompressedHeaderMask = 0x80 as const
 const GarminTimeOffset = 631065600000 as const
 let monitoring_timestamp = 0
 
+console.log(">>> LOADING BINARY.TS <<<");
+
 export function addEndian(littleEndian: boolean, bytes: number[]): number {
   let result = 0
   if (!littleEndian)
@@ -134,9 +136,13 @@ function formatByType(
     case 'uint16_array':
     case 'uint8_array':
       if (Array.isArray(data)) {
-        return data.map((dataItem: number) =>
-          scale ? dataItem / scale + offset : dataItem,
-        )
+        const baseType = type.replace('_array', '')
+        return data.map((dataItem: number) => {
+          if (isInvalidValue(dataItem, baseType)) {
+            return null
+          }
+          return scale ? dataItem / scale + offset : dataItem
+        })
       }
       return scale ? data / scale + offset : data
     default:
