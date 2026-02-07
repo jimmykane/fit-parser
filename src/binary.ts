@@ -12,8 +12,6 @@ const CompressedHeaderMask = 0x80 as const
 const GarminTimeOffset = 631065600000 as const
 let monitoring_timestamp = 0
 
-console.log(">>> LOADING BINARY.TS <<<");
-
 export function addEndian(littleEndian: boolean, bytes: number[]): number {
   let result = 0
   if (!littleEndian)
