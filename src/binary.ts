@@ -156,7 +156,9 @@ function formatByType(
           }
         }
         if (!values.includes('mask')) {
-          return FIT.types[type][data]
+          const typeMap = FIT.types[type] as Record<string, any>
+          const mapped = typeMap[String(data)]
+          return mapped === undefined ? data : mapped
         }
         const dataItem: any = {}
         for (const key in FIT.types[type]) {
