@@ -2593,6 +2593,13 @@ export const FIT: FitType = {
     },
     20: {
       name: 'record',
+      90: {
+        field: 'garmin_performance_condition',
+        type: 'sint8',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
       253: {
         field: 'timestamp',
         type: 'date_time',
