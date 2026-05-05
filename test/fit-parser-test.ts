@@ -81,4 +81,29 @@ describe('fit parser tests', () => {
     })
     expect(fitObject.activity_metrics?.[0]?.vo2_max).toBeUndefined()
   })
+
+  it('expects extended Garmin user metrics to be parsed', async () => {
+    const fitParser = new FitParser({ force: true })
+    const buffer = await fs.readFile('./test/user_metrics_extended.fit')
+    const fitObject = await fitParser.parseAsync(buffer)
+
+    const userMetrics = fitObject.user_metrics?.[0]
+
+    expect(userMetrics?.timestamp).toEqual(new Date('2026-05-03T09:36:24.000Z'))
+    expect(userMetrics?.vo2_max).toBeCloseTo(56.22, 2)
+    expect(userMetrics?.first_vo2_max).toBeCloseTo(56.2173, 4)
+    expect(userMetrics).toMatchObject({
+      age: 42,
+      height: 1.78,
+      weight: 65,
+      gender: 'male',
+      max_heart_rate: 187,
+      remaining_recovery_time: 182,
+      lthr: 161,
+      ltpower: 216,
+      ltspeed: 0,
+      start_of_activity: new Date('2026-05-03T09:36:23.000Z'),
+      end_of_previous_activity: new Date('2026-04-28T14:37:31.000Z'),
+    })
+  })
 })

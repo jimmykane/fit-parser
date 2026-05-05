@@ -861,6 +861,13 @@ export interface ParsedUserMetrics {
   weight?: number
   gender?: Gender
   max_heart_rate?: number
+  remaining_recovery_time?: number
+  lthr?: number
+  ltpower?: number
+  ltspeed?: number
+  start_of_activity?: string
+  first_vo2_max?: number
+  end_of_previous_activity?: string
   timestamp: string
 }
 export interface ParsedLength {
