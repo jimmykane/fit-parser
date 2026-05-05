@@ -115,7 +115,7 @@ function readData(
 
 function formatByType(
   data: any,
-  type: string,
+  type: string | number,
   scale: number | null,
   offset: number,
 ): any {
@@ -176,7 +176,7 @@ function formatByType(
   }
 }
 
-function isInvalidValue(data: any, type: string): boolean {
+function isInvalidValue(data: any, type: string | number): boolean {
   switch (type) {
     case 'enum':
       return data === 0xFF
@@ -218,6 +218,15 @@ function isInvalidValue(data: any, type: string): boolean {
     default:
       return false
   }
+}
+
+function isInvalidBaseTypeValue(data: any, baseTypeNo: number): boolean {
+  if (Array.isArray(data)) {
+    return false
+  }
+
+  const baseType = FIT.types.fit_base_type[baseTypeNo]
+  return typeof baseType === 'string' ? isInvalidValue(data, baseType) : false
 }
 
 function convertTo<T extends string>(
@@ -356,7 +365,7 @@ export function readRecord(
         size: blob[fDefIndex + 1],
         endianAbility: (baseType & 128) === 128,
         littleEndian: lEnd,
-        baseTypeNo: baseType & 15,
+        baseTypeNo: baseType,
         name: field,
         dataType: getFitMessageBaseType(baseType & 15),
       }
@@ -384,7 +393,7 @@ export function readRecord(
           size,
           endianAbility: (baseType & 128) === 128,
           littleEndian: lEnd,
-          baseTypeNo: baseType & 15,
+          baseTypeNo: baseType,
           name: devDef.field_name,
           dataType: getFitMessageBaseType(baseType & 15),
           scale: devDef.scale || 1,
@@ -430,7 +439,7 @@ export function readRecord(
     const fDef = messageType.fieldDefs[i]
     const data = readData(blob, fDef, readDataFromIndex, options)
 
-    if (!isInvalidValue(data, fDef.type)) {
+    if (!isInvalidValue(data, fDef.type) && !isInvalidBaseTypeValue(data, fDef.baseTypeNo)) {
       rawFields.push({ fDef, data })
     }
 
@@ -451,8 +460,8 @@ export function readRecord(
     if (fDef.isDeveloperField) {
       const field = fDef.name
       const { type } = fDef
-      const { scale } = fDef
-      const { offset } = fDef
+      const scale = fDef.scale ?? null
+      const offset = fDef.offset ?? 0
 
       fields[fDef.name] = applyOptions(
         formatByType(data, type, scale, offset),

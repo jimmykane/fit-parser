@@ -62,4 +62,23 @@ describe('fit parser tests', () => {
     expect(fitObject.activity.sessions?.[0].laps?.[0]).toHaveProperty('timestamp')
     expect(fitObject.activity.sessions?.[0].laps?.[0].records?.[0]).toHaveProperty('timestamp')
   })
+
+  it('expects undocumented Garmin user metrics to be parsed', async () => {
+    const fitParser = new FitParser({ force: true })
+    const buffer = await fs.readFile('./test/user_metrics.fit')
+    const fitObject = await fitParser.parseAsync(buffer)
+
+    const userMetrics = fitObject.user_metrics?.[0]
+
+    expect(userMetrics?.timestamp).toEqual(new Date('2020-06-09T11:53:24.000Z'))
+    expect(userMetrics?.vo2_max).toBeCloseTo(53.18, 2)
+    expect(userMetrics).toMatchObject({
+      age: 32,
+      height: 1.83,
+      weight: 70,
+      gender: 'male',
+      max_heart_rate: 188,
+    })
+    expect(fitObject.activity_metrics?.[0]?.vo2_max).toBeUndefined()
+  })
 })

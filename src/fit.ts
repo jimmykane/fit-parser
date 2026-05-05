@@ -4173,6 +4173,60 @@ export const FIT: FitType = {
         units: 'counts',
       },
     },
+    // Undocumented Garmin user metrics message. Observed in activity FIT files exported
+    // from Garmin Connect and displayed by fitfileviewer as "User Metrics".
+    79: {
+      name: 'user_metrics',
+      253: {
+        field: 'timestamp',
+        type: 'date_time',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      0: {
+        field: 'vo2_max',
+        type: 'uint16',
+        scale: 1024 / 3.5,
+        offset: 0,
+        units: 'ml/kg/min',
+      },
+      1: {
+        field: 'age',
+        type: 'uint8',
+        scale: null,
+        offset: 0,
+        units: 'years',
+      },
+      2: {
+        field: 'height',
+        type: 'uint8',
+        scale: 100,
+        offset: 0,
+        units: 'm',
+      },
+      3: {
+        field: 'weight',
+        type: 'uint16',
+        scale: 10,
+        offset: 0,
+        units: 'kg',
+      },
+      4: {
+        field: 'gender',
+        type: 'gender',
+        scale: null,
+        offset: 0,
+        units: '',
+      },
+      6: {
+        field: 'max_heart_rate',
+        type: 'uint8',
+        scale: null,
+        offset: 0,
+        units: 'bpm',
+      },
+    },
     103: {
       name: 'monitoring_info',
       253: {
@@ -4970,6 +5024,7 @@ export const FIT: FitType = {
       55: 'monitoring',
       72: 'training_file',
       78: 'hrv',
+      79: 'user_metrics',
       80: 'ant_rx',
       81: 'ant_tx',
       82: 'ant_channel_id',

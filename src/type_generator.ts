@@ -265,6 +265,7 @@ export function generateFitType(): Statement {
     jumps: 'parsed_jump',
     time_in_zone: 'parsed_time_in_zone',
     activity_metrics: 'parsed_activity_metrics',
+    user_metrics: 'parsed_user_metrics',
   }
   const referenceProperties: Record<string, string> = {
     file_creator: 'parsed_file_creator',

@@ -25,6 +25,7 @@ import type {
   ParsedTankSummary,
   ParsedTankUpdate,
   ParsedTimeInZone,
+  ParsedUserMetrics,
 } from './fit_types.js'
 import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
 import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
@@ -159,6 +160,7 @@ export default class FitParser {
     const jumps: ParsedJump[] = []
     const time_in_zone: ParsedTimeInZone[] = []
     const activity_metrics: ParsedActivityMetrics[] = []
+    const user_metrics: ParsedUserMetrics[] = []
 
     let loopIndex = headerLength
     const messageTypes: any[] = []
@@ -276,6 +278,9 @@ export default class FitParser {
         case 'activity_metrics':
           activity_metrics.push(message)
           break
+        case 'user_metrics':
+          user_metrics.push(message)
+          break
         default:
           if (messageType !== '') {
             fitObj[messageType as keyof ParsedFit] = message
@@ -299,6 +304,7 @@ export default class FitParser {
     fitObj.jumps = jumps
     fitObj.time_in_zone = time_in_zone
     fitObj.activity_metrics = activity_metrics
+    fitObj.user_metrics = user_metrics
 
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)

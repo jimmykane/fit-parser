@@ -22,7 +22,7 @@ export interface MessageIndex {
 // parsed from Fit.types
 
 export type File = 'device' | 'settings' | 'sport' | 'activity' | 'workout' | 'course' | 'schedules' | 'weight' | 'totals' | 'goals' | 'blood_pressure' | 'monitoring_a' | 'activity_summary' | 'monitoring_daily' | 'monitoring_b' | 'segment' | 'segment_list' | 'exd_configuration' | 'mfg_range_min' | 'mfg_range_max'
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
 export type Checksum = 'clear' | 'ok'
 export type FileFlags = '0' | 'read' | 'write' | 'erase'
 export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type'
@@ -854,6 +854,15 @@ export interface ParsedMonitoring {
 export interface ParsedHrv {
   time?: number[]
 }
+export interface ParsedUserMetrics {
+  vo2_max?: number
+  age?: number
+  height?: number
+  weight?: number
+  gender?: Gender
+  max_heart_rate?: number
+  timestamp: string
+}
 export interface ParsedLength {
   event?: Event
   event_type?: EventType
@@ -1056,4 +1065,5 @@ export interface ParsedFit {
   jumps?: ParsedJump[]
   time_in_zone?: ParsedTimeInZone[]
   activity_metrics?: ParsedActivityMetrics[]
+  user_metrics?: ParsedUserMetrics[]
 }
