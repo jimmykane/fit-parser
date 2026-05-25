@@ -20,6 +20,8 @@ import type {
   ParsedPowerZone,
   ParsedRecord,
   ParsedSession,
+  ParsedSplit,
+  ParsedSplitSummary,
   ParsedSport,
   ParsedStressLevel,
   ParsedTankSummary,
@@ -158,6 +160,8 @@ export default class FitParser {
     const tank_updates: ParsedTankUpdate[] = []
     const tank_summaries: ParsedTankSummary[] = []
     const jumps: ParsedJump[] = []
+    const splits: ParsedSplit[] = []
+    const split_summaries: ParsedSplitSummary[] = []
     const time_in_zone: ParsedTimeInZone[] = []
     const activity_metrics: ParsedActivityMetrics[] = []
     const user_metrics: ParsedUserMetrics[] = []
@@ -272,6 +276,12 @@ export default class FitParser {
         case 'jump':
           jumps.push(message)
           break
+        case 'split':
+          splits.push(message)
+          break
+        case 'split_summary':
+          split_summaries.push(message)
+          break
         case 'time_in_zone':
           time_in_zone.push(message)
           break
@@ -302,6 +312,8 @@ export default class FitParser {
     fitObj.tank_updates = tank_updates
     fitObj.tank_summaries = tank_summaries
     fitObj.jumps = jumps
+    fitObj.splits = splits
+    fitObj.split_summaries = split_summaries
     fitObj.time_in_zone = time_in_zone
     fitObj.activity_metrics = activity_metrics
     fitObj.user_metrics = user_metrics
@@ -320,6 +332,8 @@ export default class FitParser {
         developer_data_ids: applications,
         field_descriptions: fieldDescriptions,
         sports,
+        splits,
+        split_summaries,
       }
     }
 

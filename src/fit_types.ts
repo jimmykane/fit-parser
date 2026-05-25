@@ -22,7 +22,7 @@ export interface MessageIndex {
 // parsed from Fit.types
 
 export type File = 'device' | 'settings' | 'sport' | 'activity' | 'workout' | 'course' | 'schedules' | 'weight' | 'totals' | 'goals' | 'blood_pressure' | 'monitoring_a' | 'activity_summary' | 'monitoring_daily' | 'monitoring_b' | 'segment' | 'segment_list' | 'exd_configuration' | 'mfg_range_min' | 'mfg_range_max'
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'jump' | 'split' | 'split_summary' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition'
 export type Checksum = 'clear' | 'ok'
 export type FileFlags = '0' | 'read' | 'write' | 'erase'
 export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type'
@@ -111,6 +111,7 @@ export type SegmentLapStatus = 'end' | 'fail'
 export type SegmentLeaderboardType = 'overall' | 'personal_best' | 'connections' | 'group' | 'challenger' | 'kom' | 'qom' | 'pr' | 'goal' | 'rival' | 'club_leader'
 export type SegmentDeleteStatus = 'do_not_delete' | 'delete_one' | 'delete_all'
 export type SegmentSelectionType = 'starred' | 'suggested'
+export type SplitType = 'ascent_split' | 'descent_split' | 'interval_active' | 'interval_rest' | 'interval_warmup' | 'interval_cooldown' | 'interval_recovery' | 'interval_other' | 'climb_active' | 'climb_rest' | 'surf_active' | 'run_active' | 'run_rest' | 'workout_round' | 'rwd_run' | 'rwd_walk' | 'windsurf_active' | 'rwd_stand' | 'transition' | 'ski_lift_split' | 'ski_run_split'
 export type SourceType = 'ant' | 'antplus' | 'bluetooth' | 'bluetooth_low_energy' | 'wifi' | 'local'
 export type DisplayOrientation = 'auto' | 'portrait' | 'landscape' | 'portrait_flipped' | 'landscape_flipped'
 export type WorkoutEquipment = 'none' | 'swim_fins' | 'swim_kickboard' | 'swim_paddles' | 'swim_pull_buoy' | 'swim_snorkel'
@@ -478,6 +479,9 @@ export interface ParsedSession {
   workout_feel?: number
   workout_rpe?: number
   resting_calories?: number
+  beginning_potential_stamina?: number
+  ending_potential_stamina?: number
+  min_stamina?: number
   timestamp: string
   message_index?: MessageIndex
   laps?: ParsedLap[]
@@ -661,6 +665,8 @@ export interface ParsedRecord {
   n2_load?: number
   grit?: number
   flow?: number
+  potential_stamina?: number
+  stamina?: number
   timestamp: string
 }
 export interface ParsedEvent {
@@ -775,6 +781,8 @@ export interface ParsedActivity {
   developer_data_ids?: ParsedDeveloperDataId[]
   field_descriptions?: ParsedFieldDescription[]
   sports?: ParsedSport[]
+  splits?: ParsedSplit[]
+  split_summaries?: ParsedSplitSummary[]
 }
 export interface ParsedSoftware {
   version?: number
@@ -1023,6 +1031,48 @@ export interface ParsedJump {
   enhanced_speed?: number
   timestamp: string
 }
+export interface ParsedSplit {
+  split_type?: SplitType
+  total_elapsed_time?: number
+  total_timer_time?: number
+  total_distance?: number
+  avg_speed?: number
+  start_time: string
+  total_ascent?: number
+  total_descent?: number
+  start_position_lat?: number
+  start_position_long?: number
+  end_position_lat?: number
+  end_position_long?: number
+  max_speed?: number
+  avg_vert_speed?: number
+  end_time?: string
+  total_calories?: number
+  start_elevation?: number
+  active_time?: number
+  beginning_potential_stamina?: number
+  ending_potential_stamina?: number
+  min_stamina?: number
+  total_moving_time?: number
+  message_index?: MessageIndex
+}
+export interface ParsedSplitSummary {
+  split_type?: SplitType
+  num_splits?: number
+  total_timer_time?: number
+  total_distance?: number
+  avg_speed?: number
+  max_speed?: number
+  total_ascent?: number
+  total_descent?: number
+  avg_heart_rate?: number
+  max_heart_rate?: number
+  avg_vert_speed?: number
+  total_calories?: number
+  active_time?: number
+  total_moving_time?: number
+  message_index?: MessageIndex
+}
 export interface ParsedTankUpdate {
   sensor?: number
   pressure?: number
@@ -1070,6 +1120,8 @@ export interface ParsedFit {
   tank_updates?: ParsedTankUpdate[]
   tank_summaries?: ParsedTankSummary[]
   jumps?: ParsedJump[]
+  splits?: ParsedSplit[]
+  split_summaries?: ParsedSplitSummary[]
   time_in_zone?: ParsedTimeInZone[]
   activity_metrics?: ParsedActivityMetrics[]
   user_metrics?: ParsedUserMetrics[]

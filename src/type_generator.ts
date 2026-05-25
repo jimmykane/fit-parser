@@ -230,6 +230,8 @@ function generateAdditionalFields(msg: Message): PropertySignature[] {
       developer_data_ids: 'parsed_developer_data_id',
       field_descriptions: 'parsed_field_description',
       sports: 'parsed_sport',
+      splits: 'parsed_split',
+      split_summaries: 'parsed_split_summary',
     }
     return Object.keys(props).map(prop => generateArrayProperty(prop, ts.factory.createTypeReferenceNode(
       snakeToCamel(props[prop]),
@@ -263,6 +265,8 @@ export function generateFitType(): Statement {
     tank_updates: 'parsed_tank_update',
     tank_summaries: 'parsed_tank_summary',
     jumps: 'parsed_jump',
+    splits: 'parsed_split',
+    split_summaries: 'parsed_split_summary',
     time_in_zone: 'parsed_time_in_zone',
     activity_metrics: 'parsed_activity_metrics',
     user_metrics: 'parsed_user_metrics',

@@ -185,6 +185,8 @@ export interface FitOptions {
     tank_updates?: ParsedTankUpdate[];
     tank_summaries?: ParsedTankSummary[];
     jumps?: ParsedJump[];
+    splits?: ParsedSplit[];
+    split_summaries?: ParsedSplitSummary[];
     time_in_zone?: ParsedTimeInZone[];
     activity_metrics?: ParsedActivityMetrics[];
     user_metrics?: ParsedUserMetrics[];

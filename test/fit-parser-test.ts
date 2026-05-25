@@ -106,4 +106,53 @@ describe('fit parser tests', () => {
       end_of_previous_activity: new Date('2026-04-28T14:37:31.000Z'),
     })
   })
+
+  it('expects Garmin stamina fields to be parsed from records, session, and splits', async () => {
+    const fitParser = new FitParser({ force: true, mode: 'both' })
+    const buffer = await fs.readFile('./test/garmin-stamina.fit')
+    const fitObject = await fitParser.parseAsync(buffer)
+    const records = fitObject.records ?? []
+    const splits = fitObject.splits ?? []
+
+    expect(records).toHaveLength(4488)
+    expect(records[0]).toMatchObject({
+      potential_stamina: 95,
+      stamina: 95,
+    })
+
+    const lastRecord = records[records.length - 1]
+    expect(lastRecord).toMatchObject({
+      potential_stamina: 66,
+      stamina: 66,
+    })
+    expect(Math.min(...records.map(record => record.stamina!))).toBe(34)
+
+    expect(fitObject.sessions?.[0]).toMatchObject({
+      beginning_potential_stamina: 95,
+      ending_potential_stamina: 66,
+      min_stamina: 34,
+    })
+
+    expect(splits).toHaveLength(91)
+    expect(splits[0]).toMatchObject({
+      beginning_potential_stamina: 95,
+      ending_potential_stamina: 95,
+      min_stamina: 95,
+    })
+    expect(splits[splits.length - 1]).toMatchObject({
+      beginning_potential_stamina: 66,
+      ending_potential_stamina: 66,
+      min_stamina: 66,
+    })
+    expect(Math.min(...splits.map(split => split.min_stamina!))).toBe(34)
+    expect(fitObject.activity?.splits).toHaveLength(91)
+
+    expect(fitObject.split_summaries).toHaveLength(7)
+    expect(fitObject.split_summaries?.[0]).toMatchObject({
+      split_type: 'interval_active',
+      num_splits: 5,
+      avg_heart_rate: 160,
+      max_heart_rate: 199,
+    })
+  })
 })
