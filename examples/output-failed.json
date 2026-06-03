@@ -1,0 +1,5095 @@
+{
+  "profileVersion": 21187,
+  "protocolVersion": 32,
+  "file_creator": {
+    "software_version": 1701
+  },
+  "activity": {
+    "timestamp": "2026-01-17T08:10:42.000Z",
+    "total_timer_time": 778.918,
+    "local_timestamp": "2026-01-17T08:10:42.000Z",
+    "num_sessions": 1,
+    "type": "manual",
+    "event": "activity",
+    "event_type": "stop",
+    "sessions": [
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "start_time": "2026-01-17T08:10:42.000Z",
+        "total_elapsed_time": 778.918,
+        "total_timer_time": 778.918,
+        "total_cycles": 0,
+        "sport_profile_name": "Yoga",
+        "message_index": {
+          "0": false,
+          "value": 0,
+          "reserved": false,
+          "selected": false
+        },
+        "total_calories": 114,
+        "first_lap_index": 0,
+        "num_laps": 1,
+        "enhanced_avg_respiration_rate": 13.89,
+        "enhanced_max_respiration_rate": 22,
+        "est_sweat_loss": 79,
+        "enhanced_min_respiration_rate": 0,
+        "resting_calories": 17,
+        "event": "session",
+        "event_type": "stop",
+        "sport": "training",
+        "sub_sport": "yoga",
+        "avg_heart_rate": 102,
+        "max_heart_rate": 118,
+        "trigger": "activity_end",
+        "primary_benefit": 1,
+        "avg_flow": 51,
+        "laps": []
+      }
+    ],
+    "events": [
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "data": 0,
+        "event": "timer",
+        "event_type": "start",
+        "event_group": 0
+      },
+      {
+        "timestamp": "2026-01-17T08:23:40.000Z",
+        "data": 0,
+        "event": "timer",
+        "event_type": "stop_all",
+        "event_group": 0
+      }
+    ],
+    "hrv": [],
+    "device_infos": [
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "serial_number": 3485598867,
+        "manufacturer": "garmin",
+        "product": 4260,
+        "software_version": 17.01,
+        "device_index": 0,
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "manufacturer": "garmin",
+        "product": 4260,
+        "software_version": 17.01,
+        "device_index": 1,
+        "device_type": "barometer",
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "device_index": 2,
+        "device_type": 8,
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "software_version": 1,
+        "device_index": 3,
+        "device_type": "whr",
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:10:42.000Z",
+        "manufacturer": "garmin",
+        "product": 4278,
+        "software_version": 35.1,
+        "device_index": 4,
+        "device_type": "sensor_hub",
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:23:40.000Z",
+        "serial_number": 3485598867,
+        "manufacturer": "garmin",
+        "product": 4260,
+        "software_version": 17.01,
+        "device_index": 0,
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:23:40.000Z",
+        "manufacturer": "garmin",
+        "product": 4260,
+        "software_version": 17.01,
+        "device_index": 1,
+        "device_type": "barometer",
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:23:40.000Z",
+        "device_index": 2,
+        "device_type": 8,
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:23:40.000Z",
+        "software_version": 1,
+        "device_index": 3,
+        "device_type": "whr",
+        "source_type": "local"
+      },
+      {
+        "timestamp": "2026-01-17T08:23:40.000Z",
+        "manufacturer": "garmin",
+        "product": 4278,
+        "software_version": 35.1,
+        "device_index": 4,
+        "device_type": "sensor_hub",
+        "source_type": "local"
+      }
+    ],
+    "developer_data_ids": [],
+    "field_descriptions": [],
+    "sports": [
+      {
+        "name": "Yoga",
+        "sport": "training",
+        "sub_sport": "yoga"
+      }
+    ]
+  },
+  "device_settings": {
+    "utc_offset": 0,
+    "time_offset": 0,
+    "active_time_zone": 0,
+    "time_zone_offset": 0,
+    "display_orientation": "landscape",
+    "mounting_side": "left",
+    "number_of_screens": 5
+  },
+  "user_profile": {
+    "wake_time": 21600,
+    "sleep_time": 79200,
+    "weight": 76.5,
+    "gender": "male",
+    "height": 1.8,
+    "language": "english",
+    "elev_setting": "metric",
+    "weight_setting": "metric",
+    "resting_heart_rate": 45,
+    "hr_setting": "max",
+    "speed_setting": "metric",
+    "dist_setting": "metric",
+    "position_setting": "degree_minute_second",
+    "temperature_setting": "statute",
+    "height_setting": "metric"
+  },
+  "zones_target": {
+    "max_heart_rate": 156,
+    "threshold_heart_rate": 0,
+    "hr_calc_type": "percent_max_hr",
+    "pwr_calc_type": "percent_ftp"
+  },
+  "hr_zone": [],
+  "power_zone": [],
+  "dive_gases": [],
+  "course_points": [],
+  "sports": [
+    {
+      "name": "Yoga",
+      "sport": "training",
+      "sub_sport": "yoga"
+    }
+  ],
+  "monitors": [],
+  "stress": [],
+  "file_ids": [
+    {
+      "serial_number": 3485598867,
+      "time_created": "2026-01-17T08:10:42.000Z",
+      "manufacturer": "garmin",
+      "product": 4260,
+      "type": "activity"
+    }
+  ],
+  "monitor_info": [],
+  "definitions": [],
+  "tank_updates": [],
+  "tank_summaries": [],
+  "jumps": [],
+  "time_in_zone": [
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "time_in_hr_zone": [
+        0,
+        97.965,
+        566.955,
+        113.998,
+        0,
+        0,
+        0
+      ],
+      "reference_mesg": 18,
+      "reference_index": 0,
+      "hr_zone_high_boundary": [
+        78,
+        94,
+        109,
+        125,
+        140,
+        156
+      ],
+      "max_heart_rate_deprecated": 1,
+      "max_heart_rate": 156,
+      "resting_heart_rate": 45
+    },
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "time_in_hr_zone": [
+        0,
+        97.965,
+        566.955,
+        113.998,
+        0,
+        0,
+        0
+      ],
+      "reference_mesg": 225,
+      "reference_index": 0,
+      "hr_zone_high_boundary": [
+        78,
+        94,
+        109,
+        125,
+        140,
+        156
+      ],
+      "max_heart_rate_deprecated": 1,
+      "max_heart_rate": 156,
+      "resting_heart_rate": 45
+    }
+  ],
+  "activity_metrics": [
+    {
+      "vo2_max": 0,
+      "first_vo2_max": 0,
+      "recovery_time": 4660,
+      "new_max_heart_rate": 0,
+      "aerobic_training_effect": 1.1,
+      "sport": "training",
+      "anaerobic_training_effect": 0.2,
+      "primary_benefit": 1,
+      "avg_heart_rate": 102
+    }
+  ],
+  "sessions": [
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "start_time": "2026-01-17T08:10:42.000Z",
+      "total_elapsed_time": 778.918,
+      "total_timer_time": 778.918,
+      "total_cycles": 0,
+      "sport_profile_name": "Yoga",
+      "message_index": {
+        "0": false,
+        "value": 0,
+        "reserved": false,
+        "selected": false
+      },
+      "total_calories": 114,
+      "first_lap_index": 0,
+      "num_laps": 1,
+      "enhanced_avg_respiration_rate": 13.89,
+      "enhanced_max_respiration_rate": 22,
+      "est_sweat_loss": 79,
+      "enhanced_min_respiration_rate": 0,
+      "resting_calories": 17,
+      "event": "session",
+      "event_type": "stop",
+      "sport": "training",
+      "sub_sport": "yoga",
+      "avg_heart_rate": 102,
+      "max_heart_rate": 118,
+      "trigger": "activity_end",
+      "primary_benefit": 1,
+      "avg_flow": 51,
+      "laps": []
+    }
+  ],
+  "laps": [],
+  "lengths": [],
+  "records": [
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 0,
+      "timer_time": 0
+    },
+    {
+      "timestamp": "2026-01-17T08:10:43.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 1,
+      "timer_time": 1
+    },
+    {
+      "timestamp": "2026-01-17T08:10:44.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 2,
+      "timer_time": 2
+    },
+    {
+      "timestamp": "2026-01-17T08:10:45.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 3,
+      "timer_time": 3
+    },
+    {
+      "timestamp": "2026-01-17T08:10:46.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 4,
+      "timer_time": 4
+    },
+    {
+      "timestamp": "2026-01-17T08:10:47.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 5,
+      "timer_time": 5
+    },
+    {
+      "timestamp": "2026-01-17T08:10:48.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 6,
+      "timer_time": 6
+    },
+    {
+      "timestamp": "2026-01-17T08:10:49.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 7,
+      "timer_time": 7
+    },
+    {
+      "timestamp": "2026-01-17T08:10:50.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 8,
+      "timer_time": 8
+    },
+    {
+      "timestamp": "2026-01-17T08:10:51.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 9,
+      "timer_time": 9
+    },
+    {
+      "timestamp": "2026-01-17T08:10:52.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 10,
+      "timer_time": 10
+    },
+    {
+      "timestamp": "2026-01-17T08:10:53.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 11,
+      "timer_time": 11
+    },
+    {
+      "timestamp": "2026-01-17T08:10:54.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 12,
+      "timer_time": 12
+    },
+    {
+      "timestamp": "2026-01-17T08:10:55.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 13,
+      "timer_time": 13
+    },
+    {
+      "timestamp": "2026-01-17T08:10:56.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 14,
+      "timer_time": 14
+    },
+    {
+      "timestamp": "2026-01-17T08:10:57.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 15,
+      "timer_time": 15
+    },
+    {
+      "timestamp": "2026-01-17T08:10:58.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 16,
+      "timer_time": 16
+    },
+    {
+      "timestamp": "2026-01-17T08:10:59.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 17,
+      "timer_time": 17
+    },
+    {
+      "timestamp": "2026-01-17T08:11:00.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 18,
+      "timer_time": 18
+    },
+    {
+      "timestamp": "2026-01-17T08:11:01.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 19,
+      "timer_time": 19
+    },
+    {
+      "timestamp": "2026-01-17T08:11:02.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 20,
+      "timer_time": 20
+    },
+    {
+      "timestamp": "2026-01-17T08:11:03.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 21,
+      "timer_time": 21
+    },
+    {
+      "timestamp": "2026-01-17T08:11:04.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 22,
+      "timer_time": 22
+    },
+    {
+      "timestamp": "2026-01-17T08:11:05.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 23,
+      "timer_time": 23
+    },
+    {
+      "timestamp": "2026-01-17T08:11:06.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 24,
+      "timer_time": 24
+    },
+    {
+      "timestamp": "2026-01-17T08:11:07.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 25,
+      "timer_time": 25
+    },
+    {
+      "timestamp": "2026-01-17T08:11:08.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 26,
+      "timer_time": 26
+    },
+    {
+      "timestamp": "2026-01-17T08:11:09.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 27,
+      "timer_time": 27
+    },
+    {
+      "timestamp": "2026-01-17T08:11:10.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 28,
+      "timer_time": 28
+    },
+    {
+      "timestamp": "2026-01-17T08:11:11.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 29,
+      "timer_time": 29
+    },
+    {
+      "timestamp": "2026-01-17T08:11:12.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 30,
+      "timer_time": 30
+    },
+    {
+      "timestamp": "2026-01-17T08:11:13.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 31,
+      "timer_time": 31
+    },
+    {
+      "timestamp": "2026-01-17T08:11:14.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 32,
+      "timer_time": 32
+    },
+    {
+      "timestamp": "2026-01-17T08:11:15.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 33,
+      "timer_time": 33
+    },
+    {
+      "timestamp": "2026-01-17T08:11:16.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 34,
+      "timer_time": 34
+    },
+    {
+      "timestamp": "2026-01-17T08:11:17.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 35,
+      "timer_time": 35
+    },
+    {
+      "timestamp": "2026-01-17T08:11:18.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 36,
+      "timer_time": 36
+    },
+    {
+      "timestamp": "2026-01-17T08:11:19.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 37,
+      "timer_time": 37
+    },
+    {
+      "timestamp": "2026-01-17T08:11:20.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 38,
+      "timer_time": 38
+    },
+    {
+      "timestamp": "2026-01-17T08:11:21.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 39,
+      "timer_time": 39
+    },
+    {
+      "timestamp": "2026-01-17T08:11:22.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 40,
+      "timer_time": 40
+    },
+    {
+      "timestamp": "2026-01-17T08:11:23.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 41,
+      "timer_time": 41
+    },
+    {
+      "timestamp": "2026-01-17T08:11:24.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 42,
+      "timer_time": 42
+    },
+    {
+      "timestamp": "2026-01-17T08:11:25.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 43,
+      "timer_time": 43
+    },
+    {
+      "timestamp": "2026-01-17T08:11:26.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 44,
+      "timer_time": 44
+    },
+    {
+      "timestamp": "2026-01-17T08:11:27.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 45,
+      "timer_time": 45
+    },
+    {
+      "timestamp": "2026-01-17T08:11:28.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 46,
+      "timer_time": 46
+    },
+    {
+      "timestamp": "2026-01-17T08:11:29.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 47,
+      "timer_time": 47
+    },
+    {
+      "timestamp": "2026-01-17T08:11:30.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 48,
+      "timer_time": 48
+    },
+    {
+      "timestamp": "2026-01-17T08:11:31.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 49,
+      "timer_time": 49
+    },
+    {
+      "timestamp": "2026-01-17T08:11:32.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 50,
+      "timer_time": 50
+    },
+    {
+      "timestamp": "2026-01-17T08:11:33.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 51,
+      "timer_time": 51
+    },
+    {
+      "timestamp": "2026-01-17T08:11:34.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 52,
+      "timer_time": 52
+    },
+    {
+      "timestamp": "2026-01-17T08:11:35.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 53,
+      "timer_time": 53
+    },
+    {
+      "timestamp": "2026-01-17T08:11:36.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 54,
+      "timer_time": 54
+    },
+    {
+      "timestamp": "2026-01-17T08:11:37.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 55,
+      "timer_time": 55
+    },
+    {
+      "timestamp": "2026-01-17T08:11:38.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 56,
+      "timer_time": 56
+    },
+    {
+      "timestamp": "2026-01-17T08:11:39.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 57,
+      "timer_time": 57
+    },
+    {
+      "timestamp": "2026-01-17T08:11:40.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 58,
+      "timer_time": 58
+    },
+    {
+      "timestamp": "2026-01-17T08:11:41.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 59,
+      "timer_time": 59
+    },
+    {
+      "timestamp": "2026-01-17T08:11:42.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 60,
+      "timer_time": 60
+    },
+    {
+      "timestamp": "2026-01-17T08:11:43.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 61,
+      "timer_time": 61
+    },
+    {
+      "timestamp": "2026-01-17T08:11:44.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 62,
+      "timer_time": 62
+    },
+    {
+      "timestamp": "2026-01-17T08:11:45.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 63,
+      "timer_time": 63
+    },
+    {
+      "timestamp": "2026-01-17T08:11:46.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 64,
+      "timer_time": 64
+    },
+    {
+      "timestamp": "2026-01-17T08:11:47.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 65,
+      "timer_time": 65
+    },
+    {
+      "timestamp": "2026-01-17T08:11:48.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 66,
+      "timer_time": 66
+    },
+    {
+      "timestamp": "2026-01-17T08:11:49.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 67,
+      "timer_time": 67
+    },
+    {
+      "timestamp": "2026-01-17T08:11:50.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 68,
+      "timer_time": 68
+    },
+    {
+      "timestamp": "2026-01-17T08:11:51.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 69,
+      "timer_time": 69
+    },
+    {
+      "timestamp": "2026-01-17T08:11:52.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 70,
+      "timer_time": 70
+    },
+    {
+      "timestamp": "2026-01-17T08:11:53.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 71,
+      "timer_time": 71
+    },
+    {
+      "timestamp": "2026-01-17T08:11:54.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 72,
+      "timer_time": 72
+    },
+    {
+      "timestamp": "2026-01-17T08:11:55.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 73,
+      "timer_time": 73
+    },
+    {
+      "timestamp": "2026-01-17T08:11:56.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 74,
+      "timer_time": 74
+    },
+    {
+      "timestamp": "2026-01-17T08:11:57.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 75,
+      "timer_time": 75
+    },
+    {
+      "timestamp": "2026-01-17T08:11:58.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 76,
+      "timer_time": 76
+    },
+    {
+      "timestamp": "2026-01-17T08:11:59.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 77,
+      "timer_time": 77
+    },
+    {
+      "timestamp": "2026-01-17T08:12:00.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 78,
+      "timer_time": 78
+    },
+    {
+      "timestamp": "2026-01-17T08:12:01.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 79,
+      "timer_time": 79
+    },
+    {
+      "timestamp": "2026-01-17T08:12:02.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 80,
+      "timer_time": 80
+    },
+    {
+      "timestamp": "2026-01-17T08:12:03.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 81,
+      "timer_time": 81
+    },
+    {
+      "timestamp": "2026-01-17T08:12:04.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 82,
+      "timer_time": 82
+    },
+    {
+      "timestamp": "2026-01-17T08:12:05.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 83,
+      "timer_time": 83
+    },
+    {
+      "timestamp": "2026-01-17T08:12:06.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 84,
+      "timer_time": 84
+    },
+    {
+      "timestamp": "2026-01-17T08:12:07.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 85,
+      "timer_time": 85
+    },
+    {
+      "timestamp": "2026-01-17T08:12:08.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 86,
+      "timer_time": 86
+    },
+    {
+      "timestamp": "2026-01-17T08:12:09.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 87,
+      "timer_time": 87
+    },
+    {
+      "timestamp": "2026-01-17T08:12:10.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 88,
+      "timer_time": 88
+    },
+    {
+      "timestamp": "2026-01-17T08:12:11.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 89,
+      "timer_time": 89
+    },
+    {
+      "timestamp": "2026-01-17T08:12:12.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 90,
+      "timer_time": 90
+    },
+    {
+      "timestamp": "2026-01-17T08:12:13.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 91,
+      "timer_time": 91
+    },
+    {
+      "timestamp": "2026-01-17T08:12:14.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 92,
+      "timer_time": 92
+    },
+    {
+      "timestamp": "2026-01-17T08:12:15.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 93,
+      "timer_time": 93
+    },
+    {
+      "timestamp": "2026-01-17T08:12:16.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 94,
+      "timer_time": 94
+    },
+    {
+      "timestamp": "2026-01-17T08:12:17.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 95,
+      "timer_time": 95
+    },
+    {
+      "timestamp": "2026-01-17T08:12:18.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 96,
+      "timer_time": 96
+    },
+    {
+      "timestamp": "2026-01-17T08:12:19.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 97,
+      "timer_time": 97
+    },
+    {
+      "timestamp": "2026-01-17T08:12:20.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 98,
+      "timer_time": 98
+    },
+    {
+      "timestamp": "2026-01-17T08:12:21.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 99,
+      "timer_time": 99
+    },
+    {
+      "timestamp": "2026-01-17T08:12:22.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 100,
+      "timer_time": 100
+    },
+    {
+      "timestamp": "2026-01-17T08:12:23.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 101,
+      "timer_time": 101
+    },
+    {
+      "timestamp": "2026-01-17T08:12:24.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 102,
+      "timer_time": 102
+    },
+    {
+      "timestamp": "2026-01-17T08:12:25.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 103,
+      "timer_time": 103
+    },
+    {
+      "timestamp": "2026-01-17T08:12:26.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 104,
+      "timer_time": 104
+    },
+    {
+      "timestamp": "2026-01-17T08:12:27.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 105,
+      "timer_time": 105
+    },
+    {
+      "timestamp": "2026-01-17T08:12:28.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 106,
+      "timer_time": 106
+    },
+    {
+      "timestamp": "2026-01-17T08:12:29.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 107,
+      "timer_time": 107
+    },
+    {
+      "timestamp": "2026-01-17T08:12:30.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 108,
+      "timer_time": 108
+    },
+    {
+      "timestamp": "2026-01-17T08:12:31.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 109,
+      "timer_time": 109
+    },
+    {
+      "timestamp": "2026-01-17T08:12:32.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 110,
+      "timer_time": 110
+    },
+    {
+      "timestamp": "2026-01-17T08:12:33.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 111,
+      "timer_time": 111
+    },
+    {
+      "timestamp": "2026-01-17T08:12:34.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 112,
+      "timer_time": 112
+    },
+    {
+      "timestamp": "2026-01-17T08:12:35.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 113,
+      "timer_time": 113
+    },
+    {
+      "timestamp": "2026-01-17T08:12:36.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 114,
+      "timer_time": 114
+    },
+    {
+      "timestamp": "2026-01-17T08:12:37.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 115,
+      "timer_time": 115
+    },
+    {
+      "timestamp": "2026-01-17T08:12:38.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 116,
+      "timer_time": 116
+    },
+    {
+      "timestamp": "2026-01-17T08:12:39.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 117,
+      "timer_time": 117
+    },
+    {
+      "timestamp": "2026-01-17T08:12:40.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 118,
+      "timer_time": 118
+    },
+    {
+      "timestamp": "2026-01-17T08:12:41.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 119,
+      "timer_time": 119
+    },
+    {
+      "timestamp": "2026-01-17T08:12:42.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 120,
+      "timer_time": 120
+    },
+    {
+      "timestamp": "2026-01-17T08:12:43.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 121,
+      "timer_time": 121
+    },
+    {
+      "timestamp": "2026-01-17T08:12:44.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 122,
+      "timer_time": 122
+    },
+    {
+      "timestamp": "2026-01-17T08:12:45.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 123,
+      "timer_time": 123
+    },
+    {
+      "timestamp": "2026-01-17T08:12:46.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 124,
+      "timer_time": 124
+    },
+    {
+      "timestamp": "2026-01-17T08:12:47.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 125,
+      "timer_time": 125
+    },
+    {
+      "timestamp": "2026-01-17T08:12:48.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 126,
+      "timer_time": 126
+    },
+    {
+      "timestamp": "2026-01-17T08:12:49.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 127,
+      "timer_time": 127
+    },
+    {
+      "timestamp": "2026-01-17T08:12:50.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 128,
+      "timer_time": 128
+    },
+    {
+      "timestamp": "2026-01-17T08:12:51.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 129,
+      "timer_time": 129
+    },
+    {
+      "timestamp": "2026-01-17T08:12:52.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 130,
+      "timer_time": 130
+    },
+    {
+      "timestamp": "2026-01-17T08:12:53.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 131,
+      "timer_time": 131
+    },
+    {
+      "timestamp": "2026-01-17T08:12:54.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 132,
+      "timer_time": 132
+    },
+    {
+      "timestamp": "2026-01-17T08:12:55.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 133,
+      "timer_time": 133
+    },
+    {
+      "timestamp": "2026-01-17T08:12:56.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 134,
+      "timer_time": 134
+    },
+    {
+      "timestamp": "2026-01-17T08:12:57.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 135,
+      "timer_time": 135
+    },
+    {
+      "timestamp": "2026-01-17T08:12:58.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 136,
+      "timer_time": 136
+    },
+    {
+      "timestamp": "2026-01-17T08:12:59.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 137,
+      "timer_time": 137
+    },
+    {
+      "timestamp": "2026-01-17T08:13:00.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 138,
+      "timer_time": 138
+    },
+    {
+      "timestamp": "2026-01-17T08:13:01.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 139,
+      "timer_time": 139
+    },
+    {
+      "timestamp": "2026-01-17T08:13:02.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 140,
+      "timer_time": 140
+    },
+    {
+      "timestamp": "2026-01-17T08:13:03.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 141,
+      "timer_time": 141
+    },
+    {
+      "timestamp": "2026-01-17T08:13:04.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 142,
+      "timer_time": 142
+    },
+    {
+      "timestamp": "2026-01-17T08:13:05.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 143,
+      "timer_time": 143
+    },
+    {
+      "timestamp": "2026-01-17T08:13:06.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 144,
+      "timer_time": 144
+    },
+    {
+      "timestamp": "2026-01-17T08:13:07.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 145,
+      "timer_time": 145
+    },
+    {
+      "timestamp": "2026-01-17T08:13:08.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 146,
+      "timer_time": 146
+    },
+    {
+      "timestamp": "2026-01-17T08:13:09.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 147,
+      "timer_time": 147
+    },
+    {
+      "timestamp": "2026-01-17T08:13:10.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 148,
+      "timer_time": 148
+    },
+    {
+      "timestamp": "2026-01-17T08:13:11.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 149,
+      "timer_time": 149
+    },
+    {
+      "timestamp": "2026-01-17T08:13:12.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 150,
+      "timer_time": 150
+    },
+    {
+      "timestamp": "2026-01-17T08:13:13.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 151,
+      "timer_time": 151
+    },
+    {
+      "timestamp": "2026-01-17T08:13:14.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 152,
+      "timer_time": 152
+    },
+    {
+      "timestamp": "2026-01-17T08:13:15.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 153,
+      "timer_time": 153
+    },
+    {
+      "timestamp": "2026-01-17T08:13:16.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 154,
+      "timer_time": 154
+    },
+    {
+      "timestamp": "2026-01-17T08:13:17.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 155,
+      "timer_time": 155
+    },
+    {
+      "timestamp": "2026-01-17T08:13:18.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 156,
+      "timer_time": 156
+    },
+    {
+      "timestamp": "2026-01-17T08:13:19.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 157,
+      "timer_time": 157
+    },
+    {
+      "timestamp": "2026-01-17T08:13:20.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 158,
+      "timer_time": 158
+    },
+    {
+      "timestamp": "2026-01-17T08:13:21.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 159,
+      "timer_time": 159
+    },
+    {
+      "timestamp": "2026-01-17T08:13:22.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 160,
+      "timer_time": 160
+    },
+    {
+      "timestamp": "2026-01-17T08:13:23.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 161,
+      "timer_time": 161
+    },
+    {
+      "timestamp": "2026-01-17T08:13:24.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 162,
+      "timer_time": 162
+    },
+    {
+      "timestamp": "2026-01-17T08:13:25.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 163,
+      "timer_time": 163
+    },
+    {
+      "timestamp": "2026-01-17T08:13:26.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 164,
+      "timer_time": 164
+    },
+    {
+      "timestamp": "2026-01-17T08:13:27.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 165,
+      "timer_time": 165
+    },
+    {
+      "timestamp": "2026-01-17T08:13:28.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 166,
+      "timer_time": 166
+    },
+    {
+      "timestamp": "2026-01-17T08:13:29.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 167,
+      "timer_time": 167
+    },
+    {
+      "timestamp": "2026-01-17T08:13:30.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 168,
+      "timer_time": 168
+    },
+    {
+      "timestamp": "2026-01-17T08:13:31.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 169,
+      "timer_time": 169
+    },
+    {
+      "timestamp": "2026-01-17T08:13:32.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 170,
+      "timer_time": 170
+    },
+    {
+      "timestamp": "2026-01-17T08:13:33.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 171,
+      "timer_time": 171
+    },
+    {
+      "timestamp": "2026-01-17T08:13:34.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 172,
+      "timer_time": 172
+    },
+    {
+      "timestamp": "2026-01-17T08:13:35.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 173,
+      "timer_time": 173
+    },
+    {
+      "timestamp": "2026-01-17T08:13:36.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 174,
+      "timer_time": 174
+    },
+    {
+      "timestamp": "2026-01-17T08:13:37.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 175,
+      "timer_time": 175
+    },
+    {
+      "timestamp": "2026-01-17T08:13:38.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 176,
+      "timer_time": 176
+    },
+    {
+      "timestamp": "2026-01-17T08:13:39.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 177,
+      "timer_time": 177
+    },
+    {
+      "timestamp": "2026-01-17T08:13:40.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 178,
+      "timer_time": 178
+    },
+    {
+      "timestamp": "2026-01-17T08:13:41.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 179,
+      "timer_time": 179
+    },
+    {
+      "timestamp": "2026-01-17T08:13:42.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 180,
+      "timer_time": 180
+    },
+    {
+      "timestamp": "2026-01-17T08:13:43.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 181,
+      "timer_time": 181
+    },
+    {
+      "timestamp": "2026-01-17T08:13:44.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 182,
+      "timer_time": 182
+    },
+    {
+      "timestamp": "2026-01-17T08:13:45.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 183,
+      "timer_time": 183
+    },
+    {
+      "timestamp": "2026-01-17T08:13:46.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 184,
+      "timer_time": 184
+    },
+    {
+      "timestamp": "2026-01-17T08:13:47.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 185,
+      "timer_time": 185
+    },
+    {
+      "timestamp": "2026-01-17T08:13:48.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 186,
+      "timer_time": 186
+    },
+    {
+      "timestamp": "2026-01-17T08:13:49.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 187,
+      "timer_time": 187
+    },
+    {
+      "timestamp": "2026-01-17T08:13:50.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 188,
+      "timer_time": 188
+    },
+    {
+      "timestamp": "2026-01-17T08:13:51.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 189,
+      "timer_time": 189
+    },
+    {
+      "timestamp": "2026-01-17T08:13:52.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 190,
+      "timer_time": 190
+    },
+    {
+      "timestamp": "2026-01-17T08:13:53.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 191,
+      "timer_time": 191
+    },
+    {
+      "timestamp": "2026-01-17T08:13:54.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 192,
+      "timer_time": 192
+    },
+    {
+      "timestamp": "2026-01-17T08:13:55.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 193,
+      "timer_time": 193
+    },
+    {
+      "timestamp": "2026-01-17T08:13:56.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 194,
+      "timer_time": 194
+    },
+    {
+      "timestamp": "2026-01-17T08:13:57.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 195,
+      "timer_time": 195
+    },
+    {
+      "timestamp": "2026-01-17T08:13:58.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 196,
+      "timer_time": 196
+    },
+    {
+      "timestamp": "2026-01-17T08:13:59.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 197,
+      "timer_time": 197
+    },
+    {
+      "timestamp": "2026-01-17T08:14:00.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 198,
+      "timer_time": 198
+    },
+    {
+      "timestamp": "2026-01-17T08:14:01.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 199,
+      "timer_time": 199
+    },
+    {
+      "timestamp": "2026-01-17T08:14:02.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 200,
+      "timer_time": 200
+    },
+    {
+      "timestamp": "2026-01-17T08:14:03.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 201,
+      "timer_time": 201
+    },
+    {
+      "timestamp": "2026-01-17T08:14:04.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 202,
+      "timer_time": 202
+    },
+    {
+      "timestamp": "2026-01-17T08:14:05.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 203,
+      "timer_time": 203
+    },
+    {
+      "timestamp": "2026-01-17T08:14:06.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 204,
+      "timer_time": 204
+    },
+    {
+      "timestamp": "2026-01-17T08:14:07.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 205,
+      "timer_time": 205
+    },
+    {
+      "timestamp": "2026-01-17T08:14:08.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 206,
+      "timer_time": 206
+    },
+    {
+      "timestamp": "2026-01-17T08:14:09.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 207,
+      "timer_time": 207
+    },
+    {
+      "timestamp": "2026-01-17T08:14:10.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 208,
+      "timer_time": 208
+    },
+    {
+      "timestamp": "2026-01-17T08:14:11.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 209,
+      "timer_time": 209
+    },
+    {
+      "timestamp": "2026-01-17T08:14:12.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 210,
+      "timer_time": 210
+    },
+    {
+      "timestamp": "2026-01-17T08:14:13.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 211,
+      "timer_time": 211
+    },
+    {
+      "timestamp": "2026-01-17T08:14:14.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 212,
+      "timer_time": 212
+    },
+    {
+      "timestamp": "2026-01-17T08:14:15.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 213,
+      "timer_time": 213
+    },
+    {
+      "timestamp": "2026-01-17T08:14:16.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 214,
+      "timer_time": 214
+    },
+    {
+      "timestamp": "2026-01-17T08:14:17.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 215,
+      "timer_time": 215
+    },
+    {
+      "timestamp": "2026-01-17T08:14:18.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 216,
+      "timer_time": 216
+    },
+    {
+      "timestamp": "2026-01-17T08:14:19.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 217,
+      "timer_time": 217
+    },
+    {
+      "timestamp": "2026-01-17T08:14:20.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 218,
+      "timer_time": 218
+    },
+    {
+      "timestamp": "2026-01-17T08:14:21.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 219,
+      "timer_time": 219
+    },
+    {
+      "timestamp": "2026-01-17T08:14:22.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 220,
+      "timer_time": 220
+    },
+    {
+      "timestamp": "2026-01-17T08:14:23.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 221,
+      "timer_time": 221
+    },
+    {
+      "timestamp": "2026-01-17T08:14:24.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 222,
+      "timer_time": 222
+    },
+    {
+      "timestamp": "2026-01-17T08:14:25.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 223,
+      "timer_time": 223
+    },
+    {
+      "timestamp": "2026-01-17T08:14:26.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 224,
+      "timer_time": 224
+    },
+    {
+      "timestamp": "2026-01-17T08:14:27.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 225,
+      "timer_time": 225
+    },
+    {
+      "timestamp": "2026-01-17T08:14:28.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 226,
+      "timer_time": 226
+    },
+    {
+      "timestamp": "2026-01-17T08:14:29.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 227,
+      "timer_time": 227
+    },
+    {
+      "timestamp": "2026-01-17T08:14:30.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 228,
+      "timer_time": 228
+    },
+    {
+      "timestamp": "2026-01-17T08:14:31.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 229,
+      "timer_time": 229
+    },
+    {
+      "timestamp": "2026-01-17T08:14:32.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 230,
+      "timer_time": 230
+    },
+    {
+      "timestamp": "2026-01-17T08:14:33.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 231,
+      "timer_time": 231
+    },
+    {
+      "timestamp": "2026-01-17T08:14:34.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 232,
+      "timer_time": 232
+    },
+    {
+      "timestamp": "2026-01-17T08:14:35.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 233,
+      "timer_time": 233
+    },
+    {
+      "timestamp": "2026-01-17T08:14:36.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 234,
+      "timer_time": 234
+    },
+    {
+      "timestamp": "2026-01-17T08:14:37.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 235,
+      "timer_time": 235
+    },
+    {
+      "timestamp": "2026-01-17T08:14:38.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 236,
+      "timer_time": 236
+    },
+    {
+      "timestamp": "2026-01-17T08:14:39.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 237,
+      "timer_time": 237
+    },
+    {
+      "timestamp": "2026-01-17T08:14:40.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 238,
+      "timer_time": 238
+    },
+    {
+      "timestamp": "2026-01-17T08:14:41.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 239,
+      "timer_time": 239
+    },
+    {
+      "timestamp": "2026-01-17T08:14:42.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 240,
+      "timer_time": 240
+    },
+    {
+      "timestamp": "2026-01-17T08:14:43.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 241,
+      "timer_time": 241
+    },
+    {
+      "timestamp": "2026-01-17T08:14:44.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 242,
+      "timer_time": 242
+    },
+    {
+      "timestamp": "2026-01-17T08:14:45.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 243,
+      "timer_time": 243
+    },
+    {
+      "timestamp": "2026-01-17T08:14:46.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 244,
+      "timer_time": 244
+    },
+    {
+      "timestamp": "2026-01-17T08:14:47.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 245,
+      "timer_time": 245
+    },
+    {
+      "timestamp": "2026-01-17T08:14:48.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 246,
+      "timer_time": 246
+    },
+    {
+      "timestamp": "2026-01-17T08:14:49.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 247,
+      "timer_time": 247
+    },
+    {
+      "timestamp": "2026-01-17T08:14:50.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 248,
+      "timer_time": 248
+    },
+    {
+      "timestamp": "2026-01-17T08:14:51.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 249,
+      "timer_time": 249
+    },
+    {
+      "timestamp": "2026-01-17T08:14:52.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 250,
+      "timer_time": 250
+    },
+    {
+      "timestamp": "2026-01-17T08:14:53.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 251,
+      "timer_time": 251
+    },
+    {
+      "timestamp": "2026-01-17T08:14:54.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 252,
+      "timer_time": 252
+    },
+    {
+      "timestamp": "2026-01-17T08:14:55.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 253,
+      "timer_time": 253
+    },
+    {
+      "timestamp": "2026-01-17T08:14:56.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 254,
+      "timer_time": 254
+    },
+    {
+      "timestamp": "2026-01-17T08:14:57.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 255,
+      "timer_time": 255
+    },
+    {
+      "timestamp": "2026-01-17T08:14:58.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 256,
+      "timer_time": 256
+    },
+    {
+      "timestamp": "2026-01-17T08:14:59.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 257,
+      "timer_time": 257
+    },
+    {
+      "timestamp": "2026-01-17T08:15:00.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 258,
+      "timer_time": 258
+    },
+    {
+      "timestamp": "2026-01-17T08:15:01.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 259,
+      "timer_time": 259
+    },
+    {
+      "timestamp": "2026-01-17T08:15:02.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 260,
+      "timer_time": 260
+    },
+    {
+      "timestamp": "2026-01-17T08:15:03.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 261,
+      "timer_time": 261
+    },
+    {
+      "timestamp": "2026-01-17T08:15:04.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 262,
+      "timer_time": 262
+    },
+    {
+      "timestamp": "2026-01-17T08:15:05.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 263,
+      "timer_time": 263
+    },
+    {
+      "timestamp": "2026-01-17T08:15:06.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 264,
+      "timer_time": 264
+    },
+    {
+      "timestamp": "2026-01-17T08:15:07.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 265,
+      "timer_time": 265
+    },
+    {
+      "timestamp": "2026-01-17T08:15:08.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 266,
+      "timer_time": 266
+    },
+    {
+      "timestamp": "2026-01-17T08:15:09.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 267,
+      "timer_time": 267
+    },
+    {
+      "timestamp": "2026-01-17T08:15:10.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 268,
+      "timer_time": 268
+    },
+    {
+      "timestamp": "2026-01-17T08:15:11.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 269,
+      "timer_time": 269
+    },
+    {
+      "timestamp": "2026-01-17T08:15:12.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 270,
+      "timer_time": 270
+    },
+    {
+      "timestamp": "2026-01-17T08:15:13.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 271,
+      "timer_time": 271
+    },
+    {
+      "timestamp": "2026-01-17T08:15:14.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 272,
+      "timer_time": 272
+    },
+    {
+      "timestamp": "2026-01-17T08:15:15.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 273,
+      "timer_time": 273
+    },
+    {
+      "timestamp": "2026-01-17T08:15:16.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 274,
+      "timer_time": 274
+    },
+    {
+      "timestamp": "2026-01-17T08:15:17.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 275,
+      "timer_time": 275
+    },
+    {
+      "timestamp": "2026-01-17T08:15:18.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 276,
+      "timer_time": 276
+    },
+    {
+      "timestamp": "2026-01-17T08:15:19.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 277,
+      "timer_time": 277
+    },
+    {
+      "timestamp": "2026-01-17T08:15:20.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 278,
+      "timer_time": 278
+    },
+    {
+      "timestamp": "2026-01-17T08:15:21.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 279,
+      "timer_time": 279
+    },
+    {
+      "timestamp": "2026-01-17T08:15:22.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 280,
+      "timer_time": 280
+    },
+    {
+      "timestamp": "2026-01-17T08:15:23.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 281,
+      "timer_time": 281
+    },
+    {
+      "timestamp": "2026-01-17T08:15:24.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 282,
+      "timer_time": 282
+    },
+    {
+      "timestamp": "2026-01-17T08:15:25.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 283,
+      "timer_time": 283
+    },
+    {
+      "timestamp": "2026-01-17T08:15:26.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 284,
+      "timer_time": 284
+    },
+    {
+      "timestamp": "2026-01-17T08:15:27.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 285,
+      "timer_time": 285
+    },
+    {
+      "timestamp": "2026-01-17T08:15:28.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 286,
+      "timer_time": 286
+    },
+    {
+      "timestamp": "2026-01-17T08:15:29.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 287,
+      "timer_time": 287
+    },
+    {
+      "timestamp": "2026-01-17T08:15:30.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 288,
+      "timer_time": 288
+    },
+    {
+      "timestamp": "2026-01-17T08:15:31.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 289,
+      "timer_time": 289
+    },
+    {
+      "timestamp": "2026-01-17T08:15:32.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 290,
+      "timer_time": 290
+    },
+    {
+      "timestamp": "2026-01-17T08:15:33.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 291,
+      "timer_time": 291
+    },
+    {
+      "timestamp": "2026-01-17T08:15:34.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 292,
+      "timer_time": 292
+    },
+    {
+      "timestamp": "2026-01-17T08:15:35.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 293,
+      "timer_time": 293
+    },
+    {
+      "timestamp": "2026-01-17T08:15:36.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 294,
+      "timer_time": 294
+    },
+    {
+      "timestamp": "2026-01-17T08:15:37.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 295,
+      "timer_time": 295
+    },
+    {
+      "timestamp": "2026-01-17T08:15:38.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 296,
+      "timer_time": 296
+    },
+    {
+      "timestamp": "2026-01-17T08:15:39.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 297,
+      "timer_time": 297
+    },
+    {
+      "timestamp": "2026-01-17T08:15:40.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 298,
+      "timer_time": 298
+    },
+    {
+      "timestamp": "2026-01-17T08:15:41.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 299,
+      "timer_time": 299
+    },
+    {
+      "timestamp": "2026-01-17T08:15:42.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 300,
+      "timer_time": 300
+    },
+    {
+      "timestamp": "2026-01-17T08:15:43.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 301,
+      "timer_time": 301
+    },
+    {
+      "timestamp": "2026-01-17T08:15:44.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 302,
+      "timer_time": 302
+    },
+    {
+      "timestamp": "2026-01-17T08:15:45.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 303,
+      "timer_time": 303
+    },
+    {
+      "timestamp": "2026-01-17T08:15:46.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 304,
+      "timer_time": 304
+    },
+    {
+      "timestamp": "2026-01-17T08:15:47.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 305,
+      "timer_time": 305
+    },
+    {
+      "timestamp": "2026-01-17T08:15:48.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 306,
+      "timer_time": 306
+    },
+    {
+      "timestamp": "2026-01-17T08:15:49.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 307,
+      "timer_time": 307
+    },
+    {
+      "timestamp": "2026-01-17T08:15:50.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 308,
+      "timer_time": 308
+    },
+    {
+      "timestamp": "2026-01-17T08:15:51.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 309,
+      "timer_time": 309
+    },
+    {
+      "timestamp": "2026-01-17T08:15:52.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 310,
+      "timer_time": 310
+    },
+    {
+      "timestamp": "2026-01-17T08:15:53.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 311,
+      "timer_time": 311
+    },
+    {
+      "timestamp": "2026-01-17T08:15:54.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 312,
+      "timer_time": 312
+    },
+    {
+      "timestamp": "2026-01-17T08:15:55.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 313,
+      "timer_time": 313
+    },
+    {
+      "timestamp": "2026-01-17T08:15:56.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 314,
+      "timer_time": 314
+    },
+    {
+      "timestamp": "2026-01-17T08:15:57.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 315,
+      "timer_time": 315
+    },
+    {
+      "timestamp": "2026-01-17T08:15:58.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 316,
+      "timer_time": 316
+    },
+    {
+      "timestamp": "2026-01-17T08:15:59.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 317,
+      "timer_time": 317
+    },
+    {
+      "timestamp": "2026-01-17T08:16:00.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 318,
+      "timer_time": 318
+    },
+    {
+      "timestamp": "2026-01-17T08:16:01.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 319,
+      "timer_time": 319
+    },
+    {
+      "timestamp": "2026-01-17T08:16:02.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 320,
+      "timer_time": 320
+    },
+    {
+      "timestamp": "2026-01-17T08:16:03.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 321,
+      "timer_time": 321
+    },
+    {
+      "timestamp": "2026-01-17T08:16:04.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 322,
+      "timer_time": 322
+    },
+    {
+      "timestamp": "2026-01-17T08:16:05.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 323,
+      "timer_time": 323
+    },
+    {
+      "timestamp": "2026-01-17T08:16:06.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 324,
+      "timer_time": 324
+    },
+    {
+      "timestamp": "2026-01-17T08:16:07.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 325,
+      "timer_time": 325
+    },
+    {
+      "timestamp": "2026-01-17T08:16:08.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 326,
+      "timer_time": 326
+    },
+    {
+      "timestamp": "2026-01-17T08:16:09.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 327,
+      "timer_time": 327
+    },
+    {
+      "timestamp": "2026-01-17T08:16:10.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 328,
+      "timer_time": 328
+    },
+    {
+      "timestamp": "2026-01-17T08:16:11.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 329,
+      "timer_time": 329
+    },
+    {
+      "timestamp": "2026-01-17T08:16:12.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 330,
+      "timer_time": 330
+    },
+    {
+      "timestamp": "2026-01-17T08:16:13.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 331,
+      "timer_time": 331
+    },
+    {
+      "timestamp": "2026-01-17T08:16:14.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 332,
+      "timer_time": 332
+    },
+    {
+      "timestamp": "2026-01-17T08:16:15.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 333,
+      "timer_time": 333
+    },
+    {
+      "timestamp": "2026-01-17T08:16:16.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 334,
+      "timer_time": 334
+    },
+    {
+      "timestamp": "2026-01-17T08:16:17.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 335,
+      "timer_time": 335
+    },
+    {
+      "timestamp": "2026-01-17T08:16:18.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 336,
+      "timer_time": 336
+    },
+    {
+      "timestamp": "2026-01-17T08:16:19.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 337,
+      "timer_time": 337
+    },
+    {
+      "timestamp": "2026-01-17T08:16:20.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 338,
+      "timer_time": 338
+    },
+    {
+      "timestamp": "2026-01-17T08:16:21.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 339,
+      "timer_time": 339
+    },
+    {
+      "timestamp": "2026-01-17T08:16:22.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 340,
+      "timer_time": 340
+    },
+    {
+      "timestamp": "2026-01-17T08:16:23.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 341,
+      "timer_time": 341
+    },
+    {
+      "timestamp": "2026-01-17T08:16:24.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 342,
+      "timer_time": 342
+    },
+    {
+      "timestamp": "2026-01-17T08:16:25.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 343,
+      "timer_time": 343
+    },
+    {
+      "timestamp": "2026-01-17T08:16:26.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 344,
+      "timer_time": 344
+    },
+    {
+      "timestamp": "2026-01-17T08:16:27.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 345,
+      "timer_time": 345
+    },
+    {
+      "timestamp": "2026-01-17T08:16:28.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 346,
+      "timer_time": 346
+    },
+    {
+      "timestamp": "2026-01-17T08:16:29.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 347,
+      "timer_time": 347
+    },
+    {
+      "timestamp": "2026-01-17T08:16:30.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 348,
+      "timer_time": 348
+    },
+    {
+      "timestamp": "2026-01-17T08:16:31.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 349,
+      "timer_time": 349
+    },
+    {
+      "timestamp": "2026-01-17T08:16:32.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 350,
+      "timer_time": 350
+    },
+    {
+      "timestamp": "2026-01-17T08:16:33.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 351,
+      "timer_time": 351
+    },
+    {
+      "timestamp": "2026-01-17T08:16:34.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 352,
+      "timer_time": 352
+    },
+    {
+      "timestamp": "2026-01-17T08:16:35.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 353,
+      "timer_time": 353
+    },
+    {
+      "timestamp": "2026-01-17T08:16:36.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 354,
+      "timer_time": 354
+    },
+    {
+      "timestamp": "2026-01-17T08:16:37.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 355,
+      "timer_time": 355
+    },
+    {
+      "timestamp": "2026-01-17T08:16:38.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 356,
+      "timer_time": 356
+    },
+    {
+      "timestamp": "2026-01-17T08:16:39.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 357,
+      "timer_time": 357
+    },
+    {
+      "timestamp": "2026-01-17T08:16:40.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 358,
+      "timer_time": 358
+    },
+    {
+      "timestamp": "2026-01-17T08:16:41.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 359,
+      "timer_time": 359
+    },
+    {
+      "timestamp": "2026-01-17T08:16:42.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 360,
+      "timer_time": 360
+    },
+    {
+      "timestamp": "2026-01-17T08:16:43.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 361,
+      "timer_time": 361
+    },
+    {
+      "timestamp": "2026-01-17T08:16:44.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 362,
+      "timer_time": 362
+    },
+    {
+      "timestamp": "2026-01-17T08:16:45.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 363,
+      "timer_time": 363
+    },
+    {
+      "timestamp": "2026-01-17T08:16:46.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 364,
+      "timer_time": 364
+    },
+    {
+      "timestamp": "2026-01-17T08:16:47.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 365,
+      "timer_time": 365
+    },
+    {
+      "timestamp": "2026-01-17T08:16:48.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 366,
+      "timer_time": 366
+    },
+    {
+      "timestamp": "2026-01-17T08:16:49.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 367,
+      "timer_time": 367
+    },
+    {
+      "timestamp": "2026-01-17T08:16:50.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 368,
+      "timer_time": 368
+    },
+    {
+      "timestamp": "2026-01-17T08:16:51.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 369,
+      "timer_time": 369
+    },
+    {
+      "timestamp": "2026-01-17T08:16:52.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 370,
+      "timer_time": 370
+    },
+    {
+      "timestamp": "2026-01-17T08:16:53.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 371,
+      "timer_time": 371
+    },
+    {
+      "timestamp": "2026-01-17T08:16:54.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 372,
+      "timer_time": 372
+    },
+    {
+      "timestamp": "2026-01-17T08:16:55.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 373,
+      "timer_time": 373
+    },
+    {
+      "timestamp": "2026-01-17T08:16:56.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 374,
+      "timer_time": 374
+    },
+    {
+      "timestamp": "2026-01-17T08:16:57.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 375,
+      "timer_time": 375
+    },
+    {
+      "timestamp": "2026-01-17T08:16:58.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 376,
+      "timer_time": 376
+    },
+    {
+      "timestamp": "2026-01-17T08:16:59.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 377,
+      "timer_time": 377
+    },
+    {
+      "timestamp": "2026-01-17T08:17:00.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 378,
+      "timer_time": 378
+    },
+    {
+      "timestamp": "2026-01-17T08:17:01.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 379,
+      "timer_time": 379
+    },
+    {
+      "timestamp": "2026-01-17T08:17:02.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 380,
+      "timer_time": 380
+    },
+    {
+      "timestamp": "2026-01-17T08:17:03.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 381,
+      "timer_time": 381
+    },
+    {
+      "timestamp": "2026-01-17T08:17:04.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 382,
+      "timer_time": 382
+    },
+    {
+      "timestamp": "2026-01-17T08:17:05.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 383,
+      "timer_time": 383
+    },
+    {
+      "timestamp": "2026-01-17T08:17:06.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 384,
+      "timer_time": 384
+    },
+    {
+      "timestamp": "2026-01-17T08:17:07.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 385,
+      "timer_time": 385
+    },
+    {
+      "timestamp": "2026-01-17T08:17:08.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 386,
+      "timer_time": 386
+    },
+    {
+      "timestamp": "2026-01-17T08:17:09.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 387,
+      "timer_time": 387
+    },
+    {
+      "timestamp": "2026-01-17T08:17:10.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 388,
+      "timer_time": 388
+    },
+    {
+      "timestamp": "2026-01-17T08:17:11.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 389,
+      "timer_time": 389
+    },
+    {
+      "timestamp": "2026-01-17T08:17:12.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 390,
+      "timer_time": 390
+    },
+    {
+      "timestamp": "2026-01-17T08:17:13.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 391,
+      "timer_time": 391
+    },
+    {
+      "timestamp": "2026-01-17T08:17:14.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 392,
+      "timer_time": 392
+    },
+    {
+      "timestamp": "2026-01-17T08:17:15.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 393,
+      "timer_time": 393
+    },
+    {
+      "timestamp": "2026-01-17T08:17:16.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 394,
+      "timer_time": 394
+    },
+    {
+      "timestamp": "2026-01-17T08:17:17.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 395,
+      "timer_time": 395
+    },
+    {
+      "timestamp": "2026-01-17T08:17:18.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 396,
+      "timer_time": 396
+    },
+    {
+      "timestamp": "2026-01-17T08:17:19.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 397,
+      "timer_time": 397
+    },
+    {
+      "timestamp": "2026-01-17T08:17:20.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 398,
+      "timer_time": 398
+    },
+    {
+      "timestamp": "2026-01-17T08:17:21.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 399,
+      "timer_time": 399
+    },
+    {
+      "timestamp": "2026-01-17T08:17:22.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 400,
+      "timer_time": 400
+    },
+    {
+      "timestamp": "2026-01-17T08:17:23.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 401,
+      "timer_time": 401
+    },
+    {
+      "timestamp": "2026-01-17T08:17:24.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 402,
+      "timer_time": 402
+    },
+    {
+      "timestamp": "2026-01-17T08:17:25.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 403,
+      "timer_time": 403
+    },
+    {
+      "timestamp": "2026-01-17T08:17:26.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 404,
+      "timer_time": 404
+    },
+    {
+      "timestamp": "2026-01-17T08:17:27.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 405,
+      "timer_time": 405
+    },
+    {
+      "timestamp": "2026-01-17T08:17:28.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 406,
+      "timer_time": 406
+    },
+    {
+      "timestamp": "2026-01-17T08:17:29.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 407,
+      "timer_time": 407
+    },
+    {
+      "timestamp": "2026-01-17T08:17:30.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 408,
+      "timer_time": 408
+    },
+    {
+      "timestamp": "2026-01-17T08:17:31.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 409,
+      "timer_time": 409
+    },
+    {
+      "timestamp": "2026-01-17T08:17:32.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 410,
+      "timer_time": 410
+    },
+    {
+      "timestamp": "2026-01-17T08:17:33.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 411,
+      "timer_time": 411
+    },
+    {
+      "timestamp": "2026-01-17T08:17:34.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 412,
+      "timer_time": 412
+    },
+    {
+      "timestamp": "2026-01-17T08:17:35.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 413,
+      "timer_time": 413
+    },
+    {
+      "timestamp": "2026-01-17T08:17:36.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 414,
+      "timer_time": 414
+    },
+    {
+      "timestamp": "2026-01-17T08:17:37.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 415,
+      "timer_time": 415
+    },
+    {
+      "timestamp": "2026-01-17T08:17:38.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 416,
+      "timer_time": 416
+    },
+    {
+      "timestamp": "2026-01-17T08:17:39.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 417,
+      "timer_time": 417
+    },
+    {
+      "timestamp": "2026-01-17T08:17:40.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 418,
+      "timer_time": 418
+    },
+    {
+      "timestamp": "2026-01-17T08:17:41.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 419,
+      "timer_time": 419
+    },
+    {
+      "timestamp": "2026-01-17T08:17:42.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 420,
+      "timer_time": 420
+    },
+    {
+      "timestamp": "2026-01-17T08:17:43.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 421,
+      "timer_time": 421
+    },
+    {
+      "timestamp": "2026-01-17T08:17:44.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 422,
+      "timer_time": 422
+    },
+    {
+      "timestamp": "2026-01-17T08:17:45.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 423,
+      "timer_time": 423
+    },
+    {
+      "timestamp": "2026-01-17T08:17:46.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 424,
+      "timer_time": 424
+    },
+    {
+      "timestamp": "2026-01-17T08:17:47.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 425,
+      "timer_time": 425
+    },
+    {
+      "timestamp": "2026-01-17T08:17:48.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 426,
+      "timer_time": 426
+    },
+    {
+      "timestamp": "2026-01-17T08:17:49.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 427,
+      "timer_time": 427
+    },
+    {
+      "timestamp": "2026-01-17T08:17:50.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 428,
+      "timer_time": 428
+    },
+    {
+      "timestamp": "2026-01-17T08:17:51.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 429,
+      "timer_time": 429
+    },
+    {
+      "timestamp": "2026-01-17T08:17:52.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 430,
+      "timer_time": 430
+    },
+    {
+      "timestamp": "2026-01-17T08:17:53.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 431,
+      "timer_time": 431
+    },
+    {
+      "timestamp": "2026-01-17T08:17:54.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 432,
+      "timer_time": 432
+    },
+    {
+      "timestamp": "2026-01-17T08:17:55.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 433,
+      "timer_time": 433
+    },
+    {
+      "timestamp": "2026-01-17T08:17:56.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 434,
+      "timer_time": 434
+    },
+    {
+      "timestamp": "2026-01-17T08:17:57.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 435,
+      "timer_time": 435
+    },
+    {
+      "timestamp": "2026-01-17T08:17:58.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 436,
+      "timer_time": 436
+    },
+    {
+      "timestamp": "2026-01-17T08:17:59.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 437,
+      "timer_time": 437
+    },
+    {
+      "timestamp": "2026-01-17T08:18:00.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 438,
+      "timer_time": 438
+    },
+    {
+      "timestamp": "2026-01-17T08:18:01.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 439,
+      "timer_time": 439
+    },
+    {
+      "timestamp": "2026-01-17T08:18:02.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 440,
+      "timer_time": 440
+    },
+    {
+      "timestamp": "2026-01-17T08:18:03.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 441,
+      "timer_time": 441
+    },
+    {
+      "timestamp": "2026-01-17T08:18:04.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 442,
+      "timer_time": 442
+    },
+    {
+      "timestamp": "2026-01-17T08:18:05.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 443,
+      "timer_time": 443
+    },
+    {
+      "timestamp": "2026-01-17T08:18:06.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 444,
+      "timer_time": 444
+    },
+    {
+      "timestamp": "2026-01-17T08:18:07.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 445,
+      "timer_time": 445
+    },
+    {
+      "timestamp": "2026-01-17T08:18:08.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 446,
+      "timer_time": 446
+    },
+    {
+      "timestamp": "2026-01-17T08:18:09.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 447,
+      "timer_time": 447
+    },
+    {
+      "timestamp": "2026-01-17T08:18:10.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 448,
+      "timer_time": 448
+    },
+    {
+      "timestamp": "2026-01-17T08:18:11.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 449,
+      "timer_time": 449
+    },
+    {
+      "timestamp": "2026-01-17T08:18:12.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 450,
+      "timer_time": 450
+    },
+    {
+      "timestamp": "2026-01-17T08:18:13.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 451,
+      "timer_time": 451
+    },
+    {
+      "timestamp": "2026-01-17T08:18:14.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 452,
+      "timer_time": 452
+    },
+    {
+      "timestamp": "2026-01-17T08:18:15.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 453,
+      "timer_time": 453
+    },
+    {
+      "timestamp": "2026-01-17T08:18:16.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 454,
+      "timer_time": 454
+    },
+    {
+      "timestamp": "2026-01-17T08:18:17.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 455,
+      "timer_time": 455
+    },
+    {
+      "timestamp": "2026-01-17T08:18:18.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 456,
+      "timer_time": 456
+    },
+    {
+      "timestamp": "2026-01-17T08:18:19.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 457,
+      "timer_time": 457
+    },
+    {
+      "timestamp": "2026-01-17T08:18:20.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 458,
+      "timer_time": 458
+    },
+    {
+      "timestamp": "2026-01-17T08:18:21.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 459,
+      "timer_time": 459
+    },
+    {
+      "timestamp": "2026-01-17T08:18:22.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 460,
+      "timer_time": 460
+    },
+    {
+      "timestamp": "2026-01-17T08:18:23.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 461,
+      "timer_time": 461
+    },
+    {
+      "timestamp": "2026-01-17T08:18:24.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 462,
+      "timer_time": 462
+    },
+    {
+      "timestamp": "2026-01-17T08:18:25.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 463,
+      "timer_time": 463
+    },
+    {
+      "timestamp": "2026-01-17T08:18:26.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 464,
+      "timer_time": 464
+    },
+    {
+      "timestamp": "2026-01-17T08:18:27.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 465,
+      "timer_time": 465
+    },
+    {
+      "timestamp": "2026-01-17T08:18:28.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 466,
+      "timer_time": 466
+    },
+    {
+      "timestamp": "2026-01-17T08:18:29.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 467,
+      "timer_time": 467
+    },
+    {
+      "timestamp": "2026-01-17T08:18:30.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 468,
+      "timer_time": 468
+    },
+    {
+      "timestamp": "2026-01-17T08:18:31.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 469,
+      "timer_time": 469
+    },
+    {
+      "timestamp": "2026-01-17T08:18:32.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 470,
+      "timer_time": 470
+    },
+    {
+      "timestamp": "2026-01-17T08:18:33.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 471,
+      "timer_time": 471
+    },
+    {
+      "timestamp": "2026-01-17T08:18:34.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 472,
+      "timer_time": 472
+    },
+    {
+      "timestamp": "2026-01-17T08:18:35.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 473,
+      "timer_time": 473
+    },
+    {
+      "timestamp": "2026-01-17T08:18:36.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 474,
+      "timer_time": 474
+    },
+    {
+      "timestamp": "2026-01-17T08:18:37.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 475,
+      "timer_time": 475
+    },
+    {
+      "timestamp": "2026-01-17T08:18:38.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 476,
+      "timer_time": 476
+    },
+    {
+      "timestamp": "2026-01-17T08:18:39.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 477,
+      "timer_time": 477
+    },
+    {
+      "timestamp": "2026-01-17T08:18:40.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 478,
+      "timer_time": 478
+    },
+    {
+      "timestamp": "2026-01-17T08:18:41.000Z",
+      "heart_rate": 116,
+      "elapsed_time": 479,
+      "timer_time": 479
+    },
+    {
+      "timestamp": "2026-01-17T08:18:42.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 480,
+      "timer_time": 480
+    },
+    {
+      "timestamp": "2026-01-17T08:18:43.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 481,
+      "timer_time": 481
+    },
+    {
+      "timestamp": "2026-01-17T08:18:44.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 482,
+      "timer_time": 482
+    },
+    {
+      "timestamp": "2026-01-17T08:18:45.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 483,
+      "timer_time": 483
+    },
+    {
+      "timestamp": "2026-01-17T08:18:46.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 484,
+      "timer_time": 484
+    },
+    {
+      "timestamp": "2026-01-17T08:18:47.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 485,
+      "timer_time": 485
+    },
+    {
+      "timestamp": "2026-01-17T08:18:48.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 486,
+      "timer_time": 486
+    },
+    {
+      "timestamp": "2026-01-17T08:18:49.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 487,
+      "timer_time": 487
+    },
+    {
+      "timestamp": "2026-01-17T08:18:50.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 488,
+      "timer_time": 488
+    },
+    {
+      "timestamp": "2026-01-17T08:18:51.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 489,
+      "timer_time": 489
+    },
+    {
+      "timestamp": "2026-01-17T08:18:52.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 490,
+      "timer_time": 490
+    },
+    {
+      "timestamp": "2026-01-17T08:18:53.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 491,
+      "timer_time": 491
+    },
+    {
+      "timestamp": "2026-01-17T08:18:54.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 492,
+      "timer_time": 492
+    },
+    {
+      "timestamp": "2026-01-17T08:18:55.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 493,
+      "timer_time": 493
+    },
+    {
+      "timestamp": "2026-01-17T08:18:56.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 494,
+      "timer_time": 494
+    },
+    {
+      "timestamp": "2026-01-17T08:18:57.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 495,
+      "timer_time": 495
+    },
+    {
+      "timestamp": "2026-01-17T08:18:58.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 496,
+      "timer_time": 496
+    },
+    {
+      "timestamp": "2026-01-17T08:18:59.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 497,
+      "timer_time": 497
+    },
+    {
+      "timestamp": "2026-01-17T08:19:00.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 498,
+      "timer_time": 498
+    },
+    {
+      "timestamp": "2026-01-17T08:19:01.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 499,
+      "timer_time": 499
+    },
+    {
+      "timestamp": "2026-01-17T08:19:02.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 500,
+      "timer_time": 500
+    },
+    {
+      "timestamp": "2026-01-17T08:19:03.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 501,
+      "timer_time": 501
+    },
+    {
+      "timestamp": "2026-01-17T08:19:04.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 502,
+      "timer_time": 502
+    },
+    {
+      "timestamp": "2026-01-17T08:19:05.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 503,
+      "timer_time": 503
+    },
+    {
+      "timestamp": "2026-01-17T08:19:06.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 504,
+      "timer_time": 504
+    },
+    {
+      "timestamp": "2026-01-17T08:19:07.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 505,
+      "timer_time": 505
+    },
+    {
+      "timestamp": "2026-01-17T08:19:08.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 506,
+      "timer_time": 506
+    },
+    {
+      "timestamp": "2026-01-17T08:19:09.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 507,
+      "timer_time": 507
+    },
+    {
+      "timestamp": "2026-01-17T08:19:10.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 508,
+      "timer_time": 508
+    },
+    {
+      "timestamp": "2026-01-17T08:19:11.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 509,
+      "timer_time": 509
+    },
+    {
+      "timestamp": "2026-01-17T08:19:12.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 510,
+      "timer_time": 510
+    },
+    {
+      "timestamp": "2026-01-17T08:19:13.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 511,
+      "timer_time": 511
+    },
+    {
+      "timestamp": "2026-01-17T08:19:14.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 512,
+      "timer_time": 512
+    },
+    {
+      "timestamp": "2026-01-17T08:19:15.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 513,
+      "timer_time": 513
+    },
+    {
+      "timestamp": "2026-01-17T08:19:16.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 514,
+      "timer_time": 514
+    },
+    {
+      "timestamp": "2026-01-17T08:19:17.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 515,
+      "timer_time": 515
+    },
+    {
+      "timestamp": "2026-01-17T08:19:18.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 516,
+      "timer_time": 516
+    },
+    {
+      "timestamp": "2026-01-17T08:19:19.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 517,
+      "timer_time": 517
+    },
+    {
+      "timestamp": "2026-01-17T08:19:20.000Z",
+      "heart_rate": 108,
+      "elapsed_time": 518,
+      "timer_time": 518
+    },
+    {
+      "timestamp": "2026-01-17T08:19:21.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 519,
+      "timer_time": 519
+    },
+    {
+      "timestamp": "2026-01-17T08:19:22.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 520,
+      "timer_time": 520
+    },
+    {
+      "timestamp": "2026-01-17T08:19:23.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 521,
+      "timer_time": 521
+    },
+    {
+      "timestamp": "2026-01-17T08:19:24.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 522,
+      "timer_time": 522
+    },
+    {
+      "timestamp": "2026-01-17T08:19:25.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 523,
+      "timer_time": 523
+    },
+    {
+      "timestamp": "2026-01-17T08:19:26.000Z",
+      "heart_rate": 110,
+      "elapsed_time": 524,
+      "timer_time": 524
+    },
+    {
+      "timestamp": "2026-01-17T08:19:27.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 525,
+      "timer_time": 525
+    },
+    {
+      "timestamp": "2026-01-17T08:19:28.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 526,
+      "timer_time": 526
+    },
+    {
+      "timestamp": "2026-01-17T08:19:29.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 527,
+      "timer_time": 527
+    },
+    {
+      "timestamp": "2026-01-17T08:19:30.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 528,
+      "timer_time": 528
+    },
+    {
+      "timestamp": "2026-01-17T08:19:31.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 529,
+      "timer_time": 529
+    },
+    {
+      "timestamp": "2026-01-17T08:19:32.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 530,
+      "timer_time": 530
+    },
+    {
+      "timestamp": "2026-01-17T08:19:33.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 531,
+      "timer_time": 531
+    },
+    {
+      "timestamp": "2026-01-17T08:19:34.000Z",
+      "heart_rate": 116,
+      "elapsed_time": 532,
+      "timer_time": 532
+    },
+    {
+      "timestamp": "2026-01-17T08:19:35.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 533,
+      "timer_time": 533
+    },
+    {
+      "timestamp": "2026-01-17T08:19:36.000Z",
+      "heart_rate": 118,
+      "elapsed_time": 534,
+      "timer_time": 534
+    },
+    {
+      "timestamp": "2026-01-17T08:19:37.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 535,
+      "timer_time": 535
+    },
+    {
+      "timestamp": "2026-01-17T08:19:38.000Z",
+      "heart_rate": 118,
+      "elapsed_time": 536,
+      "timer_time": 536
+    },
+    {
+      "timestamp": "2026-01-17T08:19:39.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 537,
+      "timer_time": 537
+    },
+    {
+      "timestamp": "2026-01-17T08:19:40.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 538,
+      "timer_time": 538
+    },
+    {
+      "timestamp": "2026-01-17T08:19:41.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 539,
+      "timer_time": 539
+    },
+    {
+      "timestamp": "2026-01-17T08:19:42.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 540,
+      "timer_time": 540
+    },
+    {
+      "timestamp": "2026-01-17T08:19:43.000Z",
+      "heart_rate": 116,
+      "elapsed_time": 541,
+      "timer_time": 541
+    },
+    {
+      "timestamp": "2026-01-17T08:19:44.000Z",
+      "heart_rate": 116,
+      "elapsed_time": 542,
+      "timer_time": 542
+    },
+    {
+      "timestamp": "2026-01-17T08:19:45.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 543,
+      "timer_time": 543
+    },
+    {
+      "timestamp": "2026-01-17T08:19:46.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 544,
+      "timer_time": 544
+    },
+    {
+      "timestamp": "2026-01-17T08:19:47.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 545,
+      "timer_time": 545
+    },
+    {
+      "timestamp": "2026-01-17T08:19:48.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 546,
+      "timer_time": 546
+    },
+    {
+      "timestamp": "2026-01-17T08:19:49.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 547,
+      "timer_time": 547
+    },
+    {
+      "timestamp": "2026-01-17T08:19:50.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 548,
+      "timer_time": 548
+    },
+    {
+      "timestamp": "2026-01-17T08:19:51.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 549,
+      "timer_time": 549
+    },
+    {
+      "timestamp": "2026-01-17T08:19:52.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 550,
+      "timer_time": 550
+    },
+    {
+      "timestamp": "2026-01-17T08:19:53.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 551,
+      "timer_time": 551
+    },
+    {
+      "timestamp": "2026-01-17T08:19:54.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 552,
+      "timer_time": 552
+    },
+    {
+      "timestamp": "2026-01-17T08:19:55.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 553,
+      "timer_time": 553
+    },
+    {
+      "timestamp": "2026-01-17T08:19:56.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 554,
+      "timer_time": 554
+    },
+    {
+      "timestamp": "2026-01-17T08:19:57.000Z",
+      "heart_rate": 117,
+      "elapsed_time": 555,
+      "timer_time": 555
+    },
+    {
+      "timestamp": "2026-01-17T08:19:58.000Z",
+      "heart_rate": 116,
+      "elapsed_time": 556,
+      "timer_time": 556
+    },
+    {
+      "timestamp": "2026-01-17T08:19:59.000Z",
+      "heart_rate": 116,
+      "elapsed_time": 557,
+      "timer_time": 557
+    },
+    {
+      "timestamp": "2026-01-17T08:20:00.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 558,
+      "timer_time": 558
+    },
+    {
+      "timestamp": "2026-01-17T08:20:01.000Z",
+      "heart_rate": 115,
+      "elapsed_time": 559,
+      "timer_time": 559
+    },
+    {
+      "timestamp": "2026-01-17T08:20:02.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 560,
+      "timer_time": 560
+    },
+    {
+      "timestamp": "2026-01-17T08:20:03.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 561,
+      "timer_time": 561
+    },
+    {
+      "timestamp": "2026-01-17T08:20:04.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 562,
+      "timer_time": 562
+    },
+    {
+      "timestamp": "2026-01-17T08:20:05.000Z",
+      "heart_rate": 114,
+      "elapsed_time": 563,
+      "timer_time": 563
+    },
+    {
+      "timestamp": "2026-01-17T08:20:06.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 564,
+      "timer_time": 564
+    },
+    {
+      "timestamp": "2026-01-17T08:20:07.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 565,
+      "timer_time": 565
+    },
+    {
+      "timestamp": "2026-01-17T08:20:08.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 566,
+      "timer_time": 566
+    },
+    {
+      "timestamp": "2026-01-17T08:20:09.000Z",
+      "heart_rate": 113,
+      "elapsed_time": 567,
+      "timer_time": 567
+    },
+    {
+      "timestamp": "2026-01-17T08:20:10.000Z",
+      "heart_rate": 112,
+      "elapsed_time": 568,
+      "timer_time": 568
+    },
+    {
+      "timestamp": "2026-01-17T08:20:11.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 569,
+      "timer_time": 569
+    },
+    {
+      "timestamp": "2026-01-17T08:20:12.000Z",
+      "heart_rate": 111,
+      "elapsed_time": 570,
+      "timer_time": 570
+    },
+    {
+      "timestamp": "2026-01-17T08:20:13.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 571,
+      "timer_time": 571
+    },
+    {
+      "timestamp": "2026-01-17T08:20:14.000Z",
+      "heart_rate": 109,
+      "elapsed_time": 572,
+      "timer_time": 572
+    },
+    {
+      "timestamp": "2026-01-17T08:20:15.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 573,
+      "timer_time": 573
+    },
+    {
+      "timestamp": "2026-01-17T08:20:16.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 574,
+      "timer_time": 574
+    },
+    {
+      "timestamp": "2026-01-17T08:20:17.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 575,
+      "timer_time": 575
+    },
+    {
+      "timestamp": "2026-01-17T08:20:18.000Z",
+      "heart_rate": 107,
+      "elapsed_time": 576,
+      "timer_time": 576
+    },
+    {
+      "timestamp": "2026-01-17T08:20:19.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 577,
+      "timer_time": 577
+    },
+    {
+      "timestamp": "2026-01-17T08:20:20.000Z",
+      "heart_rate": 106,
+      "elapsed_time": 578,
+      "timer_time": 578
+    },
+    {
+      "timestamp": "2026-01-17T08:20:21.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 579,
+      "timer_time": 579
+    },
+    {
+      "timestamp": "2026-01-17T08:20:22.000Z",
+      "heart_rate": 105,
+      "elapsed_time": 580,
+      "timer_time": 580
+    },
+    {
+      "timestamp": "2026-01-17T08:20:23.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 581,
+      "timer_time": 581
+    },
+    {
+      "timestamp": "2026-01-17T08:20:24.000Z",
+      "heart_rate": 104,
+      "elapsed_time": 582,
+      "timer_time": 582
+    },
+    {
+      "timestamp": "2026-01-17T08:20:25.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 583,
+      "timer_time": 583
+    },
+    {
+      "timestamp": "2026-01-17T08:20:26.000Z",
+      "heart_rate": 103,
+      "elapsed_time": 584,
+      "timer_time": 584
+    },
+    {
+      "timestamp": "2026-01-17T08:20:27.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 585,
+      "timer_time": 585
+    },
+    {
+      "timestamp": "2026-01-17T08:20:28.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 586,
+      "timer_time": 586
+    },
+    {
+      "timestamp": "2026-01-17T08:20:29.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 587,
+      "timer_time": 587
+    },
+    {
+      "timestamp": "2026-01-17T08:20:30.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 588,
+      "timer_time": 588
+    },
+    {
+      "timestamp": "2026-01-17T08:20:31.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 589,
+      "timer_time": 589
+    },
+    {
+      "timestamp": "2026-01-17T08:20:32.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 590,
+      "timer_time": 590
+    },
+    {
+      "timestamp": "2026-01-17T08:20:33.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 591,
+      "timer_time": 591
+    },
+    {
+      "timestamp": "2026-01-17T08:20:34.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 592,
+      "timer_time": 592
+    },
+    {
+      "timestamp": "2026-01-17T08:20:35.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 593,
+      "timer_time": 593
+    },
+    {
+      "timestamp": "2026-01-17T08:20:36.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 594,
+      "timer_time": 594
+    },
+    {
+      "timestamp": "2026-01-17T08:20:37.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 595,
+      "timer_time": 595
+    },
+    {
+      "timestamp": "2026-01-17T08:20:38.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 596,
+      "timer_time": 596
+    },
+    {
+      "timestamp": "2026-01-17T08:20:39.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 597,
+      "timer_time": 597
+    },
+    {
+      "timestamp": "2026-01-17T08:20:40.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 598,
+      "timer_time": 598
+    },
+    {
+      "timestamp": "2026-01-17T08:20:41.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 599,
+      "timer_time": 599
+    },
+    {
+      "timestamp": "2026-01-17T08:20:42.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 600,
+      "timer_time": 600
+    },
+    {
+      "timestamp": "2026-01-17T08:20:43.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 601,
+      "timer_time": 601
+    },
+    {
+      "timestamp": "2026-01-17T08:20:44.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 602,
+      "timer_time": 602
+    },
+    {
+      "timestamp": "2026-01-17T08:20:45.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 603,
+      "timer_time": 603
+    },
+    {
+      "timestamp": "2026-01-17T08:20:46.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 604,
+      "timer_time": 604
+    },
+    {
+      "timestamp": "2026-01-17T08:20:47.000Z",
+      "heart_rate": 102,
+      "elapsed_time": 605,
+      "timer_time": 605
+    },
+    {
+      "timestamp": "2026-01-17T08:20:48.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 606,
+      "timer_time": 606
+    },
+    {
+      "timestamp": "2026-01-17T08:20:49.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 607,
+      "timer_time": 607
+    },
+    {
+      "timestamp": "2026-01-17T08:20:50.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 608,
+      "timer_time": 608
+    },
+    {
+      "timestamp": "2026-01-17T08:20:51.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 609,
+      "timer_time": 609
+    },
+    {
+      "timestamp": "2026-01-17T08:20:52.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 610,
+      "timer_time": 610
+    },
+    {
+      "timestamp": "2026-01-17T08:20:53.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 611,
+      "timer_time": 611
+    },
+    {
+      "timestamp": "2026-01-17T08:20:54.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 612,
+      "timer_time": 612
+    },
+    {
+      "timestamp": "2026-01-17T08:20:55.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 613,
+      "timer_time": 613
+    },
+    {
+      "timestamp": "2026-01-17T08:20:56.000Z",
+      "heart_rate": 101,
+      "elapsed_time": 614,
+      "timer_time": 614
+    },
+    {
+      "timestamp": "2026-01-17T08:20:57.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 615,
+      "timer_time": 615
+    },
+    {
+      "timestamp": "2026-01-17T08:20:58.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 616,
+      "timer_time": 616
+    },
+    {
+      "timestamp": "2026-01-17T08:20:59.000Z",
+      "heart_rate": 100,
+      "elapsed_time": 617,
+      "timer_time": 617
+    },
+    {
+      "timestamp": "2026-01-17T08:21:00.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 618,
+      "timer_time": 618
+    },
+    {
+      "timestamp": "2026-01-17T08:21:01.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 619,
+      "timer_time": 619
+    },
+    {
+      "timestamp": "2026-01-17T08:21:02.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 620,
+      "timer_time": 620
+    },
+    {
+      "timestamp": "2026-01-17T08:21:03.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 621,
+      "timer_time": 621
+    },
+    {
+      "timestamp": "2026-01-17T08:21:04.000Z",
+      "heart_rate": 99,
+      "elapsed_time": 622,
+      "timer_time": 622
+    },
+    {
+      "timestamp": "2026-01-17T08:21:05.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 623,
+      "timer_time": 623
+    },
+    {
+      "timestamp": "2026-01-17T08:21:06.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 624,
+      "timer_time": 624
+    },
+    {
+      "timestamp": "2026-01-17T08:21:07.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 625,
+      "timer_time": 625
+    },
+    {
+      "timestamp": "2026-01-17T08:21:08.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 626,
+      "timer_time": 626
+    },
+    {
+      "timestamp": "2026-01-17T08:21:09.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 627,
+      "timer_time": 627
+    },
+    {
+      "timestamp": "2026-01-17T08:21:10.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 628,
+      "timer_time": 628
+    },
+    {
+      "timestamp": "2026-01-17T08:21:11.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 629,
+      "timer_time": 629
+    },
+    {
+      "timestamp": "2026-01-17T08:21:12.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 630,
+      "timer_time": 630
+    },
+    {
+      "timestamp": "2026-01-17T08:21:13.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 631,
+      "timer_time": 631
+    },
+    {
+      "timestamp": "2026-01-17T08:21:14.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 632,
+      "timer_time": 632
+    },
+    {
+      "timestamp": "2026-01-17T08:21:15.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 633,
+      "timer_time": 633
+    },
+    {
+      "timestamp": "2026-01-17T08:21:16.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 634,
+      "timer_time": 634
+    },
+    {
+      "timestamp": "2026-01-17T08:21:17.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 635,
+      "timer_time": 635
+    },
+    {
+      "timestamp": "2026-01-17T08:21:18.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 636,
+      "timer_time": 636
+    },
+    {
+      "timestamp": "2026-01-17T08:21:19.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 637,
+      "timer_time": 637
+    },
+    {
+      "timestamp": "2026-01-17T08:21:20.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 638,
+      "timer_time": 638
+    },
+    {
+      "timestamp": "2026-01-17T08:21:21.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 639,
+      "timer_time": 639
+    },
+    {
+      "timestamp": "2026-01-17T08:21:22.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 640,
+      "timer_time": 640
+    },
+    {
+      "timestamp": "2026-01-17T08:21:23.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 641,
+      "timer_time": 641
+    },
+    {
+      "timestamp": "2026-01-17T08:21:24.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 642,
+      "timer_time": 642
+    },
+    {
+      "timestamp": "2026-01-17T08:21:25.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 643,
+      "timer_time": 643
+    },
+    {
+      "timestamp": "2026-01-17T08:21:26.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 644,
+      "timer_time": 644
+    },
+    {
+      "timestamp": "2026-01-17T08:21:27.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 645,
+      "timer_time": 645
+    },
+    {
+      "timestamp": "2026-01-17T08:21:28.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 646,
+      "timer_time": 646
+    },
+    {
+      "timestamp": "2026-01-17T08:21:29.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 647,
+      "timer_time": 647
+    },
+    {
+      "timestamp": "2026-01-17T08:21:30.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 648,
+      "timer_time": 648
+    },
+    {
+      "timestamp": "2026-01-17T08:21:31.000Z",
+      "heart_rate": 98,
+      "elapsed_time": 649,
+      "timer_time": 649
+    },
+    {
+      "timestamp": "2026-01-17T08:21:32.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 650,
+      "timer_time": 650
+    },
+    {
+      "timestamp": "2026-01-17T08:21:33.000Z",
+      "heart_rate": 97,
+      "elapsed_time": 651,
+      "timer_time": 651
+    },
+    {
+      "timestamp": "2026-01-17T08:21:34.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 652,
+      "timer_time": 652
+    },
+    {
+      "timestamp": "2026-01-17T08:21:35.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 653,
+      "timer_time": 653
+    },
+    {
+      "timestamp": "2026-01-17T08:21:36.000Z",
+      "heart_rate": 96,
+      "elapsed_time": 654,
+      "timer_time": 654
+    },
+    {
+      "timestamp": "2026-01-17T08:21:37.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 655,
+      "timer_time": 655
+    },
+    {
+      "timestamp": "2026-01-17T08:21:38.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 656,
+      "timer_time": 656
+    },
+    {
+      "timestamp": "2026-01-17T08:21:39.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 657,
+      "timer_time": 657
+    },
+    {
+      "timestamp": "2026-01-17T08:21:40.000Z",
+      "heart_rate": 90,
+      "elapsed_time": 658,
+      "timer_time": 658
+    },
+    {
+      "timestamp": "2026-01-17T08:21:41.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 659,
+      "timer_time": 659
+    },
+    {
+      "timestamp": "2026-01-17T08:21:42.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 660,
+      "timer_time": 660
+    },
+    {
+      "timestamp": "2026-01-17T08:21:43.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 661,
+      "timer_time": 661
+    },
+    {
+      "timestamp": "2026-01-17T08:21:44.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 662,
+      "timer_time": 662
+    },
+    {
+      "timestamp": "2026-01-17T08:21:45.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 663,
+      "timer_time": 663
+    },
+    {
+      "timestamp": "2026-01-17T08:21:46.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 664,
+      "timer_time": 664
+    },
+    {
+      "timestamp": "2026-01-17T08:21:47.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 665,
+      "timer_time": 665
+    },
+    {
+      "timestamp": "2026-01-17T08:21:48.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 666,
+      "timer_time": 666
+    },
+    {
+      "timestamp": "2026-01-17T08:21:49.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 667,
+      "timer_time": 667
+    },
+    {
+      "timestamp": "2026-01-17T08:21:50.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 668,
+      "timer_time": 668
+    },
+    {
+      "timestamp": "2026-01-17T08:21:51.000Z",
+      "heart_rate": 90,
+      "elapsed_time": 669,
+      "timer_time": 669
+    },
+    {
+      "timestamp": "2026-01-17T08:21:52.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 670,
+      "timer_time": 670
+    },
+    {
+      "timestamp": "2026-01-17T08:21:53.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 671,
+      "timer_time": 671
+    },
+    {
+      "timestamp": "2026-01-17T08:21:54.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 672,
+      "timer_time": 672
+    },
+    {
+      "timestamp": "2026-01-17T08:21:55.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 673,
+      "timer_time": 673
+    },
+    {
+      "timestamp": "2026-01-17T08:21:56.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 674,
+      "timer_time": 674
+    },
+    {
+      "timestamp": "2026-01-17T08:21:57.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 675,
+      "timer_time": 675
+    },
+    {
+      "timestamp": "2026-01-17T08:21:58.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 676,
+      "timer_time": 676
+    },
+    {
+      "timestamp": "2026-01-17T08:21:59.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 677,
+      "timer_time": 677
+    },
+    {
+      "timestamp": "2026-01-17T08:22:00.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 678,
+      "timer_time": 678
+    },
+    {
+      "timestamp": "2026-01-17T08:22:01.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 679,
+      "timer_time": 679
+    },
+    {
+      "timestamp": "2026-01-17T08:22:02.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 680,
+      "timer_time": 680
+    },
+    {
+      "timestamp": "2026-01-17T08:22:03.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 681,
+      "timer_time": 681
+    },
+    {
+      "timestamp": "2026-01-17T08:22:04.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 682,
+      "timer_time": 682
+    },
+    {
+      "timestamp": "2026-01-17T08:22:05.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 683,
+      "timer_time": 683
+    },
+    {
+      "timestamp": "2026-01-17T08:22:06.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 684,
+      "timer_time": 684
+    },
+    {
+      "timestamp": "2026-01-17T08:22:07.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 685,
+      "timer_time": 685
+    },
+    {
+      "timestamp": "2026-01-17T08:22:08.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 686,
+      "timer_time": 686
+    },
+    {
+      "timestamp": "2026-01-17T08:22:09.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 687,
+      "timer_time": 687
+    },
+    {
+      "timestamp": "2026-01-17T08:22:10.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 688,
+      "timer_time": 688
+    },
+    {
+      "timestamp": "2026-01-17T08:22:11.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 689,
+      "timer_time": 689
+    },
+    {
+      "timestamp": "2026-01-17T08:22:12.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 690,
+      "timer_time": 690
+    },
+    {
+      "timestamp": "2026-01-17T08:22:13.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 691,
+      "timer_time": 691
+    },
+    {
+      "timestamp": "2026-01-17T08:22:14.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 692,
+      "timer_time": 692
+    },
+    {
+      "timestamp": "2026-01-17T08:22:15.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 693,
+      "timer_time": 693
+    },
+    {
+      "timestamp": "2026-01-17T08:22:16.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 694,
+      "timer_time": 694
+    },
+    {
+      "timestamp": "2026-01-17T08:22:17.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 695,
+      "timer_time": 695
+    },
+    {
+      "timestamp": "2026-01-17T08:22:18.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 696,
+      "timer_time": 696
+    },
+    {
+      "timestamp": "2026-01-17T08:22:19.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 697,
+      "timer_time": 697
+    },
+    {
+      "timestamp": "2026-01-17T08:22:20.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 698,
+      "timer_time": 698
+    },
+    {
+      "timestamp": "2026-01-17T08:22:21.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 699,
+      "timer_time": 699
+    },
+    {
+      "timestamp": "2026-01-17T08:22:22.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 700,
+      "timer_time": 700
+    },
+    {
+      "timestamp": "2026-01-17T08:22:23.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 701,
+      "timer_time": 701
+    },
+    {
+      "timestamp": "2026-01-17T08:22:24.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 702,
+      "timer_time": 702
+    },
+    {
+      "timestamp": "2026-01-17T08:22:25.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 703,
+      "timer_time": 703
+    },
+    {
+      "timestamp": "2026-01-17T08:22:26.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 704,
+      "timer_time": 704
+    },
+    {
+      "timestamp": "2026-01-17T08:22:27.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 705,
+      "timer_time": 705
+    },
+    {
+      "timestamp": "2026-01-17T08:22:28.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 706,
+      "timer_time": 706
+    },
+    {
+      "timestamp": "2026-01-17T08:22:29.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 707,
+      "timer_time": 707
+    },
+    {
+      "timestamp": "2026-01-17T08:22:30.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 708,
+      "timer_time": 708
+    },
+    {
+      "timestamp": "2026-01-17T08:22:31.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 709,
+      "timer_time": 709
+    },
+    {
+      "timestamp": "2026-01-17T08:22:32.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 710,
+      "timer_time": 710
+    },
+    {
+      "timestamp": "2026-01-17T08:22:33.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 711,
+      "timer_time": 711
+    },
+    {
+      "timestamp": "2026-01-17T08:22:34.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 712,
+      "timer_time": 712
+    },
+    {
+      "timestamp": "2026-01-17T08:22:35.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 713,
+      "timer_time": 713
+    },
+    {
+      "timestamp": "2026-01-17T08:22:36.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 714,
+      "timer_time": 714
+    },
+    {
+      "timestamp": "2026-01-17T08:22:37.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 715,
+      "timer_time": 715
+    },
+    {
+      "timestamp": "2026-01-17T08:22:38.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 716,
+      "timer_time": 716
+    },
+    {
+      "timestamp": "2026-01-17T08:22:39.000Z",
+      "heart_rate": 90,
+      "elapsed_time": 717,
+      "timer_time": 717
+    },
+    {
+      "timestamp": "2026-01-17T08:22:40.000Z",
+      "heart_rate": 90,
+      "elapsed_time": 718,
+      "timer_time": 718
+    },
+    {
+      "timestamp": "2026-01-17T08:22:41.000Z",
+      "heart_rate": 90,
+      "elapsed_time": 719,
+      "timer_time": 719
+    },
+    {
+      "timestamp": "2026-01-17T08:22:42.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 720,
+      "timer_time": 720
+    },
+    {
+      "timestamp": "2026-01-17T08:22:43.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 721,
+      "timer_time": 721
+    },
+    {
+      "timestamp": "2026-01-17T08:22:44.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 722,
+      "timer_time": 722
+    },
+    {
+      "timestamp": "2026-01-17T08:22:45.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 723,
+      "timer_time": 723
+    },
+    {
+      "timestamp": "2026-01-17T08:22:46.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 724,
+      "timer_time": 724
+    },
+    {
+      "timestamp": "2026-01-17T08:22:47.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 725,
+      "timer_time": 725
+    },
+    {
+      "timestamp": "2026-01-17T08:22:48.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 726,
+      "timer_time": 726
+    },
+    {
+      "timestamp": "2026-01-17T08:22:49.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 727,
+      "timer_time": 727
+    },
+    {
+      "timestamp": "2026-01-17T08:22:50.000Z",
+      "heart_rate": 95,
+      "elapsed_time": 728,
+      "timer_time": 728
+    },
+    {
+      "timestamp": "2026-01-17T08:22:51.000Z",
+      "heart_rate": 94,
+      "elapsed_time": 729,
+      "timer_time": 729
+    },
+    {
+      "timestamp": "2026-01-17T08:22:52.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 730,
+      "timer_time": 730
+    },
+    {
+      "timestamp": "2026-01-17T08:22:53.000Z",
+      "heart_rate": 93,
+      "elapsed_time": 731,
+      "timer_time": 731
+    },
+    {
+      "timestamp": "2026-01-17T08:22:54.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 732,
+      "timer_time": 732
+    },
+    {
+      "timestamp": "2026-01-17T08:22:55.000Z",
+      "heart_rate": 92,
+      "elapsed_time": 733,
+      "timer_time": 733
+    },
+    {
+      "timestamp": "2026-01-17T08:22:56.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 734,
+      "timer_time": 734
+    },
+    {
+      "timestamp": "2026-01-17T08:22:57.000Z",
+      "heart_rate": 91,
+      "elapsed_time": 735,
+      "timer_time": 735
+    },
+    {
+      "timestamp": "2026-01-17T08:22:58.000Z",
+      "heart_rate": 90,
+      "elapsed_time": 736,
+      "timer_time": 736
+    },
+    {
+      "timestamp": "2026-01-17T08:22:59.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 737,
+      "timer_time": 737
+    },
+    {
+      "timestamp": "2026-01-17T08:23:00.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 738,
+      "timer_time": 738
+    },
+    {
+      "timestamp": "2026-01-17T08:23:01.000Z",
+      "heart_rate": 86,
+      "elapsed_time": 739,
+      "timer_time": 739
+    },
+    {
+      "timestamp": "2026-01-17T08:23:02.000Z",
+      "heart_rate": 86,
+      "elapsed_time": 740,
+      "timer_time": 740
+    },
+    {
+      "timestamp": "2026-01-17T08:23:03.000Z",
+      "heart_rate": 85,
+      "elapsed_time": 741,
+      "timer_time": 741
+    },
+    {
+      "timestamp": "2026-01-17T08:23:04.000Z",
+      "heart_rate": 86,
+      "elapsed_time": 742,
+      "timer_time": 742
+    },
+    {
+      "timestamp": "2026-01-17T08:23:05.000Z",
+      "heart_rate": 86,
+      "elapsed_time": 743,
+      "timer_time": 743
+    },
+    {
+      "timestamp": "2026-01-17T08:23:06.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 744,
+      "timer_time": 744
+    },
+    {
+      "timestamp": "2026-01-17T08:23:07.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 745,
+      "timer_time": 745
+    },
+    {
+      "timestamp": "2026-01-17T08:23:08.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 746,
+      "timer_time": 746
+    },
+    {
+      "timestamp": "2026-01-17T08:23:09.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 747,
+      "timer_time": 747
+    },
+    {
+      "timestamp": "2026-01-17T08:23:10.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 748,
+      "timer_time": 748
+    },
+    {
+      "timestamp": "2026-01-17T08:23:11.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 749,
+      "timer_time": 749
+    },
+    {
+      "timestamp": "2026-01-17T08:23:12.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 750,
+      "timer_time": 750
+    },
+    {
+      "timestamp": "2026-01-17T08:23:13.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 751,
+      "timer_time": 751
+    },
+    {
+      "timestamp": "2026-01-17T08:23:14.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 752,
+      "timer_time": 752
+    },
+    {
+      "timestamp": "2026-01-17T08:23:15.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 753,
+      "timer_time": 753
+    },
+    {
+      "timestamp": "2026-01-17T08:23:16.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 754,
+      "timer_time": 754
+    },
+    {
+      "timestamp": "2026-01-17T08:23:17.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 755,
+      "timer_time": 755
+    },
+    {
+      "timestamp": "2026-01-17T08:23:18.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 756,
+      "timer_time": 756
+    },
+    {
+      "timestamp": "2026-01-17T08:23:19.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 757,
+      "timer_time": 757
+    },
+    {
+      "timestamp": "2026-01-17T08:23:20.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 758,
+      "timer_time": 758
+    },
+    {
+      "timestamp": "2026-01-17T08:23:21.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 759,
+      "timer_time": 759
+    },
+    {
+      "timestamp": "2026-01-17T08:23:22.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 760,
+      "timer_time": 760
+    },
+    {
+      "timestamp": "2026-01-17T08:23:23.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 761,
+      "timer_time": 761
+    },
+    {
+      "timestamp": "2026-01-17T08:23:24.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 762,
+      "timer_time": 762
+    },
+    {
+      "timestamp": "2026-01-17T08:23:25.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 763,
+      "timer_time": 763
+    },
+    {
+      "timestamp": "2026-01-17T08:23:26.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 764,
+      "timer_time": 764
+    },
+    {
+      "timestamp": "2026-01-17T08:23:27.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 765,
+      "timer_time": 765
+    },
+    {
+      "timestamp": "2026-01-17T08:23:28.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 766,
+      "timer_time": 766
+    },
+    {
+      "timestamp": "2026-01-17T08:23:29.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 767,
+      "timer_time": 767
+    },
+    {
+      "timestamp": "2026-01-17T08:23:30.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 768,
+      "timer_time": 768
+    },
+    {
+      "timestamp": "2026-01-17T08:23:31.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 769,
+      "timer_time": 769
+    },
+    {
+      "timestamp": "2026-01-17T08:23:32.000Z",
+      "heart_rate": 87,
+      "elapsed_time": 770,
+      "timer_time": 770
+    },
+    {
+      "timestamp": "2026-01-17T08:23:33.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 771,
+      "timer_time": 771
+    },
+    {
+      "timestamp": "2026-01-17T08:23:34.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 772,
+      "timer_time": 772
+    },
+    {
+      "timestamp": "2026-01-17T08:23:35.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 773,
+      "timer_time": 773
+    },
+    {
+      "timestamp": "2026-01-17T08:23:36.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 774,
+      "timer_time": 774
+    },
+    {
+      "timestamp": "2026-01-17T08:23:37.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 775,
+      "timer_time": 775
+    },
+    {
+      "timestamp": "2026-01-17T08:23:38.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 776,
+      "timer_time": 776
+    },
+    {
+      "timestamp": "2026-01-17T08:23:39.000Z",
+      "heart_rate": 88,
+      "elapsed_time": 777,
+      "timer_time": 777
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "heart_rate": 89,
+      "elapsed_time": 778,
+      "timer_time": 778
+    }
+  ],
+  "events": [
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "data": 0,
+      "event": "timer",
+      "event_type": "start",
+      "event_group": 0
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "data": 0,
+      "event": "timer",
+      "event_type": "stop_all",
+      "event_group": 0
+    }
+  ],
+  "device_infos": [
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "serial_number": 3485598867,
+      "manufacturer": "garmin",
+      "product": 4260,
+      "software_version": 17.01,
+      "device_index": 0,
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "manufacturer": "garmin",
+      "product": 4260,
+      "software_version": 17.01,
+      "device_index": 1,
+      "device_type": "barometer",
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "device_index": 2,
+      "device_type": 8,
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "software_version": 1,
+      "device_index": 3,
+      "device_type": "whr",
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:10:42.000Z",
+      "manufacturer": "garmin",
+      "product": 4278,
+      "software_version": 35.1,
+      "device_index": 4,
+      "device_type": "sensor_hub",
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "serial_number": 3485598867,
+      "manufacturer": "garmin",
+      "product": 4260,
+      "software_version": 17.01,
+      "device_index": 0,
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "manufacturer": "garmin",
+      "product": 4260,
+      "software_version": 17.01,
+      "device_index": 1,
+      "device_type": "barometer",
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "device_index": 2,
+      "device_type": 8,
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "software_version": 1,
+      "device_index": 3,
+      "device_type": "whr",
+      "source_type": "local"
+    },
+    {
+      "timestamp": "2026-01-17T08:23:40.000Z",
+      "manufacturer": "garmin",
+      "product": 4278,
+      "software_version": 35.1,
+      "device_index": 4,
+      "device_type": "sensor_hub",
+      "source_type": "local"
+    }
+  ],
+  "developer_data_ids": [],
+  "field_descriptions": [],
+  "hrv": []
+}
