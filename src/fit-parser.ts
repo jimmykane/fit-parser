@@ -32,6 +32,9 @@ import type {
 import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
 import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
 
+export { FitBaseType, FitEncoder } from './fit-encoder.js'
+export type { FitEncoderField, FitEncoderOptions } from './fit-encoder.js'
+
 export interface FitParserOptions {
   force?: boolean
   speedUnit?: string

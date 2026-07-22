@@ -57,6 +57,31 @@ const buffer = await fs.readFile('./example.fit')
 const fitObject = await fitParser.parseAsync(buffer)
 ```
 
+## Encoding
+
+`FitEncoder` writes FIT headers, message definitions, data messages, and CRCs.
+It is profile-agnostic: callers provide profile field identifiers and values in
+their raw FIT representation (including any scale or offset). Scalar 64-bit
+values use `bigint`; strings and numeric arrays use exact-size raw
+`Uint8Array` values.
+
+```javascript
+import { FitBaseType, FitEncoder } from 'fit-file-parser'
+
+const encoder = new FitEncoder()
+encoder.writeMessage(0, [
+  { number: 0, size: 1, baseType: FitBaseType.Enum, value: 6 }, // FileId.type = course
+  { number: 4, size: 4, baseType: FitBaseType.Uint32, value: FitEncoder.toFitTimestamp(new Date()) },
+])
+
+const fitBytes = encoder.close()
+```
+
+Use a distinct local message number (the optional third `writeMessage`
+argument) for each recurring message shape to avoid redundant definitions.
+The encoder validates field definitions and numeric ranges before writing, so
+an exception never leaves a partial message in the output.
+
 ## Development
 
 To build the project, run:

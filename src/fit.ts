@@ -3773,6 +3773,7 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
+      7: { field: 'sub_sport', type: 'sub_sport', scale: null, offset: 0, units: '' },
     },
     32: {
       name: 'course_point',

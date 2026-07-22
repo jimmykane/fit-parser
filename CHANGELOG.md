@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.1.0
+
+- Add the public `FitEncoder` API for writing FIT headers, definitions, data messages, and CRCs.
+- Preserve the `course.sub_sport` field while parsing FIT course files.
+
 <a name="1.5.4"></a>
 
 ## [1.5.4](https://github.com/jimmykane/fit-parser/compare/v1.0.0...v1.5.3) (2019-03-01)

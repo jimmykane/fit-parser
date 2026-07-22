@@ -7,3 +7,6 @@
 examples/tempissue1.fit
 
 examples/tempissue2.fit
+
+# Local debug output
+/output.txt
