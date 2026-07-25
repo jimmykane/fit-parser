@@ -292,6 +292,7 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
     case 'gps_accuracy':
       return convertTo<LengthUnits>(data, 'lengthUnits', options.lengthUnit)
     case 'temperature':
+    case 'min_temperature':
     case 'avg_temperature':
     case 'max_temperature':
       return convertTo<TemperatureUnits>(data, 'temperatureUnits', options.temperatureUnit)
