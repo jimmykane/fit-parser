@@ -144,35 +144,35 @@ function formatByType(
       }
       return scale ? data / scale + offset : data
     default:
-      {
-        if (!FIT.types[type]) {
-          return data
-        }
-        // Quick check for a mask
-        const values: string[] = []
-        for (const key in FIT.types[type]) {
-          if (key in FIT.types[type]) {
-            values.push(String(FIT.types[type][key]))
-          }
-        }
-        if (!values.includes('mask')) {
-          const typeMap = FIT.types[type] as Record<string, any>
-          const mapped = typeMap[String(data)]
-          return mapped === undefined ? data : mapped
-        }
-        const dataItem: any = {}
-        for (const key in FIT.types[type]) {
-          if (key in FIT.types[type]) {
-            if (FIT.types[type][key] === 'mask') {
-              dataItem.value = data & Number(key)
-            }
-            else {
-              dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
-            }
-          }
-        }
-        return dataItem
+    {
+      if (!FIT.types[type]) {
+        return data
       }
+      // Quick check for a mask
+      const values: string[] = []
+      for (const key in FIT.types[type]) {
+        if (key in FIT.types[type]) {
+          values.push(String(FIT.types[type][key]))
+        }
+      }
+      if (!values.includes('mask')) {
+        const typeMap = FIT.types[type] as Record<string, any>
+        const mapped = typeMap[String(data)]
+        return mapped === undefined ? data : mapped
+      }
+      const dataItem: any = {}
+      for (const key in FIT.types[type]) {
+        if (key in FIT.types[type]) {
+          if (FIT.types[type][key] === 'mask') {
+            dataItem.value = data & Number(key)
+          }
+          else {
+            dataItem[FIT.types[type][key]] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+          }
+        }
+      }
+      return dataItem
+    }
   }
 }
 
@@ -403,15 +403,14 @@ export function readRecord(
         }
 
         mTypeDef.fieldDefs.push(fDef)
-      } catch (e) {
+      }
+      catch (e) {
         if (options.force) {
           continue
         }
         throw e
       }
     }
-
-
 
     messageTypes[localMessageType] = mTypeDef
 
@@ -446,8 +445,6 @@ export function readRecord(
     readDataFromIndex += fDef.size
     messageSize += fDef.size
   }
-
-
 
   for (const { fDef, data } of rawFields) {
     const { field } = fDef.isDeveloperField ? { field: fDef.name } : message.getAttributes(fDef.fDefNo)

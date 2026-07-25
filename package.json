@@ -1,7 +1,7 @@
 {
   "name": "fit-file-parser",
   "type": "module",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "private": false,
   "description": "Parse your .FIT files easily, directly from JS (Garmin, Polar, Suunto)",
   "author": {
@@ -32,13 +32,6 @@
     "garmin",
     "parse"
   ],
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md",
-    "CONTRIBUTORS.md"
-  ],
   "exports": {
     ".": {
       "types": "./dist/fit-parser.d.ts",
@@ -47,6 +40,13 @@
     }
   },
   "main": "dist/cjs/fit-parser.js",
+  "files": [
+    "CHANGELOG.md",
+    "CONTRIBUTORS.md",
+    "LICENSE",
+    "README.md",
+    "dist/"
+  ],
   "maintainers": [
     {
       "email": "jimmykane9@gmail.com",
@@ -66,7 +66,8 @@
     "lint": "eslint .",
     "fmt": "eslint --fix .",
     "type-check": "tsc --noEmit",
-    "build": "tsc --noCheck && tsc --project tsconfig.cjs.json --noCheck && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json"
+    "build": "tsc --noCheck && tsc --project tsconfig.cjs.json --noCheck && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "prepack": "npm run build"
   },
   "test": "vitest",
   "dependencies": {
