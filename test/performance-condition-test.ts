@@ -17,13 +17,11 @@ describe('garmin performance condition test', () => {
     const buffer = await fs.readFile('./test/running-with-developer-data.fit')
     const fitObject = await fitParser.parseAsync(buffer)
 
-    expect(fitObject).toHaveProperty('records');
+    const values = (fitObject.records ?? [])
+      .map(record => record.garmin_performance_condition)
+      .filter((value): value is number => value != null)
 
-    // console.log(fitObject.records?.filter(r => r.garmin_performance_condition != null).map(r => r.garmin_performance_condition).slice(0, 10));
-
-    const valuesFound = fitObject.records?.filter(r => r.garmin_performance_condition != null).map(r => r.garmin_performance_condition).length
-
-    expect(valuesFound).toBeGreaterThan(0);
+    expect(values).not.toHaveLength(0)
+    expect(values.every(value => value >= -20 && value <= 20)).toBe(true)
   })
-
 })
