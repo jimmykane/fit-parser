@@ -742,6 +742,7 @@ export interface ParsedCourse {
   sport?: Sport
   name?: string
   capabilities?: CourseCapabilities
+  sub_sport?: SubSport
 }
 export interface ParsedCoursePoint {
   timestamp: string
