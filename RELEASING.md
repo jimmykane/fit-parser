@@ -1,6 +1,6 @@
 # Releasing
 
-Publishing is handled by `.github/workflows/publish.yml`.
+Publishing is handled by `.github/workflows/publish.yml` after `.github/workflows/ci.yml` succeeds.
 
 ## One-time setup
 
@@ -17,6 +17,6 @@ Publishing is handled by `.github/workflows/publish.yml`.
 
 1. Update `package.json` and `package-lock.json` to the intended semantic version in the same pull request.
 2. Merge that change into `master`.
-3. CI verifies the build, tests, lint, types, generated FIT types, and package contents. It then publishes the new version to npm and creates the matching `v<version>` tag.
+3. CI verifies the build, tests, lint, types, and generated FIT types on every supported Node version. After that CI run succeeds, the separate publish workflow verifies package contents, publishes the exact CI-tested commit to npm, and creates the matching `v<version>` tag.
 
-The workflow rejects mismatched manifest versions and refuses to republish a version from a branch push. A manually pushed `v<version>` tag is also supported for recovery or for publishing a version that was bumped before the workflow was introduced.
+The workflow rejects mismatched manifest versions and refuses to republish an existing npm version. Publishing never begins until CI has passed.
