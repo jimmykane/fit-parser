@@ -655,6 +655,7 @@ export interface ParsedRecord {
   vertical_ratio?: number
   stance_time_balance?: number
   step_length?: number
+  garmin_performance_condition?: number
   absolute_pressure?: number
   depth?: number
   next_stop_depth?: number
