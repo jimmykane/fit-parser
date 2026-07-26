@@ -56,6 +56,8 @@
   "scripts": {
     "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts codegen/codegen.ts",
     "codegen": "tsx codegen/codegen.ts",
+    "codegen:check": "tsx codegen/codegen.ts --check",
+    "check": "npm run codegen:check && npm run lint && npm run type-check && npm test -- --run && npm run build",
     "example-output": "node examples/parse.js examples/example.fit > examples/output-example.json",
     "example-output-tank": "node examples/parse.js examples/example-diving.fit > examples/output-diving.json",
     "example-output-summary-first": "node examples/parse.js examples/triathlon_summary_first.fit > examples/output_summary_first.json",
