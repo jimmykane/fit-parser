@@ -23,11 +23,33 @@ export interface MessageTypeDefinition {
   globalMessageNumber: number
   numberOfFields: number
   fieldDefs: FieldDefinition[]
-  rawData: any[]
+  rawData?: any[]
 }
 
 const InvalidFieldData = Symbol('invalid FIT field data')
 const formatTypeMetadata = new Map<string | number, FormatTypeMetadata>()
+
+function requiresBoundedEndianDataView(type: string | number, size: number): boolean {
+  switch (type) {
+    case 'sint16':
+    case 'uint16':
+    case 'uint16z':
+      return size < 2
+    case 'sint32':
+    case 'uint32':
+    case 'uint32z':
+    case 'float32':
+      return size < 4
+    case 'float64':
+      return size < 8
+    case 'uint16_array':
+      return size % 2 !== 0
+    case 'uint32_array':
+      return size % 4 !== 0
+    default:
+      return false
+  }
+}
 
 export function addEndian(littleEndian: boolean, bytes: number[]): number {
   let result = 0
@@ -56,33 +78,54 @@ function readData(
   }
 
   if (fDef.endianAbility) {
+    const requiresBoundedDataView = fDef.requiresBoundedDataView
+      ?? (fDef.requiresBoundedDataView = requiresBoundedEndianDataView(fDef.type, fDef.size))
+    let fieldDataView = dataView
+    let fieldStartIndex = startIndex
+    if (
+      startIndex < 0
+      || startIndex + fDef.size > blob.length
+      || startIndex + fDef.size > dataView.byteLength
+    ) {
+      const paddedField = new Uint8Array(fDef.size)
+      for (let index = 0; index < fDef.size; index++) {
+        paddedField[index] = blob[startIndex + index]
+      }
+      fieldDataView = new DataView(paddedField.buffer)
+      fieldStartIndex = 0
+    }
+    else if (requiresBoundedDataView) {
+      fieldDataView = new DataView(dataView.buffer, dataView.byteOffset + startIndex, fDef.size)
+      fieldStartIndex = 0
+    }
+
     try {
       switch (fDef.type) {
         case 'sint16':
-          return dataView.getInt16(startIndex, fDef.littleEndian)
+          return fieldDataView.getInt16(fieldStartIndex, fDef.littleEndian)
         case 'uint16':
         case 'uint16z':
-          return dataView.getUint16(startIndex, fDef.littleEndian)
+          return fieldDataView.getUint16(fieldStartIndex, fDef.littleEndian)
         case 'sint32':
-          return dataView.getInt32(startIndex, fDef.littleEndian)
+          return fieldDataView.getInt32(fieldStartIndex, fDef.littleEndian)
         case 'uint32':
         case 'uint32z':
-          return dataView.getUint32(startIndex, fDef.littleEndian)
+          return fieldDataView.getUint32(fieldStartIndex, fDef.littleEndian)
         case 'float32':
-          return dataView.getFloat32(startIndex, fDef.littleEndian)
+          return fieldDataView.getFloat32(fieldStartIndex, fDef.littleEndian)
         case 'float64':
-          return dataView.getFloat64(startIndex, fDef.littleEndian)
+          return fieldDataView.getFloat64(fieldStartIndex, fDef.littleEndian)
         case 'uint32_array': {
           const array32: number[] = []
           for (let i = 0; i < fDef.size; i += 4) {
-            array32.push(dataView.getUint32(startIndex + i, fDef.littleEndian))
+            array32.push(fieldDataView.getUint32(fieldStartIndex + i, fDef.littleEndian))
           }
           return array32
         }
         case 'uint16_array': {
           const array16: number[] = []
           for (let i = 0; i < fDef.size; i += 2) {
-            array16.push(dataView.getUint16(startIndex + i, fDef.littleEndian))
+            array16.push(fieldDataView.getUint16(fieldStartIndex + i, fDef.littleEndian))
           }
           return array16
         }
@@ -397,6 +440,7 @@ export function readRecord(
         dataType: getFitMessageBaseType(baseType & 15),
         scale,
         offset,
+        requiresBoundedDataView: requiresBoundedEndianDataView(type, blob[fDefIndex + 1]),
       }
 
       mTypeDef.fieldDefs.push(fDef)
@@ -427,6 +471,10 @@ export function readRecord(
           dataType: getFitMessageBaseType(baseType & 15),
           scale: devDef.scale || 1,
           offset: devDef.offset || 0,
+          requiresBoundedDataView: requiresBoundedEndianDataView(
+            FIT.types.fit_base_type[baseType],
+            size,
+          ),
           developerDataIndex: devDataIndex,
           isDeveloperField: true,
         }
@@ -467,6 +515,10 @@ export function readRecord(
   const message = getFitMessage(messageType.globalMessageNumber)
 
   const rawData = messageType.rawData
+    ?? (messageType.rawData = Array.from(
+      { length: messageType.fieldDefs.length },
+      () => InvalidFieldData,
+    ))
   let validFieldCount = 0
   for (let i = 0; i < messageType.fieldDefs.length; i++) {
     const fDef = messageType.fieldDefs[i]

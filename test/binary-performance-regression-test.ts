@@ -113,4 +113,82 @@ describe('binary decoder allocation regressions', () => {
     expect(third.message).toMatchObject({ heart_rate: 141 })
     expect(messageDefinition.rawData).toBe(rawData)
   })
+
+  it('preserves legacy zero-padding for truncated endian fields', () => {
+    const truncatedFloat = new Uint8Array([0, 0x3F, 0x80])
+    const parsedFloat = readRecord(
+      truncatedFloat,
+      [definition([field('truncated_float', 'float32', 4, 136, false)])],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    const truncatedArray = new Uint8Array([0, 7, 0, 9])
+    const parsedArray = readRecord(
+      truncatedArray,
+      [definition([field('truncated_array', 'uint16_array', 4, 132, true)])],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    expect(parsedFloat.message).toMatchObject({ truncated_float: 1 })
+    expect(parsedArray.message).toMatchObject({ truncated_array: [7, 9] })
+  })
+
+  it('does not read malformed endian fields across their declared boundary', () => {
+    const malformedDefinition = definition([
+      field('short_uint16', 'uint16', 1, 132, true),
+    ])
+    const dataWithFollowingBytes = new Uint8Array([0, 0x34, 0x12])
+
+    expect(() =>
+      readRecord(
+        dataWithFollowingBytes,
+        [malformedDefinition],
+        [],
+        0,
+        parserOptions,
+        undefined,
+        0,
+      )).toThrow(RangeError)
+
+    const forced = readRecord(
+      dataWithFollowingBytes,
+      [malformedDefinition],
+      [],
+      0,
+      { ...parserOptions, force: true },
+      undefined,
+      0,
+    )
+    expect(forced.message).toMatchObject({ short_uint16: 0x34 })
+  })
+
+  it('initializes a reusable raw-data buffer for legacy definitions', () => {
+    const legacyDefinition: MessageTypeDefinition = {
+      fieldDefs: [field('heart_rate', 'uint8', 1, 2, true)],
+      globalMessageNumber: 20,
+      littleEndian: true,
+      numberOfFields: 1,
+    }
+
+    const parsed = readRecord(
+      new Uint8Array([0, 140]),
+      [legacyDefinition],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    expect(parsed.message).toMatchObject({ heart_rate: 140 })
+    expect(legacyDefinition.rawData).toHaveLength(1)
+  })
 })
