@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import FitParser from '../src/fit-parser.js'
 
 describe('fit parser tests', () => {
@@ -23,6 +23,19 @@ describe('fit parser tests', () => {
     const offset = await new FitParser({ force: true }).parseAsync(offsetBuffer)
 
     expect(offset).toEqual(direct)
+  })
+
+  it('parses ArrayBuffer input without changing Buffer output', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const arrayBuffer = buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength,
+    ) as ArrayBuffer
+
+    const direct = await new FitParser({ force: true }).parseAsync(buffer)
+    const parsedArrayBuffer = await new FitParser({ force: true }).parseAsync(arrayBuffer)
+
+    expect(parsedArrayBuffer).toEqual(direct)
   })
 
   it('preserves elapsed and timer time generation with cached field definitions', async () => {
@@ -50,6 +63,25 @@ describe('fit parser tests', () => {
     const corrupt = await new FitParser({ force: true }).parseAsync(corruptCrc)
 
     expect(corrupt).toEqual(original)
+  })
+
+  it('skips header and file CRC mismatches only in force mode', async () => {
+    const buffer = await fs.readFile('./test/running-with-developer-data.fit')
+    const expected = await new FitParser({ force: false }).parseAsync(buffer)
+    const corruptHeaderCrc = Buffer.from(buffer)
+    corruptHeaderCrc[12] ^= 0xFF
+    const corruptFileCrc = Buffer.from(buffer)
+    const crcStart = corruptFileCrc[0] + corruptFileCrc.readUInt32LE(4)
+    corruptFileCrc[crcStart] ^= 0xFF
+
+    await expect(new FitParser({ force: true }).parseAsync(corruptHeaderCrc)).resolves.toEqual(expected)
+    await expect(new FitParser({ force: true }).parseAsync(corruptFileCrc)).resolves.toEqual(expected)
+
+    for (const corrupt of [corruptHeaderCrc, corruptFileCrc]) {
+      const callback = vi.fn()
+      new FitParser({ force: false }).parse(corrupt, callback)
+      expect(callback).not.toHaveBeenCalled()
+    }
   })
 
   it('expects longitude to be in the range -180 to +180', async () => {
