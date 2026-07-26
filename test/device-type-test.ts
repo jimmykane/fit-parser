@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
-import FitParser from '../src/fit-parser.js'
+import FitParser, { FitBaseType, FitEncoder } from '../src/fit-parser.js'
 
 describe('device type mapping tests', () => {
   it('expects correct resolution for Local, BLE and ANT+ device types', async () => {
@@ -31,5 +31,31 @@ describe('device type mapping tests', () => {
     const barometerDevice = deviceInfos.find(d => d.device_type === 'barometer')
     expect(barometerDevice).toBeDefined()
     expect(barometerDevice?.source_type).toBe('local')
+  })
+
+  it('resolves a Garmin product ID while preserving the raw product value', async () => {
+    const encoder = new FitEncoder()
+
+    encoder.writeMessage(0, [
+      { number: 0, size: 1, baseType: FitBaseType.Enum, value: 4 },
+      { number: 1, size: 2, baseType: FitBaseType.Uint16, value: 1 },
+      { number: 2, size: 2, baseType: FitBaseType.Uint16, value: 3113 },
+    ])
+    encoder.writeMessage(23, [
+      { number: 0, size: 1, baseType: FitBaseType.Uint8, value: 0 },
+      { number: 2, size: 2, baseType: FitBaseType.Uint16, value: 1 },
+      { number: 4, size: 2, baseType: FitBaseType.Uint16, value: 3113 },
+    ], 1)
+
+    const fitObject = await new FitParser({ force: false }).parseAsync(
+      encoder.close().buffer,
+    )
+
+    expect(fitObject.file_ids).toMatchObject([
+      { manufacturer: 'garmin', product: 3113, product_name: 'fr945' },
+    ])
+    expect(fitObject.device_infos).toMatchObject([
+      { manufacturer: 'garmin', product: 3113, product_name: 'fr945' },
+    ])
   })
 })
