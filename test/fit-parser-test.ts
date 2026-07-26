@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
 import FitParser from '../src/fit-parser.js'
@@ -10,6 +11,45 @@ describe('fit parser tests', () => {
 
     expect(fitObject).toBeTypeOf('object')
     expect(fitObject).toHaveProperty('sessions')
+  })
+
+  it('parses an offset Buffer view without reading surrounding bytes', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const padded = Buffer.alloc(buffer.length + 32, 0xA5)
+    buffer.copy(padded, 17)
+    const offsetBuffer = padded.subarray(17, 17 + buffer.length)
+
+    const direct = await new FitParser({ force: true }).parseAsync(buffer)
+    const offset = await new FitParser({ force: true }).parseAsync(offsetBuffer)
+
+    expect(offset).toEqual(direct)
+  })
+
+  it('preserves elapsed and timer time generation with cached field definitions', async () => {
+    const fitParser = new FitParser({ elapsedRecordField: true, force: true })
+    const buffer = await fs.readFile('./test/test.fit')
+    const fitObject = await fitParser.parseAsync(buffer)
+    const records = fitObject.records ?? []
+
+    expect(records.length).toBeGreaterThan(1)
+    expect(records[0]).toMatchObject({ elapsed_time: 0, timer_time: 0 })
+    expect(records[records.length - 1]?.elapsed_time).toBeTypeOf('number')
+    expect(records[records.length - 1]?.timer_time).toBeTypeOf('number')
+  })
+
+  it('preserves force-mode output when only the trailing file CRC is corrupt', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const corruptCrc = Buffer.from(buffer)
+    const headerLength = corruptCrc[0]
+    const dataLength = corruptCrc.readUInt32LE(4)
+    const crcStart = headerLength + dataLength
+    corruptCrc[crcStart] ^= 0xFF
+    corruptCrc[crcStart + 1] ^= 0xFF
+
+    const original = await new FitParser({ force: true }).parseAsync(buffer)
+    const corrupt = await new FitParser({ force: true }).parseAsync(corruptCrc)
+
+    expect(corrupt).toEqual(original)
   })
 
   it('expects longitude to be in the range -180 to +180', async () => {
