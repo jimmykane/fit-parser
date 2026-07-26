@@ -1,5 +1,6 @@
+import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import FitParser from '../src/fit-parser.js'
 
 describe('fit parser tests', () => {
@@ -10,6 +11,77 @@ describe('fit parser tests', () => {
 
     expect(fitObject).toBeTypeOf('object')
     expect(fitObject).toHaveProperty('sessions')
+  })
+
+  it('parses an offset Buffer view without reading surrounding bytes', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const padded = Buffer.alloc(buffer.length + 32, 0xA5)
+    buffer.copy(padded, 17)
+    const offsetBuffer = padded.subarray(17, 17 + buffer.length)
+
+    const direct = await new FitParser({ force: true }).parseAsync(buffer)
+    const offset = await new FitParser({ force: true }).parseAsync(offsetBuffer)
+
+    expect(offset).toEqual(direct)
+  })
+
+  it('parses ArrayBuffer input without changing Buffer output', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const arrayBuffer = buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength,
+    ) as ArrayBuffer
+
+    const direct = await new FitParser({ force: true }).parseAsync(buffer)
+    const parsedArrayBuffer = await new FitParser({ force: true }).parseAsync(arrayBuffer)
+
+    expect(parsedArrayBuffer).toEqual(direct)
+  })
+
+  it('preserves elapsed and timer time generation with cached field definitions', async () => {
+    const fitParser = new FitParser({ elapsedRecordField: true, force: true })
+    const buffer = await fs.readFile('./test/test.fit')
+    const fitObject = await fitParser.parseAsync(buffer)
+    const records = fitObject.records ?? []
+
+    expect(records.length).toBeGreaterThan(1)
+    expect(records[0]).toMatchObject({ elapsed_time: 0, timer_time: 0 })
+    expect(records[records.length - 1]?.elapsed_time).toBeTypeOf('number')
+    expect(records[records.length - 1]?.timer_time).toBeTypeOf('number')
+  })
+
+  it('preserves force-mode output when only the trailing file CRC is corrupt', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const corruptCrc = Buffer.from(buffer)
+    const headerLength = corruptCrc[0]
+    const dataLength = corruptCrc.readUInt32LE(4)
+    const crcStart = headerLength + dataLength
+    corruptCrc[crcStart] ^= 0xFF
+    corruptCrc[crcStart + 1] ^= 0xFF
+
+    const original = await new FitParser({ force: true }).parseAsync(buffer)
+    const corrupt = await new FitParser({ force: true }).parseAsync(corruptCrc)
+
+    expect(corrupt).toEqual(original)
+  })
+
+  it('skips header and file CRC mismatches only in force mode', async () => {
+    const buffer = await fs.readFile('./test/running-with-developer-data.fit')
+    const expected = await new FitParser({ force: false }).parseAsync(buffer)
+    const corruptHeaderCrc = Buffer.from(buffer)
+    corruptHeaderCrc[12] ^= 0xFF
+    const corruptFileCrc = Buffer.from(buffer)
+    const crcStart = corruptFileCrc[0] + corruptFileCrc.readUInt32LE(4)
+    corruptFileCrc[crcStart] ^= 0xFF
+
+    await expect(new FitParser({ force: true }).parseAsync(corruptHeaderCrc)).resolves.toEqual(expected)
+    await expect(new FitParser({ force: true }).parseAsync(corruptFileCrc)).resolves.toEqual(expected)
+
+    for (const corrupt of [corruptHeaderCrc, corruptFileCrc]) {
+      const callback = vi.fn()
+      new FitParser({ force: false }).parse(corrupt, callback)
+      expect(callback).not.toHaveBeenCalled()
+    }
   })
 
   it('expects longitude to be in the range -180 to +180', async () => {

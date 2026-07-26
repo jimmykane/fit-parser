@@ -1,4 +1,5 @@
 import type { Buffer } from 'buffer'
+import type { MessageTypeDefinition } from './binary.js'
 import type {
   ParsedActivity,
   ParsedActivityMetrics,
@@ -29,7 +30,7 @@ import type {
   ParsedTimeInZone,
   ParsedUserMetrics,
 } from './fit_types.js'
-import { calculateCRC, getArrayBuffer, readRecord } from './binary.js'
+import { calculateCRC, readRecord } from './binary.js'
 import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
 
 export { FitBaseType, FitEncoder } from './fit-encoder.js'
@@ -76,7 +77,10 @@ export default class FitParser {
   }
 
   parse(content: ArrayBuffer | Buffer<ArrayBuffer>, callback: FitParserCallback): void {
-    const blob = new Uint8Array(getArrayBuffer(content))
+    const blob = content instanceof ArrayBuffer
+      ? new Uint8Array(content)
+      : new Uint8Array(content.buffer, content.byteOffset, content.byteLength)
+    const dataView = new DataView(blob.buffer, blob.byteOffset, blob.byteLength)
 
     if (blob.length < 12) {
       callback('File to small to be a FIT file', undefined)
@@ -104,15 +108,13 @@ export default class FitParser {
       }
     }
 
-    if (headerLength === 14) {
+    if (headerLength === 14 && !this.options.force) {
       const crcHeader = blob[12] + (blob[13] << 8)
       const crcHeaderCalc = calculateCRC(blob, 0, 12)
       if (crcHeader !== crcHeaderCalc) {
         // callback('Header CRC mismatch', {});
         // TODO: fix Header CRC check
-        if (!this.options.force) {
-          return
-        }
+        return
       }
     }
 
@@ -121,17 +123,17 @@ export default class FitParser {
     const dataLength: number
       = blob[4] + (blob[5] << 8) + (blob[6] << 16) + (blob[7] << 24)
     const crcStart = dataLength + headerLength
-    const crcFile = blob[crcStart] + (blob[crcStart + 1] << 8)
-    const crcFileCalc = calculateCRC(
-      blob,
-      headerLength === 12 ? 0 : headerLength,
-      crcStart,
-    )
+    if (!this.options.force) {
+      const crcFile = blob[crcStart] + (blob[crcStart + 1] << 8)
+      const crcFileCalc = calculateCRC(
+        blob,
+        headerLength === 12 ? 0 : headerLength,
+        crcStart,
+      )
 
-    if (crcFile !== crcFileCalc) {
-      // callback('File CRC mismatch', {});
-      // TODO: fix File CRC check
-      if (!this.options.force) {
+      if (crcFile !== crcFileCalc) {
+        // callback('File CRC mismatch', {});
+        // TODO: fix File CRC check
         return
       }
     }
@@ -170,7 +172,7 @@ export default class FitParser {
     const user_metrics: ParsedUserMetrics[] = []
 
     let loopIndex = headerLength
-    const messageTypes: any[] = []
+    const messageTypes: MessageTypeDefinition[] = []
     const developerFields: any[] = []
 
     const isModeCascade = this.options.mode === 'cascade'
@@ -189,6 +191,7 @@ export default class FitParser {
         this.options,
         startDate,
         pausedTime,
+        dataView,
       )
       loopIndex = nextIndex
 

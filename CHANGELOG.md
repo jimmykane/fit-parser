@@ -1,5 +1,27 @@
 # Change Log
 
+## 4.0.0
+
+### FIT decoder performance
+
+- Parse `ArrayBuffer` inputs and exact Node.js `Buffer` views directly, avoiding a full copy of the source file.
+- Reuse one parse-local `DataView` instead of allocating temporary views for each supported endian field.
+- Cache standard field metadata and enum/mask lookups on reusable message definitions.
+- Reuse raw field storage for records that share a local message definition.
+- Generate elapsed and timer fields once per record instead of once per decoded field.
+- Skip header and file CRC scans in `force: true` mode, where CRC mismatches are intentionally ignored; strict mode continues to validate both CRCs.
+- Preserve legacy malformed-field zero-padding, field-boundary, developer-field, invalid-value, and offset-buffer behavior.
+
+### Measured benefit
+
+- Suunto 93-hour / 7.5 MB FIT decoding: 1.057 s to 0.375 s, a 64.5% reduction.
+- Garmin 110-hour / 28.6 MB FIT decoding: 3.643 s to 1.241 s, a 65.9% reduction.
+- Input-related array-buffer memory is approximately halved by removing the full source copy:
+  - Suunto: 15.0 MB to 7.5 MB.
+  - Garmin: 57.2 MB to 28.6 MB.
+
+There are no intentional parsed-output or public API changes in this release. Output parity was verified across 162 checked-in fixture/mode combinations, 8,320 generated malformed endian-definition cases, and both private long-duration benchmark files.
+
 ## 3.1.0
 
 - Add the public `FitEncoder` API for writing FIT headers, definitions, data messages, and CRCs.
