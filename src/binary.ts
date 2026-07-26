@@ -379,6 +379,23 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
   }
 }
 
+function applyGarminProductName(fields: any): void {
+  if (fields.product_name !== undefined || fields.manufacturer !== 'garmin') {
+    return
+  }
+
+  const product = fields.product
+  if (typeof product !== 'number') {
+    return
+  }
+
+  const productName = FIT.types.garmin_product[product]
+  if (typeof productName === 'string') {
+    // Keep the raw protocol ID and expose the SDK product name separately.
+    fields.product_name = productName
+  }
+}
+
 export function readRecord(
   blob: Uint8Array,
   messageTypes: MessageTypeDefinition[],
@@ -582,6 +599,8 @@ export function readRecord(
       }
     }
   }
+
+  applyGarminProductName(fields)
 
   if (validFieldCount > 0 && message.name === 'record' && options.elapsedRecordField) {
     fields.elapsed_time = ((fields.timestamp as any) - (startDate || 0)) / 1000
