@@ -75,6 +75,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.2.0",
+    "@garmin/fitsdk": "^21.208.0",
     "@types/node": "^24.10.1",
     "@vitest/coverage-v8": "^4.0.13",
     "eslint": "^9.10.0",
