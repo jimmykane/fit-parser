@@ -149,6 +149,7 @@ export default class FitParser {
       profileVersion,
       protocolVersion,
     }
+    const messages: Record<string, unknown[]> = {}
 
     let sessions: ParsedSession[] = []
     let laps: ParsedLap[] = []
@@ -204,6 +205,14 @@ export default class FitParser {
         decoderState,
       )
       loopIndex = nextIndex
+
+      if (
+        messageType !== ''
+        && messageType !== 'definition'
+        && message !== undefined
+      ) {
+        (messages[messageType] ??= []).push(message)
+      }
 
       switch (messageType) {
         case 'lap':
@@ -336,6 +345,7 @@ export default class FitParser {
     fitObj.time_in_zone = time_in_zone
     fitObj.activity_metrics = activity_metrics
     fitObj.user_metrics = user_metrics
+    fitObj.messages = messages as ParsedFit['messages']
 
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)

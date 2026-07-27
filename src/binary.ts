@@ -42,6 +42,7 @@ export interface DecoderState {
 
 const InvalidFieldData = Symbol('invalid FIT field data')
 const formatTypeMetadata = new Map<string | number, FormatTypeMetadata>()
+const uint8CompatibleTypes = new Set(['enum', 'uint8', 'byte'])
 
 function baseTypeSize(type: string | number): number | undefined {
   switch (type) {
@@ -70,6 +71,21 @@ function baseTypeSize(type: string | number): number | undefined {
 function requiresBoundedEndianDataView(type: string | number, size: number): boolean {
   const elementSize = baseTypeSize(type)
   return elementSize !== undefined && size % elementSize !== 0
+}
+
+function areProfileBaseTypesCompatible(
+  profileType: string | number | undefined,
+  wireType: string | number,
+): boolean {
+  if (profileType === undefined || profileType === wireType) {
+    return true
+  }
+
+  // FIT producers commonly interchange enum, uint8, and byte definitions.
+  // They have the same width and value representation; keeping the semantic
+  // profile type is safe while still rejecting width and sign conflicts.
+  return uint8CompatibleTypes.has(String(profileType))
+    && uint8CompatibleTypes.has(String(wireType))
 }
 
 export function addEndian(littleEndian: boolean, bytes: number[]): number {
@@ -458,9 +474,14 @@ function resolveDeveloperFieldDefinition(
     return developerFieldDef.resolvedFieldDef
   }
 
-  const baseType = description.fit_base_type_id
+  const describedBaseType = description.fit_base_type_id
+  const baseType = typeof describedBaseType === 'number'
+    ? describedBaseType
+    : Number(Object.entries(FIT.types.fit_base_type).find(
+        ([, typeName]) => typeName === describedBaseType,
+      )?.[0])
   const type = FIT.types.fit_base_type[baseType]
-  if (typeof baseType !== 'number' || type === undefined) {
+  if (!Number.isInteger(baseType) || type === undefined) {
     developerFieldDef.resolvedFieldDef = undefined
     developerFieldDef.resolvedFrom = undefined
     if (options.force) {
@@ -560,8 +581,10 @@ export function readRecord(
         scale,
         offset,
       } = message.getAttributes(blob[fDefIndex])
-      const profileCompatible
-        = profileBaseType === undefined || profileBaseType === wireType
+      const profileCompatible = areProfileBaseTypesCompatible(
+        profileBaseType,
+        wireType,
+      )
       const fDef: FieldDefinition = {
         type: profileCompatible ? type : wireType,
         rawType: wireType,

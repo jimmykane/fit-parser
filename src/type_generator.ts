@@ -126,15 +126,17 @@ export function generateTypes(types: { [typeName: string]: Record<number, string
 
     const typeAlias = ts.factory.createTypeAliasDeclaration([
       ts.factory.createModifier(ts.SyntaxKind.ExportKeyword),
-    ], snakeToCamel(name), undefined, ts.factory.createUnionTypeNode(
-      [...names.map(n => ts.factory.createLiteralTypeNode(
-        ts.factory.createStringLiteral(String(n)),
-      )), ...(name === 'mesg_num'
-        ? [
-            ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
-          ]
-        : [])],
-    ))
+    ], snakeToCamel(name), undefined, names.length === 0
+      ? ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+      : ts.factory.createUnionTypeNode(
+          [...names.map(n => ts.factory.createLiteralTypeNode(
+            ts.factory.createStringLiteral(String(n)),
+          )), ...(name === 'mesg_num'
+            ? [
+                ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
+              ]
+            : [])],
+        ))
 
     nodes.push(typeAlias)
   })
@@ -294,9 +296,23 @@ export function generateFitType(): Statement {
     activity: 'parsed_activity',
     zones_target: '?parsed_zones_target',
   }
+  const existingMessageNames = new Set([
+    ...Object.values(collectionProperties),
+    ...Object.values(referenceProperties),
+  ].map(name => name.replace('?', '').replace(/^parsed_/, '')))
+  const additionalReferenceProperties = Object.values(FIT.messages)
+    .filter(message => !existingMessageNames.has(message.name))
+    .map(message => generateProperty(
+      message.name,
+      ts.factory.createTypeReferenceNode(
+        snakeToCamel(`parsed_${message.name}`),
+      ),
+    ))
+
   return ts.factory.createInterfaceDeclaration([ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)], 'ParsedFit', undefined, undefined, [
     generateProperty('protocolVersion', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
     generateProperty('profileVersion', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
+    generateProperty('messages', ts.factory.createTypeReferenceNode('ParsedMessages')),
     ...Object.keys(referenceProperties).map(prop => generateProperty(prop, ts.factory.createTypeReferenceNode(
       snakeToCamel(referenceProperties[prop].replace('?', '')),
     ), referenceProperties[prop].startsWith('?'))),
@@ -305,8 +321,25 @@ export function generateFitType(): Statement {
       : ts.factory.createTypeReferenceNode(
           snakeToCamel(collectionProperties[prop]),
         ))),
+    ...additionalReferenceProperties,
   ])
 }
+
+export function generateParsedMessages(messages: { [messageId: number]: Message }): Statement {
+  return ts.factory.createInterfaceDeclaration(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    'ParsedMessages',
+    undefined,
+    undefined,
+    Object.values(messages).map(message => generateArrayProperty(
+      message.name,
+      ts.factory.createTypeReferenceNode(
+        snakeToCamel(`parsed_${message.name}`),
+      ),
+    )),
+  )
+}
+
 export function generateMessages(messages: { [messageId: number]: Message }): Statement[] {
   const nodes: Statement[] = []
 
@@ -351,6 +384,8 @@ export function main(): string {
   nodes.push(...generateOptions(FIT.options as unknown as any))
   nodes.push(...comment('parsed from Fit.messages'))
   nodes.push(...generateMessages(FIT.messages as unknown as any))
+  nodes.push(...comment('all recognized messages, retained in file order'))
+  nodes.push(generateParsedMessages(FIT.messages))
   nodes.push(...comment('the returned type after parsing a .fit file'))
   nodes.push(generateFitType())
 

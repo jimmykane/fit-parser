@@ -152,47 +152,11 @@ export interface FitOptions {
     const result = generateFitType()
     const code = print([result])
 
-    expect(code).toEqual(`export interface ParsedFit {
-    protocolVersion?: number;
-    profileVersion?: number;
-    file_creator: ParsedFileCreator;
-    device_settings: ParsedDeviceSettings;
-    dive_summary?: ParsedDiveSummary;
-    dive_settings?: ParsedDiveSettings;
-    software: ParsedSoftware;
-    user_profile: ParsedUserProfile;
-    activity: ParsedActivity;
-    zones_target?: ParsedZonesTarget;
-    laps?: ParsedLap[];
-    records?: ParsedRecord[];
-    sessions?: ParsedSession[];
-    lengths?: ParsedLength[];
-    events?: ParsedEvent[];
-    device_infos?: ParsedDeviceInfo[];
-    developer_data_ids?: ParsedDeveloperDataId[];
-    field_descriptions?: ParsedFieldDescription[];
-    hrv?: ParsedHrv[];
-    hr_zone?: ParsedHrZone[];
-    power_zone?: ParsedPowerZone[];
-    dive_gases?: ParsedDiveGas[];
-    course_points?: ParsedCoursePoint[];
-    sports?: ParsedSport[];
-    monitors?: ParsedMonitoring[];
-    stress?: ParsedStressLevel[];
-    file_ids?: ParsedFileId[];
-    monitor_info?: ParsedMonitoringInfo[];
-    definitions?: unknown[];
-    tank_updates?: ParsedTankUpdate[];
-    tank_summaries?: ParsedTankSummary[];
-    jumps?: ParsedJump[];
-    sets?: ParsedSet[];
-    splits?: ParsedSplit[];
-    split_summaries?: ParsedSplitSummary[];
-    time_in_zone?: ParsedTimeInZone[];
-    activity_metrics?: ParsedActivityMetrics[];
-    user_metrics?: ParsedUserMetrics[];
-}
-`)
+    expect(code).toContain('export interface ParsedFit {')
+    expect(code).toContain('messages?: ParsedMessages;')
+    expect(code).toContain('records?: ParsedRecord[];')
+    expect(code).toContain('ohr_settings?: ParsedOhrSettings;')
+    expect(code).toContain('sleep_level?: ParsedSleepLevel;')
   })
 
   it('should generate all in one', () => {

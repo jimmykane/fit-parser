@@ -1,4 +1,5 @@
 import type { FitOptions, MesgNum } from './fit_types.js'
+import { GARMIN_MESSAGES, GARMIN_TYPES } from './garmin_profile.generated.js'
 
 const metersInOneKilometer = 1000
 const secondsInOneHour = 3600
@@ -53,7 +54,7 @@ export interface FitType {
 // which contains all the types and values
 // i would wish for some kind of inference mechanism here but for now we leave it as any
 // maybe zod could help here
-export const FIT: FitType = {
+const FIT_OVERRIDES: FitType = {
   scConst: 180 / 2 ** 31,
   options: {
     speedUnits: {
@@ -114,15 +115,15 @@ export const FIT: FitType = {
     },
     pressureUnits: {
       cbar: {
-        multiplier: 1,
+        multiplier: centiBarsInOneBar,
         offset: 0,
       },
       bar: {
-        multiplier: 1 / centiBarsInOneBar,
+        multiplier: 1,
         offset: 0,
       },
       psi: {
-        multiplier: (1 / centiBarsInOneBar) * psiInOneBar,
+        multiplier: psiInOneBar,
         offset: 0,
       },
     },
@@ -4638,17 +4639,6 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
-    },
-    108: {
-      name: 'o_hr_settings',
-      253: {
-        field: 'timestamp',
-        type: 'date_time',
-        scale: null,
-        offset: 0,
-        units: '',
-      },
-      0: { field: 'enabled', type: 'byte', scale: null, offset: 0, units: '' },
     },
     140: {
       name: 'activity_metrics',
@@ -9212,3 +9202,77 @@ export const FIT: FitType = {
     },
   },
 } as const
+
+function equivalentProfileName(
+  left: string | number,
+  right: string | number,
+): boolean {
+  return String(left).replace(/_/g, '').toLowerCase()
+    === String(right).replace(/_/g, '').toLowerCase()
+}
+
+function mergeMessages(): Record<number, Message> {
+  const messages: Record<number, Message> = { ...FIT_OVERRIDES.messages }
+
+  Object.entries(GARMIN_MESSAGES).forEach(([messageId, generatedMessage]) => {
+    const overrideMessage = FIT_OVERRIDES.messages[Number(messageId)]
+    if (!overrideMessage) {
+      messages[Number(messageId)] = generatedMessage
+      return
+    }
+
+    const mergedMessage: Message = {
+      ...overrideMessage,
+      ...generatedMessage,
+    }
+    Object.entries(generatedMessage).forEach(([fieldId, generatedField]) => {
+      if (fieldId === 'name') {
+        return
+      }
+      const overrideField = overrideMessage[Number(fieldId)]
+      mergedMessage[Number(fieldId)] = {
+        ...overrideField,
+        ...generatedField,
+        field: overrideField
+          && equivalentProfileName(overrideField.field, generatedField.field)
+          ? overrideField.field
+          : generatedField.field,
+      }
+    })
+    messages[Number(messageId)] = mergedMessage
+  })
+
+  return messages
+}
+
+function mergeTypes(): Record<string, Record<number, string | number>> {
+  const typeNames = new Set([
+    ...Object.keys(GARMIN_TYPES),
+    ...Object.keys(FIT_OVERRIDES.types),
+  ])
+
+  return Object.fromEntries([...typeNames].map((typeName) => {
+    const generatedValues = GARMIN_TYPES[typeName] ?? {}
+    const overrideValues = FIT_OVERRIDES.types[typeName] ?? {}
+    const values = { ...generatedValues }
+
+    Object.entries(overrideValues).forEach(([valueId, overrideValue]) => {
+      const generatedValue = generatedValues[Number(valueId)]
+      if (
+        generatedValue === undefined
+        || equivalentProfileName(overrideValue, generatedValue)
+      ) {
+        values[Number(valueId)] = overrideValue
+      }
+    })
+
+    return [typeName, values]
+  }))
+}
+
+export const FIT: FitType = {
+  scConst: FIT_OVERRIDES.scConst,
+  options: FIT_OVERRIDES.options,
+  messages: mergeMessages(),
+  types: mergeTypes(),
+}
