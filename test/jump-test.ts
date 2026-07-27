@@ -3,6 +3,40 @@ import { describe, expect, it } from 'vitest'
 import FitParser from '../src/fit-parser.js'
 
 describe('jump message tests', () => {
+  it.each([false, true])(
+    'preserves Garmin MTB flow and grit fields (force: %s)',
+    async (force) => {
+      const fitParser = new FitParser({ force, mode: 'both' })
+      const buffer = await fs.readFile('./test/jumps-mtb.fit')
+      const fitObject = await fitParser.parseAsync(buffer)
+      const records = fitObject.records ?? []
+
+      expect(records).toHaveLength(7251)
+      expect(records.filter(record => typeof record.flow === 'number')).toHaveLength(7251)
+      expect(records.filter(record => typeof record.grit === 'number')).toHaveLength(7251)
+      expect(records[27]).toMatchObject({
+        flow: 8,
+        grit: 0,
+        timestamp: new Date('2026-01-14T13:17:04.000Z'),
+      })
+      expect(records[32]).toMatchObject({
+        flow: 20,
+        grit: 18.75,
+        timestamp: new Date('2026-01-14T13:17:09.000Z'),
+      })
+      expect(fitObject.sessions?.[0]).toMatchObject({
+        avg_flow: 6.130067348480225,
+        jump_count: 11,
+        total_grit: 38.40234375,
+      })
+      expect(fitObject.activity.sessions?.[0]).toMatchObject({
+        avg_flow: 6.130067348480225,
+        jump_count: 11,
+        total_grit: 38.40234375,
+      })
+    },
+  )
+
   it('expects jump message to be parsed with all fields', async () => {
     const fitParser = new FitParser({ force: true })
     const buffer = await fs.readFile('./test/jumps-mtb.fit')
