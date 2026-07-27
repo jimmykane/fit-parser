@@ -9,6 +9,8 @@
 - Correct stale Garmin profile mappings, including official OHR settings,
   pressure scaling, altitude offsets, monitoring HR, sleep, and lap/segment
   flow and grit summaries.
+- Add reproducible profile and privacy-safe external corpus audit commands,
+  and document generated-profile maintenance.
 - Decode fields from their wire base types, reconstruct compressed timestamps,
   and keep timestamp state isolated between parser instances.
 - Accept omitted header CRCs, validate file CRCs across the complete FIT header

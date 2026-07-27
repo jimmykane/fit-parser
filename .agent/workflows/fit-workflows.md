@@ -51,14 +51,17 @@ them into `.agent`, `test`, or `examples`.
 
 1. Locate the message and field definitions in the pinned
    `@garmin/fitsdk` profile.
-2. Update the source profile in `src/fit.ts`.
-3. Regenerate `src/fit_types.ts`:
+2. If it is standard, update the pinned SDK only when necessary. Use
+   `src/fit.ts` only for an audited private overlay or compatible output-name
+   override.
+3. Regenerate the profile and public types:
 
    ```sh
    npm run codegen
+   npm run profile:audit
    ```
 
-4. Add or update tests in `test/`.
+4. Review both generated files and add or update tests in `test/`.
 5. Verify generated output is current and run all checks:
 
    ```sh
@@ -69,15 +72,28 @@ them into `.agent`, `test`, or `examples`.
 
 1. Update the pinned `@garmin/fitsdk` dependency only when the required
    profile data is absent from the current version.
-2. Synchronize `FIT.types.garmin_product` in `src/fit.ts` from the SDK
-   `Profile.types.garminProduct` mapping.
+2. Regenerate the profile. Existing compatible product names are retained
+   automatically.
 3. Run:
 
    ```sh
    npm test -- --run test/garmin-product-profile.test.ts
    npm run codegen
+   npm run profile:audit
    npm run check
    ```
+
+## Check an External FIT Corpus
+
+Keep the corpus outside the repository. The command reports aggregate error
+counts and never prints filenames or parsed activity data:
+
+```sh
+npm run corpus:check -- /absolute/path/to/FIT-test-files
+```
+
+Use `--allow-force-recovery` when the corpus intentionally includes files
+with known CRC corruption that should be accepted only in force mode.
 
 ## Before a Commit or Pull Request
 

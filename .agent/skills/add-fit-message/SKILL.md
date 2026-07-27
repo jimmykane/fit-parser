@@ -14,17 +14,23 @@ description: Add a standard FIT profile message or update its fields and generat
 
 ## Steps
 
-1. Add or update the message definition in `src/fit.ts`.
-2. Run `npm run codegen` to update `src/fit_types.ts`.
-3. Review both the source and generated diffs.
-4. Add a focused test under `test/` that verifies parsed field names, values,
+1. Confirm whether the message exists in the pinned SDK profile.
+2. If it exists, regenerate the profile instead of duplicating it in
+   `src/fit.ts`.
+3. Use `src/fit.ts` only for a documented private overlay or a
+   compatibility-preserving output-name override.
+4. Run `npm run codegen` to update
+   `src/garmin_profile.generated.ts` and `src/fit_types.ts`.
+5. Run `npm run profile:audit`.
+6. Review the source and generated diffs.
+7. Add a focused test under `test/` that verifies parsed field names, values,
    and types.
-5. Run the focused test.
-6. Run `npm run check`.
+8. Run the focused test.
+9. Run `npm run check`.
 
 ## Guardrails
 
-- Do not edit `src/fit_types.ts` manually.
+- Do not edit either generated file manually.
 - Do not guess message or field numbers.
 - Do not commit private FIT files to make a regression reproducible; use
   synthetic data or `FitEncoder`.
