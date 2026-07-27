@@ -9,8 +9,10 @@ const psiInOneBar = 14.5037738
 
 export interface FieldDefinition {
   type: string | number
+  rawType?: string | number
   fDefNo: number
   size: number
+  array?: boolean
   endianAbility: boolean
   littleEndian: boolean
   baseTypeNo: number
@@ -25,6 +27,8 @@ export interface FieldDefinition {
 export interface MessageObject {
   field: string
   type: string
+  baseType?: string
+  array?: boolean
   scale: number | null
   offset: number
   units: string
@@ -1841,21 +1845,6 @@ export const FIT: FitType = {
         offset: 0,
         units: 'percent',
       },
-      214: {
-        field: 'avg_grit',
-        type: 'float32',
-        scale: null,
-        offset: 0,
-        units: '',
-      },
-      215: {
-        field: 'avg_flow',
-        type: 'float32',
-        scale: null,
-        offset: 0,
-        units: '',
-      },
-
       140: { // From forums/guess, often recovery advisor used here or in event
         field: 'recovery_advisor',
         type: 'uint16', // Minutes?
@@ -4180,22 +4169,25 @@ export const FIT: FitType = {
       },
       2: {
         field: 'distance',
-        type: 'float32',
-        scale: null,
+        type: 'uint32',
+        baseType: 'uint32',
+        scale: 100,
         offset: 0,
         units: 'm',
       },
       3: {
         field: 'cycles',
-        type: 'float32',
-        scale: null,
+        type: 'uint32',
+        baseType: 'uint32',
+        scale: 2,
         offset: 0,
         units: 'cycles',
       },
       4: {
         field: 'active_time',
-        type: 'float32',
-        scale: null,
+        type: 'uint32',
+        baseType: 'uint32',
+        scale: 1000,
         offset: 0,
         units: 's',
       },
@@ -4250,28 +4242,33 @@ export const FIT: FitType = {
       },
       12: {
         field: 'temperature',
-        type: 'float32',
-        scale: null,
+        type: 'sint16',
+        baseType: 'sint16',
+        scale: 100,
         offset: 0,
         units: 'C',
       },
       14: {
         field: 'temperature_min',
-        type: 'float32',
-        scale: null,
+        type: 'sint16',
+        baseType: 'sint16',
+        scale: 100,
         offset: 0,
         units: 'C',
       },
       15: {
         field: 'temperature_max',
-        type: 'float32',
-        scale: null,
+        type: 'sint16',
+        baseType: 'sint16',
+        scale: 100,
         offset: 0,
         units: 'C',
       },
       16: {
         field: 'activity_time',
-        type: 'int32',
+        type: 'uint16',
+        baseType: 'uint16',
+        array: true,
         scale: null,
         offset: 0,
         units: '',
@@ -5328,7 +5325,7 @@ export const FIT: FitType = {
         units: 's',
       },
       4: {
-        field: 'time_in_power_zone',
+        field: 'time_in_cadence_zone',
         type: 'uint32_array',
         scale: 1000,
         offset: 0,
@@ -5356,11 +5353,11 @@ export const FIT: FitType = {
         units: 'm/s',
       },
       8: {
-        field: 'power_zone_high_boundary',
-        type: 'uint16_array',
+        field: 'cadence_zone_high_boundary',
+        type: 'uint8_array',
         scale: null,
         offset: 0,
-        units: 'watts',
+        units: 'rpm',
       },
       9: {
         field: 'power_zone_high_boundary',
