@@ -783,6 +783,7 @@ export interface ParsedActivity {
   developer_data_ids?: ParsedDeveloperDataId[]
   field_descriptions?: ParsedFieldDescription[]
   sports?: ParsedSport[]
+  sets?: ParsedSet[]
   splits?: ParsedSplit[]
   split_summaries?: ParsedSplitSummary[]
 }
@@ -960,6 +961,19 @@ export interface ParsedTimeInZone {
   functional_threshold_power?: number
   timestamp: string
 }
+export interface ParsedSet {
+  duration?: number
+  repetitions?: number
+  weight?: number
+  set_type?: SetType
+  start_time: string
+  category?: ExerciseCategory[]
+  category_subtype?: number[]
+  weight_display_unit?: FitBaseUnit
+  message_index?: MessageIndex
+  wkt_step_index?: MessageIndex
+  timestamp: string
+}
 export interface ParsedStressLevel {
   stress_level_value?: number
   stress_level_time?: string
@@ -1122,6 +1136,7 @@ export interface ParsedFit {
   tank_updates?: ParsedTankUpdate[]
   tank_summaries?: ParsedTankSummary[]
   jumps?: ParsedJump[]
+  sets?: ParsedSet[]
   splits?: ParsedSplit[]
   split_summaries?: ParsedSplitSummary[]
   time_in_zone?: ParsedTimeInZone[]

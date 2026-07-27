@@ -70,6 +70,10 @@ export function generateTypeFromField(def: MessageObject): TypeNode {
       return ts.factory.createArrayTypeNode(
         ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
       )
+    case 'exercise_category_array':
+      return ts.factory.createArrayTypeNode(
+        ts.factory.createTypeReferenceNode('ExerciseCategory'),
+      )
     case 'bool':
       return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword)
     case 'date_time':
@@ -230,6 +234,7 @@ function generateAdditionalFields(msg: Message): PropertySignature[] {
       developer_data_ids: 'parsed_developer_data_id',
       field_descriptions: 'parsed_field_description',
       sports: 'parsed_sport',
+      sets: 'parsed_set',
       splits: 'parsed_split',
       split_summaries: 'parsed_split_summary',
     }
@@ -265,6 +270,7 @@ export function generateFitType(): Statement {
     tank_updates: 'parsed_tank_update',
     tank_summaries: 'parsed_tank_summary',
     jumps: 'parsed_jump',
+    sets: 'parsed_set',
     splits: 'parsed_split',
     split_summaries: 'parsed_split_summary',
     time_in_zone: 'parsed_time_in_zone',
