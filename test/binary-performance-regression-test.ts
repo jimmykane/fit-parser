@@ -161,6 +161,163 @@ describe('binary decoder allocation regressions', () => {
     expect(messageTypes[0]?.rawData).toBe(rawData)
   })
 
+  it.each([false, true])(
+    'preserves record alignment when a developer field description is missing (force: %s)',
+    (force) => {
+      const messageTypes: MessageTypeDefinition[] = []
+      const developerFields: any[] = []
+      const definitionRecord = new Uint8Array([
+        0x60,
+        0,
+        0,
+        20,
+        0,
+        1,
+        3,
+        1,
+        2,
+        1,
+        2,
+        4,
+        2,
+      ])
+
+      const parsedDefinition = readRecord(
+        definitionRecord,
+        messageTypes,
+        developerFields,
+        0,
+        { ...parserOptions, force },
+        undefined,
+        0,
+      )
+
+      expect(parsedDefinition.nextIndex).toBe(definitionRecord.length)
+      expect(messageTypes[0]?.fieldDefs).toHaveLength(1)
+      expect(messageTypes[0]?.developerFieldDefs).toEqual([
+        {
+          developerDataIndex: 2,
+          fieldDefinitionNumber: 2,
+          size: 4,
+        },
+      ])
+      expect(messageTypes[0]?.rawData).toHaveLength(2)
+
+      const records = new Uint8Array([
+        0,
+        140,
+        1,
+        2,
+        3,
+        4,
+        0,
+        141,
+        5,
+        6,
+        7,
+        8,
+      ])
+      const first = readRecord(
+        records,
+        messageTypes,
+        developerFields,
+        0,
+        { ...parserOptions, force },
+        undefined,
+        0,
+      )
+      const second = readRecord(
+        records,
+        messageTypes,
+        developerFields,
+        first.nextIndex,
+        { ...parserOptions, force },
+        undefined,
+        0,
+      )
+
+      expect(first.nextIndex).toBe(6)
+      expect(first.message).toEqual({ heart_rate: 140 })
+      expect(second.nextIndex).toBe(records.length)
+      expect(second.message).toEqual({ heart_rate: 141 })
+    },
+  )
+
+  it('decodes a developer field after its description arrives', () => {
+    const messageTypes: MessageTypeDefinition[] = []
+    const developerFields: any[] = []
+    const definitionRecord = new Uint8Array([
+      0x60,
+      0,
+      0,
+      20,
+      0,
+      1,
+      3,
+      1,
+      2,
+      1,
+      2,
+      4,
+      2,
+    ])
+    readRecord(
+      definitionRecord,
+      messageTypes,
+      developerFields,
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    const beforeDescription = new Uint8Array(6)
+    beforeDescription[1] = 140
+    new DataView(beforeDescription.buffer).setFloat32(2, 9.5, true)
+    const unresolved = readRecord(
+      beforeDescription,
+      messageTypes,
+      developerFields,
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+    expect(unresolved.message).toEqual({ heart_rate: 140 })
+
+    developerFields[2] = []
+    developerFields[2][2] = {
+      field_name: 'late_developer_value',
+      fit_base_type_id: 136,
+      offset: 0,
+      scale: 1,
+    }
+
+    const afterDescription = new Uint8Array(6)
+    afterDescription[1] = 141
+    new DataView(afterDescription.buffer).setFloat32(2, 12.5, true)
+    const resolved = readRecord(
+      afterDescription,
+      messageTypes,
+      developerFields,
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    expect(resolved.nextIndex).toBe(afterDescription.length)
+    expect(resolved.message).toEqual({
+      heart_rate: 141,
+      late_developer_value: 12.5,
+    })
+    expect(messageTypes[0]?.developerFieldDefs?.[0].resolvedFieldDef).toMatchObject({
+      baseTypeNo: 136,
+      name: 'late_developer_value',
+      type: 'float32',
+    })
+  })
+
   it('clears invalid values when reusing a message definition raw-data buffer', () => {
     const messageDefinition = definition([
       field('heart_rate', 'uint8', 1, 2, true),

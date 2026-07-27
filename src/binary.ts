@@ -23,7 +23,16 @@ export interface MessageTypeDefinition {
   globalMessageNumber: number
   numberOfFields: number
   fieldDefs: FieldDefinition[]
+  developerFieldDefs?: DeveloperFieldDefinition[]
   rawData?: any[]
+}
+
+export interface DeveloperFieldDefinition {
+  developerDataIndex: number
+  fieldDefinitionNumber: number
+  size: number
+  resolvedFieldDef?: FieldDefinition
+  resolvedFrom?: unknown
 }
 
 const InvalidFieldData = Symbol('invalid FIT field data')
@@ -396,6 +405,67 @@ function applyGarminProductName(fields: any): void {
   }
 }
 
+function resolveDeveloperFieldDefinition(
+  developerFieldDef: DeveloperFieldDefinition,
+  littleEndian: boolean,
+  developerFields: any[],
+  options: FitParserOptions,
+): FieldDefinition | undefined {
+  const description
+    = developerFields[developerFieldDef.developerDataIndex]?.[
+      developerFieldDef.fieldDefinitionNumber
+    ]
+
+  if (!description) {
+    developerFieldDef.resolvedFieldDef = undefined
+    developerFieldDef.resolvedFrom = undefined
+    return undefined
+  }
+
+  if (
+    developerFieldDef.resolvedFrom === description
+    && developerFieldDef.resolvedFieldDef
+  ) {
+    return developerFieldDef.resolvedFieldDef
+  }
+
+  const baseType = description.fit_base_type_id
+  const type = FIT.types.fit_base_type[baseType]
+  if (typeof baseType !== 'number' || type === undefined) {
+    developerFieldDef.resolvedFieldDef = undefined
+    developerFieldDef.resolvedFrom = undefined
+    if (options.force) {
+      return undefined
+    }
+    throw new Error(
+      `Unsupported base type for developer data index ${developerFieldDef.developerDataIndex}, field ${developerFieldDef.fieldDefinitionNumber}`,
+    )
+  }
+
+  const resolvedFieldDef: FieldDefinition = {
+    type,
+    fDefNo: developerFieldDef.fieldDefinitionNumber,
+    size: developerFieldDef.size,
+    endianAbility: (baseType & 128) === 128,
+    littleEndian,
+    baseTypeNo: baseType,
+    name: description.field_name ?? '',
+    dataType: getFitMessageBaseType(baseType & 15),
+    scale: description.scale ?? 1,
+    offset: description.offset ?? 0,
+    requiresBoundedDataView: requiresBoundedEndianDataView(
+      type,
+      developerFieldDef.size,
+    ),
+    developerDataIndex: developerFieldDef.developerDataIndex,
+    isDeveloperField: true,
+  }
+
+  developerFieldDef.resolvedFieldDef = resolvedFieldDef
+  developerFieldDef.resolvedFrom = description
+  return resolvedFieldDef
+}
+
 export function readRecord(
   blob: Uint8Array,
   messageTypes: MessageTypeDefinition[],
@@ -437,6 +507,7 @@ export function readRecord(
       ]),
       numberOfFields: numberOfFields + numberOfDeveloperDataFields,
       fieldDefs: [],
+      developerFieldDefs: [],
       rawData: [],
     }
 
@@ -463,51 +534,17 @@ export function readRecord(
       mTypeDef.fieldDefs.push(fDef)
     }
 
-    // numberOfDeveloperDataFields = 0 so it wont crash here and wont loop
     for (let i = 0; i < numberOfDeveloperDataFields; i++) {
-      // If we fail to parse then try catch
-      try {
-        const fDefIndex = startIndex + 6 + numberOfFields * 3 + 1 + i * 3
-
-        const fieldNum = blob[fDefIndex]
-        const size = blob[fDefIndex + 1]
-        const devDataIndex = blob[fDefIndex + 2]
-
-        const devDef = developerFields[devDataIndex][fieldNum]
-
-        const baseType = devDef.fit_base_type_id
-
-        const fDef: FieldDefinition = {
-          type: FIT.types.fit_base_type[baseType],
-          fDefNo: fieldNum,
-          size,
-          endianAbility: (baseType & 128) === 128,
-          littleEndian: lEnd,
-          baseTypeNo: baseType,
-          name: devDef.field_name,
-          dataType: getFitMessageBaseType(baseType & 15),
-          scale: devDef.scale || 1,
-          offset: devDef.offset || 0,
-          requiresBoundedDataView: requiresBoundedEndianDataView(
-            FIT.types.fit_base_type[baseType],
-            size,
-          ),
-          developerDataIndex: devDataIndex,
-          isDeveloperField: true,
-        }
-
-        mTypeDef.fieldDefs.push(fDef)
-      }
-      catch (e) {
-        if (options.force) {
-          continue
-        }
-        throw e
-      }
+      const fDefIndex = startIndex + 6 + numberOfFields * 3 + 1 + i * 3
+      mTypeDef.developerFieldDefs?.push({
+        fieldDefinitionNumber: blob[fDefIndex],
+        size: blob[fDefIndex + 1],
+        developerDataIndex: blob[fDefIndex + 2],
+      })
     }
 
     mTypeDef.rawData = Array.from(
-      { length: mTypeDef.fieldDefs.length },
+      { length: mTypeDef.numberOfFields },
       () => InvalidFieldData,
     )
     messageTypes[localMessageType] = mTypeDef
@@ -530,10 +567,12 @@ export function readRecord(
   let readDataFromIndex = startIndex + 1
   const fields: any = {}
   const message = getFitMessage(messageType.globalMessageNumber)
+  const developerFieldDefs = messageType.developerFieldDefs ?? []
+  const totalFieldCount = messageType.fieldDefs.length + developerFieldDefs.length
 
   const rawData = messageType.rawData
     ?? (messageType.rawData = Array.from(
-      { length: messageType.fieldDefs.length },
+      { length: totalFieldCount },
       () => InvalidFieldData,
     ))
   let validFieldCount = 0
@@ -553,6 +592,34 @@ export function readRecord(
     messageSize += fDef.size
   }
 
+  for (let i = 0; i < developerFieldDefs.length; i++) {
+    const developerFieldDef = developerFieldDefs[i]
+    const rawDataIndex = messageType.fieldDefs.length + i
+    const fDef = resolveDeveloperFieldDefinition(
+      developerFieldDef,
+      messageType.littleEndian,
+      developerFields,
+      options,
+    )
+
+    if (fDef) {
+      const data = readData(blob, dataView, fDef, readDataFromIndex, options)
+      if (!isInvalidValue(data, fDef.type) && !isInvalidBaseTypeValue(data, fDef.baseTypeNo)) {
+        rawData[rawDataIndex] = data
+        validFieldCount++
+      }
+      else {
+        rawData[rawDataIndex] = InvalidFieldData
+      }
+    }
+    else {
+      rawData[rawDataIndex] = InvalidFieldData
+    }
+
+    readDataFromIndex += developerFieldDef.size
+    messageSize += developerFieldDef.size
+  }
+
   for (let i = 0; i < messageType.fieldDefs.length; i++) {
     const data = rawData[i]
     if (data === InvalidFieldData) {
@@ -561,6 +628,18 @@ export function readRecord(
     const fDef = messageType.fieldDefs[i]
     const field = fDef.name
     if (field !== 'unknown' && field !== '' && field !== undefined) {
+      fields[field] = data
+    }
+  }
+
+  for (let i = 0; i < developerFieldDefs.length; i++) {
+    const data = rawData[messageType.fieldDefs.length + i]
+    const fDef = developerFieldDefs[i].resolvedFieldDef
+    if (data === InvalidFieldData || !fDef) {
+      continue
+    }
+    const field = fDef.name
+    if (field !== 'unknown' && field !== '') {
       fields[field] = data
     }
   }
@@ -597,6 +676,23 @@ export function readRecord(
           fields,
         )
       }
+    }
+  }
+
+  for (let i = 0; i < developerFieldDefs.length; i++) {
+    const data = rawData[messageType.fieldDefs.length + i]
+    const fDef = developerFieldDefs[i].resolvedFieldDef
+    if (data === InvalidFieldData || !fDef) {
+      continue
+    }
+    const field = fDef.name
+    if (field !== 'unknown' && field !== '') {
+      fields[field] = applyOptions(
+        formatByType(data, fDef.type, fDef.scale ?? null, fDef.offset ?? 0),
+        field,
+        options,
+        fields,
+      )
     }
   }
 

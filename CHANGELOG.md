@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.0.2
+
+- Preserve record alignment when developer-field descriptions are missing or
+  appear after their message definitions.
+- Decode subsequent developer-field values once their descriptions become
+  available, in both strict and force modes.
+
 ## 4.0.0
 
 ### FIT decoder performance
