@@ -348,18 +348,8 @@ function formatFieldValue(
   )
 }
 
-function fieldDefinitionsWithAliases(
-  fieldDefinition: FieldDefinition,
-): FieldDefinition[] {
-  return [
-    fieldDefinition,
-    ...(fieldDefinition.aliases ?? []).map(alias => ({
-      ...fieldDefinition,
-      ...alias,
-      name: alias.field,
-      aliases: undefined,
-    })),
-  ]
+function isOutputFieldName(field: string | undefined): field is string {
+  return field !== 'unknown' && field !== '' && field !== undefined
 }
 
 function convertTo<T extends string>(
@@ -725,10 +715,14 @@ export function readRecord(
       continue
     }
     const fDef = messageType.fieldDefs[i]
-    for (const namedDefinition of fieldDefinitionsWithAliases(fDef)) {
-      const field = namedDefinition.name
-      if (field !== 'unknown' && field !== '' && field !== undefined) {
-        fields[field] = data
+    if (isOutputFieldName(fDef.name)) {
+      fields[fDef.name] = data
+    }
+    if (fDef.aliases) {
+      for (const alias of fDef.aliases) {
+        if (isOutputFieldName(alias.field)) {
+          fields[alias.field] = data
+        }
       }
     }
   }
@@ -751,15 +745,24 @@ export function readRecord(
       continue
     }
     const fDef = messageType.fieldDefs[i]
-    for (const namedDefinition of fieldDefinitionsWithAliases(fDef)) {
-      const field = namedDefinition.name
-      if (field !== 'unknown' && field !== '' && field !== undefined) {
-        fields[field] = formatFieldValue(
-          data,
-          namedDefinition,
-          options,
-          fields,
-        )
+    if (isOutputFieldName(fDef.name)) {
+      fields[fDef.name] = formatFieldValue(data, fDef, options, fields)
+    }
+    if (fDef.aliases) {
+      for (const alias of fDef.aliases) {
+        if (isOutputFieldName(alias.field)) {
+          fields[alias.field] = formatFieldValue(
+            data,
+            {
+              ...fDef,
+              ...alias,
+              name: alias.field,
+              aliases: undefined,
+            },
+            options,
+            fields,
+          )
+        }
       }
     }
   }
