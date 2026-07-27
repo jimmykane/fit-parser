@@ -847,7 +847,7 @@ export interface ParsedMonitoring {
   temperature?: number
   temperature_min?: number
   temperature_max?: number
-  activity_time?: number
+  activity_time?: number[]
   active_calories?: number
   current_activity_type_intensity?: number
   timestamp_min8?: number
@@ -949,9 +949,11 @@ export interface ParsedTimeInZone {
   reference_index?: number
   time_in_hr_zone?: number[]
   time_in_speed_zone?: number[]
+  time_in_cadence_zone?: number[]
   time_in_power_zone?: number[]
   hr_zone_high_boundary?: number[]
   speed_zone_high_boundary?: number[]
+  cadence_zone_high_boundary?: number[]
   power_zone_high_boundary?: number[]
   max_heart_rate_deprecated?: number
   max_heart_rate?: number

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Decode fields from their wire base types, reconstruct compressed timestamps,
+  and keep timestamp state isolated between parser instances.
+- Accept omitted header CRCs, validate file CRCs across the complete FIT header
+  and data section, and correct monitoring and time-in-zone profile mappings.
 - Decode Garmin strength-training `set` messages and expose them in list and
   cascade output modes.
 - Reject structurally invalid FIT inputs consistently in callback and Promise

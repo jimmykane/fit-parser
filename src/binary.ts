@@ -9,8 +9,8 @@ import { getFitMessage, getFitMessageBaseType } from './messages.js'
 
 const CompressedLocalMsgNumMask = 0x60 as const
 const CompressedHeaderMask = 0x80 as const
+const CompressedTimestampMask = 0x1F as const
 const GarminTimeOffset = 631065600000 as const
-let monitoring_timestamp = 0
 
 interface FormatTypeMetadata {
   entries: [string, string | number][]
@@ -35,30 +35,41 @@ export interface DeveloperFieldDefinition {
   resolvedFrom?: unknown
 }
 
+export interface DecoderState {
+  lastTimestamp?: number
+  monitoringTimestamp?: number
+}
+
 const InvalidFieldData = Symbol('invalid FIT field data')
 const formatTypeMetadata = new Map<string | number, FormatTypeMetadata>()
 
-function requiresBoundedEndianDataView(type: string | number, size: number): boolean {
+function baseTypeSize(type: string | number): number | undefined {
   switch (type) {
+    case 'enum':
+    case 'sint8':
+    case 'uint8':
+    case 'uint8z':
+    case 'byte':
+      return 1
     case 'sint16':
     case 'uint16':
     case 'uint16z':
-      return size < 2
+      return 2
     case 'sint32':
     case 'uint32':
     case 'uint32z':
     case 'float32':
-      return size < 4
+      return 4
     case 'float64':
-      return size < 8
-    case 'uint16_array':
-    case 'exercise_category_array':
-      return size % 2 !== 0
-    case 'uint32_array':
-      return size % 4 !== 0
+      return 8
     default:
-      return false
+      return undefined
   }
+}
+
+function requiresBoundedEndianDataView(type: string | number, size: number): boolean {
+  const elementSize = baseTypeSize(type)
+  return elementSize !== undefined && size % elementSize !== 0
 }
 
 export function addEndian(littleEndian: boolean, bytes: number[]): number {
@@ -77,85 +88,10 @@ function readData(
   dataView: DataView,
   fDef: FieldDefinition,
   startIndex: number,
-  options: FitParserOptions,
 ): any {
-  if (fDef.type === 'uint8_array') {
-    const array8: number[] = []
-    for (let i = 0; i < fDef.size; i++) {
-      array8.push(blob[startIndex + i])
-    }
-    return array8
-  }
-
-  if (fDef.endianAbility) {
-    const requiresBoundedDataView = fDef.requiresBoundedDataView
-      ?? (fDef.requiresBoundedDataView = requiresBoundedEndianDataView(fDef.type, fDef.size))
-    let fieldDataView = dataView
-    let fieldStartIndex = startIndex
-    if (
-      startIndex < 0
-      || startIndex + fDef.size > blob.length
-      || startIndex + fDef.size > dataView.byteLength
-    ) {
-      const paddedField = new Uint8Array(fDef.size)
-      for (let index = 0; index < fDef.size; index++) {
-        paddedField[index] = blob[startIndex + index]
-      }
-      fieldDataView = new DataView(paddedField.buffer)
-      fieldStartIndex = 0
-    }
-    else if (requiresBoundedDataView) {
-      fieldDataView = new DataView(dataView.buffer, dataView.byteOffset + startIndex, fDef.size)
-      fieldStartIndex = 0
-    }
-
-    try {
-      switch (fDef.type) {
-        case 'sint16':
-          return fieldDataView.getInt16(fieldStartIndex, fDef.littleEndian)
-        case 'uint16':
-        case 'uint16z':
-          return fieldDataView.getUint16(fieldStartIndex, fDef.littleEndian)
-        case 'sint32':
-          return fieldDataView.getInt32(fieldStartIndex, fDef.littleEndian)
-        case 'uint32':
-        case 'uint32z':
-          return fieldDataView.getUint32(fieldStartIndex, fDef.littleEndian)
-        case 'float32':
-          return fieldDataView.getFloat32(fieldStartIndex, fDef.littleEndian)
-        case 'float64':
-          return fieldDataView.getFloat64(fieldStartIndex, fDef.littleEndian)
-        case 'uint32_array': {
-          const array32: number[] = []
-          for (let i = 0; i < fDef.size; i += 4) {
-            array32.push(fieldDataView.getUint32(fieldStartIndex + i, fDef.littleEndian))
-          }
-          return array32
-        }
-        case 'uint16_array':
-        case 'exercise_category_array': {
-          const array16: number[] = []
-          for (let i = 0; i < fDef.size; i += 2) {
-            array16.push(fieldDataView.getUint16(fieldStartIndex + i, fDef.littleEndian))
-          }
-          return array16
-        }
-      }
-    }
-    catch (e) {
-      if (!options.force) {
-        throw e
-      }
-    }
-
-    const temp: number[] = []
-    for (let i = 0; i < fDef.size; i++) {
-      temp.push(blob[startIndex + i])
-    }
-    return addEndian(fDef.littleEndian, temp)
-  }
-
-  if (fDef.type === 'string') {
+  const rawType
+    = fDef.rawType ?? FIT.types.fit_base_type[fDef.baseTypeNo] ?? fDef.type
+  if (rawType === 'string') {
     const temp: number[] = []
     for (let i = 0; i < fDef.size; i++) {
       if (blob[startIndex + i]) {
@@ -165,20 +101,63 @@ function readData(
     return Buffer.from(temp).toString('utf-8')
   }
 
-  if (fDef.type === 'byte_array') {
-    const temp: number[] = []
-    for (let i = 0; i < fDef.size; i++) {
-      temp.push(blob[startIndex + i])
+  const elementSize = baseTypeSize(rawType)
+  if (elementSize === undefined) {
+    return InvalidFieldData
+  }
+
+  if (
+    fDef.size < elementSize
+    || fDef.size % elementSize !== 0
+    || startIndex < 0
+    || startIndex + fDef.size > blob.length
+    || startIndex + fDef.size > dataView.byteLength
+  ) {
+    return InvalidFieldData
+  }
+
+  const isArray = fDef.array === true
+    || String(fDef.type).endsWith('_array')
+    || fDef.type === 'exercise_category_array'
+    || (fDef.isDeveloperField === true && fDef.size > elementSize)
+  const elementCount = isArray ? fDef.size / elementSize : 1
+  const values: number[] = []
+
+  for (let elementIndex = 0; elementIndex < elementCount; elementIndex++) {
+    const offset = startIndex + elementIndex * elementSize
+    switch (rawType) {
+      case 'sint8': {
+        const value = blob[offset]
+        values.push(value > 127 ? value - 256 : value)
+        break
+      }
+      case 'sint16':
+        values.push(dataView.getInt16(offset, fDef.littleEndian))
+        break
+      case 'uint16':
+      case 'uint16z':
+        values.push(dataView.getUint16(offset, fDef.littleEndian))
+        break
+      case 'sint32':
+        values.push(dataView.getInt32(offset, fDef.littleEndian))
+        break
+      case 'uint32':
+      case 'uint32z':
+        values.push(dataView.getUint32(offset, fDef.littleEndian))
+        break
+      case 'float32':
+        values.push(dataView.getFloat32(offset, fDef.littleEndian))
+        break
+      case 'float64':
+        values.push(dataView.getFloat64(offset, fDef.littleEndian))
+        break
+      default:
+        values.push(blob[offset])
+        break
     }
-    return temp
   }
 
-  if (fDef.type === 'sint8') {
-    const val = blob[startIndex]
-    return val > 127 ? val - 256 : val
-  }
-
-  return blob[startIndex]
+  return isArray ? values : values[0]
 }
 
 function formatByType(
@@ -283,10 +262,9 @@ function isInvalidValue(data: any, type: string | number): boolean {
     case 'string':
       return data === 0x00
     case 'float32':
-      return data === 0xFFFFFFFF
+      return Number.isNaN(data)
     case 'float64':
-      // eslint-disable-next-line no-loss-of-precision
-      return data === 0xFFFFFFFFFFFFFFFF
+      return Number.isNaN(data)
     case 'uint8z':
       return data === 0x00
     case 'uint16z':
@@ -315,6 +293,43 @@ function isInvalidBaseTypeValue(data: any, baseTypeNo: number): boolean {
 
   const baseType = FIT.types.fit_base_type[baseTypeNo]
   return typeof baseType === 'string' ? isInvalidValue(data, baseType) : false
+}
+
+function formatFieldValue(
+  data: any,
+  fDef: FieldDefinition,
+  options: FitParserOptions,
+  fields: any,
+): any {
+  const field = fDef.name
+  const scale = fDef.scale ?? null
+  const offset = fDef.offset ?? 0
+
+  if (
+    Array.isArray(data)
+    && !String(fDef.type).endsWith('_array')
+    && fDef.type !== 'exercise_category_array'
+  ) {
+    const rawType = fDef.rawType ?? FIT.types.fit_base_type[fDef.baseTypeNo]
+    return data.map((item) => {
+      if (isInvalidValue(item, rawType)) {
+        return null
+      }
+      return applyOptions(
+        formatByType(item, fDef.type, scale, offset),
+        field,
+        options,
+        fields,
+      )
+    })
+  }
+
+  return applyOptions(
+    formatByType(data, fDef.type, scale, offset),
+    field,
+    options,
+    fields,
+  )
 }
 
 function convertTo<T extends string>(
@@ -381,8 +396,10 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
       return convertTo<LengthUnits>(data, 'lengthUnits', options.lengthUnit)
     case 'temperature':
     case 'min_temperature':
+    case 'temperature_min':
     case 'avg_temperature':
     case 'max_temperature':
+    case 'temperature_max':
       return convertTo<TemperatureUnits>(data, 'temperatureUnits', options.temperatureUnit)
     case 'pressure':
     case 'start_pressure':
@@ -456,8 +473,11 @@ function resolveDeveloperFieldDefinition(
 
   const resolvedFieldDef: FieldDefinition = {
     type,
+    rawType: type,
     fDefNo: developerFieldDef.fieldDefinitionNumber,
     size: developerFieldDef.size,
+    array: type !== 'string'
+      && developerFieldDef.size > (baseTypeSize(type) ?? developerFieldDef.size),
     endianAbility: (baseType & 128) === 128,
     littleEndian,
     baseTypeNo: baseType,
@@ -487,6 +507,7 @@ export function readRecord(
   startDate: number | undefined,
   pausedTime: number,
   dataView: DataView = new DataView(blob.buffer, blob.byteOffset, blob.byteLength),
+  decoderState: DecoderState = {},
 ): {
   messageType: MesgNum | ''
   nextIndex: number
@@ -494,8 +515,10 @@ export function readRecord(
 } {
   const recordHeader = blob[startIndex]
   let localMessageType = recordHeader & 15
+  const isCompressedTimestamp
+    = (recordHeader & CompressedHeaderMask) === CompressedHeaderMask
 
-  if ((recordHeader & CompressedHeaderMask) === CompressedHeaderMask) {
+  if (isCompressedTimestamp) {
     // compressed timestamp
 
     localMessageType = (recordHeader & CompressedLocalMsgNumMask) >> 5
@@ -528,19 +551,36 @@ export function readRecord(
     for (let i = 0; i < numberOfFields; i++) {
       const fDefIndex = startIndex + 6 + i * 3
       const baseType = blob[fDefIndex + 2]
-      const { field, type, scale, offset } = message.getAttributes(blob[fDefIndex])
-      const fDef: FieldDefinition = {
+      const wireType = FIT.types.fit_base_type[baseType]
+      const {
+        field,
         type,
+        baseType: profileBaseType,
+        array,
+        scale,
+        offset,
+      } = message.getAttributes(blob[fDefIndex])
+      const profileCompatible
+        = profileBaseType === undefined || profileBaseType === wireType
+      const fDef: FieldDefinition = {
+        type: profileCompatible ? type : wireType,
+        rawType: wireType,
         fDefNo: blob[fDefIndex],
         size: blob[fDefIndex + 1],
+        array: profileCompatible
+          ? array === true || String(type).endsWith('_array')
+          : false,
         endianAbility: (baseType & 128) === 128,
         littleEndian: lEnd,
         baseTypeNo: baseType,
-        name: field,
+        name: profileCompatible ? field : '',
         dataType: getFitMessageBaseType(baseType & 15),
-        scale,
-        offset,
-        requiresBoundedDataView: requiresBoundedEndianDataView(type, blob[fDefIndex + 1]),
+        scale: profileCompatible ? scale : null,
+        offset: profileCompatible ? offset : 0,
+        requiresBoundedDataView: requiresBoundedEndianDataView(
+          wireType,
+          blob[fDefIndex + 1],
+        ),
       }
 
       mTypeDef.fieldDefs.push(fDef)
@@ -572,9 +612,6 @@ export function readRecord(
 
   const messageType = messageTypes[localMessageType] || messageTypes[0]
 
-  // TODO: handle compressed header ((recordHeader & 128) == 128)
-
-  // uncompressed header
   let messageSize = 0
   let readDataFromIndex = startIndex + 1
   const fields: any = {}
@@ -590,11 +627,18 @@ export function readRecord(
   let validFieldCount = 0
   for (let i = 0; i < messageType.fieldDefs.length; i++) {
     const fDef = messageType.fieldDefs[i]
-    const data = readData(blob, dataView, fDef, readDataFromIndex, options)
+    const data = readData(blob, dataView, fDef, readDataFromIndex)
 
-    if (!isInvalidValue(data, fDef.type) && !isInvalidBaseTypeValue(data, fDef.baseTypeNo)) {
+    if (
+      data !== InvalidFieldData
+      && !isInvalidValue(data, fDef.type)
+      && !isInvalidBaseTypeValue(data, fDef.baseTypeNo)
+    ) {
       rawData[i] = data
       validFieldCount++
+      if (!isCompressedTimestamp && fDef.fDefNo === 253 && typeof data === 'number') {
+        decoderState.lastTimestamp = data
+      }
     }
     else {
       rawData[i] = InvalidFieldData
@@ -615,8 +659,12 @@ export function readRecord(
     )
 
     if (fDef) {
-      const data = readData(blob, dataView, fDef, readDataFromIndex, options)
-      if (!isInvalidValue(data, fDef.type) && !isInvalidBaseTypeValue(data, fDef.baseTypeNo)) {
+      const data = readData(blob, dataView, fDef, readDataFromIndex)
+      if (
+        data !== InvalidFieldData
+        && !isInvalidValue(data, fDef.type)
+        && !isInvalidBaseTypeValue(data, fDef.baseTypeNo)
+      ) {
         rawData[rawDataIndex] = data
         validFieldCount++
       }
@@ -662,32 +710,9 @@ export function readRecord(
       continue
     }
     const fDef = messageType.fieldDefs[i]
-    if (fDef.isDeveloperField) {
-      const field = fDef.name
-      const { type } = fDef
-      const scale = fDef.scale ?? null
-      const offset = fDef.offset ?? 0
-
-      fields[fDef.name] = applyOptions(
-        formatByType(data, type, scale, offset),
-        field,
-        options,
-        fields,
-      )
-    }
-    else {
-      const { name: field, type } = fDef
-      const scale = fDef.scale ?? null
-      const offset = fDef.offset ?? 0
-
-      if (field !== 'unknown' && field !== '' && field !== undefined) {
-        fields[field] = applyOptions(
-          formatByType(data, type, scale, offset),
-          field,
-          options,
-          fields,
-        )
-      }
+    const field = fDef.name
+    if (field !== 'unknown' && field !== '' && field !== undefined) {
+      fields[field] = formatFieldValue(data, fDef, options, fields)
     }
   }
 
@@ -699,12 +724,26 @@ export function readRecord(
     }
     const field = fDef.name
     if (field !== 'unknown' && field !== '') {
-      fields[field] = applyOptions(
-        formatByType(data, fDef.type, fDef.scale ?? null, fDef.offset ?? 0),
-        field,
-        options,
-        fields,
-      )
+      fields[field] = formatFieldValue(data, fDef, options, fields)
+    }
+  }
+
+  if (isCompressedTimestamp) {
+    const previousTimestamp = decoderState.lastTimestamp
+    if (previousTimestamp === undefined) {
+      if (!options.force) {
+        throw new Error('Compressed timestamp requires a previous timestamp')
+      }
+    }
+    else {
+      const timeOffset = recordHeader & CompressedTimestampMask
+      const previousOffset = previousTimestamp & CompressedTimestampMask
+      const rollover = timeOffset < previousOffset ? 0x20 : 0
+      const timestamp
+        = (previousTimestamp & ~CompressedTimestampMask) + timeOffset + rollover
+      decoderState.lastTimestamp = timestamp
+      fields.timestamp = new Date(timestamp * 1000 + GarminTimeOffset)
+      validFieldCount++
     }
   }
 
@@ -724,18 +763,26 @@ export function readRecord(
   }
 
   if (message.name === 'monitoring') {
-    // TODO weirdly uses global variables?
-    // we need to keep the raw timestamp value so we can calculate subsequent timestamp16 fields
-    if (fields.timestamp) {
-      monitoring_timestamp = fields.timestamp
-      fields.timestamp = new Date(fields.timestamp * 1000 + GarminTimeOffset)
+    const timestampFieldIndex = messageType.fieldDefs.findIndex(
+      fieldDefinition => fieldDefinition.fDefNo === 253,
+    )
+    const rawTimestamp = timestampFieldIndex >= 0
+      ? rawData[timestampFieldIndex]
+      : InvalidFieldData
+
+    if (rawTimestamp !== InvalidFieldData && typeof rawTimestamp === 'number') {
+      decoderState.monitoringTimestamp = rawTimestamp
+      fields.timestamp = new Date(rawTimestamp * 1000 + GarminTimeOffset)
     }
-    if (fields.timestamp16 && !fields.timestamp) {
-      monitoring_timestamp
-        += (fields.timestamp16 - (monitoring_timestamp & 0xFFFF)) & 0xFFFF
-      // fields.timestamp = monitoring_timestamp;
+    else if (
+      fields.timestamp16
+      && decoderState.monitoringTimestamp !== undefined
+      && !fields.timestamp
+    ) {
+      decoderState.monitoringTimestamp
+        += (fields.timestamp16 - (decoderState.monitoringTimestamp & 0xFFFF)) & 0xFFFF
       fields.timestamp = new Date(
-        monitoring_timestamp * 1000 + GarminTimeOffset,
+        decoderState.monitoringTimestamp * 1000 + GarminTimeOffset,
       )
     }
   }

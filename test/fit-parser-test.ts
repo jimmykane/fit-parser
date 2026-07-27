@@ -1,6 +1,7 @@
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import { describe, expect, it, vi } from 'vitest'
+import { calculateCRC } from '../src/binary.js'
 import FitParser from '../src/fit-parser.js'
 
 describe('fit parser tests', () => {
@@ -170,6 +171,40 @@ describe('fit parser tests', () => {
       expect(callback).toHaveBeenCalledWith(error, undefined)
       await expect(new FitParser({ force: false }).parseAsync(content)).rejects.toBe(error)
     }
+  })
+
+  it('accepts an omitted zero header CRC when the complete file CRC is valid', async () => {
+    const buffer = await fs.readFile('./test/running-with-developer-data.fit')
+    const expected = await new FitParser({ force: false }).parseAsync(buffer)
+    const zeroHeaderCrc = Buffer.from(buffer)
+    const crcStart = zeroHeaderCrc[0] + zeroHeaderCrc.readUInt32LE(4)
+
+    zeroHeaderCrc.writeUInt16LE(0, 12)
+    zeroHeaderCrc.writeUInt16LE(
+      calculateCRC(zeroHeaderCrc, 0, crcStart),
+      crcStart,
+    )
+
+    await expect(
+      new FitParser({ force: false }).parseAsync(zeroHeaderCrc),
+    ).resolves.toEqual(expected)
+  })
+
+  it('validates a legacy 12-byte header as part of the complete file CRC', async () => {
+    const buffer = await fs.readFile('./test/running-with-developer-data.fit')
+    const expected = await new FitParser({ force: false }).parseAsync(buffer)
+    const dataLength = buffer.readUInt32LE(4)
+    const legacy = Buffer.alloc(12 + dataLength + 2)
+
+    buffer.copy(legacy, 0, 0, 12)
+    legacy[0] = 12
+    buffer.copy(legacy, 12, 14, 14 + dataLength)
+    const crcStart = 12 + dataLength
+    legacy.writeUInt16LE(calculateCRC(legacy, 0, crcStart), crcStart)
+
+    await expect(
+      new FitParser({ force: false }).parseAsync(legacy),
+    ).resolves.toEqual(expected)
   })
 
   it('expects longitude to be in the range -180 to +180', async () => {

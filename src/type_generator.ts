@@ -59,6 +59,13 @@ export function generateArrayProperty(name: string, type: TypeNode, optional = t
 }
 
 export function generateTypeFromField(def: MessageObject): TypeNode {
+  if (def.array === true) {
+    return ts.factory.createArrayTypeNode(generateTypeFromField({
+      ...def,
+      array: false,
+    }))
+  }
+
   switch (def.type) {
     case 'uint32_array':
     case 'uint16_array':
