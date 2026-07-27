@@ -54,9 +54,10 @@
     }
   ],
   "scripts": {
-    "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts codegen/codegen.ts",
-    "codegen": "tsx codegen/codegen.ts",
-    "codegen:check": "tsx codegen/codegen.ts --check",
+    "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts --watch-path=src/garmin_profile.generated.ts codegen/codegen.ts",
+    "codegen:profile": "tsx codegen/garmin-profile.ts",
+    "codegen": "npm run codegen:profile && tsx codegen/codegen.ts",
+    "codegen:check": "tsx codegen/garmin-profile.ts --check && tsx codegen/codegen.ts --check",
     "check": "npm run codegen:check && npm run lint && npm run type-check && npm test -- --run && npm run build",
     "example-output": "node examples/parse.js examples/example.fit > examples/output-example.json",
     "example-output-tank": "node examples/parse.js examples/example-diving.fit > examples/output-diving.json",
@@ -77,7 +78,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.2.0",
-    "@garmin/fitsdk": "^21.208.0",
+    "@garmin/fitsdk": "21.208.0",
     "@types/node": "^24.10.1",
     "@vitest/coverage-v8": "^4.0.13",
     "eslint": "^9.10.0",

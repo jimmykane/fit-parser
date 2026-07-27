@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Generate all standard messages, fields, and enum additions from the pinned
+  Garmin SDK profile while retaining compatible legacy output names.
+- Retain every recognized message in file order under `ParsedFit.messages`
+  without changing the existing list, cascade, or singleton outputs.
+- Correct stale Garmin profile mappings, including official OHR settings,
+  pressure scaling, altitude offsets, monitoring HR, sleep, and lap/segment
+  flow and grit summaries.
 - Decode fields from their wire base types, reconstruct compressed timestamps,
   and keep timestamp state isolated between parser instances.
 - Accept omitted header CRCs, validate file CRCs across the complete FIT header
