@@ -185,7 +185,7 @@ export type FaveroProduct = 'assioma_uno' | 'assioma_duo'
 
 export type SpeedUnits = 'm/s' | 'mph' | 'km/h'
 export type LengthUnits = 'm' | 'mi' | 'km'
-export type TemperatureUnits = '\u00B0C' | 'kelvin' | 'fahrenheit'
+export type TemperatureUnits = 'celsius' | '\u00B0C' | 'kelvin' | 'fahrenheit'
 export type PressureUnits = 'cbar' | 'bar' | 'psi'
 
 export interface FitOptions {

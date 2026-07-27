@@ -87,6 +87,11 @@ export const FIT: FitType = {
       },
     },
     temperatureUnits: {
+      // canonical native temperature unit: degree Celsius [°C]
+      'celsius': {
+        multiplier: 1,
+        offset: 0,
+      },
       // native temperature unit: degree Celsius [°C]
       '°C': {
         multiplier: 1,
@@ -95,7 +100,7 @@ export const FIT: FitType = {
       // kelvin [K]
       'kelvin': {
         multiplier: 1,
-        offset: -273.15,
+        offset: 273.15,
       },
       // degree fahrenheit [°F]
       'fahrenheit': {
