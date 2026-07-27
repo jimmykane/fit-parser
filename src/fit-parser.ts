@@ -84,17 +84,18 @@ export default class FitParser {
 
     if (blob.length < 12) {
       callback('File to small to be a FIT file', undefined)
-      if (!this.options.force) {
-        return
-      }
+      return
     }
 
     const headerLength: number = blob[0]
     if (headerLength !== 14 && headerLength !== 12) {
       callback('Incorrect header size', undefined)
-      if (!this.options.force) {
-        return
-      }
+      return
+    }
+
+    if (blob.length < headerLength) {
+      callback('File to small to be a FIT file', undefined)
+      return
     }
 
     let fileTypeString = ''
@@ -103,26 +104,32 @@ export default class FitParser {
     }
     if (fileTypeString !== '.FIT') {
       callback('Missing \'.FIT\' in header', undefined)
-      if (!this.options.force) {
-        return
-      }
+      return
     }
 
     if (headerLength === 14 && !this.options.force) {
       const crcHeader = blob[12] + (blob[13] << 8)
       const crcHeaderCalc = calculateCRC(blob, 0, 12)
       if (crcHeader !== crcHeaderCalc) {
-        // callback('Header CRC mismatch', {});
-        // TODO: fix Header CRC check
+        callback('Header CRC mismatch', undefined)
         return
       }
     }
 
     const protocolVersion: number = blob[1]
     const profileVersion: number = blob[2] + (blob[3] << 8)
-    const dataLength: number
-      = blob[4] + (blob[5] << 8) + (blob[6] << 16) + (blob[7] << 24)
+    const dataLength = dataView.getUint32(4, true)
     const crcStart = dataLength + headerLength
+    if (crcStart > blob.length) {
+      callback('File data exceeds input length', undefined)
+      return
+    }
+
+    if (!this.options.force && crcStart + 2 > blob.length) {
+      callback('File CRC missing', undefined)
+      return
+    }
+
     if (!this.options.force) {
       const crcFile = blob[crcStart] + (blob[crcStart + 1] << 8)
       const crcFileCalc = calculateCRC(
@@ -132,8 +139,7 @@ export default class FitParser {
       )
 
       if (crcFile !== crcFileCalc) {
-        // callback('File CRC mismatch', {});
-        // TODO: fix File CRC check
+        callback('File CRC mismatch', undefined)
         return
       }
     }

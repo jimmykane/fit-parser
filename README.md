@@ -1,181 +1,237 @@
 # fit-file-parser
 
-> Parse your .FIT files easily, directly from JS.
-> Written in Typescript
+[![CI](https://github.com/jimmykane/fit-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/jimmykane/fit-parser/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/fit-file-parser.svg)](https://www.npmjs.com/package/fit-file-parser)
+[![license](https://img.shields.io/npm/l/fit-file-parser.svg)](./LICENSE)
 
-## Install
+Parse and encode FIT files in JavaScript and TypeScript. The parser supports
+files produced by Garmin, Polar, Suunto, and other FIT-compatible devices,
+including developer-defined data.
 
+## Features
+
+- Parse Node.js `Buffer` and standard `ArrayBuffer` inputs.
+- Choose flat lists, nested activity data, or both output shapes.
+- Convert speed, length, temperature, and pressure fields to preferred units.
+- Decode developer fields while preserving record alignment when descriptions
+  arrive after their definitions.
+- Encode profile-agnostic FIT messages with validated field definitions and
+  CRCs.
+- Use ESM or CommonJS with bundled TypeScript declarations.
+
+## Requirements
+
+- Node.js 20 or newer
+
+## Installation
+
+```sh
+npm install fit-file-parser
 ```
-$ npm install fit-file-parser --save
-```
 
-## How to use
+## Quick start
 
-See in [examples](./examples) folder:
-
-### using callbacks
+The Promise API is the simplest way to parse a file:
 
 ```javascript
-import fs from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import FitParser from 'fit-file-parser'
 
-fs.readFile('./example.fit', (err, content) => {
-  // Create a FitParser instance (options argument is optional)
-  if (err) {
-    console.error(err)
-  }
-  const fitParser = new FitParser({
-    force: true,
-    speedUnit: 'km/h',
-    lengthUnit: 'km',
-    temperatureUnit: 'kelvin',
-    pressureUnit: 'bar', // accept bar, cbar and psi (default is bar)
-    elapsedRecordField: true,
-    mode: 'cascade',
-  })
+const content = await readFile('./activity.fit')
+const parser = new FitParser({
+  mode: 'list',
+  speedUnit: 'km/h',
+  lengthUnit: 'km',
+})
 
-  // Parse your file
-  fitParser.parse(content, (error, data) => {
-    // Handle result of parse method
-    if (error) {
-      console.error(error)
+const data = await parser.parseAsync(content)
+
+console.log({
+  sessions: data.sessions?.length ?? 0,
+  laps: data.laps?.length ?? 0,
+  records: data.records?.length ?? 0,
+})
+```
+
+### Callback API
+
+```javascript
+import { readFile } from 'node:fs'
+import FitParser from 'fit-file-parser'
+
+readFile('./activity.fit', (readError, content) => {
+  if (readError) {
+    console.error(readError)
+    return
+  }
+
+  const parser = new FitParser()
+  parser.parse(content, (parseError, data) => {
+    if (parseError) {
+      console.error(parseError)
+      return
     }
-    else {
-      console.log(JSON.stringify(data))
-    }
+
+    console.log(data)
   })
 })
 ```
 
-### using async/await
+Parser errors are strings. `parseAsync()` rejects with the same value that the
+callback API receives as its first argument.
+
+## Parser options
+
+All options are optional.
+
+| Option               | Values                                  | Default   | Behavior                                                                                                                                       |
+| -------------------- | --------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mode`               | `list`, `cascade`, `both`               | `list`    | Controls whether primary activity collections are returned as root lists, nested data, or both.                                                |
+| `force`              | `true`, `false`                         | `true`    | Skips header and file CRC validation and enables supported best-effort field recovery. Structural header and data bounds are always validated. |
+| `speedUnit`          | `m/s`, `km/h`, `mph`                    | `m/s`     | Converts speed-related fields.                                                                                                                 |
+| `lengthUnit`         | `m`, `km`, `mi`                         | `m`       | Converts distance, altitude, and other length-related fields.                                                                                  |
+| `temperatureUnit`    | `celsius`, `°C`, `kelvin`, `fahrenheit` | `celsius` | Converts temperature fields. `°C` remains available as a legacy alias.                                                                         |
+| `pressureUnit`       | `bar`, `cbar`, `psi`                    | `bar`     | Converts pressure and tank-pressure fields.                                                                                                    |
+| `elapsedRecordField` | `true`, `false`                         | `false`   | Adds `elapsed_time` and `timer_time`, in seconds, to records.                                                                                  |
+
+`force: true` does not make arbitrary bytes a valid FIT file. Inputs that are
+too short, have an invalid header size or signature, or declare data beyond the
+available bytes are rejected in both modes.
+
+## Output modes
+
+The mode controls where sessions, laps, records, and related activity
+collections are exposed.
+
+| Mode      | Root lists | Nested under `activity` | Default |
+| --------- | ---------- | ----------------------- | ------- |
+| `list`    | Yes        | No                      | Yes     |
+| `cascade` | No         | Yes                     | No      |
+| `both`    | Yes        | Yes                     | No      |
+
+In cascade output, sessions contain their laps and laps contain their records
+and lengths. Other parsed FIT message collections remain available where the
+parser exposes them.
+
+## Inputs
+
+Both parser methods accept:
+
+- Node.js `Buffer`
+- `ArrayBuffer`
 
 ```javascript
-import fs from 'node:fs/promises'
-import FitParser from 'fit-file-parser'
-
-const buffer = await fs.readFile('./example.fit')
-const fitObject = await fitParser.parseAsync(buffer)
+const parsed = await new FitParser().parseAsync(arrayBuffer)
 ```
+
+## Developer fields
+
+FIT producers may define custom fields outside the standard profile. The
+parser consumes every developer field's declared byte size so later messages
+stay aligned. If a field description is not available yet, that value is
+omitted. Subsequent values are decoded by name once the description appears.
 
 ## Encoding
 
 `FitEncoder` writes FIT headers, message definitions, data messages, and CRCs.
-It is profile-agnostic: callers provide profile field identifiers and values in
-their raw FIT representation (including any scale or offset). Scalar 64-bit
-values use `bigint`; strings and numeric arrays use exact-size raw
-`Uint8Array` values.
+It is profile-agnostic: callers provide profile message and field numbers,
+base types, sizes, and values in their raw FIT representation. Applying FIT
+scales and offsets is the caller's responsibility.
 
 ```javascript
 import { FitBaseType, FitEncoder } from 'fit-file-parser'
 
 const encoder = new FitEncoder()
 encoder.writeMessage(0, [
-  { number: 0, size: 1, baseType: FitBaseType.Enum, value: 6 }, // FileId.type = course
-  { number: 4, size: 4, baseType: FitBaseType.Uint32, value: FitEncoder.toFitTimestamp(new Date()) },
+  {
+    number: 0,
+    size: 1,
+    baseType: FitBaseType.Enum,
+    value: 6,
+  },
+  {
+    number: 4,
+    size: 4,
+    baseType: FitBaseType.Uint32,
+    value: FitEncoder.toFitTimestamp(new Date()),
+  },
 ])
 
 const fitBytes = encoder.close()
 ```
 
-Use a distinct local message number (the optional third `writeMessage`
-argument) for each recurring message shape to avoid redundant definitions.
-The encoder validates field definitions and numeric ranges before writing, so
-an exception never leaves a partial message in the output.
+`writeMessage(globalMessageNumber, fields, localMessageNumber?)` accepts local
+message numbers from 0 through 15. Definitions are emitted automatically and
+reused until the shape assigned to that local number changes. `close()` returns
+a `Uint8Array`.
+
+The encoder also provides:
+
+- `FitEncoder.string(value)` for null-terminated UTF-8 field bytes.
+- `FitEncoder.toFitTimestamp(value)` for FIT timestamps.
+- `FitEncoder.calculateCRC(bytes)` for FIT-compatible CRC calculation.
+
+Scalar 64-bit values use `bigint`. Strings, numeric arrays, and other
+variable-length values use exact-size `Uint8Array` values. Invalid field
+definitions or numeric ranges throw before a partial message is written.
+
+## TypeScript and module formats
+
+The package includes TypeScript declarations and exports
+`FitParserOptions`, `FitEncoderField`, and `FitEncoderOptions`.
+
+ESM:
+
+```javascript
+import FitParser, { FitBaseType, FitEncoder } from 'fit-file-parser'
+```
+
+CommonJS:
+
+```javascript
+const {
+  default: FitParser,
+  FitBaseType,
+  FitEncoder,
+} = require('fit-file-parser')
+```
 
 ## Development
 
-To build the project, run:
+Run commands from the repository root.
 
-```
-npm run build
-```
+| Command                            | Purpose                                           |
+| ---------------------------------- | ------------------------------------------------- |
+| `npm ci`                           | Install locked dependencies.                      |
+| `npm run build`                    | Build ESM and CommonJS output.                    |
+| `npm test -- --run`                | Run the complete test suite once.                 |
+| `npm test -- --run test/<file>.ts` | Run a focused test file.                          |
+| `npm run codegen`                  | Regenerate `src/fit_types.ts` from `src/fit.ts`.  |
+| `npm run codegen:check`            | Verify generated types are current.               |
+| `npm run lint`                     | Check lint and formatting rules.                  |
+| `npm run fmt`                      | Apply the configured formatting rules.            |
+| `npm run type-check`               | Run TypeScript without emitting files.            |
+| `npm run examples`                 | Build and regenerate checked-in example outputs.  |
+| `npm run check`                    | Run codegen, lint, types, tests, and both builds. |
 
-To run tests, run:
+Do not edit `src/fit_types.ts` manually. Update `src/fit.ts` or the generator,
+then run `npm run codegen`.
 
-```
-npm test
-```
-
-To rebuild the typescript types (as they are autogenerated from the `FIT` object) run:
-
-```npm run codegen
-
-```
-
-> this will update the file `src/fit_types.ts` as it is only running with node (with type stripping), regenerating them requires node>=245
-
-To run the codegen in watch mode during local development, run:
-
-```npm run dev
-
-```
-
-To build the local examples, run:
-
-```
-npm run examples
-```
-
-To lint and format the code, run:
-
-```
-npm run lint
-```
-
-To run the typechecker, run:
-
-```
-npm run type-check
-```
-
-## API Documentation
-
-### new FitParser(Object _options_)
-
-Needed to create a new instance. _options_ is optional, and is used to customize the returned object.
-
-Allowed properties :
-
-- `mode`: String
-  - `cascade`: Returned object is organized as a tree, eg. each lap contains a `records` fields, that is an array of its records (**default**)
-  - `list`: Returned object is organized as lists of sessions, laps, records, etc..., without parent-child relation
-  - `both`: A mix of the two other modes, eg. `records` are available inside the root field as well as inside each laps
-- `lengthUnit`: String
-  - `m`: Lengths are in meters (**default**)
-  - `km`: Lengths are in kilometers
-  - `mi`: Lengths are in miles
-- `temperatureUnit`: String
-  - `celsius`:Temperatures are in °C (**default**)
-  - `kelvin`: Temperatures are in °K
-  - `fahrenheit`: Temperatures are in °F
-- `speedUnit`: String
-  - `m/s`: Speeds are in meters per seconds (**default**)
-  - `km/h`: Speeds are in kilometers per hour
-  - `mph`: Speeds are in miles per hour
-- `force`: Boolean
-  - `true`: Continues even if they are errors (**default for now**)
-  - `false`: Stops if an error occurs
-- `elapsedRecordField`: Boolean
-  - `true`: Includes `elapsed_time`, containing the elapsed time in seconds since the first record, and `timer_time`, containing the time shown on the device, inside each `record` field
-  - `false` (**default**)
-
-### fitParser.parse(Buffer _file_, Function _callback_)
-
-_callback_ receives two arguments, the first as a error String, and the second as Object, result of parsing.
-
-### fitParser.parseAsync(Buffer _file_)
-
-returns a Promise that resolves to the result of parsing.
+Repository-specific automation guidance is tracked in
+[`.agent/README.md`](./.agent/README.md). More examples are available in the
+[`examples`](./examples) directory, and release notes are in the
+[`CHANGELOG`](./CHANGELOG.md).
 
 ## Contributors
 
-All started thanks to [Pierre Jacquier](https://github.com/pierremtb)
-
-Big thanks to [Mikael Lofjärd](https://github.com/mlofjard) for [his early prototype](https://github.com/mlofjard/jsonfit).
-See [CONTRIBUTORS](./CONTRIBUTORS.md).
+This project started from work by
+[Pierre Jacquier](https://github.com/pierremtb). Thanks to
+[Mikael Lofjärd](https://github.com/mlofjard) for
+[his early prototype](https://github.com/mlofjard/jsonfit), and to everyone in
+[`CONTRIBUTORS.md`](./CONTRIBUTORS.md).
 
 ## License
 
-MIT license; see [LICENSE](./LICENSE).
+MIT; see [`LICENSE`](./LICENSE).
 
-(c) 2019 Dimitrios Kanellopoulos
+Copyright 2019-present Dimitrios Kanellopoulos.

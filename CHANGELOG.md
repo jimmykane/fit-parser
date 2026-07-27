@@ -1,5 +1,15 @@
 # Change Log
 
+## Unreleased
+
+- Reject structurally invalid FIT inputs consistently in callback and Promise
+  APIs, and report strict header and file CRC failures explicitly.
+- Correct Celsius-to-Kelvin conversion, add `celsius` as the canonical
+  temperature unit, and retain `°C` as a supported alias.
+- Add temperature, pressure, and parser-validation regression coverage.
+- Refresh the README with current runtime, API, unit, output, encoder, and
+  development documentation.
+
 ## 4.0.2
 
 - Preserve record alignment when developer-field descriptions are missing or

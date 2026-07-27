@@ -111,7 +111,7 @@ export interface MessageIndex {
 
     expect(code).toEqual(`export type SpeedUnits = "m/s" | "mph" | "km/h";
 export type LengthUnits = "m" | "mi" | "km";
-export type TemperatureUnits = "°C" | "kelvin" | "fahrenheit";
+export type TemperatureUnits = "celsius" | "°C" | "kelvin" | "fahrenheit";
 export type PressureUnits = "cbar" | "bar" | "psi";
 
 export interface FitOptions {

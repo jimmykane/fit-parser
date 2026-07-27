@@ -65,7 +65,86 @@ describe('fit parser tests', () => {
     expect(corrupt).toEqual(original)
   })
 
-  it('skips header and file CRC mismatches only in force mode', async () => {
+  it.each([false, true])(
+    'completes valid callback parsing exactly once (force: %s)',
+    async (force) => {
+      const buffer = await fs.readFile('./test/running-with-developer-data.fit')
+      const callback = vi.fn()
+
+      new FitParser({ force }).parse(buffer, callback)
+
+      expect(callback).toHaveBeenCalledOnce()
+      expect(callback).toHaveBeenCalledWith(undefined, expect.any(Object))
+    },
+  )
+
+  it.each([false, true])(
+    'rejects structural validation failures exactly once (force: %s)',
+    async (force) => {
+      const valid = await fs.readFile('./test/running-with-developer-data.fit')
+      const headerLength = valid[0]
+      const dataLength = valid.readUInt32LE(4)
+      const crcStart = headerLength + dataLength
+      const badHeaderSize = Buffer.from(valid)
+      badHeaderSize[0] = 13
+      const badSignature = Buffer.from(valid)
+      badSignature[8] = 0
+      const cases = [
+        {
+          content: valid.subarray(0, 11),
+          error: 'File to small to be a FIT file',
+        },
+        {
+          content: valid.subarray(0, headerLength - 1),
+          error: 'File to small to be a FIT file',
+        },
+        {
+          content: badHeaderSize,
+          error: 'Incorrect header size',
+        },
+        {
+          content: badSignature,
+          error: 'Missing \'.FIT\' in header',
+        },
+        {
+          content: valid.subarray(0, crcStart - 1),
+          error: 'File data exceeds input length',
+        },
+      ]
+
+      for (const { content, error } of cases) {
+        const callback = vi.fn()
+        new FitParser({ force }).parse(content, callback)
+
+        expect(callback).toHaveBeenCalledOnce()
+        expect(callback).toHaveBeenCalledWith(error, undefined)
+        await expect(new FitParser({ force }).parseAsync(content)).rejects.toBe(error)
+      }
+    },
+  )
+
+  it('accepts a missing file CRC only in force mode', async () => {
+    const buffer = await fs.readFile('./test/running-with-developer-data.fit')
+    const expected = await new FitParser({ force: false }).parseAsync(buffer)
+    const crcStart = buffer[0] + buffer.readUInt32LE(4)
+    const missingFileCrc = buffer.subarray(0, crcStart)
+
+    const forceCallback = vi.fn()
+    new FitParser({ force: true }).parse(missingFileCrc, forceCallback)
+    expect(forceCallback).toHaveBeenCalledOnce()
+    expect(forceCallback).toHaveBeenCalledWith(undefined, expected)
+    await expect(new FitParser({ force: true }).parseAsync(missingFileCrc)).resolves.toEqual(expected)
+
+    const callback = vi.fn()
+    new FitParser({ force: false }).parse(missingFileCrc, callback)
+    expect(callback).toHaveBeenCalledOnce()
+    expect(callback).toHaveBeenCalledWith('File CRC missing', undefined)
+    await expect(new FitParser({ force: false }).parseAsync(missingFileCrc))
+      .rejects
+      .toBe('File CRC missing')
+  })
+
+  it('accepts header and file CRC mismatches only in force mode', async () => {
     const buffer = await fs.readFile('./test/running-with-developer-data.fit')
     const expected = await new FitParser({ force: false }).parseAsync(buffer)
     const corruptHeaderCrc = Buffer.from(buffer)
@@ -73,14 +152,23 @@ describe('fit parser tests', () => {
     const corruptFileCrc = Buffer.from(buffer)
     const crcStart = corruptFileCrc[0] + corruptFileCrc.readUInt32LE(4)
     corruptFileCrc[crcStart] ^= 0xFF
+    const cases = [
+      { content: corruptHeaderCrc, error: 'Header CRC mismatch' },
+      { content: corruptFileCrc, error: 'File CRC mismatch' },
+    ]
 
-    await expect(new FitParser({ force: true }).parseAsync(corruptHeaderCrc)).resolves.toEqual(expected)
-    await expect(new FitParser({ force: true }).parseAsync(corruptFileCrc)).resolves.toEqual(expected)
+    for (const { content, error } of cases) {
+      const forceCallback = vi.fn()
+      new FitParser({ force: true }).parse(content, forceCallback)
+      expect(forceCallback).toHaveBeenCalledOnce()
+      expect(forceCallback).toHaveBeenCalledWith(undefined, expected)
+      await expect(new FitParser({ force: true }).parseAsync(content)).resolves.toEqual(expected)
 
-    for (const corrupt of [corruptHeaderCrc, corruptFileCrc]) {
       const callback = vi.fn()
-      new FitParser({ force: false }).parse(corrupt, callback)
-      expect(callback).not.toHaveBeenCalled()
+      new FitParser({ force: false }).parse(content, callback)
+      expect(callback).toHaveBeenCalledOnce()
+      expect(callback).toHaveBeenCalledWith(error, undefined)
+      await expect(new FitParser({ force: false }).parseAsync(content)).rejects.toBe(error)
     }
   })
 
