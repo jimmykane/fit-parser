@@ -2,28 +2,44 @@
 
 ## Unreleased
 
-- Generate all standard messages, fields, and enum additions from the pinned
-  Garmin SDK profile while retaining compatible legacy output names.
-- Retain every recognized message in file order under `ParsedFit.messages`
-  without changing the existing list, cascade, or singleton outputs.
-- Correct stale Garmin profile mappings, including official OHR settings,
-  pressure scaling, altitude offsets, monitoring HR, sleep, and lap/segment
-  flow and grit summaries.
-- Add reproducible profile and privacy-safe external corpus audit commands,
-  and document generated-profile maintenance.
-- Decode fields from their wire base types, reconstruct compressed timestamps,
-  and keep timestamp state isolated between parser instances.
+## 4.1.0
+
+### Added
+
+- Generate all 124 standard messages, 1,406 fields, and 200 profile types from
+  the exactly pinned Garmin FIT SDK 21.208.0 profile.
+- Retain every recognized message in file order under the typed
+  `ParsedFit.messages` index without changing existing list, cascade, or
+  singleton outputs.
+- Decode Garmin strength-training `set` messages in list and cascade modes.
+- Add reproducible generated-profile and privacy-safe external corpus audits,
+  and enforce profile freshness and coverage in CI.
+
+### Fixed
+
+- Decode fields from their wire base types, including compatible developer
+  enum/uint8/byte definitions and correctly sized numeric arrays.
+- Reconstruct compressed timestamps and keep timestamp state isolated between
+  parser instances.
 - Accept omitted header CRCs, validate file CRCs across the complete FIT header
-  and data section, and correct monitoring and time-in-zone profile mappings.
-- Decode Garmin strength-training `set` messages and expose them in list and
-  cascade output modes.
-- Reject structurally invalid FIT inputs consistently in callback and Promise
-  APIs, and report strict header and file CRC failures explicitly.
+  and data section, and report strict header and file CRC failures explicitly.
+- Reject structurally unsafe FIT inputs consistently in callback and Promise
+  APIs while retaining force-mode recovery for CRC corruption.
+- Correct Garmin profile mappings for OHR settings, monitoring HR, sleep,
+  time-in-zone, altitude offsets, and lap/segment flow and grit summaries.
 - Correct Celsius-to-Kelvin conversion, add `celsius` as the canonical
   temperature unit, and retain `°C` as a supported alias.
-- Add temperature, pressure, and parser-validation regression coverage.
-- Refresh the README with current runtime, API, unit, output, encoder, and
-  development documentation.
+
+### Compatibility and documentation
+
+- Preserve compatible legacy field names, scales, value shapes, parser
+  signatures, output modes, and date behavior while adding canonical profile
+  names.
+- Add regression coverage for temperature, pressure, validation, compressed
+  timestamps, generated profile messages, repeated messages, and MTB
+  flow/grit data.
+- Refresh the README with current runtime, API, units, output modes, developer
+  fields, encoder behavior, and repository commands.
 
 ## 4.0.2
 
