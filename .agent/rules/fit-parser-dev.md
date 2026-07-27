@@ -15,11 +15,16 @@ These repository-specific rules apply to automated and human contributors.
 
 ## Source and generated files
 
-- Edit `src/fit.ts` for profile changes.
+- Standard profile definitions in `src/garmin_profile.generated.ts` come from
+  the pinned Garmin SDK. Do not edit that file manually.
+- Use `src/fit.ts` only for parser options, compatibility-preserving naming,
+  and explicitly audited private message overlays.
 - `src/fit_types.ts` is generated. Do not edit it manually.
-- After changing `src/fit.ts` or `src/type_generator.ts`, run
-  `npm run codegen` and commit the generated result.
+- After changing the pinned SDK, `src/fit.ts`, either generator, or profile
+  handling, run `npm run codegen` and commit both generated results.
 - Use `npm run codegen:check` to detect stale generated output.
+- Use `npm run profile:audit` to verify complete standard-message coverage and
+  the expected private overlay set.
 
 ## Tests
 
@@ -31,6 +36,9 @@ These repository-specific rules apply to automated and human contributors.
 - Existing repository-owned FIT fixtures may be used when they are already
   intentionally tracked.
 - Run a focused test while iterating and `npm run check` before handoff.
+- For broad decoder or profile changes, run `npm run corpus:check -- <path>`
+  against an external corpus. Add `--allow-force-recovery` only when known CRC
+  corruption is an accepted corpus property.
 
 ## Private data
 

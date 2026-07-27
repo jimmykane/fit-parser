@@ -113,6 +113,18 @@ In cascade output, sessions contain their laps and laps contain their records
 and lengths. Other parsed FIT message collections remain available where the
 parser exposes them.
 
+Every recognized message is also retained in file order in `data.messages`.
+This additive index is useful for message kinds that historically exposed
+only the last value at the root:
+
+```javascript
+const workoutSteps = data.messages?.workout_step ?? []
+const diveSummaries = data.messages?.dive_summary ?? []
+```
+
+Existing root lists, cascade nesting, and last-message root properties remain
+unchanged.
+
 ## Inputs
 
 Both parser methods accept:
@@ -200,22 +212,25 @@ const {
 
 Run commands from the repository root.
 
-| Command                            | Purpose                                           |
-| ---------------------------------- | ------------------------------------------------- |
-| `npm ci`                           | Install locked dependencies.                      |
-| `npm run build`                    | Build ESM and CommonJS output.                    |
-| `npm test -- --run`                | Run the complete test suite once.                 |
-| `npm test -- --run test/<file>.ts` | Run a focused test file.                          |
-| `npm run codegen`                  | Regenerate `src/fit_types.ts` from `src/fit.ts`.  |
-| `npm run codegen:check`            | Verify generated types are current.               |
-| `npm run lint`                     | Check lint and formatting rules.                  |
-| `npm run fmt`                      | Apply the configured formatting rules.            |
-| `npm run type-check`               | Run TypeScript without emitting files.            |
-| `npm run examples`                 | Build and regenerate checked-in example outputs.  |
-| `npm run check`                    | Run codegen, lint, types, tests, and both builds. |
+| Command                            | Purpose                                            |
+| ---------------------------------- | -------------------------------------------------- |
+| `npm ci`                           | Install locked dependencies.                       |
+| `npm run build`                    | Build ESM and CommonJS output.                     |
+| `npm test -- --run`                | Run the complete test suite once.                  |
+| `npm test -- --run test/<file>.ts` | Run a focused test file.                           |
+| `npm run codegen`                  | Regenerate the Garmin profile and public types.    |
+| `npm run codegen:check`            | Verify both generated files are current.           |
+| `npm run profile:audit`            | Audit SDK profile coverage and private overlays.   |
+| `npm run corpus:check -- <path>`   | Validate an external FIT corpus without file data. |
+| `npm run lint`                     | Check lint and formatting rules.                   |
+| `npm run fmt`                      | Apply the configured formatting rules.             |
+| `npm run type-check`               | Run TypeScript without emitting files.             |
+| `npm run examples`                 | Build and regenerate checked-in example outputs.   |
+| `npm run check`                    | Run profile audit, lint, types, tests, and builds. |
 
-Do not edit `src/fit_types.ts` manually. Update `src/fit.ts` or the generator,
-then run `npm run codegen`.
+Do not edit `src/garmin_profile.generated.ts` or `src/fit_types.ts` manually.
+Update the pinned SDK, compatibility overrides, or a generator, then run
+`npm run codegen`.
 
 Repository-specific automation guidance is tracked in
 [`.agent/README.md`](./.agent/README.md). More examples are available in the
