@@ -73,8 +73,28 @@ describe('generated Garmin profile', () => {
 
     expect(parsed.field_descriptions?.[0]).toMatchObject({
       field_name: 'Wind',
-      fit_base_type_id: 'float64',
+      fit_base_type_id: 137,
     })
+  })
+
+  it('preserves compatible legacy scales and semantic value shapes', async () => {
+    const encoder = new FitEncoder()
+      .writeMessage(18, [
+        { number: 139, size: 2, baseType: FitBaseType.Uint16, value: 100 },
+        { number: 196, size: 2, baseType: FitBaseType.Uint16, value: 159 },
+      ], 0)
+      .writeMessage(216, [
+        { number: 0, size: 2, baseType: FitBaseType.Uint16, value: 18 },
+      ], 1)
+
+    const parsed = await new FitParser({ force: false }).parseAsync(
+      encoder.close().buffer,
+    )
+
+    expect(parsed.sessions?.[0]?.avg_vam).toBe(100)
+    expect(parsed.sessions?.[0]?.metabolic_calories).toBe(159)
+    expect(parsed.sessions?.[0]?.resting_calories).toBe(159)
+    expect(parsed.time_in_zone?.[0]?.reference_mesg).toBe(18)
   })
 
   it('retains every recognized repeated message in file order', async () => {
@@ -114,8 +134,8 @@ describe('generated Garmin profile', () => {
       .toEqual(['Warm up', 'Run'])
     expect(parsed.workout_step?.wkt_step_name).toBe('Run')
     expect(parsed.messages?.dive_summary?.map(summary => summary.avg_depth))
-      .toEqual([1.25, 2.5])
-    expect(parsed.dive_summary?.avg_depth).toBe(2.5)
+      .toEqual([1250, 2500])
+    expect(parsed.dive_summary?.avg_depth).toBe(2500)
   })
 
   it('covers flow and grit across lap and segment-lap summaries', async () => {

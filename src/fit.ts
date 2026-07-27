@@ -24,6 +24,7 @@ export interface FieldDefinition {
   requiresBoundedDataView?: boolean
   developerDataIndex?: number
   isDeveloperField?: boolean
+  aliases?: MessageObject[]
 }
 export interface MessageObject {
   field: string
@@ -33,6 +34,7 @@ export interface MessageObject {
   scale: number | null
   offset: number
   units: string
+  aliases?: MessageObject[]
 }
 export interface Message {
   name: MesgNum
@@ -115,15 +117,15 @@ const FIT_OVERRIDES: FitType = {
     },
     pressureUnits: {
       cbar: {
-        multiplier: centiBarsInOneBar,
-        offset: 0,
-      },
-      bar: {
         multiplier: 1,
         offset: 0,
       },
+      bar: {
+        multiplier: 1 / centiBarsInOneBar,
+        offset: 0,
+      },
       psi: {
-        multiplier: psiInOneBar,
+        multiplier: (1 / centiBarsInOneBar) * psiInOneBar,
         offset: 0,
       },
     },
@@ -9230,14 +9232,20 @@ function mergeMessages(): Record<number, Message> {
         return
       }
       const overrideField = overrideMessage[Number(fieldId)]
-      mergedMessage[Number(fieldId)] = {
-        ...overrideField,
-        ...generatedField,
-        field: overrideField
-          && equivalentProfileName(overrideField.field, generatedField.field)
-          ? overrideField.field
-          : generatedField.field,
-      }
+      const hasCompatibleName = overrideField
+        && equivalentProfileName(overrideField.field, generatedField.field)
+      mergedMessage[Number(fieldId)] = hasCompatibleName
+        ? {
+            ...generatedField,
+            ...overrideField,
+            baseType: generatedField.baseType,
+            array: overrideField.array ?? generatedField.array,
+          }
+        : {
+            ...overrideField,
+            ...generatedField,
+            aliases: overrideField ? [overrideField] : undefined,
+          }
     })
     messages[Number(messageId)] = mergedMessage
   })

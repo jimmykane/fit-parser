@@ -141,7 +141,7 @@ describe('binary decoder allocation regressions', () => {
       name: 'heart_rate',
       offset: 0,
       requiresBoundedDataView: false,
-      scale: 1,
+      scale: null,
       type: 'uint8',
     })
     expect(messageTypes[0]?.rawData).toHaveLength(1)

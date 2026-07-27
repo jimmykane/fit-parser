@@ -474,10 +474,10 @@ export interface ParsedSession {
   max_pos_vertical_speed?: number
   max_neg_vertical_speed?: number
   min_heart_rate?: number
-  time_in_hr_zone?: number[]
-  time_in_speed_zone?: number[]
-  time_in_cadence_zone?: number[]
-  time_in_power_zone?: number[]
+  time_in_hr_zone?: number[][]
+  time_in_speed_zone?: number[][]
+  time_in_cadence_zone?: number[][]
+  time_in_power_zone?: number[][]
   avg_lap_time?: number
   best_lap_index?: number
   min_altitude?: number
@@ -534,6 +534,7 @@ export interface ParsedSession {
   total_anaerobic_training_effect?: number
   avg_vam?: number
   avg_depth?: number
+  recovery_advisor?: number
   max_depth?: number
   surface_interval?: number
   start_cns?: number
@@ -562,6 +563,7 @@ export interface ParsedSession {
   avg_spo_2?: number
   avg_stress?: number
   metabolic_calories?: number
+  resting_calories?: number
   sdrr_hrv?: number
   rmssd_hrv?: number
   total_fractional_ascent?: number
@@ -628,10 +630,10 @@ export interface ParsedLap {
   avg_neg_vertical_speed?: number
   max_pos_vertical_speed?: number
   max_neg_vertical_speed?: number
-  time_in_hr_zone?: number[]
-  time_in_speed_zone?: number[]
-  time_in_cadence_zone?: number[]
-  time_in_power_zone?: number[]
+  time_in_hr_zone?: number[][]
+  time_in_speed_zone?: number[][]
+  time_in_cadence_zone?: number[][]
+  time_in_power_zone?: number[][]
   repetition_num?: number
   min_altitude?: number
   min_heart_rate?: number
@@ -878,7 +880,7 @@ export interface ParsedSchedule {
   scheduled_time?: LocalDateTime
 }
 export interface ParsedWeightScale {
-  weight?: number
+  weight?: Weight
   percent_fat?: number
   percent_hydration?: number
   visceral_fat_mass?: number
@@ -1002,7 +1004,7 @@ export interface ParsedMonitoring {
   distance16?: number
   cycles16?: number
   active_time16?: number
-  local_timestamp?: LocalDateTime
+  local_timestamp?: number
   temperature?: number
   temperature_min?: number
   temperature_max?: number
@@ -1019,7 +1021,8 @@ export interface ParsedMonitoring {
   descent?: number
   moderate_activity_minutes?: number
   vigorous_activity_minutes?: number
-  timestamp: string
+  vigorous_activity_inutes?: number
+  timestamp: number
 }
 export interface ParsedTrainingFile {
   type?: File
@@ -1030,7 +1033,7 @@ export interface ParsedTrainingFile {
   timestamp: string
 }
 export interface ParsedHrv {
-  time?: number[]
+  time?: number[][]
 }
 export interface ParsedUserMetrics {
   vo2_max?: number
@@ -1096,7 +1099,7 @@ export interface ParsedLength {
   message_index?: MessageIndex
 }
 export interface ParsedMonitoringInfo {
-  local_timestamp?: LocalDateTime
+  local_timestamp?: number
   activity_type?: ActivityType[]
   cycles_to_distance?: number[]
   cycles_to_calories?: number[]
@@ -1490,7 +1493,7 @@ export interface ParsedExdDataConceptConfiguration {
 export interface ParsedFieldDescription {
   developer_data_index?: number
   field_definition_number?: number
-  fit_base_type_id?: FitBaseType
+  fit_base_type_id?: number
   field_name?: string
   array?: number
   components?: string
@@ -1505,7 +1508,7 @@ export interface ParsedFieldDescription {
 }
 export interface ParsedDeveloperDataId {
   developer_id?: number[]
-  application_id?: number[]
+  application_id?: number[][]
   manufacturer_id?: Manufacturer
   developer_data_index?: number
   application_version?: number
@@ -1541,17 +1544,18 @@ export interface ParsedMonitoringHrData {
   timestamp: string
 }
 export interface ParsedTimeInZone {
-  reference_mesg?: MesgNum
-  reference_index?: MessageIndex
-  time_in_hr_zone?: number[]
-  time_in_speed_zone?: number[]
-  time_in_cadence_zone?: number[]
-  time_in_power_zone?: number[]
-  hr_zone_high_boundary?: number[]
-  speed_zone_high_boundary?: number[]
-  cadence_zone_high_boundary?: number[]
-  power_zone_high_boundary?: number[]
+  reference_mesg?: number
+  reference_index?: number
+  time_in_hr_zone?: number[][]
+  time_in_speed_zone?: number[][]
+  time_in_cadence_zone?: number[][]
+  time_in_power_zone?: number[][]
+  hr_zone_high_boundary?: number[][]
+  speed_zone_high_boundary?: number[][]
+  cadence_zone_high_boundary?: number[][]
+  power_zone_high_boundary?: number[][]
   hr_calc_type?: HrZoneCalc
+  max_heart_rate_deprecated?: number
   max_heart_rate?: number
   resting_heart_rate?: number
   threshold_heart_rate?: number
@@ -1565,8 +1569,8 @@ export interface ParsedSet {
   weight?: number
   set_type?: SetType
   start_time: string
-  category?: ExerciseCategory[]
-  category_subtype?: number[]
+  category?: ExerciseCategory[][]
+  category_subtype?: number[][]
   weight_display_unit?: FitBaseUnit
   message_index?: MessageIndex
   wkt_step_index?: MessageIndex
@@ -1608,6 +1612,7 @@ export interface ParsedDiveSettings {
   backlight_brightness?: number
   backlight_timeout?: BacklightTimeout
   repeat_dive_interval?: number
+  repeat_dive_time?: number
   safety_stop_time?: number
   heart_rate_source_type?: SourceType
   heart_rate_source?: number
@@ -1817,12 +1822,12 @@ export interface ParsedClimbPro {
   timestamp: string
 }
 export interface ParsedTankUpdate {
-  sensor?: AntChannelId
+  sensor?: number
   pressure?: number
   timestamp: string
 }
 export interface ParsedTankSummary {
-  sensor?: AntChannelId
+  sensor?: number
   start_pressure?: number
   end_pressure?: number
   volume_used?: number

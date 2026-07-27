@@ -348,6 +348,20 @@ function formatFieldValue(
   )
 }
 
+function fieldDefinitionsWithAliases(
+  fieldDefinition: FieldDefinition,
+): FieldDefinition[] {
+  return [
+    fieldDefinition,
+    ...(fieldDefinition.aliases ?? []).map(alias => ({
+      ...fieldDefinition,
+      ...alias,
+      name: alias.field,
+      aliases: undefined,
+    })),
+  ]
+}
+
 function convertTo<T extends string>(
   data: number,
   unitsList: keyof FitOptions,
@@ -580,6 +594,7 @@ export function readRecord(
         array,
         scale,
         offset,
+        aliases,
       } = message.getAttributes(blob[fDefIndex])
       const profileCompatible = areProfileBaseTypesCompatible(
         profileBaseType,
@@ -604,6 +619,7 @@ export function readRecord(
           wireType,
           blob[fDefIndex + 1],
         ),
+        aliases: profileCompatible ? aliases : undefined,
       }
 
       mTypeDef.fieldDefs.push(fDef)
@@ -709,9 +725,11 @@ export function readRecord(
       continue
     }
     const fDef = messageType.fieldDefs[i]
-    const field = fDef.name
-    if (field !== 'unknown' && field !== '' && field !== undefined) {
-      fields[field] = data
+    for (const namedDefinition of fieldDefinitionsWithAliases(fDef)) {
+      const field = namedDefinition.name
+      if (field !== 'unknown' && field !== '' && field !== undefined) {
+        fields[field] = data
+      }
     }
   }
 
@@ -733,9 +751,16 @@ export function readRecord(
       continue
     }
     const fDef = messageType.fieldDefs[i]
-    const field = fDef.name
-    if (field !== 'unknown' && field !== '' && field !== undefined) {
-      fields[field] = formatFieldValue(data, fDef, options, fields)
+    for (const namedDefinition of fieldDefinitionsWithAliases(fDef)) {
+      const field = namedDefinition.name
+      if (field !== 'unknown' && field !== '' && field !== undefined) {
+        fields[field] = formatFieldValue(
+          data,
+          namedDefinition,
+          options,
+          fields,
+        )
+      }
     }
   }
 

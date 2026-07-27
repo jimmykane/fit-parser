@@ -351,10 +351,17 @@ export function generateMessages(messages: { [messageId: number]: Message }): St
     ], snakeToCamel(`parsed_${msg.name}`), undefined, undefined, [
       ...Object.keys(msg).filter(n => n !== 'name').reduce((acc, id) => {
         const def: MessageObject = msg[Number(id)]
-        if (!usedFields.has(def.field)) {
-          usedFields.add(def.field)
-          acc.push(generateProperty(def.field, generateTypeFromField(def), !['start_time', 'timestamp'].includes(def.field)))
-        }
+        const definitions = [def, ...(def.aliases ?? [])]
+        definitions.forEach((definition) => {
+          if (!usedFields.has(definition.field)) {
+            usedFields.add(definition.field)
+            acc.push(generateProperty(
+              definition.field,
+              generateTypeFromField(definition),
+              !['start_time', 'timestamp'].includes(definition.field),
+            ))
+          }
+        })
         return acc
       }, [] as PropertySignature[]),
       ...generateAdditionalFields(msg),
