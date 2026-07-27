@@ -52,6 +52,7 @@ function requiresBoundedEndianDataView(type: string | number, size: number): boo
     case 'float64':
       return size < 8
     case 'uint16_array':
+    case 'exercise_category_array':
       return size % 2 !== 0
     case 'uint32_array':
       return size % 4 !== 0
@@ -131,7 +132,8 @@ function readData(
           }
           return array32
         }
-        case 'uint16_array': {
+        case 'uint16_array':
+        case 'exercise_category_array': {
           const array16: number[] = []
           for (let i = 0; i < fDef.size; i += 2) {
             array16.push(fieldDataView.getUint16(fieldStartIndex + i, fDef.littleEndian))
@@ -209,6 +211,16 @@ function formatByType(
         })
       }
       return scale ? data / scale + offset : data
+    case 'exercise_category_array':
+      if (Array.isArray(data)) {
+        return data.map((dataItem: number) => {
+          if (isInvalidValue(dataItem, 'uint16')) {
+            return null
+          }
+          return formatByType(dataItem, 'exercise_category', scale, offset)
+        })
+      }
+      return formatByType(data, 'exercise_category', scale, offset)
     default:
     {
       const typeMap = FIT.types[type] as Record<string, string | number> | undefined

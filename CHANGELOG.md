@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Decode Garmin strength-training `set` messages and expose them in list and
+  cascade output modes.
 - Reject structurally invalid FIT inputs consistently in callback and Promise
   APIs, and report strict header and file CRC failures explicitly.
 - Correct Celsius-to-Kelvin conversion, add `celsius` as the canonical

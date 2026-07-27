@@ -21,6 +21,7 @@ import type {
   ParsedPowerZone,
   ParsedRecord,
   ParsedSession,
+  ParsedSet,
   ParsedSplit,
   ParsedSplitSummary,
   ParsedSport,
@@ -171,6 +172,7 @@ export default class FitParser {
     const tank_updates: ParsedTankUpdate[] = []
     const tank_summaries: ParsedTankSummary[] = []
     const jumps: ParsedJump[] = []
+    const sets: ParsedSet[] = []
     const splits: ParsedSplit[] = []
     const split_summaries: ParsedSplitSummary[] = []
     const time_in_zone: ParsedTimeInZone[] = []
@@ -288,6 +290,9 @@ export default class FitParser {
         case 'jump':
           jumps.push(message)
           break
+        case 'set':
+          sets.push(message)
+          break
         case 'split':
           splits.push(message)
           break
@@ -344,6 +349,7 @@ export default class FitParser {
         developer_data_ids: applications,
         field_descriptions: fieldDescriptions,
         sports,
+        sets,
         splits,
         split_summaries,
       }
@@ -359,6 +365,7 @@ export default class FitParser {
       fitObj.developer_data_ids = applications
       fitObj.field_descriptions = fieldDescriptions
       fitObj.hrv = hrv
+      fitObj.sets = sets
     }
 
     callback(undefined, fitObj as ParsedFit)
