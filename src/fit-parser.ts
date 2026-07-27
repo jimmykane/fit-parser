@@ -1,5 +1,5 @@
 import type { Buffer } from 'buffer'
-import type { MessageTypeDefinition } from './binary.js'
+import type { DecoderState, MessageTypeDefinition } from './binary.js'
 import type {
   ParsedActivity,
   ParsedActivityMetrics,
@@ -111,7 +111,7 @@ export default class FitParser {
     if (headerLength === 14 && !this.options.force) {
       const crcHeader = blob[12] + (blob[13] << 8)
       const crcHeaderCalc = calculateCRC(blob, 0, 12)
-      if (crcHeader !== crcHeaderCalc) {
+      if (crcHeader !== 0 && crcHeader !== crcHeaderCalc) {
         callback('Header CRC mismatch', undefined)
         return
       }
@@ -135,7 +135,7 @@ export default class FitParser {
       const crcFile = blob[crcStart] + (blob[crcStart + 1] << 8)
       const crcFileCalc = calculateCRC(
         blob,
-        headerLength === 12 ? 0 : headerLength,
+        0,
         crcStart,
       )
 
@@ -149,6 +149,7 @@ export default class FitParser {
       profileVersion,
       protocolVersion,
     }
+    const messages: Record<string, unknown[]> = {}
 
     let sessions: ParsedSession[] = []
     let laps: ParsedLap[] = []
@@ -182,6 +183,7 @@ export default class FitParser {
     let loopIndex = headerLength
     const messageTypes: MessageTypeDefinition[] = []
     const developerFields: any[] = []
+    const decoderState: DecoderState = {}
 
     const isModeCascade = this.options.mode === 'cascade'
     const isCascadeNeeded = isModeCascade || this.options.mode === 'both'
@@ -200,8 +202,17 @@ export default class FitParser {
         startDate,
         pausedTime,
         dataView,
+        decoderState,
       )
       loopIndex = nextIndex
+
+      if (
+        messageType !== ''
+        && messageType !== 'definition'
+        && message !== undefined
+      ) {
+        (messages[messageType] ??= []).push(message)
+      }
 
       switch (messageType) {
         case 'lap':
@@ -334,6 +345,7 @@ export default class FitParser {
     fitObj.time_in_zone = time_in_zone
     fitObj.activity_metrics = activity_metrics
     fitObj.user_metrics = user_metrics
+    fitObj.messages = messages as ParsedFit['messages']
 
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)

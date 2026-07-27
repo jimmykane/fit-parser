@@ -1,4 +1,5 @@
 import type { FitOptions, MesgNum } from './fit_types.js'
+import { GARMIN_MESSAGES, GARMIN_TYPES } from './garmin_profile.generated.js'
 
 const metersInOneKilometer = 1000
 const secondsInOneHour = 3600
@@ -9,8 +10,10 @@ const psiInOneBar = 14.5037738
 
 export interface FieldDefinition {
   type: string | number
+  rawType?: string | number
   fDefNo: number
   size: number
+  array?: boolean
   endianAbility: boolean
   littleEndian: boolean
   baseTypeNo: number
@@ -21,13 +24,17 @@ export interface FieldDefinition {
   requiresBoundedDataView?: boolean
   developerDataIndex?: number
   isDeveloperField?: boolean
+  aliases?: MessageObject[]
 }
 export interface MessageObject {
   field: string
   type: string
+  baseType?: string
+  array?: boolean
   scale: number | null
   offset: number
   units: string
+  aliases?: MessageObject[]
 }
 export interface Message {
   name: MesgNum
@@ -49,7 +56,7 @@ export interface FitType {
 // which contains all the types and values
 // i would wish for some kind of inference mechanism here but for now we leave it as any
 // maybe zod could help here
-export const FIT: FitType = {
+const FIT_OVERRIDES: FitType = {
   scConst: 180 / 2 ** 31,
   options: {
     speedUnits: {
@@ -1841,21 +1848,6 @@ export const FIT: FitType = {
         offset: 0,
         units: 'percent',
       },
-      214: {
-        field: 'avg_grit',
-        type: 'float32',
-        scale: null,
-        offset: 0,
-        units: '',
-      },
-      215: {
-        field: 'avg_flow',
-        type: 'float32',
-        scale: null,
-        offset: 0,
-        units: '',
-      },
-
       140: { // From forums/guess, often recovery advisor used here or in event
         field: 'recovery_advisor',
         type: 'uint16', // Minutes?
@@ -4180,22 +4172,25 @@ export const FIT: FitType = {
       },
       2: {
         field: 'distance',
-        type: 'float32',
-        scale: null,
+        type: 'uint32',
+        baseType: 'uint32',
+        scale: 100,
         offset: 0,
         units: 'm',
       },
       3: {
         field: 'cycles',
-        type: 'float32',
-        scale: null,
+        type: 'uint32',
+        baseType: 'uint32',
+        scale: 2,
         offset: 0,
         units: 'cycles',
       },
       4: {
         field: 'active_time',
-        type: 'float32',
-        scale: null,
+        type: 'uint32',
+        baseType: 'uint32',
+        scale: 1000,
         offset: 0,
         units: 's',
       },
@@ -4250,28 +4245,33 @@ export const FIT: FitType = {
       },
       12: {
         field: 'temperature',
-        type: 'float32',
-        scale: null,
+        type: 'sint16',
+        baseType: 'sint16',
+        scale: 100,
         offset: 0,
         units: 'C',
       },
       14: {
         field: 'temperature_min',
-        type: 'float32',
-        scale: null,
+        type: 'sint16',
+        baseType: 'sint16',
+        scale: 100,
         offset: 0,
         units: 'C',
       },
       15: {
         field: 'temperature_max',
-        type: 'float32',
-        scale: null,
+        type: 'sint16',
+        baseType: 'sint16',
+        scale: 100,
         offset: 0,
         units: 'C',
       },
       16: {
         field: 'activity_time',
-        type: 'int32',
+        type: 'uint16',
+        baseType: 'uint16',
+        array: true,
         scale: null,
         offset: 0,
         units: '',
@@ -4641,17 +4641,6 @@ export const FIT: FitType = {
         offset: 0,
         units: '',
       },
-    },
-    108: {
-      name: 'o_hr_settings',
-      253: {
-        field: 'timestamp',
-        type: 'date_time',
-        scale: null,
-        offset: 0,
-        units: '',
-      },
-      0: { field: 'enabled', type: 'byte', scale: null, offset: 0, units: '' },
     },
     140: {
       name: 'activity_metrics',
@@ -5328,7 +5317,7 @@ export const FIT: FitType = {
         units: 's',
       },
       4: {
-        field: 'time_in_power_zone',
+        field: 'time_in_cadence_zone',
         type: 'uint32_array',
         scale: 1000,
         offset: 0,
@@ -5356,11 +5345,11 @@ export const FIT: FitType = {
         units: 'm/s',
       },
       8: {
-        field: 'power_zone_high_boundary',
-        type: 'uint16_array',
+        field: 'cadence_zone_high_boundary',
+        type: 'uint8_array',
         scale: null,
         offset: 0,
-        units: 'watts',
+        units: 'rpm',
       },
       9: {
         field: 'power_zone_high_boundary',
@@ -9215,3 +9204,83 @@ export const FIT: FitType = {
     },
   },
 } as const
+
+function equivalentProfileName(
+  left: string | number,
+  right: string | number,
+): boolean {
+  return String(left).replace(/_/g, '').toLowerCase()
+    === String(right).replace(/_/g, '').toLowerCase()
+}
+
+function mergeMessages(): Record<number, Message> {
+  const messages: Record<number, Message> = { ...FIT_OVERRIDES.messages }
+
+  Object.entries(GARMIN_MESSAGES).forEach(([messageId, generatedMessage]) => {
+    const overrideMessage = FIT_OVERRIDES.messages[Number(messageId)]
+    if (!overrideMessage) {
+      messages[Number(messageId)] = generatedMessage
+      return
+    }
+
+    const mergedMessage: Message = {
+      ...overrideMessage,
+      ...generatedMessage,
+    }
+    Object.entries(generatedMessage).forEach(([fieldId, generatedField]) => {
+      if (fieldId === 'name') {
+        return
+      }
+      const overrideField = overrideMessage[Number(fieldId)]
+      const hasCompatibleName = overrideField
+        && equivalentProfileName(overrideField.field, generatedField.field)
+      mergedMessage[Number(fieldId)] = hasCompatibleName
+        ? {
+            ...generatedField,
+            ...overrideField,
+            baseType: generatedField.baseType,
+            array: overrideField.array ?? generatedField.array,
+          }
+        : {
+            ...overrideField,
+            ...generatedField,
+            aliases: overrideField ? [overrideField] : undefined,
+          }
+    })
+    messages[Number(messageId)] = mergedMessage
+  })
+
+  return messages
+}
+
+function mergeTypes(): Record<string, Record<number, string | number>> {
+  const typeNames = new Set([
+    ...Object.keys(GARMIN_TYPES),
+    ...Object.keys(FIT_OVERRIDES.types),
+  ])
+
+  return Object.fromEntries([...typeNames].map((typeName) => {
+    const generatedValues = GARMIN_TYPES[typeName] ?? {}
+    const overrideValues = FIT_OVERRIDES.types[typeName] ?? {}
+    const values = { ...generatedValues }
+
+    Object.entries(overrideValues).forEach(([valueId, overrideValue]) => {
+      const generatedValue = generatedValues[Number(valueId)]
+      if (
+        generatedValue === undefined
+        || equivalentProfileName(overrideValue, generatedValue)
+      ) {
+        values[Number(valueId)] = overrideValue
+      }
+    })
+
+    return [typeName, values]
+  }))
+}
+
+export const FIT: FitType = {
+  scConst: FIT_OVERRIDES.scConst,
+  options: FIT_OVERRIDES.options,
+  messages: mergeMessages(),
+  types: mergeTypes(),
+}

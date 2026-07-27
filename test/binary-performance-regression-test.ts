@@ -340,7 +340,7 @@ describe('binary decoder allocation regressions', () => {
     expect(messageDefinition.rawData).toBe(rawData)
   })
 
-  it('preserves legacy zero-padding for truncated endian fields', () => {
+  it('omits truncated endian fields instead of manufacturing padded values', () => {
     const truncatedFloat = new Uint8Array([0, 0x3F, 0x80])
     const parsedFloat = readRecord(
       truncatedFloat,
@@ -363,67 +363,53 @@ describe('binary decoder allocation regressions', () => {
       0,
     )
 
-    expect(parsedFloat.message).toMatchObject({ truncated_float: 1 })
-    expect(parsedArray.message).toMatchObject({ truncated_array: [7, 9] })
+    expect(parsedFloat.message).toEqual({})
+    expect(parsedArray.message).toEqual({})
   })
 
-  it('does not read malformed endian fields across their declared boundary', () => {
-    const malformedDefinition = definition([
-      field('short_uint16', 'uint16', 1, 132, true),
-    ])
-    const dataWithFollowingBytes = new Uint8Array([0, 0x34, 0x12])
+  it.each([false, true])(
+    'omits undersized endian fields without reading the following bytes (force: %s)',
+    (force) => {
+      const malformedDefinition = definition([
+        field('short_uint16', 'uint16', 1, 132, true),
+      ])
+      const dataWithFollowingBytes = new Uint8Array([0, 0x34, 0x12])
 
-    expect(() =>
-      readRecord(
+      const parsed = readRecord(
         dataWithFollowingBytes,
         [malformedDefinition],
         [],
         0,
-        parserOptions,
+        { ...parserOptions, force },
         undefined,
         0,
-      )).toThrow(RangeError)
+      )
+      expect(parsed.message).toEqual({})
+      expect(parsed.nextIndex).toBe(2)
+    },
+  )
 
-    const forced = readRecord(
-      dataWithFollowingBytes,
-      [malformedDefinition],
-      [],
-      0,
-      { ...parserOptions, force: true },
-      undefined,
-      0,
-    )
-    expect(forced.message).toMatchObject({ short_uint16: 0x34 })
-  })
+  it.each([false, true])(
+    'omits malformed endian arrays without reading the following bytes (force: %s)',
+    (force) => {
+      const malformedDefinition = definition([
+        field('odd_uint16_array', 'uint16_array', 3, 132, true),
+      ])
+      const dataWithFollowingBytes = new Uint8Array([0, 0x34, 0x12, 0x56, 0x78])
 
-  it('does not read malformed endian arrays across their declared boundary', () => {
-    const malformedDefinition = definition([
-      field('odd_uint16_array', 'uint16_array', 3, 132, true),
-    ])
-    const dataWithFollowingBytes = new Uint8Array([0, 0x34, 0x12, 0x56, 0x78])
-
-    expect(() =>
-      readRecord(
+      const parsed = readRecord(
         dataWithFollowingBytes,
         [malformedDefinition],
         [],
         0,
-        parserOptions,
+        { ...parserOptions, force },
         undefined,
         0,
-      )).toThrow(RangeError)
-
-    const forced = readRecord(
-      dataWithFollowingBytes,
-      [malformedDefinition],
-      [],
-      0,
-      { ...parserOptions, force: true },
-      undefined,
-      0,
-    )
-    expect(forced.message).toMatchObject({ odd_uint16_array: 0x561234 })
-  })
+      )
+      expect(parsed.message).toEqual({})
+      expect(parsed.nextIndex).toBe(4)
+    },
+  )
 
   it('preserves enum and mask formatting when metadata is reused', () => {
     const messageDefinition = definition([
@@ -533,5 +519,122 @@ describe('binary decoder allocation regressions', () => {
 
     expect(parsed.message).toMatchObject({ heart_rate: 140 })
     expect(legacyDefinition.rawData).toHaveLength(1)
+  })
+
+  it('reconstructs compressed timestamps and handles the 32-second rollover', () => {
+    const decoderState = { lastTimestamp: 1000 }
+    const messageTypes: MessageTypeDefinition[] = []
+    messageTypes[3] = definition([
+      field('heart_rate', 'uint8', 1, 2, true),
+    ])
+
+    const first = readRecord(
+      new Uint8Array([0xE8, 140]),
+      messageTypes,
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+      undefined,
+      decoderState,
+    )
+    const second = readRecord(
+      new Uint8Array([0xEA, 141]),
+      messageTypes,
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+      undefined,
+      decoderState,
+    )
+    const rollover = readRecord(
+      new Uint8Array([0xE2, 142]),
+      messageTypes,
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+      undefined,
+      decoderState,
+    )
+
+    expect(first.message).toMatchObject({
+      heart_rate: 140,
+      timestamp: new Date(631066600000),
+    })
+    expect(second.message).toMatchObject({
+      heart_rate: 141,
+      timestamp: new Date(631066602000),
+    })
+    expect(rollover.message).toMatchObject({
+      heart_rate: 142,
+      timestamp: new Date(631066626000),
+    })
+    expect(decoderState.lastTimestamp).toBe(1026)
+  })
+
+  it('uses a later full timestamp as the next compressed timestamp reference', () => {
+    const decoderState = { lastTimestamp: 1000 }
+    const fullTimestamp = {
+      ...field('timestamp', 'date_time', 4, 134, true),
+      fDefNo: 253,
+    }
+    const fullTimestampPayload = new Uint8Array(5)
+    new DataView(fullTimestampPayload.buffer).setUint32(1, 2000, true)
+
+    readRecord(
+      fullTimestampPayload,
+      [definition([fullTimestamp])],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+      undefined,
+      decoderState,
+    )
+    const compressed = readRecord(
+      new Uint8Array([0x91]),
+      [definition([])],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+      undefined,
+      decoderState,
+    )
+
+    expect(compressed.message).toEqual({
+      timestamp: new Date(631067601000),
+    })
+    expect(decoderState.lastTimestamp).toBe(2001)
+  })
+
+  it('requires a timestamp reference for strict compressed records', () => {
+    expect(() => readRecord(
+      new Uint8Array([0x80, 140]),
+      [definition([field('heart_rate', 'uint8', 1, 2, true)])],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )).toThrow('Compressed timestamp requires a previous timestamp')
+
+    const forced = readRecord(
+      new Uint8Array([0x80, 140]),
+      [definition([field('heart_rate', 'uint8', 1, 2, true)])],
+      [],
+      0,
+      { ...parserOptions, force: true },
+      undefined,
+      0,
+    )
+    expect(forced.message).toEqual({ heart_rate: 140 })
   })
 })
