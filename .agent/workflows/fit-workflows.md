@@ -52,8 +52,8 @@ them into `.agent`, `test`, or `examples`.
 1. Locate the message and field definitions in the pinned
    `@garmin/fitsdk` profile.
 2. If it is standard, update the pinned SDK only when necessary. Use
-   `src/fit.ts` only for an audited private overlay or compatible output-name
-   override.
+   `src/fit.ts` only for a corpus-observed vendor extension that does not
+   collide with the pinned SDK.
 3. Regenerate the profile and public types:
 
    ```sh
@@ -72,8 +72,8 @@ them into `.agent`, `test`, or `examples`.
 
 1. Update the pinned `@garmin/fitsdk` dependency only when the required
    profile data is absent from the current version.
-2. Regenerate the profile. Existing compatible product names are retained
-   automatically.
+2. Regenerate the profile. Product names and other enum values are generated
+   without handwritten overrides.
 3. Run:
 
    ```sh

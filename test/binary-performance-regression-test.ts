@@ -3,7 +3,6 @@ import type { FitParserOptions } from '../src/fit-parser.js'
 import type { FieldDefinition } from '../src/fit.js'
 import { describe, expect, it } from 'vitest'
 import { readRecord } from '../src/binary.js'
-import { FIT } from '../src/fit.js'
 
 const parserOptions: FitParserOptions = {
   elapsedRecordField: false,
@@ -22,6 +21,7 @@ function field(
   littleEndian: boolean,
   scale: number | null = null,
   offset = 0,
+  units = '',
 ): FieldDefinition {
   return {
     baseTypeNo,
@@ -34,6 +34,7 @@ function field(
     scale,
     size,
     type,
+    units,
   }
 }
 
@@ -48,6 +49,42 @@ function definition(fieldDefs: FieldDefinition[]): MessageTypeDefinition {
 }
 
 describe('binary decoder allocation regressions', () => {
+  it('applies profile scaling to signed values while retaining semicircle coordinates', () => {
+    const fieldDefs = [
+      field('ascent_rate', 'sint32', 4, 133, true, 1000, 0, 'm/s'),
+      field('position_lat', 'sint32', 4, 133, true, 1, 0, 'semicircles'),
+      field('time_zone_offset', 'sint8', 1, 1, true, 4, 0, 'hr'),
+      {
+        ...field('orientation_matrix', 'sint32', 8, 133, true, 65535),
+        array: true,
+      },
+    ]
+    const payload = new Uint8Array(18)
+    const payloadView = new DataView(payload.buffer)
+    payloadView.setInt32(1, -287, true)
+    payloadView.setInt32(5, 536_870_912, true)
+    payloadView.setInt8(9, -5)
+    payloadView.setInt32(10, 65535, true)
+    payloadView.setInt32(14, -65535, true)
+
+    const parsed = readRecord(
+      payload,
+      [definition(fieldDefs)],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    expect(parsed.message).toMatchObject({
+      ascent_rate: -0.287,
+      orientation_matrix: [1, -1],
+      position_lat: 45,
+      time_zone_offset: -1.25,
+    })
+  })
+
   it('reads mixed-endian scalars and arrays from one offset DataView', () => {
     const fieldDefs = [
       field('little_uint16', 'uint16', 2, 132, true),
@@ -102,7 +139,7 @@ describe('binary decoder allocation regressions', () => {
       big_uint16z: 0x1234,
       big_uint32_values: [0x01020304, null],
       little_float32: 1.25,
-      little_sint32: -123_456_789 * FIT.scConst,
+      little_sint32: -123_456_789,
       little_uint16: 0x1234,
       little_uint32z: 0x89ABCDEF,
       uint16_values: [7, null],
@@ -141,7 +178,7 @@ describe('binary decoder allocation regressions', () => {
       name: 'heart_rate',
       offset: 0,
       requiresBoundedDataView: false,
-      scale: null,
+      scale: 1,
       type: 'uint8',
     })
     expect(messageTypes[0]?.rawData).toHaveLength(1)
@@ -288,14 +325,15 @@ describe('binary decoder allocation regressions', () => {
     developerFields[2] = []
     developerFields[2][2] = {
       field_name: 'late_developer_value',
-      fit_base_type_id: 136,
-      offset: 0,
-      scale: 1,
+      fit_base_type_id: 133,
+      offset: 1,
+      scale: 1000,
+      units: 'm/s',
     }
 
     const afterDescription = new Uint8Array(6)
     afterDescription[1] = 141
-    new DataView(afterDescription.buffer).setFloat32(2, 12.5, true)
+    new DataView(afterDescription.buffer).setInt32(2, -287, true)
     const resolved = readRecord(
       afterDescription,
       messageTypes,
@@ -309,12 +347,14 @@ describe('binary decoder allocation regressions', () => {
     expect(resolved.nextIndex).toBe(afterDescription.length)
     expect(resolved.message).toEqual({
       heart_rate: 141,
-      late_developer_value: 12.5,
+      late_developer_value: -1.287,
     })
     expect(messageTypes[0]?.developerFieldDefs?.[0].resolvedFieldDef).toMatchObject({
-      baseTypeNo: 136,
+      baseTypeNo: 133,
       name: 'late_developer_value',
-      type: 'float32',
+      offset: -1,
+      type: 'sint32',
+      units: 'm/s',
     })
   })
 
@@ -437,12 +477,12 @@ describe('binary decoder allocation regressions', () => {
       0,
     )
 
-    expect(first.message).toMatchObject({
-      balance_value: { 0: false, right: true, value: 0 },
+    expect(first.message).toEqual({
+      balance_value: { right: true, value: 0 },
       gender_value: 'male',
     })
-    expect(second.message).toMatchObject({
-      balance_value: { 0: false, right: false, value: 0 },
+    expect(second.message).toEqual({
+      balance_value: { right: false, value: 0 },
       gender_value: 99,
     })
   })

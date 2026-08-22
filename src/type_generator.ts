@@ -58,9 +58,20 @@ export function generateArrayProperty(name: string, type: TypeNode, optional = t
   return generateProperty(name, ts.factory.createArrayTypeNode(type), optional)
 }
 
+function generateNullableArrayType(type: TypeNode): TypeNode {
+  return ts.factory.createArrayTypeNode(
+    ts.factory.createParenthesizedType(
+      ts.factory.createUnionTypeNode([
+        type,
+        ts.factory.createLiteralTypeNode(ts.factory.createNull()),
+      ]),
+    ),
+  )
+}
+
 export function generateTypeFromField(def: MessageObject): TypeNode {
   if (def.array === true) {
-    return ts.factory.createArrayTypeNode(generateTypeFromField({
+    return generateNullableArrayType(generateTypeFromField({
       ...def,
       array: false,
     }))
@@ -74,18 +85,19 @@ export function generateTypeFromField(def: MessageObject): TypeNode {
     case 'sint16_array':
     case 'sint8_array':
     case 'byte_array':
-      return ts.factory.createArrayTypeNode(
+      return generateNullableArrayType(
         ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
       )
     case 'exercise_category_array':
-      return ts.factory.createArrayTypeNode(
+      return generateNullableArrayType(
         ts.factory.createTypeReferenceNode('ExerciseCategory'),
       )
-    case 'bool':
-      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword)
     case 'date_time':
+    case 'local_date_time':
+      return ts.factory.createTypeReferenceNode('Date')
     case 'string':
       return ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+    case 'bool':
     case 'uint32':
     case 'uint64':
     case 'uint16':
@@ -118,25 +130,42 @@ export function generateTypes(types: { [typeName: string]: Record<number, string
   const typeNames = Object.keys(types)
 
   typeNames.forEach((name) => {
-    if (name === 'message_index') {
-      return
-    }
     const type = types[name]
-    const names = Object.values(type)
+    const names = [...new Set(Object.values(type))]
+    const isMask = names.includes('mask')
+
+    const typeNode = isMask
+      ? ts.factory.createTypeLiteralNode([
+          generateProperty(
+            'value',
+            ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+            false,
+          ),
+          ...names
+            .filter(value => value !== 'mask')
+            .map(value => generateProperty(
+              String(value),
+              ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
+              false,
+            )),
+        ])
+      : names.length === 0
+        ? ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+        : ts.factory.createUnionTypeNode([
+            ...names.map(n => ts.factory.createLiteralTypeNode(
+              ts.factory.createStringLiteral(String(n)),
+            )),
+            ...(name === 'mesg_num'
+              ? [
+                  ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
+                ]
+              : []),
+            ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+          ])
 
     const typeAlias = ts.factory.createTypeAliasDeclaration([
       ts.factory.createModifier(ts.SyntaxKind.ExportKeyword),
-    ], snakeToCamel(name), undefined, names.length === 0
-      ? ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
-      : ts.factory.createUnionTypeNode(
-          [...names.map(n => ts.factory.createLiteralTypeNode(
-            ts.factory.createStringLiteral(String(n)),
-          )), ...(name === 'mesg_num'
-            ? [
-                ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral('definition')),
-              ]
-            : [])],
-        ))
+    ], snakeToCamel(name), undefined, typeNode)
 
     nodes.push(typeAlias)
   })
@@ -202,14 +231,6 @@ export function generateUtilities(): Statement[] {
     ]),
   )
   nodes.push(unitType)
-
-  const messageIndex = ts.factory.createInterfaceDeclaration([ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)], 'MessageIndex', undefined, undefined, [
-    generateProperty('0', ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), false),
-    generateProperty('value', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
-    generateProperty('reserved', ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), false),
-    generateProperty('selected', ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), false),
-  ])
-  nodes.push(messageIndex)
 
   return nodes
 }
@@ -345,25 +366,16 @@ export function generateMessages(messages: { [messageId: number]: Message }): St
 
   Object.keys(messages).forEach((name) => {
     const msg = FIT.messages[Number(name)]
-    const usedFields = new Set<string>()
     const messageType = ts.factory.createInterfaceDeclaration([
       ts.factory.createModifier(ts.SyntaxKind.ExportKeyword),
     ], snakeToCamel(`parsed_${msg.name}`), undefined, undefined, [
-      ...Object.keys(msg).filter(n => n !== 'name').reduce((acc, id) => {
+      ...Object.keys(msg).filter(n => n !== 'name').map((id) => {
         const def: MessageObject = msg[Number(id)]
-        const definitions = [def, ...(def.aliases ?? [])]
-        definitions.forEach((definition) => {
-          if (!usedFields.has(definition.field)) {
-            usedFields.add(definition.field)
-            acc.push(generateProperty(
-              definition.field,
-              generateTypeFromField(definition),
-              !['start_time', 'timestamp'].includes(definition.field),
-            ))
-          }
-        })
-        return acc
-      }, [] as PropertySignature[]),
+        return generateProperty(
+          def.field,
+          generateTypeFromField(def),
+        )
+      }),
       ...generateAdditionalFields(msg),
     ])
 

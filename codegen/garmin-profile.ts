@@ -35,10 +35,6 @@ interface GeneratedMessage {
   [fieldId: number]: GeneratedField
 }
 
-const fieldNameCorrections: Record<string, string> = {
-  cadenceZoneHighBondary: 'cadence_zone_high_boundary',
-}
-
 function snakeCase(value: string): string {
   if (/^(?:uint|sint|float)\d+z?$/i.test(value)) {
     return value.toLowerCase()
@@ -47,7 +43,6 @@ function snakeCase(value: string): string {
   return value
     .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
     .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-    .replace(/([a-z])(\d)/gi, '$1_$2')
     .toLowerCase()
 }
 
@@ -65,10 +60,8 @@ function generateMessages(): Record<number, GeneratedMessage> {
         const fields = Object.values(message.fields)
           .sort((left, right) => left.num - right.num)
           .map((field) => {
-            const fieldName
-              = fieldNameCorrections[field.name] ?? snakeCase(field.name)
             return [field.num, {
-              field: fieldName,
+              field: snakeCase(field.name),
               type: snakeCase(field.type),
               baseType: snakeCase(field.baseType),
               array: field.array && field.baseType !== 'string',

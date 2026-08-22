@@ -33,7 +33,7 @@ describe('device type mapping tests', () => {
     expect(barometerDevice?.source_type).toBe('local')
   })
 
-  it('resolves a Garmin product ID while preserving the raw product value', async () => {
+  it('does not derive a product name that is absent from the FIT fields', async () => {
     const encoder = new FitEncoder()
 
     encoder.writeMessage(0, [
@@ -52,10 +52,12 @@ describe('device type mapping tests', () => {
     )
 
     expect(fitObject.file_ids).toMatchObject([
-      { manufacturer: 'garmin', product: 3113, product_name: 'fr945' },
+      { manufacturer: 'garmin', product: 3113 },
     ])
     expect(fitObject.device_infos).toMatchObject([
-      { manufacturer: 'garmin', product: 3113, product_name: 'fr945' },
+      { manufacturer: 'garmin', product: 3113 },
     ])
+    expect(fitObject.file_ids?.[0]).not.toHaveProperty('product_name')
+    expect(fitObject.device_infos?.[0]).not.toHaveProperty('product_name')
   })
 })

@@ -1,5 +1,15 @@
 import type { ParsedLap, ParsedSession } from './fit_types.js'
 
+function timestampValue(value: unknown): number | undefined {
+  if (value === undefined || value === null) {
+    return undefined
+  }
+  const timestamp = value instanceof Date
+    ? value.getTime()
+    : new Date(value as string | number).getTime()
+  return Number.isFinite(timestamp) ? timestamp : undefined
+}
+
 export function mapDataIntoLap(
   inputLaps: ParsedLap[],
   lapKey: 'records' | 'lengths',
@@ -10,15 +20,14 @@ export function mapDataIntoLap(
   for (let i = 0; i < laps.length; i++) {
     const nextLap = laps[i + 1]
     const tempData = []
-    const nextLapStartTime = nextLap
-      ? new Date(nextLap.start_time).getTime()
-      : null
+    const nextLapStartTime = timestampValue(nextLap?.start_time)
     for (let j = index; j < data.length; j++) {
       const row = data[j]
-      if (nextLap && nextLapStartTime) {
-        const timestamp = new Date(row.timestamp || row.start_time).getTime()
-        if (nextLapStartTime > timestamp) {
+      if (nextLap && nextLapStartTime !== undefined) {
+        const timestamp = timestampValue(row.timestamp ?? row.start_time)
+        if (timestamp === undefined || nextLapStartTime > timestamp) {
           tempData.push(row)
+          index = j + 1
         }
         else if (nextLapStartTime <= timestamp) {
           index = j
@@ -27,6 +36,7 @@ export function mapDataIntoLap(
       }
       else {
         tempData.push(row)
+        index = j + 1
       }
     }
 
@@ -47,15 +57,14 @@ export function mapDataIntoSession(
   for (let i = 0; i < sessions.length; i++) {
     const nextSession = sessions[i + 1]
     const tempLaps = []
-    const nextSessionStartTime = nextSession
-      ? new Date(nextSession.start_time).getTime()
-      : null
+    const nextSessionStartTime = timestampValue(nextSession?.start_time)
     for (let j = lapIndex; j < laps.length; j++) {
       const lap = laps[j]
-      if (nextSession && nextSessionStartTime) {
-        const lapStartTime = new Date(lap.start_time).getTime()
-        if (nextSessionStartTime > lapStartTime) {
+      if (nextSession && nextSessionStartTime !== undefined) {
+        const lapStartTime = timestampValue(lap.start_time)
+        if (lapStartTime === undefined || nextSessionStartTime > lapStartTime) {
           tempLaps.push(lap)
+          lapIndex = j + 1
         }
         else if (nextSessionStartTime <= lapStartTime) {
           lapIndex = j
@@ -64,6 +73,7 @@ export function mapDataIntoSession(
       }
       else {
         tempLaps.push(lap)
+        lapIndex = j + 1
       }
     }
 

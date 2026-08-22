@@ -1,11 +1,9 @@
-import { Profile } from '@garmin/fitsdk'
 import { describe, expect, it } from 'vitest'
 import { FIT } from '../src/fit.js'
+import { GARMIN_TYPES } from '../src/garmin_profile.generated.js'
 
 describe('garmin product profile', () => {
-  it('matches every product ID and name in the pinned Garmin SDK profile', () => {
-    const sdkProducts = Profile.types.garminProduct as Record<number, string>
-
-    expect(FIT.types.garmin_product).toMatchObject(sdkProducts)
+  it('matches every generated product ID and name without overrides', () => {
+    expect(FIT.types.garmin_product).toEqual(GARMIN_TYPES.garmin_product)
   })
 })

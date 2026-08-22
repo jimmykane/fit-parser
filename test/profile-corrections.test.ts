@@ -9,6 +9,25 @@ function uint16Array(values: number[]): Uint8Array {
 }
 
 describe('fit profile corrections', () => {
+  it('converts SDK-tokenized speed arrays with parser units', async () => {
+    const encoder = new FitEncoder()
+    encoder.writeMessage(20, [
+      {
+        number: 17,
+        size: 2,
+        baseType: FitBaseType.Uint8,
+        value: new Uint8Array([16, 32]),
+      },
+    ])
+
+    const parsed = await new FitParser({
+      force: false,
+      speedUnit: 'km/h',
+    }).parseAsync(encoder.close().buffer)
+
+    expect(parsed.records?.[0]?.speed1s).toEqual([3.6, 7.2])
+  })
+
   it('decodes monitoring values from their declared integer base types', async () => {
     const encoder = new FitEncoder()
     const timestamp = FitEncoder.toFitTimestamp(
@@ -49,7 +68,7 @@ describe('fit profile corrections', () => {
     ])
   })
 
-  it('keeps cadence and power zone arrays distinct', async () => {
+  it('keeps SDK-named cadence and power zone arrays distinct', async () => {
     const encoder = new FitEncoder()
     encoder.writeMessage(216, [
       {
@@ -86,7 +105,7 @@ describe('fit profile corrections', () => {
     )
 
     expect(parsed.time_in_zone?.[0]).toMatchObject({
-      cadence_zone_high_boundary: [90, 100, 110],
+      cadence_zone_high_bondary: [90, 100, 110],
       power_zone_high_boundary: [150, 250, 350],
       time_in_cadence_zone: [1, 2],
     })

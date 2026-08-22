@@ -51,6 +51,14 @@ describe('fit parser tests', () => {
     expect(records[records.length - 1]?.timer_time).toBeTypeOf('number')
   })
 
+  it('does not derive elapsed and timer time unless requested', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const fitObject = await new FitParser({ force: true }).parseAsync(buffer)
+
+    expect(fitObject.records?.[0]).not.toHaveProperty('elapsed_time')
+    expect(fitObject.records?.[0]).not.toHaveProperty('timer_time')
+  })
+
   it('preserves force-mode output when only the trailing file CRC is corrupt', async () => {
     const buffer = await fs.readFile('./test/test.fit')
     const corruptCrc = Buffer.from(buffer)
@@ -245,6 +253,37 @@ describe('fit parser tests', () => {
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('sensor')
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('start_pressure')
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('end_pressure')
+  })
+
+  it('decodes native signed dive ascent rates with FIT profile scaling', async () => {
+    const buffer = await fs.readFile('./test/test-diving.fit')
+    const fitObject = await new FitParser({ force: false }).parseAsync(buffer)
+    const sessionSummary = fitObject.messages?.dive_summary?.find(
+      summary => summary.reference_mesg === 'session',
+    )
+    const firstAscentRate = fitObject.records?.find(
+      record => record.ascent_rate !== undefined,
+    )
+
+    expect(sessionSummary?.avg_ascent_rate).toBe(0.044)
+    expect(firstAscentRate?.ascent_rate).toBe(-0.287)
+  })
+
+  it('decodes native dive depths and bottom time with FIT profile scaling', async () => {
+    const buffer = await fs.readFile('./test/test-diving.fit')
+    const fitObject = await new FitParser({ force: false }).parseAsync(buffer)
+    const sessionSummary = fitObject.messages?.dive_summary?.find(
+      summary => summary.reference_mesg === 'session',
+    )
+    const firstDepth = fitObject.records?.find(
+      record => record.depth !== undefined,
+    )
+
+    expect(sessionSummary?.avg_depth).toBe(11.291)
+    expect(sessionSummary?.max_depth).toBe(17.646)
+    expect(sessionSummary?.bottom_time).toBe(3103.527)
+    expect(firstDepth?.depth).toBe(1.523)
+    expect(firstDepth?.next_stop_depth).toBe(0)
   })
 
   it('expects fit with data nested into the activity', async () => {

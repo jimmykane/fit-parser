@@ -2,6 +2,49 @@
 
 ## Unreleased
 
+## 5.0.0
+
+### Changed
+
+- Generate the complete standard message, field, and type surface from the
+  pinned Garmin FIT SDK without handwritten standard-profile overrides.
+- Preserve SDK alphanumeric tokens when generating public `snake_case` names,
+  including `n2`, `po2`, `time128`, and Garmin product identifiers.
+- Restrict non-SDK support to a collision-checked allowlist of Garmin fields
+  and private messages observed in the external FIT corpus.
+- Emit only parsed FIT values: Garmin product names are no longer inferred,
+  and record elapsed/timer values are generated only when
+  `elapsedRecordField: true` is requested.
+
+### Breaking
+
+- Remove compatibility aliases such as `resting_calories`,
+  `recovery_advisor`, `repeat_dive_time`, and deprecated time-in-zone names.
+- Remove guessed stress fields, handwritten enum/type additions, placeholder
+  zero-mask names, and the misspelled `hip_swing_excercise_name` type.
+- Use the pinned SDK's `cadence_zone_high_bondary` spelling and generated
+  alphanumeric field/type spellings instead of manual corrections.
+- Correct generated declarations to expose runtime `Date` values, numeric FIT
+  `bool` fields and unknown enum IDs, decoded mask objects, nullable array
+  entries, and optional profile fields.
+- Keep undated cascade rows in file order and avoid duplicating them when a lap
+  or session boundary timestamp is absent.
+
+## 4.1.1
+
+### Fixed
+
+- Apply Garmin FIT profile scale and offset to primitive numeric fields, while
+  retaining semicircle conversion only for fields declared in semicircles.
+- Apply FIT developer-field offsets with the parser's equivalent signed form,
+  including scaled signed developer values.
+- Decode native diving ascent-rate fields as meters per second instead of
+  geographic coordinates.
+- Decode native dive depth and bottom-time fields with their Garmin FIT SDK
+  scale instead of exposing their encoded integer representation.
+- Keep the pinned Garmin SDK authoritative for standard field types, arrays,
+  scales, offsets, and units while retaining compatible public field names.
+
 ## 4.1.0
 
 ### Added

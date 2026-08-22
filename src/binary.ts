@@ -1,8 +1,9 @@
 import type { FitParserOptions } from './fit-parser.js'
 import type {
   FieldDefinition,
+  MessageName,
 } from './fit.js'
-import type { FitOptions, LengthUnits, MesgNum, PressureUnits, SpeedUnits, TemperatureUnits, Unit } from './fit_types.js'
+import type { FitOptions, LengthUnits, PressureUnits, SpeedUnits, TemperatureUnits, Unit } from './fit_types.js'
 import { Buffer } from 'buffer'
 import { FIT } from './fit.js'
 import { getFitMessage, getFitMessageBaseType } from './messages.js'
@@ -181,17 +182,26 @@ function formatByType(
   type: string | number,
   scale: number | null,
   offset: number,
+  units?: string,
 ): any {
   switch (type) {
     case 'date_time':
     case 'local_date_time':
       return new Date(data * 1000 + GarminTimeOffset)
     case 'sint32':
-      return data * FIT.scConst
+      return units === 'semicircles'
+        ? data * FIT.scConst
+        : scale ? data / scale + offset : data
+    case 'sint8':
     case 'uint8':
+    case 'uint8z':
     case 'sint16':
-    case 'uint32':
     case 'uint16':
+    case 'uint16z':
+    case 'uint32':
+    case 'uint32z':
+    case 'float32':
+    case 'float64':
       return scale ? data / scale + offset : data
     case 'uint32_array':
     case 'uint16_array':
@@ -251,7 +261,7 @@ function formatByType(
           dataItem.value = data & Number(key)
         }
         else {
-          dataItem[value] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+          dataItem[value] = (data & Number(key)) !== 0
         }
       }
       return dataItem
@@ -332,7 +342,7 @@ function formatFieldValue(
         return null
       }
       return applyOptions(
-        formatByType(item, fDef.type, scale, offset),
+        formatByType(item, fDef.type, scale, offset, fDef.units),
         field,
         options,
         fields,
@@ -341,7 +351,7 @@ function formatFieldValue(
   }
 
   return applyOptions(
-    formatByType(data, fDef.type, scale, offset),
+    formatByType(data, fDef.type, scale, offset, fDef.units),
     field,
     options,
     fields,
@@ -385,7 +395,7 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
     case 'vertical_speed':
     case 'avg_speed':
     case 'max_speed':
-    case 'speed_1s':
+    case 'speed1s':
     case 'ball_speed':
     case 'enhanced_avg_speed':
     case 'enhanced_max_speed':
@@ -434,23 +444,6 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
     }
     default:
       return data
-  }
-}
-
-function applyGarminProductName(fields: any): void {
-  if (fields.product_name !== undefined || fields.manufacturer !== 'garmin') {
-    return
-  }
-
-  const product = fields.product
-  if (typeof product !== 'number') {
-    return
-  }
-
-  const productName = FIT.types.garmin_product[product]
-  if (typeof productName === 'string') {
-    // Keep the raw protocol ID and expose the SDK product name separately.
-    fields.product_name = productName
   }
 }
 
@@ -509,7 +502,11 @@ function resolveDeveloperFieldDefinition(
     name: description.field_name ?? '',
     dataType: getFitMessageBaseType(baseType & 15),
     scale: description.scale ?? 1,
-    offset: description.offset ?? 0,
+    // FIT developer-field descriptions use `raw / scale - offset`. This
+    // parser's formatter retains the legacy equivalent signed offset and adds
+    // it after scaling.
+    offset: -(description.offset ?? 0),
+    units: description.units ?? '',
     requiresBoundedDataView: requiresBoundedEndianDataView(
       type,
       developerFieldDef.size,
@@ -534,7 +531,7 @@ export function readRecord(
   dataView: DataView = new DataView(blob.buffer, blob.byteOffset, blob.byteLength),
   decoderState: DecoderState = {},
 ): {
-  messageType: MesgNum | ''
+  messageType: MessageName | 'definition' | ''
   nextIndex: number
   message?: any
 } {
@@ -584,7 +581,7 @@ export function readRecord(
         array,
         scale,
         offset,
-        aliases,
+        units,
       } = message.getAttributes(blob[fDefIndex])
       const profileCompatible = areProfileBaseTypesCompatible(
         profileBaseType,
@@ -605,11 +602,11 @@ export function readRecord(
         dataType: getFitMessageBaseType(baseType & 15),
         scale: profileCompatible ? scale : null,
         offset: profileCompatible ? offset : 0,
+        units: profileCompatible ? units : '',
         requiresBoundedDataView: requiresBoundedEndianDataView(
           wireType,
           blob[fDefIndex + 1],
         ),
-        aliases: profileCompatible ? aliases : undefined,
       }
 
       mTypeDef.fieldDefs.push(fDef)
@@ -718,13 +715,6 @@ export function readRecord(
     if (isOutputFieldName(fDef.name)) {
       fields[fDef.name] = data
     }
-    if (fDef.aliases) {
-      for (const alias of fDef.aliases) {
-        if (isOutputFieldName(alias.field)) {
-          fields[alias.field] = data
-        }
-      }
-    }
   }
 
   for (let i = 0; i < developerFieldDefs.length; i++) {
@@ -747,23 +737,6 @@ export function readRecord(
     const fDef = messageType.fieldDefs[i]
     if (isOutputFieldName(fDef.name)) {
       fields[fDef.name] = formatFieldValue(data, fDef, options, fields)
-    }
-    if (fDef.aliases) {
-      for (const alias of fDef.aliases) {
-        if (isOutputFieldName(alias.field)) {
-          fields[alias.field] = formatFieldValue(
-            data,
-            {
-              ...fDef,
-              ...alias,
-              name: alias.field,
-              aliases: undefined,
-            },
-            options,
-            fields,
-          )
-        }
-      }
     }
   }
 
@@ -797,8 +770,6 @@ export function readRecord(
       validFieldCount++
     }
   }
-
-  applyGarminProductName(fields)
 
   if (validFieldCount > 0 && message.name === 'record' && options.elapsedRecordField) {
     fields.elapsed_time = ((fields.timestamp as any) - (startDate || 0)) / 1000

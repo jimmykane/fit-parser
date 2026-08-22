@@ -29,6 +29,53 @@ including developer-defined data.
 npm install fit-file-parser
 ```
 
+## Migrating from 4.x to 5.0
+
+Version 5.0 is a breaking release because parsed output now follows the pinned
+Garmin FIT SDK profile without compatibility aliases or guessed fields. Parser
+construction, module imports, output modes, and parser options are unchanged.
+
+Update field access, destructuring, persisted schemas, and snapshots to use the
+SDK-backed names. Common migrations include:
+
+| 4.x name                       | 5.0 name                     |
+| ------------------------------ | ---------------------------- |
+| `speed_1s`                     | `speed1s`                    |
+| `start_n_2`, `end_n_2`         | `start_n2`, `end_n2`         |
+| `o_2_toxicity`                 | `o2_toxicity`                |
+| `avg_spo_2`, `reading_spo_2`   | `avg_spo2`, `reading_spo2`   |
+| `po_2`                         | `po2`                        |
+| `cycle_length_16`              | `cycle_length16`             |
+| `map_3_sample_mean`            | `map3_sample_mean`           |
+| `time_256`                     | `time256`                    |
+| `last_night_5_min_high`        | `last_night5_min_high`       |
+| `average_7_day_deviation`      | `average7_day_deviation`     |
+| `spo_2_data`, `hsa_spo_2_data` | `spo2_data`, `hsa_spo2_data` |
+| `repeat_dive_time`             | `repeat_dive_interval`       |
+| `cadence_zone_high_boundary`   | `cadence_zone_high_bondary`  |
+| `HipSwingExcerciseName`        | `HipSwingExerciseName`       |
+
+The same alphanumeric-token rule applies to enum strings, for example
+`camera_orientation_90` becomes `camera_orientation90`, `po_2_warn` becomes
+`po2_warn`, and `power_3s` becomes `power3s`. The generated TypeScript
+declarations are the exhaustive name and value reference for the pinned SDK.
+
+The handwritten `resting_calories` and guessed `recovery_advisor` fields have
+no 5.0 replacement. Other behavior to account for during migration:
+
+- `product_name` is emitted only when it exists in the FIT input. It is no
+  longer inferred from `manufacturer` and `product`.
+- Record `elapsed_time` and `timer_time` require
+  `elapsedRecordField: true`.
+- FIT timestamps are typed as `Date`, FIT `bool` values remain numeric, mask
+  fields are `{ value, ...flags }` objects, unknown enum values remain numbers,
+  and array entries may be `null` when the FIT invalid sentinel is retained.
+- Every profile field is optional because individual FIT message definitions
+  determine which fields are present.
+- When upgrading from 4.1.0 or earlier, remove application-side scale or offset
+  corrections for parsed numeric values, including dive depth, bottom time,
+  ascent rate, and developer fields. The parser now applies the SDK metadata.
+
 ## Quick start
 
 The Promise API is the simplest way to parse a file:
@@ -124,6 +171,28 @@ const diveSummaries = data.messages?.dive_summary ?? []
 
 Existing root lists, cascade nesting, and last-message root properties remain
 unchanged.
+
+## Profile-backed output
+
+Standard message names, field names, enum values, wire types, scales, offsets,
+arrays, and units come from the exactly pinned Garmin FIT SDK profile. Public
+names use the parser's generated `snake_case` form while preserving SDK
+alphanumeric tokens such as `n2`, `po2`, and `time128`. The parser does not add
+compatibility aliases for alternate field spellings.
+
+The small vendor extension table contains only Garmin fields and private
+messages observed in the external FIT corpus. Extensions cannot replace a
+standard SDK field or type value; the profile audit rejects collisions and
+unregistered additions.
+
+Only values present in the FIT input are emitted. In particular,
+`product_name` is not inferred from `manufacturer` and `product`, and record
+`elapsed_time` and `timer_time` are added only when `elapsedRecordField: true`
+is requested. Parsed FIT timestamps are `Date` objects, FIT `bool` fields keep
+their numeric wire values, mask fields decode to `{ value, ...flags }` objects,
+unknown enum IDs remain numbers, and invalid entries retained inside FIT arrays
+are `null`. All profile fields are optional because each FIT message definition
+chooses which fields are present.
 
 ## Inputs
 
@@ -229,7 +298,7 @@ Run commands from the repository root.
 | `npm run check`                    | Run profile audit, lint, types, tests, and builds. |
 
 Do not edit `src/garmin_profile.generated.ts` or `src/fit_types.ts` manually.
-Update the pinned SDK, compatibility overrides, or a generator, then run
+Update the pinned SDK, audited vendor extensions, or a generator, then run
 `npm run codegen`.
 
 Repository-specific automation guidance is tracked in
