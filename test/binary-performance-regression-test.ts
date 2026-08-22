@@ -477,11 +477,11 @@ describe('binary decoder allocation regressions', () => {
       0,
     )
 
-    expect(first.message).toMatchObject({
+    expect(first.message).toEqual({
       balance_value: { right: true, value: 0 },
       gender_value: 'male',
     })
-    expect(second.message).toMatchObject({
+    expect(second.message).toEqual({
       balance_value: { right: false, value: 0 },
       gender_value: 99,
     })

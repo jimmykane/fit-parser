@@ -1,6 +1,8 @@
 import type { FitOptions, MesgNum } from './fit_types.js'
 import { GARMIN_MESSAGES, GARMIN_TYPES } from './garmin_profile.generated.js'
 
+export type MessageName = Exclude<MesgNum, number | 'definition'>
+
 const metersInOneKilometer = 1000
 const secondsInOneHour = 3600
 // according to https://en.wikipedia.org/wiki/Mile
@@ -38,7 +40,7 @@ export interface MessageObject {
 }
 
 export interface Message {
-  name: MesgNum
+  name: MessageName
   [fieldId: number]: MessageObject
 }
 

@@ -96,12 +96,6 @@ describe('generator', () => {
     multiplier: number;
     offset: number;
 }>;
-export interface MessageIndex {
-    0: boolean;
-    value: number;
-    reserved: boolean;
-    selected: boolean;
-}
 `)
   })
 
@@ -127,7 +121,34 @@ export interface FitOptions {
     const result = generateTypes({ file: FIT.types.file })
     const code = print(result)
 
-    expect(code).toEqual(`export type File = "device" | "settings" | "sport" | "activity" | "workout" | "course" | "schedules" | "weight" | "totals" | "goals" | "blood_pressure" | "monitoring_a" | "activity_summary" | "monitoring_daily" | "monitoring_b" | "segment" | "segment_list" | "exd_configuration" | "mfg_range_min" | "mfg_range_max";
+    expect(code).toEqual(`export type File = "device" | "settings" | "sport" | "activity" | "workout" | "course" | "schedules" | "weight" | "totals" | "goals" | "blood_pressure" | "monitoring_a" | "activity_summary" | "monitoring_daily" | "monitoring_b" | "segment" | "segment_list" | "exd_configuration" | "mfg_range_min" | "mfg_range_max" | number;
+`)
+  })
+
+  it('should retain unknown message numbers alongside the definition marker', () => {
+    const result = generateTypes({ mesg_num: { 0: 'file_id' } })
+    const code = print(result)
+
+    expect(code).toEqual(`export type MesgNum = "file_id" | "definition" | number;
+`)
+  })
+
+  it('should generate decoded mask object types', () => {
+    const result = generateTypes({
+      left_right_balance: FIT.types.left_right_balance,
+      message_index: FIT.types.message_index,
+    })
+    const code = print(result)
+
+    expect(code).toEqual(`export type LeftRightBalance = {
+    value: number;
+    right: boolean;
+};
+export type MessageIndex = {
+    value: number;
+    reserved: boolean;
+    selected: boolean;
+};
 `)
   })
 
@@ -141,7 +162,7 @@ export interface FitOptions {
     manufacturer?: Manufacturer;
     product?: number;
     serial_number?: number;
-    time_created?: string;
+    time_created?: Date;
     number?: number;
     product_name?: string;
 }
@@ -169,5 +190,9 @@ export interface FitOptions {
     )
     expect(sourceFile.statements.length).toBeGreaterThan(0)
     expect(sourceFile.getText()).not.toEqual('')
+    expect(code).toContain('timestamp?: Date;')
+    expect(code).toContain('safety_stop_enabled?: number;')
+    expect(code).toContain('left_right_balance?: LeftRightBalance;')
+    expect(code).toContain('speed1s?: (number | null)[];')
   })
 })

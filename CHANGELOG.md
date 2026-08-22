@@ -24,6 +24,11 @@
   zero-mask names, and the misspelled `hip_swing_excercise_name` type.
 - Use the pinned SDK's `cadence_zone_high_bondary` spelling and generated
   alphanumeric field/type spellings instead of manual corrections.
+- Correct generated declarations to expose runtime `Date` values, numeric FIT
+  `bool` fields and unknown enum IDs, decoded mask objects, nullable array
+  entries, and optional profile fields.
+- Keep undated cascade rows in file order and avoid duplicating them when a lap
+  or session boundary timestamp is absent.
 
 ## 4.1.1
 

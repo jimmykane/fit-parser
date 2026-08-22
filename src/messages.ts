@@ -1,5 +1,4 @@
-import type { MessageObject } from './fit.js'
-import type { MesgNum } from './fit_types.js'
+import type { MessageName, MessageObject } from './fit.js'
 import { FIT } from './fit.js'
 
 function getFieldObject(
@@ -13,12 +12,12 @@ function getFieldObject(
   return message[fieldNum] || {}
 }
 
-function getMessageName(messageNum: number): MesgNum | '' {
+function getMessageName(messageNum: number): MessageName | '' {
   const message = FIT.messages[messageNum]
   return message ? message.name : ''
 }
 
-export function getFitMessage(messageNum: number): { name: MesgNum | '', getAttributes: (fieldNum: number) => MessageObject } {
+export function getFitMessage(messageNum: number): { name: MessageName | '', getAttributes: (fieldNum: number) => MessageObject } {
   return {
     name: getMessageName(messageNum),
     getAttributes: (fieldNum: number) => getFieldObject(fieldNum, messageNum),

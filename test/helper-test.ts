@@ -71,6 +71,49 @@ describe('helper tests', () => {
       expect(result[0].lengths).toHaveLength(1)
       expect(result[0].lengths[0]).toBe(data[0])
     })
+
+    it('keeps undated rows in sequence without duplicating consumed data', () => {
+      const laps: any[] = [
+        { start_time: new Date('2023-01-01T10:00:00Z') },
+        { start_time: new Date('2023-01-01T10:10:00Z') },
+      ]
+      const undated = { value: 1 }
+      const secondLap = {
+        timestamp: new Date('2023-01-01T10:10:00Z'),
+        value: 2,
+      }
+
+      const result = mapDataIntoLap(laps, 'records', [undated, secondLap])
+
+      expect(result[0].records).toEqual([undated])
+      expect(result[1].records).toEqual([secondLap])
+    })
+
+    it('consumes remaining rows once when the next lap has no boundary', () => {
+      const laps: any[] = [
+        { start_time: new Date('2023-01-01T10:00:00Z') },
+        {},
+      ]
+      const data = [{ timestamp: new Date('2023-01-01T10:05:00Z') }]
+
+      const result = mapDataIntoLap(laps, 'records', data)
+
+      expect(result[0].records).toEqual(data)
+      expect(result[1].records).toEqual([])
+    })
+
+    it('does not duplicate rows when no row reaches the next boundary', () => {
+      const laps: any[] = [
+        { start_time: new Date('2023-01-01T10:00:00Z') },
+        { start_time: new Date('2023-01-01T11:00:00Z') },
+      ]
+      const data = [{ timestamp: new Date('2023-01-01T10:05:00Z') }]
+
+      const result = mapDataIntoLap(laps, 'records', data)
+
+      expect(result[0].records).toEqual(data)
+      expect(result[1].records).toEqual([])
+    })
   })
 
   describe('mapDataIntoSession', () => {
@@ -112,6 +155,19 @@ describe('helper tests', () => {
       ]
       const result = mapDataIntoSession(sessions, laps)
       expect(result[0].laps).toHaveLength(2)
+    })
+
+    it('keeps undated laps in sequence and consumes missing boundaries once', () => {
+      const sessions: any[] = [
+        { start_time: new Date('2023-01-01T08:00:00Z') },
+        {},
+      ]
+      const laps: any[] = [{ id: 1 }]
+
+      const result = mapDataIntoSession(sessions, laps)
+
+      expect(result[0].laps).toEqual(laps)
+      expect(result[1].laps).toEqual([])
     })
   })
 })

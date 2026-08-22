@@ -1,8 +1,9 @@
 import type { FitParserOptions } from './fit-parser.js'
 import type {
   FieldDefinition,
+  MessageName,
 } from './fit.js'
-import type { FitOptions, LengthUnits, MesgNum, PressureUnits, SpeedUnits, TemperatureUnits, Unit } from './fit_types.js'
+import type { FitOptions, LengthUnits, PressureUnits, SpeedUnits, TemperatureUnits, Unit } from './fit_types.js'
 import { Buffer } from 'buffer'
 import { FIT } from './fit.js'
 import { getFitMessage, getFitMessageBaseType } from './messages.js'
@@ -260,7 +261,7 @@ function formatByType(
           dataItem.value = data & Number(key)
         }
         else {
-          dataItem[value] = !!((data & Number(key)) >> 7) // Not sure if we need the >> 7 and casting to boolean but from all the masked props of fields so far this seems to be the case
+          dataItem[value] = (data & Number(key)) !== 0
         }
       }
       return dataItem
@@ -530,7 +531,7 @@ export function readRecord(
   dataView: DataView = new DataView(blob.buffer, blob.byteOffset, blob.byteLength),
   decoderState: DecoderState = {},
 ): {
-  messageType: MesgNum | ''
+  messageType: MessageName | 'definition' | ''
   nextIndex: number
   message?: any
 } {

@@ -141,7 +141,11 @@ unregistered additions.
 Only values present in the FIT input are emitted. In particular,
 `product_name` is not inferred from `manufacturer` and `product`, and record
 `elapsed_time` and `timer_time` are added only when `elapsedRecordField: true`
-is requested.
+is requested. Parsed FIT timestamps are `Date` objects, FIT `bool` fields keep
+their numeric wire values, mask fields decode to `{ value, ...flags }` objects,
+unknown enum IDs remain numbers, and invalid entries retained inside FIT arrays
+are `null`. All profile fields are optional because each FIT message definition
+chooses which fields are present.
 
 ## Inputs
 
