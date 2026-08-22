@@ -1,12 +1,19 @@
 name: Publish npm package
 
 # A workflow_run is deliberately used instead of a second push trigger: publishing
-# begins only after CI has succeeded for the exact commit that landed on master.
+# begins only after CI has succeeded for the exact commit that landed on main.
 on:
   workflow_run:
     workflows: [CI]
     types: [completed]
-    branches: [master]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force_publish:
+        description: Publish this main commit even when its version matches its parent
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -18,9 +25,13 @@ concurrency:
 jobs:
   detect-release:
     # CI also runs for pull requests, but only successful push runs may release.
+    # Manual dispatch is restricted to main for an intentionally retried release.
     if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push'
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push') ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     outputs:
       publish: ${{ steps.release.outputs.publish }}
@@ -29,15 +40,17 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          # Do not publish whatever happens to be at master when this starts.
-          # Publish the precise commit whose CI run completed successfully.
-          ref: ${{ github.event.workflow_run.head_sha }}
+          # Do not publish whatever happens to be at main when this starts.
+          # Publish the precise commit whose CI run completed successfully, or
+          # the manually selected main commit.
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 2
 
       - id: release
         name: Detect a publishable version
         env:
-          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          TARGET_SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          FORCE_PUBLISH: ${{ inputs.force_publish || 'false' }}
         run: |
           version="$(node -p "require('./package.json').version")"
           node <<'NODE'
@@ -61,7 +74,7 @@ jobs:
 
           previous_version="$(git show "$TARGET_SHA^:package.json" | node -e "let input=''; process.stdin.on('data', (chunk) => input += chunk); process.stdin.on('end', () => process.stdout.write(JSON.parse(input).version));")"
 
-          if [ "$previous_version" = "$version" ]; then
+          if [ "$previous_version" = "$version" ] && [ "$FORCE_PUBLISH" != "true" ]; then
             echo "publish=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -80,7 +93,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
 
       - uses: actions/setup-node@v6
         with:
