@@ -5,6 +5,13 @@ import FitParser from '../src/fit-parser.js'
 import { FIT } from '../src/fit.js'
 import { GARMIN_PROFILE_VERSION } from '../src/garmin_profile.generated.js'
 
+function uint16Array(values: number[]): Uint8Array {
+  const bytes = new Uint8Array(values.length * 2)
+  const view = new DataView(bytes.buffer)
+  values.forEach((value, index) => view.setUint16(index * 2, value, true))
+  return bytes
+}
+
 describe('generated Garmin profile', () => {
   it('tracks every message and field from the pinned SDK', () => {
     const sdkMessages = Object.values(Profile.messages)
@@ -73,16 +80,46 @@ describe('generated Garmin profile', () => {
 
     expect(parsed.field_descriptions?.[0]).toMatchObject({
       field_name: 'Wind',
-      fit_base_type_id: 137,
+      fit_base_type_id: 'float64',
     })
   })
 
-  it('preserves compatible legacy scales and semantic value shapes', async () => {
+  it('uses pinned SDK metadata for compatible handwritten fields', async () => {
     const encoder = new FitEncoder()
+      .writeMessage(6, [
+        { number: 19, size: 1, baseType: FitBaseType.Uint8, value: 20 },
+      ], 2)
       .writeMessage(18, [
         { number: 139, size: 2, baseType: FitBaseType.Uint16, value: 100 },
+        { number: 168, size: 4, baseType: FitBaseType.Sint32, value: 98_304 },
+        { number: 193, size: 1, baseType: FitBaseType.Uint8, value: 7 },
         { number: 196, size: 2, baseType: FitBaseType.Uint16, value: 159 },
       ], 0)
+      .writeMessage(55, [
+        { number: 28, size: 1, baseType: FitBaseType.Uint8, value: 17 },
+        { number: 31, size: 4, baseType: FitBaseType.Uint32, value: 12_345 },
+        { number: 32, size: 4, baseType: FitBaseType.Uint32, value: 54_321 },
+      ], 3)
+      .writeMessage(103, [
+        {
+          number: 3,
+          size: 4,
+          baseType: FitBaseType.Uint16,
+          value: uint16Array([5000, 10_000]),
+        },
+        {
+          number: 4,
+          size: 4,
+          baseType: FitBaseType.Uint16,
+          value: uint16Array([2500, 7500]),
+        },
+      ], 6)
+      .writeMessage(262, [
+        { number: 0, size: 4, baseType: FitBaseType.Uint32, value: 12_345 },
+      ], 4)
+      .writeMessage(323, [
+        { number: 3, size: 4, baseType: FitBaseType.Uint32, value: 12_345 },
+      ], 5)
       .writeMessage(216, [
         { number: 0, size: 2, baseType: FitBaseType.Uint16, value: 18 },
       ], 1)
@@ -91,10 +128,24 @@ describe('generated Garmin profile', () => {
       encoder.close().buffer,
     )
 
-    expect(parsed.sessions?.[0]?.avg_vam).toBe(100)
+    expect(parsed.bike_profile?.crank_length).toBe(120)
+    expect(parsed.sessions?.[0]?.avg_vam).toBe(0.1)
+    expect(parsed.sessions?.[0]?.training_load_peak).toBe(1.5)
+    expect(parsed.sessions?.[0]?.workout_rpe).toBe(7)
     expect(parsed.sessions?.[0]?.metabolic_calories).toBe(159)
     expect(parsed.sessions?.[0]?.resting_calories).toBe(159)
-    expect(parsed.time_in_zone?.[0]?.reference_mesg).toBe(18)
+    expect(parsed.monitors?.[0]).toMatchObject({
+      intensity: 1.7,
+      ascent: 12.345,
+      descent: 54.321,
+    })
+    expect(parsed.monitor_info?.[0]).toMatchObject({
+      cycles_to_distance: [1, 2],
+      cycles_to_calories: [0.5, 1.5],
+    })
+    expect(parsed.dive_alarm?.depth).toBe(12.345)
+    expect(parsed.tank_summaries?.[0]?.volume_used).toBe(123.45)
+    expect(parsed.time_in_zone?.[0]?.reference_mesg).toBe('session')
   })
 
   it('retains every recognized repeated message in file order', async () => {

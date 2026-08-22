@@ -118,15 +118,15 @@ const FIT_OVERRIDES: FitType = {
     },
     pressureUnits: {
       cbar: {
-        multiplier: 1,
+        multiplier: centiBarsInOneBar,
         offset: 0,
       },
       bar: {
-        multiplier: 1 / centiBarsInOneBar,
+        multiplier: 1,
         offset: 0,
       },
       psi: {
-        multiplier: (1 / centiBarsInOneBar) * psiInOneBar,
+        multiplier: psiInOneBar,
         offset: 0,
       },
     },
@@ -9237,10 +9237,11 @@ function mergeMessages(): Record<number, Message> {
         && equivalentProfileName(overrideField.field, generatedField.field)
       mergedMessage[Number(fieldId)] = hasCompatibleName
         ? {
-            ...generatedField,
             ...overrideField,
-            baseType: generatedField.baseType,
-            array: overrideField.array ?? generatedField.array,
+            ...generatedField,
+            // Compatible handwritten entries retain their public field name,
+            // but the pinned SDK remains authoritative for wire metadata.
+            field: overrideField.field,
           }
         : {
             ...overrideField,

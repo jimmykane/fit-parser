@@ -14,6 +14,8 @@
   geographic coordinates.
 - Decode native dive depth and bottom-time fields with their Garmin FIT SDK
   scale instead of exposing their encoded integer representation.
+- Keep the pinned Garmin SDK authoritative for standard field types, arrays,
+  scales, offsets, and units while retaining compatible public field names.
 
 ## 4.1.0
 

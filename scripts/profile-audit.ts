@@ -12,6 +12,14 @@ const errors: string[] = []
 const sdkMessages = Object.values(Profile.messages)
 const sdkMessageIds = new Set(sdkMessages.map(message => message.num))
 
+function equivalentProfileName(
+  left: string | number,
+  right: string | number,
+): boolean {
+  return String(left).replace(/_/g, '').toLowerCase()
+    === String(right).replace(/_/g, '').toLowerCase()
+}
+
 sdkMessages.forEach((message) => {
   const generatedMessage = GARMIN_MESSAGES[message.num]
   const mergedMessage = FIT.messages[message.num]
@@ -20,12 +28,43 @@ sdkMessages.forEach((message) => {
     return
   }
 
+  if (!equivalentProfileName(mergedMessage.name, generatedMessage.name)) {
+    errors.push(
+      `Profile message name drift for message ${message.num}: ${mergedMessage.name}`,
+    )
+  }
+
   Object.values(message.fields).forEach((field) => {
-    if (!generatedMessage[field.num] || !mergedMessage[field.num]) {
+    const generatedField = generatedMessage[field.num]
+    const mergedField = mergedMessage[field.num]
+    if (!generatedField || !mergedField) {
       errors.push(
         `Missing global message ${message.num}, field ${field.num} (${field.name})`,
       )
+      return
     }
+
+    if (!equivalentProfileName(mergedField.field, generatedField.field)) {
+      errors.push(
+        `Profile field name drift for message ${message.num}, field ${field.num}: ${mergedField.field}`,
+      )
+    }
+
+    const metadataKeys = [
+      'type',
+      'baseType',
+      'array',
+      'scale',
+      'offset',
+      'units',
+    ] as const
+    metadataKeys.forEach((key) => {
+      if (mergedField[key] !== generatedField[key]) {
+        errors.push(
+          `Profile metadata drift for message ${message.num}, field ${field.num} (${field.name}): ${key}`,
+        )
+      }
+    })
   })
 })
 
