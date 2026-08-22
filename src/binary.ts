@@ -181,13 +181,16 @@ function formatByType(
   type: string | number,
   scale: number | null,
   offset: number,
+  units?: string,
 ): any {
   switch (type) {
     case 'date_time':
     case 'local_date_time':
       return new Date(data * 1000 + GarminTimeOffset)
     case 'sint32':
-      return data * FIT.scConst
+      return units === 'semicircles'
+        ? data * FIT.scConst
+        : scale ? data / scale + offset : data
     case 'uint8':
     case 'sint16':
     case 'uint32':
@@ -332,7 +335,7 @@ function formatFieldValue(
         return null
       }
       return applyOptions(
-        formatByType(item, fDef.type, scale, offset),
+        formatByType(item, fDef.type, scale, offset, fDef.units),
         field,
         options,
         fields,
@@ -341,7 +344,7 @@ function formatFieldValue(
   }
 
   return applyOptions(
-    formatByType(data, fDef.type, scale, offset),
+    formatByType(data, fDef.type, scale, offset, fDef.units),
     field,
     options,
     fields,
@@ -510,6 +513,7 @@ function resolveDeveloperFieldDefinition(
     dataType: getFitMessageBaseType(baseType & 15),
     scale: description.scale ?? 1,
     offset: description.offset ?? 0,
+    units: description.units ?? '',
     requiresBoundedDataView: requiresBoundedEndianDataView(
       type,
       developerFieldDef.size,
@@ -584,6 +588,7 @@ export function readRecord(
         array,
         scale,
         offset,
+        units,
         aliases,
       } = message.getAttributes(blob[fDefIndex])
       const profileCompatible = areProfileBaseTypesCompatible(
@@ -605,6 +610,7 @@ export function readRecord(
         dataType: getFitMessageBaseType(baseType & 15),
         scale: profileCompatible ? scale : null,
         offset: profileCompatible ? offset : 0,
+        units: profileCompatible ? units : '',
         requiresBoundedDataView: requiresBoundedEndianDataView(
           wireType,
           blob[fDefIndex + 1],

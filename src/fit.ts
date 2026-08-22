@@ -21,6 +21,7 @@ export interface FieldDefinition {
   dataType: string
   scale?: number | null
   offset?: number
+  units?: string
   requiresBoundedDataView?: boolean
   developerDataIndex?: number
   isDeveloperField?: boolean

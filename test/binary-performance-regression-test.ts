@@ -3,7 +3,6 @@ import type { FitParserOptions } from '../src/fit-parser.js'
 import type { FieldDefinition } from '../src/fit.js'
 import { describe, expect, it } from 'vitest'
 import { readRecord } from '../src/binary.js'
-import { FIT } from '../src/fit.js'
 
 const parserOptions: FitParserOptions = {
   elapsedRecordField: false,
@@ -22,6 +21,7 @@ function field(
   littleEndian: boolean,
   scale: number | null = null,
   offset = 0,
+  units = '',
 ): FieldDefinition {
   return {
     baseTypeNo,
@@ -34,6 +34,7 @@ function field(
     scale,
     size,
     type,
+    units,
   }
 }
 
@@ -48,6 +49,32 @@ function definition(fieldDefs: FieldDefinition[]): MessageTypeDefinition {
 }
 
 describe('binary decoder allocation regressions', () => {
+  it('applies profile scaling to signed values while retaining semicircle coordinates', () => {
+    const fieldDefs = [
+      field('ascent_rate', 'sint32', 4, 133, true, 1000, 0, 'm/s'),
+      field('position_lat', 'sint32', 4, 133, true, 1, 0, 'semicircles'),
+    ]
+    const payload = new Uint8Array(9)
+    const payloadView = new DataView(payload.buffer)
+    payloadView.setInt32(1, -287, true)
+    payloadView.setInt32(5, 536_870_912, true)
+
+    const parsed = readRecord(
+      payload,
+      [definition(fieldDefs)],
+      [],
+      0,
+      parserOptions,
+      undefined,
+      0,
+    )
+
+    expect(parsed.message).toMatchObject({
+      ascent_rate: -0.287,
+      position_lat: 45,
+    })
+  })
+
   it('reads mixed-endian scalars and arrays from one offset DataView', () => {
     const fieldDefs = [
       field('little_uint16', 'uint16', 2, 132, true),
@@ -102,7 +129,7 @@ describe('binary decoder allocation regressions', () => {
       big_uint16z: 0x1234,
       big_uint32_values: [0x01020304, null],
       little_float32: 1.25,
-      little_sint32: -123_456_789 * FIT.scConst,
+      little_sint32: -123_456_789,
       little_uint16: 0x1234,
       little_uint32z: 0x89ABCDEF,
       uint16_values: [7, null],

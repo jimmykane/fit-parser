@@ -247,6 +247,20 @@ describe('fit parser tests', () => {
     expect(fitObject.tank_summaries?.[0]).toHaveProperty('end_pressure')
   })
 
+  it('decodes native signed dive ascent rates with FIT profile scaling', async () => {
+    const buffer = await fs.readFile('./test/test-diving.fit')
+    const fitObject = await new FitParser({ force: false }).parseAsync(buffer)
+    const sessionSummary = fitObject.messages?.dive_summary?.find(
+      summary => summary.reference_mesg === 'session',
+    )
+    const firstAscentRate = fitObject.records?.find(
+      record => record.ascent_rate !== undefined,
+    )
+
+    expect(sessionSummary?.avg_ascent_rate).toBe(0.044)
+    expect(firstAscentRate?.ascent_rate).toBe(-0.287)
+  })
+
   it('expects fit with data nested into the activity', async () => {
     const fitParser = new FitParser({ force: true, mode: 'both' })
     const buffer = await fs.readFile('./test/test-diving.fit')
