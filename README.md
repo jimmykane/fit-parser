@@ -297,6 +297,22 @@ Run commands from the repository root.
 | `npm run examples`                 | Build and regenerate checked-in example outputs.   |
 | `npm run check`                    | Run profile audit, lint, types, tests, and builds. |
 
+### External FIT corpus (optional)
+
+The external corpus is not part of this repository or the npm package. For the
+standard contributor layout, clone it alongside this checkout, then run the
+aggregate-only validation command:
+
+```sh
+git clone https://github.com/ThomasKuehne/FIT-test-files.git ../FIT-test-files
+npm run corpus:check -- ../FIT-test-files --allow-force-recovery
+```
+
+The command accepts any corpus path; the sibling location is only a convenient
+convention. The corpus contains a known header-CRC failure that is expected to
+recover only in force mode. It reports aggregate counts and never prints file
+names or parsed activity data.
+
 Do not edit `src/garmin_profile.generated.ts` or `src/fit_types.ts` manually.
 Update the pinned SDK, audited vendor extensions, or a generator, then run
 `npm run codegen`.

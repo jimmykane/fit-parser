@@ -85,15 +85,17 @@ them into `.agent`, `test`, or `examples`.
 
 ## Check an External FIT Corpus
 
-Keep the corpus outside the repository. The command reports aggregate error
-counts and never prints filenames or parsed activity data:
+Keep the corpus outside the repository. The standard contributor layout is a
+sibling checkout:
 
 ```sh
-npm run corpus:check -- /absolute/path/to/FIT-test-files
+git clone https://github.com/ThomasKuehne/FIT-test-files.git ../FIT-test-files
+npm run corpus:check -- ../FIT-test-files --allow-force-recovery
 ```
 
-Use `--allow-force-recovery` when the corpus intentionally includes files
-with known CRC corruption that should be accepted only in force mode.
+The command accepts any corpus path. This corpus contains a known header-CRC
+failure that should recover only in force mode; it reports aggregate counts and
+never prints filenames or parsed activity data.
 
 ## Before a Commit or Pull Request
 
