@@ -125,6 +125,24 @@ const diveSummaries = data.messages?.dive_summary ?? []
 Existing root lists, cascade nesting, and last-message root properties remain
 unchanged.
 
+## Profile-backed output
+
+Standard message names, field names, enum values, wire types, scales, offsets,
+arrays, and units come from the exactly pinned Garmin FIT SDK profile. Public
+names use the parser's generated `snake_case` form while preserving SDK
+alphanumeric tokens such as `n2`, `po2`, and `time128`. The parser does not add
+compatibility aliases for alternate field spellings.
+
+The small vendor extension table contains only Garmin fields and private
+messages observed in the external FIT corpus. Extensions cannot replace a
+standard SDK field or type value; the profile audit rejects collisions and
+unregistered additions.
+
+Only values present in the FIT input are emitted. In particular,
+`product_name` is not inferred from `manufacturer` and `product`, and record
+`elapsed_time` and `timer_time` are added only when `elapsedRecordField: true`
+is requested.
+
 ## Inputs
 
 Both parser methods accept:
@@ -229,7 +247,7 @@ Run commands from the repository root.
 | `npm run check`                    | Run profile audit, lint, types, tests, and builds. |
 
 Do not edit `src/garmin_profile.generated.ts` or `src/fit_types.ts` manually.
-Update the pinned SDK, compatibility overrides, or a generator, then run
+Update the pinned SDK, audited vendor extensions, or a generator, then run
 `npm run codegen`.
 
 Repository-specific automation guidance is tracked in

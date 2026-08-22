@@ -84,7 +84,7 @@ describe('generated Garmin profile', () => {
     })
   })
 
-  it('uses pinned SDK metadata for compatible handwritten fields', async () => {
+  it('uses pinned SDK metadata without compatibility aliases', async () => {
     const encoder = new FitEncoder()
       .writeMessage(6, [
         { number: 19, size: 1, baseType: FitBaseType.Uint8, value: 20 },
@@ -133,7 +133,7 @@ describe('generated Garmin profile', () => {
     expect(parsed.sessions?.[0]?.training_load_peak).toBe(1.5)
     expect(parsed.sessions?.[0]?.workout_rpe).toBe(7)
     expect(parsed.sessions?.[0]?.metabolic_calories).toBe(159)
-    expect(parsed.sessions?.[0]?.resting_calories).toBe(159)
+    expect(parsed.sessions?.[0]).not.toHaveProperty('resting_calories')
     expect(parsed.monitors?.[0]).toMatchObject({
       intensity: 1.7,
       ascent: 12.345,

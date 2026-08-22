@@ -394,7 +394,7 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
     case 'vertical_speed':
     case 'avg_speed':
     case 'max_speed':
-    case 'speed_1s':
+    case 'speed1s':
     case 'ball_speed':
     case 'enhanced_avg_speed':
     case 'enhanced_max_speed':
@@ -443,23 +443,6 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
     }
     default:
       return data
-  }
-}
-
-function applyGarminProductName(fields: any): void {
-  if (fields.product_name !== undefined || fields.manufacturer !== 'garmin') {
-    return
-  }
-
-  const product = fields.product
-  if (typeof product !== 'number') {
-    return
-  }
-
-  const productName = FIT.types.garmin_product[product]
-  if (typeof productName === 'string') {
-    // Keep the raw protocol ID and expose the SDK product name separately.
-    fields.product_name = productName
   }
 }
 
@@ -598,7 +581,6 @@ export function readRecord(
         scale,
         offset,
         units,
-        aliases,
       } = message.getAttributes(blob[fDefIndex])
       const profileCompatible = areProfileBaseTypesCompatible(
         profileBaseType,
@@ -624,7 +606,6 @@ export function readRecord(
           wireType,
           blob[fDefIndex + 1],
         ),
-        aliases: profileCompatible ? aliases : undefined,
       }
 
       mTypeDef.fieldDefs.push(fDef)
@@ -733,13 +714,6 @@ export function readRecord(
     if (isOutputFieldName(fDef.name)) {
       fields[fDef.name] = data
     }
-    if (fDef.aliases) {
-      for (const alias of fDef.aliases) {
-        if (isOutputFieldName(alias.field)) {
-          fields[alias.field] = data
-        }
-      }
-    }
   }
 
   for (let i = 0; i < developerFieldDefs.length; i++) {
@@ -762,23 +736,6 @@ export function readRecord(
     const fDef = messageType.fieldDefs[i]
     if (isOutputFieldName(fDef.name)) {
       fields[fDef.name] = formatFieldValue(data, fDef, options, fields)
-    }
-    if (fDef.aliases) {
-      for (const alias of fDef.aliases) {
-        if (isOutputFieldName(alias.field)) {
-          fields[alias.field] = formatFieldValue(
-            data,
-            {
-              ...fDef,
-              ...alias,
-              name: alias.field,
-              aliases: undefined,
-            },
-            options,
-            fields,
-          )
-        }
-      }
     }
   }
 
@@ -812,8 +769,6 @@ export function readRecord(
       validFieldCount++
     }
   }
-
-  applyGarminProductName(fields)
 
   if (validFieldCount > 0 && message.name === 'record' && options.elapsedRecordField) {
     fields.elapsed_time = ((fields.timestamp as any) - (startDate || 0)) / 1000

@@ -247,8 +247,10 @@ export default class FitParser {
         case 'record':
           if (!startDate) {
             startDate = message.timestamp
-            message.elapsed_time = 0
-            message.timer_time = 0
+            if (this.options.elapsedRecordField) {
+              message.elapsed_time = 0
+              message.timer_time = 0
+            }
           }
           records.push(message)
           break

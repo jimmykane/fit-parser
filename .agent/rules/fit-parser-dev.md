@@ -11,14 +11,16 @@ These repository-specific rules apply to automated and human contributors.
 - Preserve byte alignment under every parser mode. Unknown fields may be
   omitted, but their declared byte sizes must still be consumed.
 - Preserve existing public output names and unit conversions unless the
-  change explicitly updates the public API.
+  change explicitly updates the public API. Do not add compatibility aliases
+  or derived values to parsed messages.
 
 ## Source and generated files
 
 - Standard profile definitions in `src/garmin_profile.generated.ts` come from
   the pinned Garmin SDK. Do not edit that file manually.
-- Use `src/fit.ts` only for parser options, compatibility-preserving naming,
-  and explicitly audited private message overlays.
+- Use `src/fit.ts` only for parser options and explicitly audited,
+  corpus-observed vendor extensions. Extensions must not replace a pinned SDK
+  message field or type value.
 - `src/fit_types.ts` is generated. Do not edit it manually.
 - After changing the pinned SDK, `src/fit.ts`, either generator, or profile
   handling, run `npm run codegen` and commit both generated results.

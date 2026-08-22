@@ -17,8 +17,8 @@ description: Add a standard FIT profile message or update its fields and generat
 1. Confirm whether the message exists in the pinned SDK profile.
 2. If it exists, regenerate the profile instead of duplicating it in
    `src/fit.ts`.
-3. Use `src/fit.ts` only for a documented private overlay or a
-   compatibility-preserving output-name override.
+3. Use `src/fit.ts` only for a documented, corpus-observed vendor extension
+   that does not replace a pinned SDK field.
 4. Run `npm run codegen` to update
    `src/garmin_profile.generated.ts` and `src/fit_types.ts`.
 5. Run `npm run profile:audit`.
@@ -32,6 +32,7 @@ description: Add a standard FIT profile message or update its fields and generat
 
 - Do not edit either generated file manually.
 - Do not guess message or field numbers.
+- Do not add compatibility aliases or alternate output spellings.
 - Do not commit private FIT files to make a regression reproducible; use
   synthetic data or `FitEncoder`.
 - If the pinned SDK lacks the required profile entry, investigate an SDK

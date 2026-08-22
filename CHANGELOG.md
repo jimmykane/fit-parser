@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+## 5.0.0
+
+### Changed
+
+- Generate the complete standard message, field, and type surface from the
+  pinned Garmin FIT SDK without handwritten standard-profile overrides.
+- Preserve SDK alphanumeric tokens when generating public `snake_case` names,
+  including `n2`, `po2`, `time128`, and Garmin product identifiers.
+- Restrict non-SDK support to a collision-checked allowlist of Garmin fields
+  and private messages observed in the external FIT corpus.
+- Emit only parsed FIT values: Garmin product names are no longer inferred,
+  and record elapsed/timer values are generated only when
+  `elapsedRecordField: true` is requested.
+
+### Breaking
+
+- Remove compatibility aliases such as `resting_calories`,
+  `recovery_advisor`, `repeat_dive_time`, and deprecated time-in-zone names.
+- Remove guessed stress fields, handwritten enum/type additions, placeholder
+  zero-mask names, and the misspelled `hip_swing_excercise_name` type.
+- Use the pinned SDK's `cadence_zone_high_bondary` spelling and generated
+  alphanumeric field/type spellings instead of manual corrections.
+
 ## 4.1.1
 
 ### Fixed

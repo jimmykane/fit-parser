@@ -345,25 +345,17 @@ export function generateMessages(messages: { [messageId: number]: Message }): St
 
   Object.keys(messages).forEach((name) => {
     const msg = FIT.messages[Number(name)]
-    const usedFields = new Set<string>()
     const messageType = ts.factory.createInterfaceDeclaration([
       ts.factory.createModifier(ts.SyntaxKind.ExportKeyword),
     ], snakeToCamel(`parsed_${msg.name}`), undefined, undefined, [
-      ...Object.keys(msg).filter(n => n !== 'name').reduce((acc, id) => {
+      ...Object.keys(msg).filter(n => n !== 'name').map((id) => {
         const def: MessageObject = msg[Number(id)]
-        const definitions = [def, ...(def.aliases ?? [])]
-        definitions.forEach((definition) => {
-          if (!usedFields.has(definition.field)) {
-            usedFields.add(definition.field)
-            acc.push(generateProperty(
-              definition.field,
-              generateTypeFromField(definition),
-              !['start_time', 'timestamp'].includes(definition.field),
-            ))
-          }
-        })
-        return acc
-      }, [] as PropertySignature[]),
+        return generateProperty(
+          def.field,
+          generateTypeFromField(def),
+          !['start_time', 'timestamp'].includes(def.field),
+        )
+      }),
       ...generateAdditionalFields(msg),
     ])
 

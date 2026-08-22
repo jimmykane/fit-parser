@@ -51,6 +51,14 @@ describe('fit parser tests', () => {
     expect(records[records.length - 1]?.timer_time).toBeTypeOf('number')
   })
 
+  it('does not derive elapsed and timer time unless requested', async () => {
+    const buffer = await fs.readFile('./test/test.fit')
+    const fitObject = await new FitParser({ force: true }).parseAsync(buffer)
+
+    expect(fitObject.records?.[0]).not.toHaveProperty('elapsed_time')
+    expect(fitObject.records?.[0]).not.toHaveProperty('timer_time')
+  })
+
   it('preserves force-mode output when only the trailing file CRC is corrupt', async () => {
     const buffer = await fs.readFile('./test/test.fit')
     const corruptCrc = Buffer.from(buffer)
