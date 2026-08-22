@@ -8,6 +8,8 @@
 
 - Apply Garmin FIT profile scale and offset to primitive numeric fields, while
   retaining semicircle conversion only for fields declared in semicircles.
+- Apply FIT developer-field offsets with the parser's equivalent signed form,
+  including scaled signed developer values.
 - Decode native diving ascent-rate fields as meters per second instead of
   geographic coordinates.
 - Decode native dive depth and bottom-time fields with their Garmin FIT SDK

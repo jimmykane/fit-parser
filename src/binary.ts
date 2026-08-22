@@ -518,7 +518,10 @@ function resolveDeveloperFieldDefinition(
     name: description.field_name ?? '',
     dataType: getFitMessageBaseType(baseType & 15),
     scale: description.scale ?? 1,
-    offset: description.offset ?? 0,
+    // FIT developer-field descriptions use `raw / scale - offset`. This
+    // parser's formatter retains the legacy equivalent signed offset and adds
+    // it after scaling.
+    offset: -(description.offset ?? 0),
     units: description.units ?? '',
     requiresBoundedDataView: requiresBoundedEndianDataView(
       type,

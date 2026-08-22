@@ -326,7 +326,7 @@ describe('binary decoder allocation regressions', () => {
     developerFields[2][2] = {
       field_name: 'late_developer_value',
       fit_base_type_id: 133,
-      offset: 0,
+      offset: 1,
       scale: 1000,
       units: 'm/s',
     }
@@ -347,11 +347,12 @@ describe('binary decoder allocation regressions', () => {
     expect(resolved.nextIndex).toBe(afterDescription.length)
     expect(resolved.message).toEqual({
       heart_rate: 141,
-      late_developer_value: -0.287,
+      late_developer_value: -1.287,
     })
     expect(messageTypes[0]?.developerFieldDefs?.[0].resolvedFieldDef).toMatchObject({
       baseTypeNo: 133,
       name: 'late_developer_value',
+      offset: -1,
       type: 'sint32',
       units: 'm/s',
     })
