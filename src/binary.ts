@@ -191,10 +191,16 @@ function formatByType(
       return units === 'semicircles'
         ? data * FIT.scConst
         : scale ? data / scale + offset : data
+    case 'sint8':
     case 'uint8':
+    case 'uint8z':
     case 'sint16':
-    case 'uint32':
     case 'uint16':
+    case 'uint16z':
+    case 'uint32':
+    case 'uint32z':
+    case 'float32':
+    case 'float64':
       return scale ? data / scale + offset : data
     case 'uint32_array':
     case 'uint16_array':

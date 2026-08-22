@@ -53,11 +53,19 @@ describe('binary decoder allocation regressions', () => {
     const fieldDefs = [
       field('ascent_rate', 'sint32', 4, 133, true, 1000, 0, 'm/s'),
       field('position_lat', 'sint32', 4, 133, true, 1, 0, 'semicircles'),
+      field('time_zone_offset', 'sint8', 1, 1, true, 4, 0, 'hr'),
+      {
+        ...field('orientation_matrix', 'sint32', 8, 133, true, 65535),
+        array: true,
+      },
     ]
-    const payload = new Uint8Array(9)
+    const payload = new Uint8Array(18)
     const payloadView = new DataView(payload.buffer)
     payloadView.setInt32(1, -287, true)
     payloadView.setInt32(5, 536_870_912, true)
+    payloadView.setInt8(9, -5)
+    payloadView.setInt32(10, 65535, true)
+    payloadView.setInt32(14, -65535, true)
 
     const parsed = readRecord(
       payload,
@@ -71,7 +79,9 @@ describe('binary decoder allocation regressions', () => {
 
     expect(parsed.message).toMatchObject({
       ascent_rate: -0.287,
+      orientation_matrix: [1, -1],
       position_lat: 45,
+      time_zone_offset: -1.25,
     })
   })
 
@@ -315,14 +325,15 @@ describe('binary decoder allocation regressions', () => {
     developerFields[2] = []
     developerFields[2][2] = {
       field_name: 'late_developer_value',
-      fit_base_type_id: 136,
+      fit_base_type_id: 133,
       offset: 0,
-      scale: 1,
+      scale: 1000,
+      units: 'm/s',
     }
 
     const afterDescription = new Uint8Array(6)
     afterDescription[1] = 141
-    new DataView(afterDescription.buffer).setFloat32(2, 12.5, true)
+    new DataView(afterDescription.buffer).setInt32(2, -287, true)
     const resolved = readRecord(
       afterDescription,
       messageTypes,
@@ -336,12 +347,13 @@ describe('binary decoder allocation regressions', () => {
     expect(resolved.nextIndex).toBe(afterDescription.length)
     expect(resolved.message).toEqual({
       heart_rate: 141,
-      late_developer_value: 12.5,
+      late_developer_value: -0.287,
     })
     expect(messageTypes[0]?.developerFieldDefs?.[0].resolvedFieldDef).toMatchObject({
-      baseTypeNo: 136,
+      baseTypeNo: 133,
       name: 'late_developer_value',
-      type: 'float32',
+      type: 'sint32',
+      units: 'm/s',
     })
   })
 

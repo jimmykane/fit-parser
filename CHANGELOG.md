@@ -6,7 +6,7 @@
 
 ### Fixed
 
-- Apply Garmin FIT profile scale and offset to signed 32-bit fields, while
+- Apply Garmin FIT profile scale and offset to primitive numeric fields, while
   retaining semicircle conversion only for fields declared in semicircles.
 - Decode native diving ascent-rate fields as meters per second instead of
   geographic coordinates.
