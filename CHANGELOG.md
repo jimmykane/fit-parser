@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 5.0.1
+
+### Fixed
+
+- Run CI and version-driven npm publishing from the repository's `main`
+  branch, with a guarded manual recovery path for a missed release.
+
 ## 5.0.0
 
 ### Changed
