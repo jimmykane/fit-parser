@@ -3024,14 +3024,14 @@ const FIT_OVERRIDES: FitType = {
       92: {
         field: 'depth',
         type: 'uint32',
-        scale: null,
+        scale: 1000,
         offset: 0,
         units: 'm',
       },
       93: {
         field: 'next_stop_depth',
         type: 'uint32',
-        scale: null,
+        scale: 1000,
         offset: 0,
         units: 'm',
       },
@@ -5169,14 +5169,14 @@ const FIT_OVERRIDES: FitType = {
       2: {
         field: 'avg_depth',
         type: 'uint32',
-        scale: null,
+        scale: 1000,
         offset: 0,
         units: 'm',
       },
       3: {
         field: 'max_depth',
         type: 'uint32',
-        scale: null,
+        scale: 1000,
         offset: 0,
         units: 'm',
       },
@@ -5232,7 +5232,7 @@ const FIT_OVERRIDES: FitType = {
       11: {
         field: 'bottom_time',
         type: 'uint32',
-        scale: null,
+        scale: 1000,
         offset: 0,
         units: 's',
       },

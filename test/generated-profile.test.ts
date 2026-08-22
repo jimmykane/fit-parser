@@ -134,8 +134,8 @@ describe('generated Garmin profile', () => {
       .toEqual(['Warm up', 'Run'])
     expect(parsed.workout_step?.wkt_step_name).toBe('Run')
     expect(parsed.messages?.dive_summary?.map(summary => summary.avg_depth))
-      .toEqual([1250, 2500])
-    expect(parsed.dive_summary?.avg_depth).toBe(2500)
+      .toEqual([1.25, 2.5])
+    expect(parsed.dive_summary?.avg_depth).toBe(2.5)
   })
 
   it('covers flow and grit across lap and segment-lap summaries', async () => {

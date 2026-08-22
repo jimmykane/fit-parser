@@ -10,6 +10,8 @@
   retaining semicircle conversion only for fields declared in semicircles.
 - Decode native diving ascent-rate fields as meters per second instead of
   geographic coordinates.
+- Decode native dive depth and bottom-time fields with their Garmin FIT SDK
+  scale instead of exposing their encoded integer representation.
 
 ## 4.1.0
 
