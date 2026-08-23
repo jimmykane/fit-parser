@@ -54,14 +54,18 @@ SDK-backed names. Common migrations include:
 | `repeat_dive_time`             | `repeat_dive_interval`       |
 | `cadence_zone_high_boundary`   | `cadence_zone_high_bondary`  |
 | `HipSwingExcerciseName`        | `HipSwingExerciseName`       |
+| `resting_calories`             | `metabolic_calories`         |
 
 The same alphanumeric-token rule applies to enum strings, for example
 `camera_orientation_90` becomes `camera_orientation90`, `po_2_warn` becomes
 `po2_warn`, and `power_3s` becomes `power3s`. The generated TypeScript
 declarations are the exhaustive name and value reference for the pinned SDK.
 
-The handwritten `resting_calories` and guessed `recovery_advisor` fields have
-no 5.0 replacement. Other behavior to account for during migration:
+Parser 4 exposed standard session field 196 (`metabolic_calories`) a second
+time as `resting_calories`; use the canonical `metabolic_calories` name in 5.0.
+`recovery_advisor` was a guessed label for standard session field 140, whose
+canonical SDK field is `avg_depth` in meters. Other behavior to account for
+during migration:
 
 - `product_name` is emitted only when it exists in the FIT input. It is no
   longer inferred from `manufacturer` and `product`.

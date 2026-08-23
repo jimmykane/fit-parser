@@ -91,6 +91,7 @@ describe('generated Garmin profile', () => {
       ], 2)
       .writeMessage(18, [
         { number: 139, size: 2, baseType: FitBaseType.Uint16, value: 100 },
+        { number: 140, size: 4, baseType: FitBaseType.Uint32, value: 70 },
         { number: 168, size: 4, baseType: FitBaseType.Sint32, value: 98_304 },
         { number: 193, size: 1, baseType: FitBaseType.Uint8, value: 7 },
         { number: 196, size: 2, baseType: FitBaseType.Uint16, value: 159 },
@@ -130,10 +131,12 @@ describe('generated Garmin profile', () => {
 
     expect(parsed.bike_profile?.crank_length).toBe(120)
     expect(parsed.sessions?.[0]?.avg_vam).toBe(0.1)
+    expect(parsed.sessions?.[0]?.avg_depth).toBe(0.07)
     expect(parsed.sessions?.[0]?.training_load_peak).toBe(1.5)
     expect(parsed.sessions?.[0]?.workout_rpe).toBe(7)
     expect(parsed.sessions?.[0]?.metabolic_calories).toBe(159)
     expect(parsed.sessions?.[0]).not.toHaveProperty('resting_calories')
+    expect(parsed.sessions?.[0]).not.toHaveProperty('recovery_advisor')
     expect(parsed.monitors?.[0]).toMatchObject({
       intensity: 1.7,
       ascent: 12.345,

@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 5.0.2
+
+### Fixed
+
+- Clarify the 5.0 migration for standard session field 196: use canonical
+  `metabolic_calories` rather than the old duplicate `resting_calories` label.
+- Clarify that the removed guessed `recovery_advisor` label was standard
+  session field 140, which the SDK defines as `avg_depth` in meters.
+
 ## 5.0.1
 
 ### Fixed
