@@ -260,4 +260,22 @@ describe('raw developer fields', () => {
       },
     ])
   })
+
+  it('never captures trailing file CRC bytes as developer-field data', async () => {
+    const file = fitFile([
+      definition(0, 18, [], [{
+        number: 9,
+        size: 4,
+        developerDataIndex: 3,
+      }]),
+      data(0, Uint8Array.from([1, 2])),
+    ])
+
+    const parsed = await new FitParser({
+      force: false,
+      includeRawDeveloperFields: true,
+    }).parseAsync(file.buffer)
+
+    expect(parsed.raw_developer_fields).toEqual([])
+  })
 })
