@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 5.1.0
+
+### Added
+
+- Add opt-in, message-filterable `raw_developer_fields` output with exact
+  developer-field bytes, global-message occurrence, developer-data index, and
+  field-definition number. Existing decoded output remains unchanged when the
+  option is disabled.
+
 ## 5.0.2
 
 ### Fixed

@@ -96,6 +96,13 @@ describe('generator', () => {
     multiplier: number;
     offset: number;
 }>;
+export interface ParsedRawDeveloperField {
+    global_message_number: number;
+    message_index: number;
+    developer_data_index: number;
+    field_definition_number: number;
+    raw_value: number[];
+}
 `)
   })
 
@@ -175,6 +182,7 @@ export type MessageIndex = {
 
     expect(code).toContain('export interface ParsedFit {')
     expect(code).toContain('messages?: ParsedMessages;')
+    expect(code).toContain('raw_developer_fields?: ParsedRawDeveloperField[];')
     expect(code).toContain('records?: ParsedRecord[];')
     expect(code).toContain('ohr_settings?: ParsedOhrSettings;')
     expect(code).toContain('sleep_level?: ParsedSleepLevel;')

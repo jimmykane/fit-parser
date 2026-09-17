@@ -19,6 +19,7 @@ import type {
   ParsedMonitoring,
   ParsedMonitoringInfo,
   ParsedPowerZone,
+  ParsedRawDeveloperField,
   ParsedRecord,
   ParsedSession,
   ParsedSet,
@@ -36,6 +37,7 @@ import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
 
 export { FitBaseType, FitEncoder } from './fit-encoder.js'
 export type { FitEncoderField, FitEncoderOptions } from './fit-encoder.js'
+export type { ParsedFit, ParsedRawDeveloperField } from './fit_types.js'
 
 export interface FitParserOptions {
   force?: boolean
@@ -45,6 +47,8 @@ export interface FitParserOptions {
   elapsedRecordField?: boolean
   pressureUnit?: string
   mode?: 'list' | 'cascade' | 'both'
+  /** Retains exact developer-field bytes for all or selected global message numbers. */
+  includeRawDeveloperFields?: boolean | readonly number[]
 }
 
 type FitParserCallback = (error: string | undefined, data: ParsedFit | undefined) => void
@@ -61,6 +65,7 @@ export default class FitParser {
       elapsedRecordField: options.elapsedRecordField || false,
       pressureUnit: options.pressureUnit || 'bar',
       mode: options.mode || 'list',
+      includeRawDeveloperFields: options.includeRawDeveloperFields ?? false,
     }
   }
 
@@ -179,6 +184,12 @@ export default class FitParser {
     const time_in_zone: ParsedTimeInZone[] = []
     const activity_metrics: ParsedActivityMetrics[] = []
     const user_metrics: ParsedUserMetrics[] = []
+    const rawDeveloperFields: ParsedRawDeveloperField[] | undefined
+      = this.options.includeRawDeveloperFields === true
+        || Array.isArray(this.options.includeRawDeveloperFields)
+        ? []
+        : undefined
+    const messageCountsByGlobalNumber = new Map<number, number>()
 
     let loopIndex = headerLength
     const messageTypes: MessageTypeDefinition[] = []
@@ -193,7 +204,13 @@ export default class FitParser {
     let pausedTime = 0
 
     while (loopIndex < crcStart) {
-      const { nextIndex, messageType, message } = readRecord(
+      const {
+        globalMessageNumber,
+        message,
+        messageType,
+        nextIndex,
+        rawDeveloperFields: recordRawDeveloperFields,
+      } = readRecord(
         blob,
         messageTypes,
         developerFields,
@@ -203,8 +220,23 @@ export default class FitParser {
         pausedTime,
         dataView,
         decoderState,
+        crcStart,
       )
       loopIndex = nextIndex
+
+      if (globalMessageNumber !== undefined) {
+        const messageIndex = messageCountsByGlobalNumber.get(globalMessageNumber) ?? 0
+        messageCountsByGlobalNumber.set(globalMessageNumber, messageIndex + 1)
+        recordRawDeveloperFields?.forEach((field) => {
+          rawDeveloperFields?.push({
+            global_message_number: globalMessageNumber,
+            message_index: messageIndex,
+            developer_data_index: field.developerDataIndex,
+            field_definition_number: field.fieldDefinitionNumber,
+            raw_value: field.rawValue,
+          })
+        })
+      }
 
       if (
         messageType !== ''
@@ -348,6 +380,9 @@ export default class FitParser {
     fitObj.activity_metrics = activity_metrics
     fitObj.user_metrics = user_metrics
     fitObj.messages = messages as ParsedFit['messages']
+    if (rawDeveloperFields) {
+      fitObj.raw_developer_fields = rawDeveloperFields
+    }
 
     if (isCascadeNeeded) {
       laps = mapDataIntoLap(laps, 'records', records)

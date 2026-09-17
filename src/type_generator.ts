@@ -232,6 +232,20 @@ export function generateUtilities(): Statement[] {
   )
   nodes.push(unitType)
 
+  nodes.push(ts.factory.createInterfaceDeclaration(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    'ParsedRawDeveloperField',
+    undefined,
+    undefined,
+    [
+      generateProperty('global_message_number', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('message_index', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('developer_data_index', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('field_definition_number', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateArrayProperty('raw_value', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+    ],
+  ))
+
   return nodes
 }
 
@@ -334,6 +348,7 @@ export function generateFitType(): Statement {
     generateProperty('protocolVersion', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
     generateProperty('profileVersion', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
     generateProperty('messages', ts.factory.createTypeReferenceNode('ParsedMessages')),
+    generateArrayProperty('raw_developer_fields', ts.factory.createTypeReferenceNode('ParsedRawDeveloperField')),
     ...Object.keys(referenceProperties).map(prop => generateProperty(prop, ts.factory.createTypeReferenceNode(
       snakeToCamel(referenceProperties[prop].replace('?', '')),
     ), referenceProperties[prop].startsWith('?'))),

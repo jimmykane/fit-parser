@@ -41,6 +41,12 @@ export interface DecoderState {
   monitoringTimestamp?: number
 }
 
+export interface RawDeveloperFieldValue {
+  developerDataIndex: number
+  fieldDefinitionNumber: number
+  rawValue: number[]
+}
+
 const InvalidFieldData = Symbol('invalid FIT field data')
 const formatTypeMetadata = new Map<string | number, FormatTypeMetadata>()
 const uint8CompatibleTypes = new Set(['enum', 'uint8', 'byte'])
@@ -530,10 +536,13 @@ export function readRecord(
   pausedTime: number,
   dataView: DataView = new DataView(blob.buffer, blob.byteOffset, blob.byteLength),
   decoderState: DecoderState = {},
+  dataEnd: number = dataView.byteLength,
 ): {
   messageType: MessageName | 'definition' | ''
   nextIndex: number
   message?: any
+  globalMessageNumber?: number
+  rawDeveloperFields?: RawDeveloperFieldValue[]
 } {
   const recordHeader = blob[startIndex]
   let localMessageType = recordHeader & 15
@@ -644,6 +653,11 @@ export function readRecord(
   const message = getFitMessage(messageType.globalMessageNumber)
   const developerFieldDefs = messageType.developerFieldDefs ?? []
   const totalFieldCount = messageType.fieldDefs.length + developerFieldDefs.length
+  const includeRawDeveloperFields = options.includeRawDeveloperFields === true
+    || (Array.isArray(options.includeRawDeveloperFields)
+      && options.includeRawDeveloperFields.includes(messageType.globalMessageNumber))
+  const rawDeveloperFields: RawDeveloperFieldValue[] | undefined
+    = includeRawDeveloperFields ? [] : undefined
 
   const rawData = messageType.rawData
     ?? (messageType.rawData = Array.from(
@@ -677,6 +691,19 @@ export function readRecord(
   for (let i = 0; i < developerFieldDefs.length; i++) {
     const developerFieldDef = developerFieldDefs[i]
     const rawDataIndex = messageType.fieldDefs.length + i
+    if (
+      rawDeveloperFields
+      && readDataFromIndex + developerFieldDef.size <= dataEnd
+    ) {
+      rawDeveloperFields.push({
+        developerDataIndex: developerFieldDef.developerDataIndex,
+        fieldDefinitionNumber: developerFieldDef.fieldDefinitionNumber,
+        rawValue: Array.from(blob.subarray(
+          readDataFromIndex,
+          readDataFromIndex + developerFieldDef.size,
+        )),
+      })
+    }
     const fDef = resolveDeveloperFieldDefinition(
       developerFieldDef,
       messageType.littleEndian,
@@ -810,9 +837,11 @@ export function readRecord(
   }
 
   return {
+    globalMessageNumber: messageType.globalMessageNumber,
     messageType: message.name,
     nextIndex: startIndex + messageSize + 1,
     message: fields,
+    rawDeveloperFields,
   }
 }
 

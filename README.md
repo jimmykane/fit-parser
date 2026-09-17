@@ -135,19 +135,54 @@ callback API receives as its first argument.
 
 All options are optional.
 
-| Option               | Values                                  | Default   | Behavior                                                                                                                                       |
-| -------------------- | --------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mode`               | `list`, `cascade`, `both`               | `list`    | Controls whether primary activity collections are returned as root lists, nested data, or both.                                                |
-| `force`              | `true`, `false`                         | `true`    | Skips header and file CRC validation and enables supported best-effort field recovery. Structural header and data bounds are always validated. |
-| `speedUnit`          | `m/s`, `km/h`, `mph`                    | `m/s`     | Converts speed-related fields.                                                                                                                 |
-| `lengthUnit`         | `m`, `km`, `mi`                         | `m`       | Converts distance, altitude, and other length-related fields.                                                                                  |
-| `temperatureUnit`    | `celsius`, `°C`, `kelvin`, `fahrenheit` | `celsius` | Converts temperature fields. `°C` remains available as a legacy alias.                                                                         |
-| `pressureUnit`       | `bar`, `cbar`, `psi`                    | `bar`     | Converts pressure and tank-pressure fields.                                                                                                    |
-| `elapsedRecordField` | `true`, `false`                         | `false`   | Adds `elapsed_time` and `timer_time`, in seconds, to records.                                                                                  |
+| Option                      | Values                                  | Default   | Behavior                                                                                                                                       |
+| --------------------------- | --------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mode`                      | `list`, `cascade`, `both`               | `list`    | Controls whether primary activity collections are returned as root lists, nested data, or both.                                                |
+| `force`                     | `true`, `false`                         | `true`    | Skips header and file CRC validation and enables supported best-effort field recovery. Structural header and data bounds are always validated. |
+| `speedUnit`                 | `m/s`, `km/h`, `mph`                    | `m/s`     | Converts speed-related fields.                                                                                                                 |
+| `lengthUnit`                | `m`, `km`, `mi`                         | `m`       | Converts distance, altitude, and other length-related fields.                                                                                  |
+| `temperatureUnit`           | `celsius`, `°C`, `kelvin`, `fahrenheit` | `celsius` | Converts temperature fields. `°C` remains available as a legacy alias.                                                                         |
+| `pressureUnit`              | `bar`, `cbar`, `psi`                    | `bar`     | Converts pressure and tank-pressure fields.                                                                                                    |
+| `elapsedRecordField`        | `true`, `false`                         | `false`   | Adds `elapsed_time` and `timer_time`, in seconds, to records.                                                                                  |
+| `includeRawDeveloperFields` | `true`, `false`, message-number array   | `false`   | Adds a lossless, message-associated view of developer-field bytes at `raw_developer_fields`.                                                   |
 
 `force: true` does not make arbitrary bytes a valid FIT file. Inputs that are
 too short, have an invalid header size or signature, or declare data beyond the
 available bytes are rejected in both modes.
+
+### Lossless developer fields
+
+By default, developer fields retain the existing decoded, name-keyed output.
+Set `includeRawDeveloperFields: true` when a consumer also needs exact field
+bytes or must distinguish same-named fields from different developer-data
+indexes:
+
+```javascript
+const data = await new FitParser({
+  force: false,
+  includeRawDeveloperFields: [18],
+}).parseAsync(content)
+
+for (const field of data.raw_developer_fields ?? []) {
+  console.log({
+    globalMessageNumber: field.global_message_number,
+    messageIndex: field.message_index,
+    developerDataIndex: field.developer_data_index,
+    fieldDefinitionNumber: field.field_definition_number,
+    rawBytes: field.raw_value,
+  })
+}
+```
+
+`message_index` is the zero-based occurrence of that global message number in
+file order. `raw_value` is a defensive plain-number copy of the exact FIT field
+bytes, including interior NUL bytes and invalid sentinels. Join
+`developer_data_index` and `field_definition_number` to the existing
+`developer_data_ids` and `field_descriptions` collections to interpret an
+application and field. The parser deliberately does not infer application- or
+provider-specific semantics. Pass `true` to retain developer fields from every
+global message, or an array such as `[18]` to bound collection to specific FIT
+message numbers.
 
 ## Output modes
 

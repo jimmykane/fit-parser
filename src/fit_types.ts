@@ -12,6 +12,13 @@ export type Unit<T extends string> = Record<T, {
   multiplier: number
   offset: number
 }>
+export interface ParsedRawDeveloperField {
+  global_message_number: number
+  message_index: number
+  developer_data_index: number
+  field_definition_number: number
+  raw_value: number[]
+}
 
 // parsed from Fit.types
 
@@ -2089,6 +2096,7 @@ export interface ParsedFit {
   protocolVersion?: number
   profileVersion?: number
   messages?: ParsedMessages
+  raw_developer_fields?: ParsedRawDeveloperField[]
   file_creator: ParsedFileCreator
   device_settings: ParsedDeviceSettings
   dive_summary?: ParsedDiveSummary

@@ -1,6 +1,7 @@
 import type {
   ParsedDiveSettings,
   ParsedFieldCapabilities,
+  ParsedFit,
   ParsedRecord,
   ParsedSession,
 } from '../src/fit_types.js'
@@ -26,11 +27,21 @@ describe('generated parsed types', () => {
     const fieldCapabilities: ParsedFieldCapabilities = {
       mesg_num: 65_000,
     }
+    const fit: Pick<ParsedFit, 'raw_developer_fields'> = {
+      raw_developer_fields: [{
+        global_message_number: 18,
+        message_index: 0,
+        developer_data_index: 1,
+        field_definition_number: 2,
+        raw_value: [97, 0, 98, 0],
+      }],
+    }
 
     expect(record.timestamp).toBe(timestamp)
     expect(record.speed1s).toEqual([1, null])
     expect(diveSettings.safety_stop_enabled).toBe(1)
     expect(session.sport).toBe(250)
     expect(fieldCapabilities.mesg_num).toBe(65_000)
+    expect(fit.raw_developer_fields?.[0]?.raw_value).toEqual([97, 0, 98, 0])
   })
 })
