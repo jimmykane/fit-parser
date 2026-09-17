@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 5.2.1
+
+### Fixed
+
+- Preserve unusual vendor field definitions in lossless raw-message output so
+  domain consumers can validate only the messages they understand.
+- Add corpus checks for raw-message-only and combined raw/decoded parsing.
+
+## 5.2.0
+
 ### Added
 
 - Add opt-in, message-filterable `raw_messages` output with exact native and
@@ -15,8 +25,6 @@
 
 - Decode compressed timestamp records without consuming bytes for the omitted
   timestamp field.
-- Preserve unusual vendor field definitions in lossless raw-message output so
-  domain consumers can validate only the messages they understand.
 
 ## 5.1.0
 
