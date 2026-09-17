@@ -246,6 +246,49 @@ export function generateUtilities(): Statement[] {
     ],
   ))
 
+  nodes.push(ts.factory.createInterfaceDeclaration(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    'ParsedRawFitField',
+    undefined,
+    undefined,
+    [
+      generateProperty('field_definition_number', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('base_type', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateArrayProperty('raw_value', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+    ],
+  ))
+
+  nodes.push(ts.factory.createInterfaceDeclaration(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    'ParsedRawFitMessageDeveloperField',
+    undefined,
+    undefined,
+    [
+      generateProperty('developer_data_index', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('field_definition_number', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateArrayProperty('raw_value', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+    ],
+  ))
+
+  nodes.push(ts.factory.createInterfaceDeclaration(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    'ParsedRawFitMessage',
+    undefined,
+    undefined,
+    [
+      generateProperty('global_message_number', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('message_index', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword), false),
+      generateProperty('little_endian', ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), false),
+      generateProperty('compressed_timestamp', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
+      generateArrayProperty('fields', ts.factory.createTypeReferenceNode('ParsedRawFitField'), false),
+      generateArrayProperty(
+        'developer_fields',
+        ts.factory.createTypeReferenceNode('ParsedRawFitMessageDeveloperField'),
+        false,
+      ),
+    ],
+  ))
+
   return nodes
 }
 
@@ -349,6 +392,7 @@ export function generateFitType(): Statement {
     generateProperty('profileVersion', ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
     generateProperty('messages', ts.factory.createTypeReferenceNode('ParsedMessages')),
     generateArrayProperty('raw_developer_fields', ts.factory.createTypeReferenceNode('ParsedRawDeveloperField')),
+    generateArrayProperty('raw_messages', ts.factory.createTypeReferenceNode('ParsedRawFitMessage')),
     ...Object.keys(referenceProperties).map(prop => generateProperty(prop, ts.factory.createTypeReferenceNode(
       snakeToCamel(referenceProperties[prop].replace('?', '')),
     ), referenceProperties[prop].startsWith('?'))),

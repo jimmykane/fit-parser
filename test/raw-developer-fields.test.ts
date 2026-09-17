@@ -47,6 +47,12 @@ function byte(value: number): Uint8Array {
   return Uint8Array.of(value)
 }
 
+function uint32(value: number): Uint8Array {
+  const bytes = new Uint8Array(4)
+  new DataView(bytes.buffer).setUint32(0, value, true)
+  return bytes
+}
+
 function text(value: string): Uint8Array {
   return new TextEncoder().encode(`${value}\0`)
 }
@@ -111,6 +117,171 @@ function fieldDescription(
 }
 
 describe('raw developer fields', () => {
+  it('retains selected raw messages with wire metadata and exact field order', async () => {
+    const owner = Uint8Array.from([97, 0, 98, 0])
+    const file = fitFile([
+      definition(
+        0,
+        18,
+        [{ number: 5, size: 1, baseType: FitBaseType.Enum }],
+        [{ number: 21, size: owner.length, developerDataIndex: 9 }],
+      ),
+      data(0, byte(2), owner),
+      definition(1, 20, [{ number: 253, size: 4, baseType: FitBaseType.Uint32 }]),
+      data(1, uint32(1_100_000_000)),
+    ])
+
+    const regular = await new FitParser({ force: false }).parseAsync(file.buffer)
+    const retained = await new FitParser({
+      force: false,
+      includeRawMessages: [18],
+    }).parseAsync(file.buffer)
+    const { raw_messages: rawMessages, ...compatibleOutput } = retained
+
+    expect(regular).not.toHaveProperty('raw_messages')
+    expect(compatibleOutput).toEqual(regular)
+    expect(rawMessages).toEqual([{
+      global_message_number: 18,
+      message_index: 0,
+      little_endian: true,
+      fields: [{
+        field_definition_number: 5,
+        base_type: FitBaseType.Enum,
+        raw_value: [2],
+      }],
+      developer_fields: [{
+        developer_data_index: 9,
+        field_definition_number: 21,
+        raw_value: Array.from(owner),
+      }],
+    }])
+  })
+
+  it('can omit decoded activity collections while retaining selected messages', async () => {
+    const file = fitFile([
+      definition(0, 18, [{ number: 5, size: 1, baseType: FitBaseType.Enum }]),
+      data(0, byte(2)),
+      definition(1, 20, [{ number: 3, size: 1, baseType: FitBaseType.Uint8 }]),
+      data(1, byte(140)),
+    ])
+
+    const parsed = await new FitParser({
+      force: false,
+      includeRawMessages: [18],
+      rawMessagesOnly: true,
+    }).parseAsync(file.buffer)
+
+    expect(parsed).toEqual({
+      profileVersion: 21208,
+      protocolVersion: 32,
+      raw_messages: [{
+        global_message_number: 18,
+        message_index: 0,
+        little_endian: true,
+        fields: [{
+          field_definition_number: 5,
+          base_type: FitBaseType.Enum,
+          raw_value: [2],
+        }],
+        developer_fields: [],
+      }],
+    })
+  })
+
+  it('retains reconstructed timestamps without inventing omitted compressed field bytes', async () => {
+    const baseTimestamp = 1_100_000_030
+    const compressedTimestamp = baseTimestamp + 4
+    const compressedHeader = 0x80 | (2 << 5) | (compressedTimestamp & 0x1F)
+    const file = fitFile([
+      definition(0, 20, [{ number: 253, size: 4, baseType: FitBaseType.Uint32 }]),
+      data(0, uint32(baseTimestamp)),
+      definition(2, 18, [
+        { number: 253, size: 4, baseType: FitBaseType.Uint32 },
+        { number: 5, size: 1, baseType: FitBaseType.Enum },
+      ]),
+      [compressedHeader, 2],
+    ])
+
+    const parsed = await new FitParser({
+      force: false,
+      includeRawMessages: [18],
+    }).parseAsync(file.buffer)
+
+    expect(parsed.raw_messages).toEqual([{
+      global_message_number: 18,
+      message_index: 0,
+      little_endian: true,
+      compressed_timestamp: compressedTimestamp,
+      fields: [{
+        field_definition_number: 5,
+        base_type: FitBaseType.Enum,
+        raw_value: [2],
+      }],
+      developer_fields: [],
+    }])
+    expect(parsed.sessions?.[0]?.timestamp).toEqual(new Date(Date.UTC(1989, 11, 31) + compressedTimestamp * 1000))
+  })
+
+  it('retains empty selected messages and unsigned compressed timestamps', async () => {
+    const baseTimestamp = 0xF000001E
+    const compressedTimestamp = baseTimestamp + 4
+    const compressedHeader = 0x80 | (2 << 5) | (compressedTimestamp & 0x1F)
+    const file = fitFile([
+      definition(0, 20, [{ number: 253, size: 4, baseType: FitBaseType.Uint32 }]),
+      data(0, uint32(baseTimestamp)),
+      definition(1, 72, []),
+      data(1),
+      definition(2, 18, [
+        { number: 253, size: 4, baseType: FitBaseType.Uint32 },
+        { number: 5, size: 1, baseType: FitBaseType.Enum },
+      ]),
+      [compressedHeader, 2],
+    ])
+
+    const parsed = await new FitParser({
+      force: false,
+      includeRawMessages: [18, 72],
+    }).parseAsync(file.buffer)
+
+    expect(parsed.raw_messages).toEqual([
+      {
+        global_message_number: 72,
+        message_index: 0,
+        little_endian: true,
+        fields: [],
+        developer_fields: [],
+      },
+      {
+        global_message_number: 18,
+        message_index: 0,
+        little_endian: true,
+        compressed_timestamp: compressedTimestamp,
+        fields: [{
+          field_definition_number: 5,
+          base_type: FitBaseType.Enum,
+          raw_value: [2],
+        }],
+        developer_fields: [],
+      },
+    ])
+  })
+
+  it.each([
+    definition(0, 18, [{ number: 5, size: 0, baseType: FitBaseType.Enum }]),
+    definition(0, 18, [
+      { number: 5, size: 1, baseType: FitBaseType.Enum },
+      { number: 5, size: 1, baseType: FitBaseType.Enum },
+    ]),
+    definition(0, 18, [{ number: 5, size: 1, baseType: 17 }]),
+  ])('rejects structurally invalid definitions when lossless messages are requested', async (invalidDefinition) => {
+    const file = fitFile([invalidDefinition])
+
+    await expect(new FitParser({
+      force: false,
+      includeRawMessages: [18],
+    }).parseAsync(file.buffer)).rejects.toBeInstanceOf(Error)
+  })
+
   it('retains exact bytes and identities without changing default parsed output', async () => {
     const owner0 = Uint8Array.from([97, 0, 98, 0])
     const external0 = Uint8Array.from([49, 0, 50, 0])

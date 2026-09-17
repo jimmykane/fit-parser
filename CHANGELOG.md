@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Added
+
+- Add opt-in, message-filterable `raw_messages` output with exact native and
+  developer-field bytes, wire base types, endianness, message occurrence, and
+  reconstructed compressed timestamps. Existing decoded output remains
+  unchanged when the option is disabled.
+- Add `rawMessagesOnly` for bounded metadata consumers that do not need decoded
+  activity collections alongside retained messages.
+
+### Fixed
+
+- Decode compressed timestamp records without consuming bytes for the omitted
+  timestamp field.
+
 ## 5.1.0
 
 ### Added

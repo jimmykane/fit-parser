@@ -47,9 +47,48 @@ export interface RawDeveloperFieldValue {
   rawValue: number[]
 }
 
+export interface RawFieldValue {
+  fieldDefinitionNumber: number
+  baseType: number
+  rawValue: number[]
+}
+
 const InvalidFieldData = Symbol('invalid FIT field data')
 const formatTypeMetadata = new Map<string | number, FormatTypeMetadata>()
 const uint8CompatibleTypes = new Set(['enum', 'uint8', 'byte'])
+const fitBaseTypeWidths = new Map<number, number>([
+  [0, 1],
+  [1, 1],
+  [2, 1],
+  [3, 2],
+  [4, 2],
+  [5, 4],
+  [6, 4],
+  [7, 1],
+  [8, 4],
+  [9, 8],
+  [10, 1],
+  [11, 2],
+  [12, 4],
+  [13, 1],
+  [14, 8],
+  [15, 8],
+  [16, 8],
+])
+
+function retainsRawMessages(options: FitParserOptions): boolean {
+  return options.includeRawMessages === true
+    || Array.isArray(options.includeRawMessages)
+}
+
+function isValidRawFieldDefinition(size: number, baseType: number): boolean {
+  if (size <= 0 || (baseType & 0x60) !== 0) {
+    return false
+  }
+  const typeId = baseType & 0x1F
+  const width = fitBaseTypeWidths.get(typeId)
+  return width !== undefined && (typeId === 7 || size % width === 0)
+}
 
 function baseTypeSize(type: string | number): number | undefined {
   switch (type) {
@@ -487,7 +526,7 @@ function resolveDeveloperFieldDefinition(
   if (!Number.isInteger(baseType) || type === undefined) {
     developerFieldDef.resolvedFieldDef = undefined
     developerFieldDef.resolvedFrom = undefined
-    if (options.force) {
+    if (options.force || retainsRawMessages(options)) {
       return undefined
     }
     throw new Error(
@@ -542,8 +581,14 @@ export function readRecord(
   nextIndex: number
   message?: any
   globalMessageNumber?: number
+  littleEndian?: boolean
+  compressedTimestamp?: number
+  rawFields?: RawFieldValue[]
   rawDeveloperFields?: RawDeveloperFieldValue[]
 } {
+  if (startIndex < 0 || startIndex >= dataEnd) {
+    throw new Error('Invalid FIT record bounds')
+  }
   const recordHeader = blob[startIndex]
   let localMessageType = recordHeader & 15
   const isCompressedTimestamp
@@ -558,12 +603,34 @@ export function readRecord(
     // is definition message
     // startIndex + 1 is reserved
 
+    if (retainsRawMessages(options) && startIndex + 6 > dataEnd) {
+      throw new Error('Invalid FIT definition bounds')
+    }
+
     const hasDeveloperData = (recordHeader & 32) === 32
     const lEnd = blob[startIndex + 2] === 0
     const numberOfFields = blob[startIndex + 5]
+    const nativeDefinitionsEnd = startIndex + 6 + numberOfFields * 3
+    if (
+      retainsRawMessages(options)
+      && (
+        (recordHeader & 16) !== 0
+        || blob[startIndex + 1] !== 0
+        || blob[startIndex + 2] > 1
+        || nativeDefinitionsEnd > dataEnd
+        || (hasDeveloperData && nativeDefinitionsEnd + 1 > dataEnd)
+      )
+    ) {
+      throw new Error('Invalid FIT definition')
+    }
     const numberOfDeveloperDataFields = hasDeveloperData
       ? blob[startIndex + 5 + numberOfFields * 3 + 1]
       : 0
+    const definitionEnd = nativeDefinitionsEnd
+      + (hasDeveloperData ? 1 + numberOfDeveloperDataFields * 3 : 0)
+    if (retainsRawMessages(options) && definitionEnd > dataEnd) {
+      throw new Error('Invalid FIT developer definition bounds')
+    }
 
     const mTypeDef: MessageTypeDefinition = {
       littleEndian: lEnd,
@@ -578,10 +645,23 @@ export function readRecord(
     }
 
     const message = getFitMessage(mTypeDef.globalMessageNumber)
+    const nativeFieldNumbers = new Set<number>()
 
     for (let i = 0; i < numberOfFields; i++) {
       const fDefIndex = startIndex + 6 + i * 3
       const baseType = blob[fDefIndex + 2]
+      const fieldNumber = blob[fDefIndex]
+      const fieldSize = blob[fDefIndex + 1]
+      if (
+        retainsRawMessages(options)
+        && (
+          nativeFieldNumbers.has(fieldNumber)
+          || !isValidRawFieldDefinition(fieldSize, baseType)
+        )
+      ) {
+        throw new Error('Invalid FIT native field definition')
+      }
+      nativeFieldNumbers.add(fieldNumber)
       const wireType = FIT.types.fit_base_type[baseType]
       const {
         field,
@@ -599,8 +679,8 @@ export function readRecord(
       const fDef: FieldDefinition = {
         type: profileCompatible ? type : wireType,
         rawType: wireType,
-        fDefNo: blob[fDefIndex],
-        size: blob[fDefIndex + 1],
+        fDefNo: fieldNumber,
+        size: fieldSize,
         array: profileCompatible
           ? array === true || String(type).endsWith('_array')
           : false,
@@ -614,15 +694,24 @@ export function readRecord(
         units: profileCompatible ? units : '',
         requiresBoundedDataView: requiresBoundedEndianDataView(
           wireType,
-          blob[fDefIndex + 1],
+          fieldSize,
         ),
       }
 
       mTypeDef.fieldDefs.push(fDef)
     }
 
+    const developerFieldNumbers = new Set<string>()
     for (let i = 0; i < numberOfDeveloperDataFields; i++) {
       const fDefIndex = startIndex + 6 + numberOfFields * 3 + 1 + i * 3
+      const developerFieldKey = `${blob[fDefIndex + 2]}:${blob[fDefIndex]}`
+      if (
+        retainsRawMessages(options)
+        && (blob[fDefIndex + 1] === 0 || developerFieldNumbers.has(developerFieldKey))
+      ) {
+        throw new Error('Invalid FIT developer field definition')
+      }
+      developerFieldNumbers.add(developerFieldKey)
       mTypeDef.developerFieldDefs?.push({
         fieldDefinitionNumber: blob[fDefIndex],
         size: blob[fDefIndex + 1],
@@ -645,7 +734,26 @@ export function readRecord(
     }
   }
 
-  const messageType = messageTypes[localMessageType] || messageTypes[0]
+  if (!isCompressedTimestamp && (recordHeader & 0x30) !== 0) {
+    throw new Error('Invalid FIT data record header')
+  }
+
+  const messageType = messageTypes[localMessageType]
+  if (!messageType) {
+    throw new Error('FIT data record has no local definition')
+  }
+
+  if (isCompressedTimestamp && retainsRawMessages(options)) {
+    const timestampField = messageType.fieldDefs[0]
+    if (
+      !timestampField
+      || timestampField.fDefNo !== 253
+      || timestampField.size !== 4
+      || (timestampField.baseTypeNo & 0x1F) !== 6
+    ) {
+      throw new Error('Invalid FIT compressed timestamp definition')
+    }
+  }
 
   let messageSize = 0
   let readDataFromIndex = startIndex + 1
@@ -653,11 +761,24 @@ export function readRecord(
   const message = getFitMessage(messageType.globalMessageNumber)
   const developerFieldDefs = messageType.developerFieldDefs ?? []
   const totalFieldCount = messageType.fieldDefs.length + developerFieldDefs.length
+  const includeRawMessage = options.includeRawMessages === true
+    || (Array.isArray(options.includeRawMessages)
+      && options.includeRawMessages.includes(messageType.globalMessageNumber))
   const includeRawDeveloperFields = options.includeRawDeveloperFields === true
     || (Array.isArray(options.includeRawDeveloperFields)
       && options.includeRawDeveloperFields.includes(messageType.globalMessageNumber))
+  const rawFields: RawFieldValue[] | undefined = includeRawMessage ? [] : undefined
   const rawDeveloperFields: RawDeveloperFieldValue[] | undefined
-    = includeRawDeveloperFields ? [] : undefined
+    = includeRawDeveloperFields || includeRawMessage ? [] : undefined
+  if (retainsRawMessages(options)) {
+    const nativeSize = messageType.fieldDefs.reduce((total, field, index) => (
+      total + (isCompressedTimestamp && index === 0 && field.fDefNo === 253 ? 0 : field.size)
+    ), 0)
+    const developerSize = developerFieldDefs.reduce((total, field) => total + field.size, 0)
+    if (startIndex + 1 + nativeSize + developerSize > dataEnd) {
+      throw new Error('Invalid FIT data record bounds')
+    }
+  }
 
   const rawData = messageType.rawData
     ?? (messageType.rawData = Array.from(
@@ -667,6 +788,20 @@ export function readRecord(
   let validFieldCount = 0
   for (let i = 0; i < messageType.fieldDefs.length; i++) {
     const fDef = messageType.fieldDefs[i]
+    if (isCompressedTimestamp && i === 0 && fDef.fDefNo === 253) {
+      rawData[i] = InvalidFieldData
+      continue
+    }
+    if (rawFields && readDataFromIndex + fDef.size <= dataEnd) {
+      rawFields.push({
+        fieldDefinitionNumber: fDef.fDefNo,
+        baseType: fDef.baseTypeNo,
+        rawValue: Array.from(blob.subarray(
+          readDataFromIndex,
+          readDataFromIndex + fDef.size,
+        )),
+      })
+    }
     const data = readData(blob, dataView, fDef, readDataFromIndex)
 
     if (
@@ -676,12 +811,15 @@ export function readRecord(
     ) {
       rawData[i] = data
       validFieldCount++
-      if (!isCompressedTimestamp && fDef.fDefNo === 253 && typeof data === 'number') {
-        decoderState.lastTimestamp = data
+      if (!isCompressedTimestamp && fDef.fDefNo === 253) {
+        decoderState.lastTimestamp = typeof data === 'number' ? data : undefined
       }
     }
     else {
       rawData[i] = InvalidFieldData
+      if (!isCompressedTimestamp && fDef.fDefNo === 253) {
+        decoderState.lastTimestamp = undefined
+      }
     }
 
     readDataFromIndex += fDef.size
@@ -779,6 +917,7 @@ export function readRecord(
     }
   }
 
+  let compressedTimestamp: number | undefined
   if (isCompressedTimestamp) {
     const previousTimestamp = decoderState.lastTimestamp
     if (previousTimestamp === undefined) {
@@ -791,8 +930,12 @@ export function readRecord(
       const previousOffset = previousTimestamp & CompressedTimestampMask
       const rollover = timeOffset < previousOffset ? 0x20 : 0
       const timestamp
-        = (previousTimestamp & ~CompressedTimestampMask) + timeOffset + rollover
+        = previousTimestamp - previousOffset + timeOffset + rollover
+      if (timestamp >= 0xFFFFFFFF) {
+        throw new Error('Compressed timestamp exceeds FIT uint32 range')
+      }
       decoderState.lastTimestamp = timestamp
+      compressedTimestamp = timestamp
       fields.timestamp = new Date(timestamp * 1000 + GarminTimeOffset)
       validFieldCount++
     }
@@ -838,9 +981,12 @@ export function readRecord(
 
   return {
     globalMessageNumber: messageType.globalMessageNumber,
+    littleEndian: messageType.littleEndian,
+    compressedTimestamp,
     messageType: message.name,
     nextIndex: startIndex + messageSize + 1,
     message: fields,
+    rawFields,
     rawDeveloperFields,
   }
 }

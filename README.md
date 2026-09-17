@@ -145,6 +145,8 @@ All options are optional.
 | `pressureUnit`              | `bar`, `cbar`, `psi`                    | `bar`     | Converts pressure and tank-pressure fields.                                                                                                    |
 | `elapsedRecordField`        | `true`, `false`                         | `false`   | Adds `elapsed_time` and `timer_time`, in seconds, to records.                                                                                  |
 | `includeRawDeveloperFields` | `true`, `false`, message-number array   | `false`   | Adds a lossless, message-associated view of developer-field bytes at `raw_developer_fields`.                                                   |
+| `includeRawMessages`        | `true`, `false`, message-number array   | `false`   | Adds selected FIT messages with exact native/developer bytes and wire metadata at `raw_messages`.                                              |
+| `rawMessagesOnly`           | `true`, `false`                         | `false`   | Omits decoded activity collections when a consumer needs only the opt-in raw-message representation.                                           |
 
 `force: true` does not make arbitrary bytes a valid FIT file. Inputs that are
 too short, have an invalid header size or signature, or declare data beyond the
@@ -183,6 +185,47 @@ application and field. The parser deliberately does not infer application- or
 provider-specific semantics. Pass `true` to retain developer fields from every
 global message, or an array such as `[18]` to bound collection to specific FIT
 message numbers.
+
+### Lossless selected messages
+
+Set `includeRawMessages` when a consumer needs native FIT numeric codes rather
+than the parser's intentionally formatted enum names, or needs native and
+developer fields grouped exactly by message occurrence:
+
+```javascript
+const data = await new FitParser({
+  force: false,
+  includeRawMessages: [18, 26, 72, 206, 207],
+  rawMessagesOnly: true,
+}).parseAsync(content)
+
+for (const message of data.raw_messages ?? []) {
+  console.log({
+    globalMessageNumber: message.global_message_number,
+    messageIndex: message.message_index,
+    littleEndian: message.little_endian,
+    fields: message.fields,
+    developerFields: message.developer_fields,
+  })
+}
+```
+
+Each native field includes its field-definition number, wire base-type byte,
+and a defensive plain-number copy of its exact bytes. Developer fields retain
+their developer-data index, field-definition number, and exact bytes. Empty
+selected messages are retained with empty field arrays. For a compressed
+timestamp record, the timestamp is not present on the wire and therefore is
+not invented in `fields`; its reconstructed native FIT timestamp is exposed as
+`compressed_timestamp` instead.
+
+The parser does not apply profile enum formatting, scaling, invalid-sentinel
+filtering, or provider semantics to this opt-in representation. Its normal
+decoded output remains unchanged. Pass `true` to retain every message or a
+global-message-number array to keep memory use bounded. `raw_messages` and
+`raw_developer_fields` are independent opt-ins; enabling `raw_messages` does
+not add the flattened `raw_developer_fields` property. Set `rawMessagesOnly`
+when only this representation is needed; the parser still validates and walks
+the complete FIT data section but does not retain decoded activity collections.
 
 ## Output modes
 

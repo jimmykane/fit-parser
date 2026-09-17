@@ -20,6 +20,7 @@ import type {
   ParsedMonitoringInfo,
   ParsedPowerZone,
   ParsedRawDeveloperField,
+  ParsedRawFitMessage,
   ParsedRecord,
   ParsedSession,
   ParsedSet,
@@ -37,7 +38,13 @@ import { mapDataIntoLap, mapDataIntoSession } from './helper.js'
 
 export { FitBaseType, FitEncoder } from './fit-encoder.js'
 export type { FitEncoderField, FitEncoderOptions } from './fit-encoder.js'
-export type { ParsedFit, ParsedRawDeveloperField } from './fit_types.js'
+export type {
+  ParsedFit,
+  ParsedRawDeveloperField,
+  ParsedRawFitField,
+  ParsedRawFitMessage,
+  ParsedRawFitMessageDeveloperField,
+} from './fit_types.js'
 
 export interface FitParserOptions {
   force?: boolean
@@ -49,6 +56,10 @@ export interface FitParserOptions {
   mode?: 'list' | 'cascade' | 'both'
   /** Retains exact developer-field bytes for all or selected global message numbers. */
   includeRawDeveloperFields?: boolean | readonly number[]
+  /** Retains exact native and developer fields for all or selected global message numbers. */
+  includeRawMessages?: boolean | readonly number[]
+  /** Returns only parser metadata and retained raw messages instead of decoded activity collections. */
+  rawMessagesOnly?: boolean
 }
 
 type FitParserCallback = (error: string | undefined, data: ParsedFit | undefined) => void
@@ -66,6 +77,8 @@ export default class FitParser {
       pressureUnit: options.pressureUnit || 'bar',
       mode: options.mode || 'list',
       includeRawDeveloperFields: options.includeRawDeveloperFields ?? false,
+      includeRawMessages: options.includeRawMessages ?? false,
+      rawMessagesOnly: options.rawMessagesOnly ?? false,
     }
   }
 
@@ -189,6 +202,11 @@ export default class FitParser {
         || Array.isArray(this.options.includeRawDeveloperFields)
         ? []
         : undefined
+    const rawMessages: ParsedRawFitMessage[] | undefined
+      = this.options.includeRawMessages === true
+        || Array.isArray(this.options.includeRawMessages)
+        ? []
+        : undefined
     const messageCountsByGlobalNumber = new Map<number, number>()
 
     let loopIndex = headerLength
@@ -206,9 +224,12 @@ export default class FitParser {
     while (loopIndex < crcStart) {
       const {
         globalMessageNumber,
+        littleEndian,
         message,
         messageType,
         nextIndex,
+        compressedTimestamp,
+        rawFields: recordRawFields,
         rawDeveloperFields: recordRawDeveloperFields,
       } = readRecord(
         blob,
@@ -227,6 +248,26 @@ export default class FitParser {
       if (globalMessageNumber !== undefined) {
         const messageIndex = messageCountsByGlobalNumber.get(globalMessageNumber) ?? 0
         messageCountsByGlobalNumber.set(globalMessageNumber, messageIndex + 1)
+        if (recordRawFields && littleEndian !== undefined) {
+          rawMessages?.push({
+            global_message_number: globalMessageNumber,
+            message_index: messageIndex,
+            little_endian: littleEndian,
+            ...(compressedTimestamp === undefined
+              ? {}
+              : { compressed_timestamp: compressedTimestamp }),
+            fields: recordRawFields.map(field => ({
+              field_definition_number: field.fieldDefinitionNumber,
+              base_type: field.baseType,
+              raw_value: field.rawValue,
+            })),
+            developer_fields: (recordRawDeveloperFields ?? []).map(field => ({
+              developer_data_index: field.developerDataIndex,
+              field_definition_number: field.fieldDefinitionNumber,
+              raw_value: field.rawValue,
+            })),
+          })
+        }
         recordRawDeveloperFields?.forEach((field) => {
           rawDeveloperFields?.push({
             global_message_number: globalMessageNumber,
@@ -236,6 +277,10 @@ export default class FitParser {
             raw_value: field.rawValue,
           })
         })
+      }
+
+      if (this.options.rawMessagesOnly) {
+        continue
       }
 
       if (
@@ -361,6 +406,17 @@ export default class FitParser {
       }
     }
 
+    if (this.options.rawMessagesOnly) {
+      if (rawDeveloperFields) {
+        fitObj.raw_developer_fields = rawDeveloperFields
+      }
+      if (rawMessages) {
+        fitObj.raw_messages = rawMessages
+      }
+      callback(undefined, fitObj as ParsedFit)
+      return
+    }
+
     fitObj.hr_zone = hr_zone
     fitObj.power_zone = power_zone
     fitObj.dive_gases = dive_gases
@@ -382,6 +438,9 @@ export default class FitParser {
     fitObj.messages = messages as ParsedFit['messages']
     if (rawDeveloperFields) {
       fitObj.raw_developer_fields = rawDeveloperFields
+    }
+    if (rawMessages) {
+      fitObj.raw_messages = rawMessages
     }
 
     if (isCascadeNeeded) {

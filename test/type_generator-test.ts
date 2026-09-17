@@ -103,6 +103,24 @@ export interface ParsedRawDeveloperField {
     field_definition_number: number;
     raw_value: number[];
 }
+export interface ParsedRawFitField {
+    field_definition_number: number;
+    base_type: number;
+    raw_value: number[];
+}
+export interface ParsedRawFitMessageDeveloperField {
+    developer_data_index: number;
+    field_definition_number: number;
+    raw_value: number[];
+}
+export interface ParsedRawFitMessage {
+    global_message_number: number;
+    message_index: number;
+    little_endian: boolean;
+    compressed_timestamp?: number;
+    fields: ParsedRawFitField[];
+    developer_fields: ParsedRawFitMessageDeveloperField[];
+}
 `)
   })
 
@@ -183,6 +201,7 @@ export type MessageIndex = {
     expect(code).toContain('export interface ParsedFit {')
     expect(code).toContain('messages?: ParsedMessages;')
     expect(code).toContain('raw_developer_fields?: ParsedRawDeveloperField[];')
+    expect(code).toContain('raw_messages?: ParsedRawFitMessage[];')
     expect(code).toContain('records?: ParsedRecord[];')
     expect(code).toContain('ohr_settings?: ParsedOhrSettings;')
     expect(code).toContain('sleep_level?: ParsedSleepLevel;')

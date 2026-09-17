@@ -19,6 +19,24 @@ export interface ParsedRawDeveloperField {
   field_definition_number: number
   raw_value: number[]
 }
+export interface ParsedRawFitField {
+  field_definition_number: number
+  base_type: number
+  raw_value: number[]
+}
+export interface ParsedRawFitMessageDeveloperField {
+  developer_data_index: number
+  field_definition_number: number
+  raw_value: number[]
+}
+export interface ParsedRawFitMessage {
+  global_message_number: number
+  message_index: number
+  little_endian: boolean
+  compressed_timestamp?: number
+  fields: ParsedRawFitField[]
+  developer_fields: ParsedRawFitMessageDeveloperField[]
+}
 
 // parsed from Fit.types
 
@@ -2097,6 +2115,7 @@ export interface ParsedFit {
   profileVersion?: number
   messages?: ParsedMessages
   raw_developer_fields?: ParsedRawDeveloperField[]
+  raw_messages?: ParsedRawFitMessage[]
   file_creator: ParsedFileCreator
   device_settings: ParsedDeviceSettings
   dive_summary?: ParsedDiveSummary
