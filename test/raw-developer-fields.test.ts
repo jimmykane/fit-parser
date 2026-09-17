@@ -267,19 +267,60 @@ describe('raw developer fields', () => {
   })
 
   it.each([
-    definition(0, 18, [{ number: 5, size: 0, baseType: FitBaseType.Enum }]),
-    definition(0, 18, [
-      { number: 5, size: 1, baseType: FitBaseType.Enum },
-      { number: 5, size: 1, baseType: FitBaseType.Enum },
-    ]),
-    definition(0, 18, [{ number: 5, size: 1, baseType: 17 }]),
-  ])('rejects structurally invalid definitions when lossless messages are requested', async (invalidDefinition) => {
-    const file = fitFile([invalidDefinition])
+    {
+      definition: definition(0, 18, [{ number: 5, size: 0, baseType: FitBaseType.Enum }]),
+      payload: data(0),
+    },
+    {
+      definition: definition(0, 18, [
+        { number: 5, size: 1, baseType: FitBaseType.Enum },
+        { number: 5, size: 1, baseType: FitBaseType.Enum },
+      ]),
+      payload: data(0, byte(1), byte(2)),
+    },
+    {
+      definition: definition(0, 18, [{ number: 5, size: 1, baseType: 17 }]),
+      payload: data(0, byte(1)),
+    },
+  ])('retains unusual field definitions for consumer-specific validation', async ({
+    definition: unusualDefinition,
+    payload,
+  }) => {
+    const file = fitFile([unusualDefinition, payload])
 
-    await expect(new FitParser({
+    const parsed = await new FitParser({
       force: false,
       includeRawMessages: [18],
-    }).parseAsync(file.buffer)).rejects.toBeInstanceOf(Error)
+      rawMessagesOnly: true,
+    }).parseAsync(file.buffer)
+
+    expect(parsed.raw_messages).toHaveLength(1)
+    expect(parsed.raw_messages?.[0]?.fields).toHaveLength(
+      (unusualDefinition[5] as number),
+    )
+  })
+
+  it('does not apply selected-message shape validation to unrelated messages', async () => {
+    const file = fitFile([
+      definition(0, 21, [{ number: 3, size: 1, baseType: FitBaseType.Uint32 }]),
+      data(0, byte(7)),
+      definition(1, 72, []),
+      data(1),
+    ])
+
+    const parsed = await new FitParser({
+      force: false,
+      includeRawMessages: [72],
+      rawMessagesOnly: true,
+    }).parseAsync(file.buffer)
+
+    expect(parsed.raw_messages).toEqual([{
+      global_message_number: 72,
+      message_index: 0,
+      little_endian: true,
+      fields: [],
+      developer_fields: [],
+    }])
   })
 
   it('retains exact bytes and identities without changing default parsed output', async () => {

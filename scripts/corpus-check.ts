@@ -44,9 +44,14 @@ async function collectFitFiles(directory: string): Promise<string[]> {
 async function main(): Promise<void> {
   const directory = process.argv[2]
   const allowForceRecovery = process.argv.includes('--allow-force-recovery')
+  const rawMessagesWithDecodedOutput = process.argv.includes(
+    '--raw-messages-with-decoded-output',
+  )
+  const rawMessages = process.argv.includes('--raw-messages')
+    || rawMessagesWithDecodedOutput
   if (!directory) {
     process.stderr.write(
-      'Usage: npm run corpus:check -- /path/to/fit-files [--allow-force-recovery]\n',
+      'Usage: npm run corpus:check -- /path/to/fit-files [--allow-force-recovery] [--raw-messages | --raw-messages-with-decoded-output]\n',
     )
     process.exitCode = 1
     return
@@ -65,13 +70,29 @@ async function main(): Promise<void> {
   for (const file of files) {
     const content = await fs.readFile(file)
     try {
-      await new FitParser({ force: false }).parseAsync(content)
+      await new FitParser({
+        force: false,
+        ...(rawMessages
+          ? {
+              includeRawMessages: true,
+              rawMessagesOnly: !rawMessagesWithDecodedOutput,
+            }
+          : {}),
+      }).parseAsync(content)
       report.strictPassed++
     }
     catch (strictError) {
       increment(report.strictFailures, strictError)
       try {
-        await new FitParser({ force: true }).parseAsync(content)
+        await new FitParser({
+          force: true,
+          ...(rawMessages
+            ? {
+                includeRawMessages: true,
+                rawMessagesOnly: !rawMessagesWithDecodedOutput,
+              }
+            : {}),
+        }).parseAsync(content)
         report.forceRecovered++
       }
       catch (forceError) {

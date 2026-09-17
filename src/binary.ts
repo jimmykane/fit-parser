@@ -56,38 +56,16 @@ export interface RawFieldValue {
 const InvalidFieldData = Symbol('invalid FIT field data')
 const formatTypeMetadata = new Map<string | number, FormatTypeMetadata>()
 const uint8CompatibleTypes = new Set(['enum', 'uint8', 'byte'])
-const fitBaseTypeWidths = new Map<number, number>([
-  [0, 1],
-  [1, 1],
-  [2, 1],
-  [3, 2],
-  [4, 2],
-  [5, 4],
-  [6, 4],
-  [7, 1],
-  [8, 4],
-  [9, 8],
-  [10, 1],
-  [11, 2],
-  [12, 4],
-  [13, 1],
-  [14, 8],
-  [15, 8],
-  [16, 8],
-])
 
 function retainsRawMessages(options: FitParserOptions): boolean {
   return options.includeRawMessages === true
     || Array.isArray(options.includeRawMessages)
 }
 
-function isValidRawFieldDefinition(size: number, baseType: number): boolean {
-  if (size <= 0 || (baseType & 0x60) !== 0) {
-    return false
-  }
-  const typeId = baseType & 0x1F
-  const width = fitBaseTypeWidths.get(typeId)
-  return width !== undefined && (typeId === 7 || size % width === 0)
+function retainsRawMessage(options: FitParserOptions, globalMessageNumber: number): boolean {
+  return options.includeRawMessages === true
+    || (Array.isArray(options.includeRawMessages)
+      && options.includeRawMessages.includes(globalMessageNumber))
 }
 
 function baseTypeSize(type: string | number): number | undefined {
@@ -645,23 +623,11 @@ export function readRecord(
     }
 
     const message = getFitMessage(mTypeDef.globalMessageNumber)
-    const nativeFieldNumbers = new Set<number>()
-
     for (let i = 0; i < numberOfFields; i++) {
       const fDefIndex = startIndex + 6 + i * 3
       const baseType = blob[fDefIndex + 2]
       const fieldNumber = blob[fDefIndex]
       const fieldSize = blob[fDefIndex + 1]
-      if (
-        retainsRawMessages(options)
-        && (
-          nativeFieldNumbers.has(fieldNumber)
-          || !isValidRawFieldDefinition(fieldSize, baseType)
-        )
-      ) {
-        throw new Error('Invalid FIT native field definition')
-      }
-      nativeFieldNumbers.add(fieldNumber)
       const wireType = FIT.types.fit_base_type[baseType]
       const {
         field,
@@ -701,17 +667,8 @@ export function readRecord(
       mTypeDef.fieldDefs.push(fDef)
     }
 
-    const developerFieldNumbers = new Set<string>()
     for (let i = 0; i < numberOfDeveloperDataFields; i++) {
       const fDefIndex = startIndex + 6 + numberOfFields * 3 + 1 + i * 3
-      const developerFieldKey = `${blob[fDefIndex + 2]}:${blob[fDefIndex]}`
-      if (
-        retainsRawMessages(options)
-        && (blob[fDefIndex + 1] === 0 || developerFieldNumbers.has(developerFieldKey))
-      ) {
-        throw new Error('Invalid FIT developer field definition')
-      }
-      developerFieldNumbers.add(developerFieldKey)
       mTypeDef.developerFieldDefs?.push({
         fieldDefinitionNumber: blob[fDefIndex],
         size: blob[fDefIndex + 1],
@@ -743,27 +700,13 @@ export function readRecord(
     throw new Error('FIT data record has no local definition')
   }
 
-  if (isCompressedTimestamp && retainsRawMessages(options)) {
-    const timestampField = messageType.fieldDefs[0]
-    if (
-      !timestampField
-      || timestampField.fDefNo !== 253
-      || timestampField.size !== 4
-      || (timestampField.baseTypeNo & 0x1F) !== 6
-    ) {
-      throw new Error('Invalid FIT compressed timestamp definition')
-    }
-  }
-
   let messageSize = 0
   let readDataFromIndex = startIndex + 1
   const fields: any = {}
   const message = getFitMessage(messageType.globalMessageNumber)
   const developerFieldDefs = messageType.developerFieldDefs ?? []
   const totalFieldCount = messageType.fieldDefs.length + developerFieldDefs.length
-  const includeRawMessage = options.includeRawMessages === true
-    || (Array.isArray(options.includeRawMessages)
-      && options.includeRawMessages.includes(messageType.globalMessageNumber))
+  const includeRawMessage = retainsRawMessage(options, messageType.globalMessageNumber)
   const includeRawDeveloperFields = options.includeRawDeveloperFields === true
     || (Array.isArray(options.includeRawDeveloperFields)
       && options.includeRawDeveloperFields.includes(messageType.globalMessageNumber))

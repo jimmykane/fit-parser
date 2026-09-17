@@ -388,12 +388,16 @@ aggregate-only validation command:
 ```sh
 git clone https://github.com/ThomasKuehne/FIT-test-files.git ../FIT-test-files
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery
+npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages
+npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages-with-decoded-output
 ```
 
 The command accepts any corpus path; the sibling location is only a convenient
-convention. The corpus contains a known header-CRC failure that is expected to
-recover only in force mode. It reports aggregate counts and never prints file
-names or parsed activity data.
+convention. Add `--raw-messages` to exercise lossless raw-message-only parsing
+for every message in each file, or `--raw-messages-with-decoded-output` to also
+verify the ordinary decoded output path. The corpus contains a known header-CRC
+failure that is expected to recover only in force mode. It reports aggregate
+counts and never prints file names or parsed activity data.
 
 Do not edit `src/garmin_profile.generated.ts` or `src/fit_types.ts` manually.
 Update the pinned SDK, audited vendor extensions, or a generator, then run
