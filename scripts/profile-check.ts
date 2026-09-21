@@ -8,23 +8,21 @@ import {
 } from '../src/profile.js'
 
 const expectedSource = {
-  maintainedCommit: 'bdb75af90b750d6c96d12429a93495742122f135',
-  productCommit: '6b9eab173125e4d3be4fd9e0a7c1d79c8438d854',
-  packageVersion: '4.0.2',
   compatibilityRelease: '5.2.1',
-  compatibilityEvidence: 'corpus-observed-public-contract',
+  compatibilityCommit: 'baafe7ad1d7ffa5cefd117ae6acc1f03ace733cf',
+  compatibilityEvidence: 'published-runtime-contract',
   kind: 'repository-history',
 } as const
 const expectedCounts = {
-  messages: 127,
-  fields: 1449,
+  messages: 126,
+  fields: 1444,
   types: 200,
-  values: 4440,
-  products: 480,
+  values: 4403,
+  products: 479,
 } as const
 const expectedFingerprints = {
-  messages: 'd9d9d20bbe03b44c26bb72790fc778957b47d81f2178b53901651058430cf36c',
-  types: '014ced1c3b387a671d0679dc2d314f68f29c4627a7b94f054c1dd8234c4983c3',
+  messages: '9c64f94fcf30d4c38249ece5159953a9ca2e48997de635b325ef6f0d0cc96ac6',
+  types: '011bdf4da611ad05de4f7af4d244d9dde445e6dcc17630fbc652782b97408a21',
 } as const
 const errors: string[] = []
 

@@ -3,10 +3,6 @@ import { FitBaseType, FitEncoder } from '../src/fit-encoder.js'
 import FitParser from '../src/fit-parser.js'
 import { FIT } from '../src/fit.js'
 import {
-  PROFILE_COMPATIBILITY_MESSAGES,
-  PROFILE_COMPATIBILITY_TYPES,
-} from '../src/profile-compatibility.js'
-import {
   PROFILE_MESSAGES,
   PROFILE_SOURCE,
   PROFILE_TYPES,
@@ -24,18 +20,16 @@ describe('static FIT profile', () => {
     const profileMessages = Object.values(PROFILE_MESSAGES)
 
     expect(PROFILE_SOURCE).toEqual({
-      maintainedCommit: 'bdb75af90b750d6c96d12429a93495742122f135',
-      productCommit: '6b9eab173125e4d3be4fd9e0a7c1d79c8438d854',
-      packageVersion: '4.0.2',
       compatibilityRelease: '5.2.1',
-      compatibilityEvidence: 'corpus-observed-public-contract',
+      compatibilityCommit: 'baafe7ad1d7ffa5cefd117ae6acc1f03ace733cf',
+      compatibilityEvidence: 'published-runtime-contract',
       kind: 'repository-history',
     })
-    expect(profileMessages).toHaveLength(127)
+    expect(profileMessages).toHaveLength(126)
     expect(profileMessages.reduce(
       (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,
       0,
-    )).toBe(1449)
+    )).toBe(1444)
     expect(Object.keys(PROFILE_TYPES)).toHaveLength(200)
 
     Object.entries(PROFILE_MESSAGES).forEach(([messageId, message]) => {
@@ -46,32 +40,6 @@ describe('static FIT profile', () => {
           parsedMessage[Number(fieldId)],
           `global message ${messageId}, field ${fieldId}`,
         ).toBeDefined()
-      })
-    })
-  })
-
-  it('merges every reviewed v5 compatibility addition into the runtime profile', () => {
-    expect(Object.keys(PROFILE_COMPATIBILITY_MESSAGES)).toHaveLength(89)
-    expect(Object.values(PROFILE_COMPATIBILITY_MESSAGES).reduce(
-      (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,
-      0,
-    )).toBe(631)
-    expect(Object.values(PROFILE_COMPATIBILITY_TYPES).reduce(
-      (count, values) => count + Object.keys(values).length,
-      0,
-    )).toBe(1271)
-
-    Object.entries(PROFILE_COMPATIBILITY_MESSAGES).forEach(([messageId, message]) => {
-      expect(PROFILE_MESSAGES[Number(messageId)]?.name).toBe(message.name)
-      Object.entries(message).forEach(([fieldId, metadata]) => {
-        if (fieldId !== 'name') {
-          expect(PROFILE_MESSAGES[Number(messageId)]?.[Number(fieldId)]).toEqual(metadata)
-        }
-      })
-    })
-    Object.entries(PROFILE_COMPATIBILITY_TYPES).forEach(([typeName, values]) => {
-      Object.entries(values).forEach(([valueId, value]) => {
-        expect(PROFILE_TYPES[typeName]?.[Number(valueId)]).toBe(value)
       })
     })
   })

@@ -419,7 +419,10 @@ describe('raw developer fields', () => {
       data(0, rawValue),
     ])
 
-    const automatic = await new FitParser({ force: false }).parseAsync(file.buffer)
+    const automatic = await new FitParser({
+      force: false,
+      includeUnmappedMessages: true,
+    }).parseAsync(file.buffer)
     const parsed = await new FitParser({
       force: false,
       includeRawDeveloperFields: true,

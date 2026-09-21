@@ -142,7 +142,7 @@ export function generateTypes(types: { [typeName: string]: Record<number, string
             false,
           ),
           ...names
-            .filter(value => typeof value === 'string' && value !== 'mask')
+            .filter(value => value !== 'mask')
             .map(value => generateProperty(
               String(value),
               ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),

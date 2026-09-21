@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import FitParser, { FitBaseType, FitEncoder } from '../src/fit-parser.js'
 
 describe('unmapped FIT data preservation', () => {
-  it('retains unknown messages without an opt-in or semantic profile entry', async () => {
+  it('retains unknown messages with an explicit opt-in', async () => {
     const file = new FitEncoder().writeMessage(470, [
       { number: 7, size: 2, baseType: FitBaseType.Uint16, value: 0x1234 },
       {
@@ -13,7 +13,10 @@ describe('unmapped FIT data preservation', () => {
       },
     ]).close()
 
-    const parsed = await new FitParser({ force: false }).parseAsync(file.buffer)
+    const parsed = await new FitParser({
+      force: false,
+      includeUnmappedMessages: true,
+    }).parseAsync(file.buffer)
 
     expect(parsed.unmapped_messages).toEqual([{
       global_message_number: 470,
@@ -41,7 +44,10 @@ describe('unmapped FIT data preservation', () => {
       { number: 250, size: 2, baseType: FitBaseType.Uint16, value: 0xCAFE },
     ]).close()
 
-    const parsed = await new FitParser({ force: false }).parseAsync(file.buffer)
+    const parsed = await new FitParser({
+      force: false,
+      includeUnmappedMessages: true,
+    }).parseAsync(file.buffer)
 
     expect(parsed.records?.[0]?.heart_rate).toBe(147)
     expect(parsed.unmapped_messages).toEqual([{
@@ -60,6 +66,19 @@ describe('unmapped FIT data preservation', () => {
   it('does not duplicate fully recognized messages', async () => {
     const file = new FitEncoder().writeMessage(20, [
       { number: 3, size: 1, baseType: FitBaseType.Uint8, value: 147 },
+    ]).close()
+
+    const parsed = await new FitParser({
+      force: false,
+      includeUnmappedMessages: true,
+    }).parseAsync(file.buffer)
+
+    expect(parsed.unmapped_messages).toBeUndefined()
+  })
+
+  it('keeps the v5 default output unchanged', async () => {
+    const file = new FitEncoder().writeMessage(470, [
+      { number: 7, size: 2, baseType: FitBaseType.Uint16, value: 0x1234 },
     ]).close()
 
     const parsed = await new FitParser({ force: false }).parseAsync(file.buffer)

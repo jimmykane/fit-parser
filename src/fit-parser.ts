@@ -58,6 +58,8 @@ export interface FitParserOptions {
   includeRawDeveloperFields?: boolean | readonly number[]
   /** Retains exact native and developer fields for all or selected global message numbers. */
   includeRawMessages?: boolean | readonly number[]
+  /** Retains exact bytes for fields that have no semantic profile mapping. */
+  includeUnmappedMessages?: boolean
   /** Returns only parser metadata and retained raw messages instead of decoded activity collections. */
   rawMessagesOnly?: boolean
 }
@@ -78,6 +80,7 @@ export default class FitParser {
       mode: options.mode || 'list',
       includeRawDeveloperFields: options.includeRawDeveloperFields ?? false,
       includeRawMessages: options.includeRawMessages ?? false,
+      includeUnmappedMessages: options.includeUnmappedMessages ?? false,
       rawMessagesOnly: options.rawMessagesOnly ?? false,
     }
   }
@@ -207,7 +210,8 @@ export default class FitParser {
         || Array.isArray(this.options.includeRawMessages)
         ? []
         : undefined
-    const unmappedMessages: ParsedRawFitMessage[] = []
+    const unmappedMessages: ParsedRawFitMessage[] | undefined
+      = this.options.includeUnmappedMessages ? [] : undefined
     const messageCountsByGlobalNumber = new Map<number, number>()
 
     let loopIndex = headerLength
@@ -284,7 +288,7 @@ export default class FitParser {
           littleEndian !== undefined
           && (recordUnmappedFields?.length || recordUnmappedDeveloperFields?.length)
         ) {
-          unmappedMessages.push({
+          unmappedMessages?.push({
             global_message_number: globalMessageNumber,
             message_index: messageIndex,
             little_endian: littleEndian,
@@ -439,7 +443,7 @@ export default class FitParser {
       if (rawMessages) {
         fitObj.raw_messages = rawMessages
       }
-      if (unmappedMessages.length > 0) {
+      if (unmappedMessages && unmappedMessages.length > 0) {
         fitObj.unmapped_messages = unmappedMessages
       }
       callback(undefined, fitObj as ParsedFit)
@@ -471,7 +475,7 @@ export default class FitParser {
     if (rawMessages) {
       fitObj.raw_messages = rawMessages
     }
-    if (unmappedMessages.length > 0) {
+    if (unmappedMessages && unmappedMessages.length > 0) {
       fitObj.unmapped_messages = unmappedMessages
     }
 

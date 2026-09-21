@@ -283,7 +283,7 @@ function formatByType(
         if (value === 'mask') {
           dataItem.value = data & Number(key)
         }
-        else if (typeof value === 'string') {
+        else {
           dataItem[value] = (data & Number(key)) !== 0
         }
       }
@@ -715,8 +715,10 @@ export function readRecord(
   const rawFields: RawFieldValue[] | undefined = includeRawMessage ? [] : undefined
   const rawDeveloperFields: RawDeveloperFieldValue[] | undefined
     = includeRawDeveloperFields || includeRawMessage ? [] : undefined
-  const unmappedFields: RawFieldValue[] = []
-  const unmappedDeveloperFields: RawDeveloperFieldValue[] = []
+  const unmappedFields: RawFieldValue[] | undefined
+    = options.includeUnmappedMessages ? [] : undefined
+  const unmappedDeveloperFields: RawDeveloperFieldValue[] | undefined
+    = options.includeUnmappedMessages ? [] : undefined
   if (retainsRawMessages(options)) {
     const nativeSize = messageType.fieldDefs.reduce((total, field, index) => (
       total + (isCompressedTimestamp && index === 0 && field.fDefNo === 253 ? 0 : field.size)
@@ -740,7 +742,7 @@ export function readRecord(
       continue
     }
     if (
-      (rawFields || !isOutputFieldName(fDef.name))
+      (rawFields || (unmappedFields && !isOutputFieldName(fDef.name)))
       && readDataFromIndex + fDef.size <= dataEnd
     ) {
       const rawField = {
@@ -753,7 +755,7 @@ export function readRecord(
       }
       rawFields?.push(rawField)
       if (!isOutputFieldName(fDef.name)) {
-        unmappedFields.push(rawField)
+        unmappedFields?.push(rawField)
       }
     }
     const data = readData(blob, dataView, fDef, readDataFromIndex)
@@ -785,7 +787,10 @@ export function readRecord(
     const rawDataIndex = messageType.fieldDefs.length + i
     let rawDeveloperField: RawDeveloperFieldValue | undefined
     if (
-      (rawDeveloperFields || developerFieldDef.resolvedFieldDef === undefined)
+      (
+        rawDeveloperFields
+        || (unmappedDeveloperFields && developerFieldDef.resolvedFieldDef === undefined)
+      )
       && readDataFromIndex + developerFieldDef.size <= dataEnd
     ) {
       rawDeveloperField = {
@@ -806,7 +811,7 @@ export function readRecord(
     )
 
     if (!fDef && rawDeveloperField) {
-      unmappedDeveloperFields.push(rawDeveloperField)
+      unmappedDeveloperFields?.push(rawDeveloperField)
     }
 
     if (fDef) {
@@ -948,8 +953,8 @@ export function readRecord(
     message: fields,
     rawFields,
     rawDeveloperFields,
-    unmappedFields: unmappedFields.length > 0 ? unmappedFields : undefined,
-    unmappedDeveloperFields: unmappedDeveloperFields.length > 0
+    unmappedFields: unmappedFields && unmappedFields.length > 0 ? unmappedFields : undefined,
+    unmappedDeveloperFields: unmappedDeveloperFields && unmappedDeveloperFields.length > 0
       ? unmappedDeveloperFields
       : undefined,
   }

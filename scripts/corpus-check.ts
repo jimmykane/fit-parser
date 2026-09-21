@@ -193,6 +193,7 @@ async function main(): Promise<void> {
     try {
       parsed = await new FitParser({
         force: false,
+        includeUnmappedMessages: includeUnmappedSummary,
         ...(rawMessages
           ? {
               includeRawMessages: true,
@@ -207,6 +208,7 @@ async function main(): Promise<void> {
       try {
         parsed = await new FitParser({
           force: true,
+          includeUnmappedMessages: includeUnmappedSummary,
           ...(rawMessages
             ? {
                 includeRawMessages: true,

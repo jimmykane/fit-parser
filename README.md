@@ -15,8 +15,8 @@ including developer-defined data.
 - Convert speed, length, temperature, and pressure fields to preferred units.
 - Decode developer fields while preserving record alignment when descriptions
   arrive after their definitions.
-- Preserve every unmapped native or unresolved developer field automatically
-  in `unmapped_messages` with its exact wire bytes.
+- Optionally preserve every unmapped native or unresolved developer field in
+  `unmapped_messages` with its exact wire bytes.
 - Encode profile-agnostic FIT messages with validated field definitions and
   CRCs.
 - Use ESM or CommonJS with bundled TypeScript declarations.
@@ -33,17 +33,15 @@ npm install fit-file-parser
 
 ## Migrating from 5.x to 6.0
 
-Version 6.0 replaces the SDK-generated profile workflow with static maintained
-source. The project's last handwritten profile remains the baseline, while a
-reviewed compatibility delta preserves every message, field, type, enum value,
-and product identifier exposed by 5.2.1. Five later fixture-backed fields are
-retained as project corrections.
+Version 6.0 replaces the profile-generation workflow with one static maintained
+table that preserves every message, field, type, enum value, and product
+identifier exposed by 5.2.1.
 
 There is no intentional loss of the 5.2.1 semantic or TypeScript surface. The
-static profile contains 127 messages, 1,449 fields, 200 types, and 4,440 enum
-values. Fields outside that maintained surface are still retained by number and
-exact bytes in `unmapped_messages`; applications that need all bytes for
-recognized messages can also opt into `raw_messages`.
+static profile contains 126 messages, 1,444 fields, 200 types, and 4,403 mapped
+values. Pass `includeUnmappedMessages: true` to retain fields outside that
+maintained surface by number and exact bytes; applications that need all bytes
+for recognized messages can also opt into `raw_messages`.
 
 ## Migrating from 4.x to 5.0
 
@@ -204,13 +202,17 @@ provider-specific semantics. Pass `true` to retain developer fields from every
 global message, or an array such as `[18]` to bound collection to specific FIT
 message numbers.
 
-### Automatically preserved unmapped fields
+### Opt-in preservation of unmapped fields
 
-Fields that are absent from the maintained profile or belong to an unknown
-global message are returned automatically in `unmapped_messages`. Only
-unmapped fields are retained, so normal known fields are not duplicated:
+Set `includeUnmappedMessages: true` to return fields that are absent from the
+maintained profile or belong to an unknown global message in
+`unmapped_messages`. Only unmapped fields are retained, so normal known fields
+are not duplicated:
 
 ```javascript
+const data = await new FitParser({ includeUnmappedMessages: true })
+  .parseAsync(content)
+
 for (const message of data.unmapped_messages ?? []) {
   console.log({
     globalMessageNumber: message.global_message_number,
@@ -222,7 +224,7 @@ for (const message of data.unmapped_messages ?? []) {
 ```
 
 Each entry uses the same wire-level field representation as `raw_messages`.
-This is always enabled so a newer FIT field cannot disappear merely because it
+This opt-in ensures a newer FIT field cannot disappear merely because it
 does not yet have a reviewed semantic mapping.
 
 ### Lossless selected messages
@@ -296,11 +298,10 @@ unchanged.
 ## Profile-backed output
 
 Recognized message names, field names, enum values, wire types, scales,
-offsets, arrays, and units come from the community-maintained tables in
-`src/profile.ts` and `src/profile-compatibility.ts`. Their repository-history
-boundary, public 5.2.1 compatibility contract, and focused fixture-backed
-corrections are documented in [`PROFILE.md`](./PROFILE.md). The package
-contains no external profile generator or SDK dependency.
+offsets, arrays, and units come from the community-maintained table in
+`src/profile.ts`. Its repository-history boundary and public 5.2.1
+compatibility contract are documented in [`PROFILE.md`](./PROFILE.md). The
+package contains no external profile generator or SDK dependency.
 
 Public names use `snake_case` while preserving established alphanumeric tokens
 such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number
@@ -430,6 +431,7 @@ git clone https://github.com/ThomasKuehne/FIT-test-files.git ../FIT-test-files
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages-with-decoded-output
+npm run compatibility:check -- /path/to/fit-file-parser-5.2.1 ../FIT-test-files
 ```
 
 The command accepts any corpus path; the sibling location is only a convenient
@@ -441,10 +443,14 @@ occurrences, and file counts. The corpus contains a known header-CRC failure
 that is expected to recover only in force mode. Reports never print file names
 or parsed activity values.
 
-Edit `src/profile.ts` and `src/profile-compatibility.ts` only through reviewed
-profile changes with focused regression coverage and a documented source. Do
-not edit `src/fit_types.ts` manually; run `npm run codegen` after changing the
-maintained profile.
+`compatibility:check` parses every corpus file with both the current build and
+an installed 5.2.1 package, compares their complete default outputs, and reports
+only aggregate counts. Files rejected by both strict parsers are retried in
+force mode.
+
+Edit `src/profile.ts` only through reviewed profile changes with focused
+regression coverage and a documented source. Do not edit `src/fit_types.ts`
+manually; run `npm run codegen` after changing the maintained profile.
 
 Repository-specific automation guidance is tracked in
 [`.agent/README.md`](./.agent/README.md). More examples are available in the
