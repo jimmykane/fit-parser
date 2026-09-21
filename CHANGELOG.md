@@ -6,6 +6,8 @@
 
 - Export lookup helpers for FIT manufacturer, Garmin product, sport, and
   sub-sport identifiers from the package root.
+- Export the same helpers from the lightweight `fit-file-parser/profile`
+  entry point for lookup-only consumers.
 - Export an opt-in Garmin product display-name helper without changing parsed
   `product` or `product_name` fields.
 - Decode mountain enduro and mountain downhill sub-sport identifiers.

@@ -278,6 +278,9 @@ These helpers read the same maintained profile used by the decoder. The product
 display helper is opt-in and does not synthesize or overwrite parsed
 `product_name` values.
 
+Lookup-only consumers can import the same helpers from
+`fit-file-parser/profile` without loading the parser entry point.
+
 ## Inputs
 
 Both parser methods accept:
