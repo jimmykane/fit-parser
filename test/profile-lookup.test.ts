@@ -73,6 +73,9 @@ describe('fit profile lookup API', () => {
     expect(getFitManufacturerName(undefined)).toBeNull()
     expect(getFitGarminProductName(null)).toBeNull()
     expect(getFitSportName('not-a-number')).toBeNull()
+    expect(getFitManufacturerName('23garbage')).toBeNull()
+    expect(getFitManufacturerName('1.5')).toBeNull()
+    expect(getFitManufacturerName(Number.POSITIVE_INFINITY)).toBeNull()
     expect(getFitSubSportName(99999)).toBeNull()
   })
 

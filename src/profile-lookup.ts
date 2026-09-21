@@ -1,26 +1,32 @@
 import { PROFILE_TYPES } from './profile.js'
 
-type FitProfileNameMap = Readonly<Record<number, string>>
+type FitProfileValueMap = Readonly<Record<number, string | number>>
 
-const FIT_PROFILE_MANUFACTURERS = PROFILE_TYPES.manufacturer as FitProfileNameMap
-const FIT_PROFILE_GARMIN_PRODUCTS = PROFILE_TYPES.garmin_product as FitProfileNameMap
-const FIT_PROFILE_SPORTS = PROFILE_TYPES.sport as FitProfileNameMap
-const FIT_PROFILE_SUB_SPORTS = PROFILE_TYPES.sub_sport as FitProfileNameMap
+const FIT_PROFILE_MANUFACTURERS = PROFILE_TYPES.manufacturer
+const FIT_PROFILE_GARMIN_PRODUCTS = PROFILE_TYPES.garmin_product
+const FIT_PROFILE_SPORTS = PROFILE_TYPES.sport
+const FIT_PROFILE_SUB_SPORTS = PROFILE_TYPES.sub_sport
 
 function getProfileName(
-  mapping: FitProfileNameMap,
+  mapping: FitProfileValueMap,
   value: number | string | null | undefined,
 ): string | null {
   if (value === null || value === undefined) {
     return null
   }
 
-  const id = typeof value === 'string' ? Number.parseInt(value, 10) : value
-  if (!Number.isFinite(id)) {
+  const normalizedValue = typeof value === 'string' ? value.trim() : value
+  if (normalizedValue === '' || (typeof normalizedValue === 'string' && !/^\d+$/.test(normalizedValue))) {
     return null
   }
 
-  return mapping[id] ?? null
+  const id = Number(normalizedValue)
+  if (!Number.isSafeInteger(id) || id < 0) {
+    return null
+  }
+
+  const name = mapping[id]
+  return typeof name === 'string' ? name : null
 }
 
 /** Resolves a FIT manufacturer identifier to its canonical profile name. */
