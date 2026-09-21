@@ -5,22 +5,25 @@
 ### Changed
 
 - Rebuild the maintained profile from the last handwritten repository table,
-  restore the earlier product map, and retain only focused fixture-backed
-  corrections.
+  then apply a static compatibility delta covering the complete public 5.2.1
+  message, field, type, enum, and product surface.
 - Remove the external SDK dependency, generated profile, profile generator,
   and local SDK comparison workflow.
-- Treat this as a breaking profile change: names present only in the expanded
-  5.x table now remain available as numbered wire data instead of unverified
-  semantic fields.
+- Keep later fixture-backed fields and parser corrections without removing any
+  5.2.1 semantic fields or generated TypeScript properties.
 
 ### Added
 
 - Preserve every unmapped native and unresolved developer field automatically
   in `unmapped_messages`, including its exact bytes and definition metadata.
 - Add regression coverage for unknown messages, unknown fields inside known
-  messages, and the immutable historical source boundary.
-- Document the repository-history provenance, manual update requirements, and
-  corpus verification workflow in `PROFILE.md`.
+  messages, the immutable historical source boundary, and all 631 restored
+  compatibility fields.
+- Add an optional privacy-safe corpus summary for unmapped message/field IDs,
+  wire base types, sizes, occurrences, and file counts.
+- Document the repository-history provenance, public 5.2.1 compatibility
+  contract, manual update requirements, and corpus verification workflow in
+  `PROFILE.md`.
 
 ## 5.2.1
 

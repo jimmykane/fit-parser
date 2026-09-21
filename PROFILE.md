@@ -1,9 +1,9 @@
 # FIT Profile Maintenance
 
-The parser ships a community-maintained interoperability table in
-`src/profile.ts`. The table is ordinary project source: normal installs,
-builds, tests, and releases do not download, import, inspect, or generate code
-from an external FIT SDK.
+The parser ships community-maintained interoperability tables in
+`src/profile.ts` and `src/profile-compatibility.ts`. They are ordinary project
+source: normal installs, builds, tests, and releases do not download, import,
+inspect, or generate code from an external FIT SDK.
 
 ## Source boundary
 
@@ -21,11 +21,21 @@ MIT-licensed Git history:
 pins full-table fingerprints as well as the resulting message, field, type,
 enum-value, and product counts.
 
-The baseline is supplemented by a deliberately small correction table in the
-same file. Each correction is exercised by a repository-owned FIT fixture or a
-synthetic `FitEncoder` regression. It covers independently testable parser
-behavior such as field numbers, wire types, scaling, units, and public names;
-it is not produced by importing a complete external profile.
+The baseline is supplemented in two layers:
+
+- `src/profile-compatibility.ts` statically preserves the semantic surface of
+  the project's public 5.2.1 parser release. All 631 field additions over the
+  handwritten baseline were independently observed by global message number,
+  field number, wire base type, and size in the regression corpus. The public
+  5.2.1 contract supplies their established names, scales, units, and enum
+  labels.
+- A focused correction table in `src/profile.ts` retains later fixture-backed
+  fields and parser corrections that are outside that compatibility surface.
+
+The compatibility source is maintained as a reviewed static delta rather than
+an SDK-generated table. The 5.2.1 release originally documented its expanded
+profile as SDK-based; preserving its already-published behavior does not by
+itself establish the licensing status of the upstream profile data.
 
 ## Unknown and newer fields
 
@@ -54,9 +64,12 @@ the project. Suitable evidence includes:
 - independently observed files whose private contents are not committed; or
 - redistributable interoperability documentation.
 
-Do not guess adjacent identifiers, copy an external generated table, or add a
-mapping solely to make `unmapped_messages` disappear. Record the source and
-rationale in the test or change description, then:
+Do not guess adjacent identifiers or add a mapping solely to make
+`unmapped_messages` disappear. Record the source and rationale in the test or
+change description. When a mapping restores an already-published compatibility
+contract, verify its field identity against the corpus and add it to
+`src/profile-compatibility.ts`; keep project-specific corrections in
+`src/profile.ts`. Then:
 
 ```sh
 npm run codegen

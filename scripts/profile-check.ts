@@ -11,18 +11,20 @@ const expectedSource = {
   maintainedCommit: 'bdb75af90b750d6c96d12429a93495742122f135',
   productCommit: '6b9eab173125e4d3be4fd9e0a7c1d79c8438d854',
   packageVersion: '4.0.2',
+  compatibilityRelease: '5.2.1',
+  compatibilityEvidence: 'corpus-observed-public-contract',
   kind: 'repository-history',
 } as const
 const expectedCounts = {
-  messages: 56,
-  fields: 818,
-  types: 162,
-  values: 3169,
-  products: 160,
+  messages: 127,
+  fields: 1449,
+  types: 200,
+  values: 4440,
+  products: 480,
 } as const
 const expectedFingerprints = {
-  messages: 'a552e0a7dc23caf5fef1a9e9c345d6934d66ade9643ee70ef1e5b803335e7c35',
-  types: '0935c5fb2c0b3b87a66bb55e258cdd56552fef9bef3edefae45ec91d6b6cba4b',
+  messages: 'd9d9d20bbe03b44c26bb72790fc778957b47d81f2178b53901651058430cf36c',
+  types: '014ced1c3b387a671d0679dc2d314f68f29c4627a7b94f054c1dd8234c4983c3',
 } as const
 const errors: string[] = []
 

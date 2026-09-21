@@ -3,6 +3,10 @@ import { FitBaseType, FitEncoder } from '../src/fit-encoder.js'
 import FitParser from '../src/fit-parser.js'
 import { FIT } from '../src/fit.js'
 import {
+  PROFILE_COMPATIBILITY_MESSAGES,
+  PROFILE_COMPATIBILITY_TYPES,
+} from '../src/profile-compatibility.js'
+import {
   PROFILE_MESSAGES,
   PROFILE_SOURCE,
   PROFILE_TYPES,
@@ -23,14 +27,16 @@ describe('static FIT profile', () => {
       maintainedCommit: 'bdb75af90b750d6c96d12429a93495742122f135',
       productCommit: '6b9eab173125e4d3be4fd9e0a7c1d79c8438d854',
       packageVersion: '4.0.2',
+      compatibilityRelease: '5.2.1',
+      compatibilityEvidence: 'corpus-observed-public-contract',
       kind: 'repository-history',
     })
-    expect(profileMessages).toHaveLength(56)
+    expect(profileMessages).toHaveLength(127)
     expect(profileMessages.reduce(
       (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,
       0,
-    )).toBe(818)
-    expect(Object.keys(PROFILE_TYPES)).toHaveLength(162)
+    )).toBe(1449)
+    expect(Object.keys(PROFILE_TYPES)).toHaveLength(200)
 
     Object.entries(PROFILE_MESSAGES).forEach(([messageId, message]) => {
       const parsedMessage = FIT.messages[Number(messageId)]
@@ -41,6 +47,75 @@ describe('static FIT profile', () => {
           `global message ${messageId}, field ${fieldId}`,
         ).toBeDefined()
       })
+    })
+  })
+
+  it('merges every reviewed v5 compatibility addition into the runtime profile', () => {
+    expect(Object.keys(PROFILE_COMPATIBILITY_MESSAGES)).toHaveLength(89)
+    expect(Object.values(PROFILE_COMPATIBILITY_MESSAGES).reduce(
+      (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,
+      0,
+    )).toBe(631)
+    expect(Object.values(PROFILE_COMPATIBILITY_TYPES).reduce(
+      (count, values) => count + Object.keys(values).length,
+      0,
+    )).toBe(1271)
+
+    Object.entries(PROFILE_COMPATIBILITY_MESSAGES).forEach(([messageId, message]) => {
+      expect(PROFILE_MESSAGES[Number(messageId)]?.name).toBe(message.name)
+      Object.entries(message).forEach(([fieldId, metadata]) => {
+        if (fieldId !== 'name') {
+          expect(PROFILE_MESSAGES[Number(messageId)]?.[Number(fieldId)]).toEqual(metadata)
+        }
+      })
+    })
+    Object.entries(PROFILE_COMPATIBILITY_TYPES).forEach(([typeName, values]) => {
+      Object.entries(values).forEach(([valueId, value]) => {
+        expect(PROFILE_TYPES[typeName]?.[Number(valueId)]).toBe(value)
+      })
+    })
+  })
+
+  it('decodes restored health messages, scaling, signed values, and enums', async () => {
+    const encoder = new FitEncoder()
+      .writeMessage(370, [
+        { number: 0, size: 2, baseType: FitBaseType.Uint16, value: 6400 },
+        { number: 2, size: 2, baseType: FitBaseType.Uint16, value: 7680 },
+        { number: 6, size: 1, baseType: FitBaseType.Enum, value: 4 },
+      ], 0)
+      .writeMessage(398, [
+        { number: 1, size: 4, baseType: FitBaseType.Float32, value: 0.5 },
+        { number: 2, size: 4, baseType: FitBaseType.Float32, value: -0.25 },
+        { number: 4, size: 4, baseType: FitBaseType.Float32, value: 36.75 },
+      ], 1)
+      .writeMessage(412, [
+        { number: 1, size: 2, baseType: FitBaseType.Sint16, value: -120 },
+        { number: 3, size: 2, baseType: FitBaseType.Sint16, value: 60 },
+        { number: 4, size: 1, baseType: FitBaseType.Enum, value: 1 },
+        { number: 5, size: 1, baseType: FitBaseType.Enum, value: 1 },
+        { number: 6, size: 1, baseType: FitBaseType.Enum, value: 2 },
+      ], 2)
+
+    const parsed = await new FitParser({ force: false }).parseAsync(
+      encoder.close().buffer,
+    )
+
+    expect(parsed.hrv_status_summary).toMatchObject({
+      weekly_average: 50,
+      last_night5_min_high: 60,
+      status: 'balanced',
+    })
+    expect(parsed.skin_temp_overnight).toMatchObject({
+      average_deviation: 0.5,
+      average7_day_deviation: -0.25,
+      nightly_value: 36.75,
+    })
+    expect(parsed.nap_event).toMatchObject({
+      start_timezone_offset: -120,
+      end_timezone_offset: 60,
+      feedback: 'multiple_naps_during_day',
+      is_deleted: 1,
+      source: 'manual_gc',
     })
   })
 

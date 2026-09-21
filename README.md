@@ -33,23 +33,17 @@ npm install fit-file-parser
 
 ## Migrating from 5.x to 6.0
 
-Version 6.0 replaces the expanded generated profile with the project's last
-handwritten profile table, a pre-synchronization product map, and a focused set
-of fixture-backed corrections. Core activity, session, lap, record, developer,
-dive, strength, stamina, jump, and monitoring behavior remains covered by the
-test suite.
+Version 6.0 replaces the SDK-generated profile workflow with static maintained
+source. The project's last handwritten profile remains the baseline, while a
+reviewed compatibility delta preserves every message, field, type, enum value,
+and product identifier exposed by 5.2.1. Five later fixture-backed fields are
+retained as project corrections.
 
-Messages or enum values that were present only in the expanded 5.x table are
-no longer assigned an unverified semantic name. Their bytes are not discarded:
-they appear automatically in `unmapped_messages` with their global message
-number, field number, base type, endianness, occurrence index, and exact wire
-value. Applications that need all bytes for recognized messages can still opt
-into `raw_messages`.
-
-The generated TypeScript declarations now describe the maintained community
-table rather than every name exposed by 5.x. Review references to newer
-message-specific properties and handle their numbered representation in
-`unmapped_messages` until an independently supported mapping is added.
+There is no intentional loss of the 5.2.1 semantic or TypeScript surface. The
+static profile contains 127 messages, 1,449 fields, 200 types, and 4,440 enum
+values. Fields outside that maintained surface are still retained by number and
+exact bytes in `unmapped_messages`; applications that need all bytes for
+recognized messages can also opt into `raw_messages`.
 
 ## Migrating from 4.x to 5.0
 
@@ -302,10 +296,11 @@ unchanged.
 ## Profile-backed output
 
 Recognized message names, field names, enum values, wire types, scales,
-offsets, arrays, and units come from the community-maintained table in
-`src/profile.ts`. Its immutable repository-history boundary and the focused
-fixture-backed corrections are documented in [`PROFILE.md`](./PROFILE.md).
-The package contains no external profile generator or SDK dependency.
+offsets, arrays, and units come from the community-maintained tables in
+`src/profile.ts` and `src/profile-compatibility.ts`. Their repository-history
+boundary, public 5.2.1 compatibility contract, and focused fixture-backed
+corrections are documented in [`PROFILE.md`](./PROFILE.md). The package
+contains no external profile generator or SDK dependency.
 
 Public names use `snake_case` while preserving established alphanumeric tokens
 such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number
@@ -440,13 +435,16 @@ npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages-
 The command accepts any corpus path; the sibling location is only a convenient
 convention. Add `--raw-messages` to exercise lossless raw-message-only parsing
 for every message in each file, or `--raw-messages-with-decoded-output` to also
-verify the ordinary decoded output path. The corpus contains a known header-CRC
-failure that is expected to recover only in force mode. It reports aggregate
-counts and never prints file names or parsed activity data.
+verify the ordinary decoded output path. Add `--unmapped-summary` for a
+privacy-safe aggregate of unknown message/field identifiers, base types, sizes,
+occurrences, and file counts. The corpus contains a known header-CRC failure
+that is expected to recover only in force mode. Reports never print file names
+or parsed activity values.
 
-Edit `src/profile.ts` only through reviewed profile changes with focused
-regression coverage and a documented source. Do not edit `src/fit_types.ts`
-manually; run `npm run codegen` after changing the maintained profile.
+Edit `src/profile.ts` and `src/profile-compatibility.ts` only through reviewed
+profile changes with focused regression coverage and a documented source. Do
+not edit `src/fit_types.ts` manually; run `npm run codegen` after changing the
+maintained profile.
 
 Repository-specific automation guidance is tracked in
 [`.agent/README.md`](./.agent/README.md). More examples are available in the

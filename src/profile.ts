@@ -1,4 +1,8 @@
 import type { Message, MessageObject } from './fit.js'
+import {
+  PROFILE_COMPATIBILITY_MESSAGES,
+  PROFILE_COMPATIBILITY_TYPES,
+} from './profile-compatibility.js'
 
 /**
  * Community-maintained FIT interoperability profile.
@@ -12,6 +16,8 @@ export const PROFILE_SOURCE = {
   maintainedCommit: 'bdb75af90b750d6c96d12429a93495742122f135',
   productCommit: '6b9eab173125e4d3be4fd9e0a7c1d79c8438d854',
   packageVersion: '4.0.2',
+  compatibilityRelease: '5.2.1',
+  compatibilityEvidence: 'corpus-observed-public-contract',
   kind: 'repository-history',
 } as const
 
@@ -8802,8 +8808,8 @@ function field(
 
 /**
  * Focused corrections supported by repository-owned fixtures and synthetic
- * regressions. These are intentionally small and reviewed entry by entry; the
- * project does not import or generate a complete external profile.
+ * regressions. The broader v5 compatibility surface is kept separately so the
+ * handwritten baseline and targeted parser corrections remain reviewable.
  */
 const PROFILE_MESSAGE_CORRECTIONS: Record<number, Message> = {
   6: {
@@ -8938,6 +8944,12 @@ const PROFILE_TYPE_CORRECTIONS: Record<string, Record<number, string | number>> 
 
 function mergeMessages(): Record<number, Message> {
   const messages = { ...HISTORICAL_PROFILE_MESSAGES } as Record<number, Message>
+  Object.entries(PROFILE_COMPATIBILITY_MESSAGES).forEach(([messageId, addition]) => {
+    const existing = messages[Number(messageId)]
+    messages[Number(messageId)] = existing
+      ? { ...existing, ...addition }
+      : addition
+  })
   Object.entries(PROFILE_MESSAGE_CORRECTIONS).forEach(([messageId, correction]) => {
     const existing = messages[Number(messageId)]
     messages[Number(messageId)] = existing
@@ -8951,6 +8963,9 @@ function mergeTypes(): Record<string, Record<number, string | number>> {
   const types = Object.fromEntries(
     Object.entries(HISTORICAL_PROFILE_TYPES).map(([name, values]) => [name, { ...values }]),
   )
+  Object.entries(PROFILE_COMPATIBILITY_TYPES).forEach(([name, additions]) => {
+    types[name] = { ...(types[name] ?? {}), ...additions }
+  })
   Object.entries(PROFILE_TYPE_CORRECTIONS).forEach(([name, correction]) => {
     types[name] = { ...(types[name] ?? {}), ...correction }
   })
