@@ -28,9 +28,9 @@ These repository-specific rules apply to automated and human contributors.
 - Use `npm run codegen:check` to detect stale generated output.
 - Use `npm run profile:check` to verify the immutable source boundary,
   maintained counts, metadata structure, and runtime wiring.
-- Do not import, generate, or mechanically synchronize profile data from an
-  external SDK. Establish each change from project history, observed FIT data,
-  or redistributable interoperability documentation.
+- Do not import, generate, or mechanically synchronize the maintained profile
+  from an external source. Establish each change from project history,
+  observed FIT data, or redistributable interoperability documentation.
 
 ## Tests
 

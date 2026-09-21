@@ -4,8 +4,7 @@ import type { Message } from './fit.js'
  * Static, community-maintained FIT interoperability profile.
  *
  * This table is ordinary project source maintained under the repository's MIT
- * license. Builds and runtime do not read, download, or generate it from an
- * external SDK. See PROFILE.md for the maintenance and verification policy.
+ * license. See PROFILE.md for the maintenance and verification policy.
  */
 export const PROFILE_MESSAGES: Record<number, Message> = {
   0: {

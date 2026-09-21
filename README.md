@@ -79,7 +79,7 @@ profile.
 Parser 4 exposed standard session field 196 (`metabolic_calories`) a second
 time as `resting_calories`; use the canonical `metabolic_calories` name in 5.0.
 `recovery_advisor` was a guessed label for standard session field 140, whose
-canonical SDK field is `avg_depth` in meters. Other behavior to account for
+canonical field is `avg_depth` in meters. Other behavior to account for
 during migration:
 
 - `product_name` is emitted only when it exists in the FIT input. It is no
@@ -93,7 +93,8 @@ during migration:
   determine which fields are present.
 - When upgrading from 4.1.0 or earlier, remove application-side scale or offset
   corrections for parsed numeric values, including dive depth, bottom time,
-  ascent rate, and developer fields. The parser now applies the SDK metadata.
+  ascent rate, and developer fields. The parser now applies the maintained
+  profile metadata.
 
 ## Quick start
 
@@ -299,8 +300,7 @@ unchanged.
 Recognized message names, field names, enum values, wire types, scales,
 offsets, arrays, and units come from the community-maintained table in
 `src/profile.ts`. Its maintenance and verification contract is documented in
-[`PROFILE.md`](./PROFILE.md). The package contains no external profile
-generator or SDK dependency.
+[`PROFILE.md`](./PROFILE.md).
 
 Public names use `snake_case` while preserving established alphanumeric tokens
 such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number

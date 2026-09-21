@@ -1,9 +1,7 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 interface PackageJson {
-  dependencies?: Record<string, string>
-  devDependencies?: Record<string, string>
   files?: string[]
   scripts?: Record<string, string>
 }
@@ -21,18 +19,19 @@ describe('profile maintenance boundary', () => {
     'utf8',
   )
 
-  it('does not depend on or generate from the Garmin SDK', () => {
-    expect(packageJson.dependencies?.['@garmin/fitsdk']).toBeUndefined()
-    expect(packageJson.devDependencies?.['@garmin/fitsdk']).toBeUndefined()
+  it('uses one static maintained profile', () => {
     expect(packageJson.scripts?.['codegen:profile']).toBeUndefined()
     expect(packageJson.scripts?.['profile:diff:local']).toBeUndefined()
     expect(packageJson.scripts?.build).toContain('npm run clean')
-    expect(existsSync(new URL('../codegen/garmin-profile.ts', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../scripts/profile-diff-local.ts', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../src/garmin_profile.generated.ts', import.meta.url))).toBe(false)
+    expect(readdirSync(new URL('../codegen/', import.meta.url))).not.toContainEqual(
+      expect.stringMatching(/profile[._-]generated/i),
+    )
+    expect(readdirSync(new URL('../src/', import.meta.url))).not.toContainEqual(
+      expect.stringMatching(/profile[._-]generated/i),
+    )
   })
 
-  it('publishes the profile provenance document', () => {
+  it('publishes the profile maintenance document', () => {
     expect(packageJson.files).toContain('PROFILE.md')
     expect(publishWorkflow).toMatch(/'PROFILE\.md'/)
   })

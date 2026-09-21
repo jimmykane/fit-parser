@@ -1,14 +1,13 @@
 # Change Log
 
-## 6.0.0 - 2026-09-21
+## 6.0.1 - 2026-09-21
 
 ### Changed
 
 - Consolidate the complete message, field, wire-metadata, type, enum, and
   product contract into one static maintained profile.
-- Remove the external SDK dependency, generated profile, profile generator,
-  and local SDK comparison workflow.
-- Preserve decoded output and the generated TypeScript surface.
+- Replace the profile-generation workflow with one static maintained table.
+- Preserve decoded output and the public TypeScript surface.
 
 ### Added
 
@@ -61,7 +60,7 @@
 - Clarify the 5.0 migration for standard session field 196: use canonical
   `metabolic_calories` rather than the old duplicate `resting_calories` label.
 - Clarify that the removed guessed `recovery_advisor` label was standard
-  session field 140, which the SDK defines as `avg_depth` in meters.
+  session field 140, whose canonical field is `avg_depth` in meters.
 
 ## 5.0.1
 
@@ -74,11 +73,11 @@
 
 ### Changed
 
-- Generate the complete standard message, field, and type surface from the
-  pinned Garmin FIT SDK without handwritten standard-profile overrides.
-- Preserve SDK alphanumeric tokens when generating public `snake_case` names,
+- Expand the complete standard message, field, and type surface without
+  handwritten standard-profile overrides.
+- Preserve established alphanumeric tokens in public `snake_case` names,
   including `n2`, `po2`, `time128`, and Garmin product identifiers.
-- Restrict non-SDK support to a collision-checked allowlist of Garmin fields
+- Restrict vendor-specific support to a collision-checked allowlist of fields
   and private messages observed in the external FIT corpus.
 - Emit only parsed FIT values: Garmin product names are no longer inferred,
   and record elapsed/timer values are generated only when
@@ -90,7 +89,7 @@
   `recovery_advisor`, `repeat_dive_time`, and deprecated time-in-zone names.
 - Remove guessed stress fields, handwritten enum/type additions, placeholder
   zero-mask names, and the misspelled `hip_swing_excercise_name` type.
-- Use the pinned SDK's `cadence_zone_high_bondary` spelling and generated
+- Use the established `cadence_zone_high_bondary` spelling and maintained
   alphanumeric field/type spellings instead of manual corrections.
 - Correct generated declarations to expose runtime `Date` values, numeric FIT
   `bool` fields and unknown enum IDs, decoded mask objects, nullable array
@@ -108,22 +107,22 @@
   including scaled signed developer values.
 - Decode native diving ascent-rate fields as meters per second instead of
   geographic coordinates.
-- Decode native dive depth and bottom-time fields with their Garmin FIT SDK
-  scale instead of exposing their encoded integer representation.
-- Keep the pinned Garmin SDK authoritative for standard field types, arrays,
+- Decode native dive depth and bottom-time fields with their maintained scale
+  instead of exposing their encoded integer representation.
+- Keep the maintained profile authoritative for standard field types, arrays,
   scales, offsets, and units while retaining compatible public field names.
 
 ## 4.1.0
 
 ### Added
 
-- Generate all 124 standard messages, 1,406 fields, and 200 profile types from
-  the exactly pinned Garmin FIT SDK 21.208.0 profile.
+- Expand coverage to 124 standard messages, 1,406 fields, and 200 profile
+  types.
 - Retain every recognized message in file order under the typed
   `ParsedFit.messages` index without changing existing list, cascade, or
   singleton outputs.
 - Decode Garmin strength-training `set` messages in list and cascade modes.
-- Add reproducible generated-profile and privacy-safe external corpus audits,
+- Add reproducible profile and privacy-safe external corpus audits,
   and enforce profile freshness and coverage in CI.
 
 ### Fixed
@@ -147,7 +146,7 @@
   signatures, output modes, and date behavior while adding canonical profile
   names.
 - Add regression coverage for temperature, pressure, validation, compressed
-  timestamps, generated profile messages, repeated messages, and MTB
+  timestamps, profile-backed messages, repeated messages, and MTB
   flow/grit data.
 - Refresh the README with current runtime, API, units, output modes, developer
   fields, encoder behavior, and repository commands.

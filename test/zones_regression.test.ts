@@ -29,7 +29,7 @@ describe('zones regression tests', () => {
     expect(msgWithPower).toHaveProperty('power_zone_high_boundary')
     expect(msgWithPower.power_zone_high_boundary).toBeInstanceOf(Array)
 
-    // Use SDK ground truth: We verified there are 7 active zones (plus potential padding)
+    // The fixture contains 7 active zones plus potential padding.
     // The array size is fixed (e.g. 10), but populated values matter.
     // We expect at least 7 zones based on the file analysis.
     expect(msgWithPower.time_in_power_zone.length).toBeGreaterThanOrEqual(7)

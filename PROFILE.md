@@ -1,9 +1,8 @@
 # FIT Profile Maintenance
 
 The parser ships one community-maintained interoperability table in
-`src/profile.ts`. It is ordinary project source: normal installs, builds,
-tests, and releases do not download, import, inspect, or generate code from an
-external FIT SDK.
+`src/profile.ts`. It is ordinary project source used directly by normal
+installs, builds, tests, and releases.
 
 ## Source
 

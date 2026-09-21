@@ -130,7 +130,7 @@ jobs:
           const missing = required.filter((path) => !packagedPaths.has(path));
           const legacyProfileArtifacts = pack.files
             .map(({ path }) => path)
-            .filter((path) => /(?:^|\/)garmin_profile\.generated\./.test(path));
+            .filter((path) => /profile\.generated\./.test(path));
           const tests = pack.files
             .map(({ path }) => path)
             .filter((path) => /(?:\.test|\.spec)\.(?:[cm]?[jt]sx?|d\.ts)$/.test(path));

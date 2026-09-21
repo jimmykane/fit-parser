@@ -9,7 +9,7 @@ function uint16Array(values: number[]): Uint8Array {
 }
 
 describe('fit profile corrections', () => {
-  it('converts SDK-tokenized speed arrays with parser units', async () => {
+  it('converts profile-tokenized speed arrays with parser units', async () => {
     const encoder = new FitEncoder()
     encoder.writeMessage(20, [
       {
