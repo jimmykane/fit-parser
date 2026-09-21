@@ -1,21 +1,11 @@
 # FIT Profile Maintenance
 
-The parser ships one community-maintained interoperability table in
-`src/profile.ts`. It is ordinary project source used directly by normal
-installs, builds, tests, and releases.
-
-## Source
-
-The table is project source maintained under the repository's MIT license. It
-contains the message and field identifiers, names, wire types, array behavior,
-scales, offsets, units, enum labels, and product identifiers required for FIT
-interoperability. `npm run profile:check` pins full-table fingerprints and the
-resulting message, field, type, enum-value, and product counts so accidental
-drift fails CI.
-
-The profile is deliberately kept as one table. There is no generated file,
-overlay, or post-merge correction layer whose precedence could change consumer
-output.
+The parser uses one static interoperability table in `src/profile.ts` for
+normal installs, builds, tests, and releases. It contains message and field
+identifiers, names, wire types, array behavior, scales, offsets, units, enum
+labels, and product identifiers. `npm run profile:check` pins full-table
+fingerprints and the resulting message, field, type, enum-value, and product
+counts so accidental drift fails CI.
 
 ## Unknown and newer fields
 
@@ -36,18 +26,10 @@ table cannot decode.
 
 ## Updating the table
 
-Every mapping change must have a reviewable source that can be maintained with
-the project. Suitable evidence includes:
-
-- documented project history;
-- a repository-owned or synthetic FIT regression;
-- independently observed files whose private contents are not committed; or
-- redistributable interoperability documentation.
-
-Do not guess adjacent identifiers or add a mapping solely to make
-`unmapped_messages` disappear. Record the source and rationale in the test or
-change description, update `src/profile.ts`, and verify the complete public
-compatibility contract. Then:
+Every mapping change requires focused regression coverage. Do not guess
+adjacent identifiers or add a mapping solely to make `unmapped_messages`
+disappear. Update `src/profile.ts`, the relevant tests, and the public types,
+then verify the complete compatibility contract:
 
 ```sh
 npm run codegen

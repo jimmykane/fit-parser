@@ -31,70 +31,12 @@ including developer-defined data.
 npm install fit-file-parser
 ```
 
-## Migrating from 5.x to 6.0
-
-Version 6.0 replaces the profile-generation workflow with one static maintained
-table containing the maintained message, field, type, enum value, and product
-identifier mappings.
+## Profile coverage
 
 The static profile contains 126 messages, 1,444 fields, 200 types, and 4,403
 mapped values. Pass `includeUnmappedMessages: true` to retain fields outside
 that maintained surface by number and exact bytes; applications that need all
 bytes for recognized messages can also opt into `raw_messages`.
-
-## Migrating from 4.x to 5.0
-
-Version 5.0 is a breaking release because parsed output follows the expanded
-standard profile snapshot without compatibility aliases or guessed fields.
-Parser construction, module imports, output modes, and parser options are
-unchanged.
-
-Update field access, destructuring, persisted schemas, and snapshots to use the
-5.x names. Common migrations include:
-
-| 4.x name                       | 5.0 name                     |
-| ------------------------------ | ---------------------------- |
-| `speed_1s`                     | `speed1s`                    |
-| `start_n_2`, `end_n_2`         | `start_n2`, `end_n2`         |
-| `o_2_toxicity`                 | `o2_toxicity`                |
-| `avg_spo_2`, `reading_spo_2`   | `avg_spo2`, `reading_spo2`   |
-| `po_2`                         | `po2`                        |
-| `cycle_length_16`              | `cycle_length16`             |
-| `map_3_sample_mean`            | `map3_sample_mean`           |
-| `time_256`                     | `time256`                    |
-| `last_night_5_min_high`        | `last_night5_min_high`       |
-| `average_7_day_deviation`      | `average7_day_deviation`     |
-| `spo_2_data`, `hsa_spo_2_data` | `spo2_data`, `hsa_spo2_data` |
-| `repeat_dive_time`             | `repeat_dive_interval`       |
-| `cadence_zone_high_boundary`   | `cadence_zone_high_bondary`  |
-| `HipSwingExcerciseName`        | `HipSwingExerciseName`       |
-| `resting_calories`             | `metabolic_calories`         |
-
-The same alphanumeric-token rule applies to enum strings, for example
-`camera_orientation_90` becomes `camera_orientation90`, `po_2_warn` becomes
-`po2_warn`, and `power_3s` becomes `power3s`. The generated TypeScript
-declarations are the exhaustive name and value reference for the maintained
-profile.
-
-Parser 4 exposed standard session field 196 (`metabolic_calories`) a second
-time as `resting_calories`; use the canonical `metabolic_calories` name in 5.0.
-`recovery_advisor` was a guessed label for standard session field 140, whose
-canonical field is `avg_depth` in meters. Other behavior to account for
-during migration:
-
-- `product_name` is emitted only when it exists in the FIT input. It is no
-  longer inferred from `manufacturer` and `product`.
-- Record `elapsed_time` and `timer_time` require
-  `elapsedRecordField: true`.
-- FIT timestamps are typed as `Date`, FIT `bool` values remain numeric, mask
-  fields are `{ value, ...flags }` objects, unknown enum values remain numbers,
-  and array entries may be `null` when the FIT invalid sentinel is retained.
-- Every profile field is optional because individual FIT message definitions
-  determine which fields are present.
-- When upgrading from 4.1.0 or earlier, remove application-side scale or offset
-  corrections for parsed numeric values, including dive depth, bottom time,
-  ascent rate, and developer fields. The parser now applies the maintained
-  profile metadata.
 
 ## Quick start
 
@@ -411,7 +353,7 @@ Run commands from the repository root.
 | `npm test -- --run test/<file>.ts` | Run a focused test file.                            |
 | `npm run codegen`                  | Regenerate public types from the static profile.    |
 | `npm run codegen:check`            | Verify generated public types are current.          |
-| `npm run profile:check`            | Audit the maintained profile and source boundary.   |
+| `npm run profile:check`            | Audit profile counts, structure, and fingerprints.  |
 | `npm run corpus:check -- <path>`   | Validate an external FIT corpus without file data.  |
 | `npm run lint`                     | Check lint and formatting rules.                    |
 | `npm run fmt`                      | Apply the configured formatting rules.              |

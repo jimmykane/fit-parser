@@ -128,7 +128,7 @@ jobs:
           ];
           const packagedPaths = new Set(pack.files.map(({ path }) => path));
           const missing = required.filter((path) => !packagedPaths.has(path));
-          const legacyProfileArtifacts = pack.files
+          const unexpectedProfileArtifacts = pack.files
             .map(({ path }) => path)
             .filter((path) => /profile\.generated\./.test(path));
           const tests = pack.files
@@ -138,13 +138,13 @@ jobs:
           if (
             unexpected.length > 0 ||
             missing.length > 0 ||
-            legacyProfileArtifacts.length > 0 ||
+            unexpectedProfileArtifacts.length > 0 ||
             tests.length > 0
           ) {
             throw new Error(`Invalid package files: ${[
               ...unexpected,
               ...missing.map((path) => `missing:${path}`),
-              ...legacyProfileArtifacts,
+              ...unexpectedProfileArtifacts,
               ...tests,
             ].join(', ')}`);
           }

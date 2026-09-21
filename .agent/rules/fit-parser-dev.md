@@ -19,18 +19,17 @@ These repository-specific rules apply to automated and human contributors.
 
 - Standard profile definitions in `src/profile.ts` are maintained through
   reviewed source changes. Every mapping change requires focused regression
-  coverage and a documented source.
-- Keep historical definitions and focused, evidence-backed corrections in
+  coverage.
+- Keep standard definitions and focused corrections in
   `src/profile.ts`; do not add a second profile or overlay table elsewhere.
 - `src/fit_types.ts` is generated. Do not edit it manually.
 - After changing `src/profile.ts`, `src/fit.ts`, the type generator, or profile
   handling, run `npm run codegen` and commit the generated public types.
 - Use `npm run codegen:check` to detect stale generated output.
-- Use `npm run profile:check` to verify the immutable source boundary,
-  maintained counts, metadata structure, and runtime wiring.
+- Use `npm run profile:check` to verify maintained counts, fingerprints,
+  metadata structure, and runtime wiring.
 - Do not import, generate, or mechanically synchronize the maintained profile
-  from an external source. Establish each change from project history,
-  observed FIT data, or redistributable interoperability documentation.
+  from another package.
 
 ## Tests
 
