@@ -1,12 +1,12 @@
 # Change Log
 
-## 6.0.1 - 2026-09-21
+## 6.0.2 - 2026-09-21
 
 ### Changed
 
 - Consolidate the complete message, field, wire-metadata, type, enum, and
   product contract into one static maintained profile.
-- Use one static maintained profile table.
+- Maintain the FIT interoperability profile directly as static project source.
 - Preserve decoded output and the public TypeScript surface.
 
 ### Added
