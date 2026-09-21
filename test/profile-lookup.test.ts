@@ -76,6 +76,8 @@ describe('fit profile lookup API', () => {
     expect(getFitManufacturerName('23garbage')).toBeNull()
     expect(getFitManufacturerName('1.5')).toBeNull()
     expect(getFitManufacturerName(Number.POSITIVE_INFINITY)).toBeNull()
+    expect(getFitManufacturerName(true as unknown as number)).toBeNull()
+    expect(getFitManufacturerName({ valueOf: () => 1 } as unknown as number)).toBeNull()
     expect(getFitSubSportName(99999)).toBeNull()
   })
 

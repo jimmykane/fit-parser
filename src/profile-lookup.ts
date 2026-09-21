@@ -15,6 +15,10 @@ function getProfileName(
     return null
   }
 
+  if (typeof value !== 'number' && typeof value !== 'string') {
+    return null
+  }
+
   const normalizedValue = typeof value === 'string' ? value.trim() : value
   if (normalizedValue === '' || (typeof normalizedValue === 'string' && !/^\d+$/.test(normalizedValue))) {
     return null
