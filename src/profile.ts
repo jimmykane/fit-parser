@@ -3,18 +3,10 @@ import type { Message } from './fit.js'
 /**
  * Static, community-maintained FIT interoperability profile.
  *
- * This table preserves the public semantic decoding contract shipped by
- * fit-file-parser 5.2.1. It is ordinary project source: builds and runtime do
- * not read, download, or generate files from an external SDK. See PROFILE.md
- * for the maintenance and verification policy.
+ * This table is ordinary project source maintained under the repository's MIT
+ * license. Builds and runtime do not read, download, or generate it from an
+ * external SDK. See PROFILE.md for the maintenance and verification policy.
  */
-export const PROFILE_SOURCE = {
-  compatibilityRelease: '5.2.1',
-  compatibilityCommit: 'baafe7ad1d7ffa5cefd117ae6acc1f03ace733cf',
-  compatibilityEvidence: 'published-runtime-contract',
-  kind: 'repository-history',
-} as const
-
 export const PROFILE_MESSAGES: Record<number, Message> = {
   0: {
     0: {

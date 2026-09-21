@@ -5,14 +5,14 @@ The parser ships one community-maintained interoperability table in
 tests, and releases do not download, import, inspect, or generate code from an
 external FIT SDK.
 
-## Source boundary
+## Source
 
-The table preserves fit-file-parser's public 5.2.1 semantic decoding contract:
-message and field identifiers, names, wire types, array behavior, scales,
-offsets, units, enum labels, and product identifiers. `PROFILE_SOURCE` records
-the immutable release commit. `npm run profile:check` pins full-table
-fingerprints and the resulting message, field, type, enum-value, and product
-counts so accidental drift fails CI.
+The table is project source maintained under the repository's MIT license. It
+contains the message and field identifiers, names, wire types, array behavior,
+scales, offsets, units, enum labels, and product identifiers required for FIT
+interoperability. `npm run profile:check` pins full-table fingerprints and the
+resulting message, field, type, enum-value, and product counts so accidental
+drift fails CI.
 
 The profile is deliberately kept as one table. There is no generated file,
 overlay, or post-merge correction layer whose precedence could change consumer
@@ -30,8 +30,8 @@ developer fields in `unmapped_messages`, including:
 - field-definition number and FIT base-type byte;
 - an exact copy of the field's wire bytes.
 
-The opt-in keeps the default decoded result identical to 5.2.1. Consumers that
-need a complete raw representation of selected messages can continue to use
+The opt-in keeps default decoded results unchanged. Consumers that need a
+complete raw representation of selected messages can continue to use
 `includeRawMessages`; `unmapped_messages` stores only the fields the maintained
 table cannot decode.
 
@@ -47,14 +47,14 @@ the project. Suitable evidence includes:
 
 Do not guess adjacent identifiers or add a mapping solely to make
 `unmapped_messages` disappear. Record the source and rationale in the test or
-change description, update `src/profile.ts`, and verify the complete 5.2.1
+change description, update `src/profile.ts`, and verify the complete public
 compatibility contract. Then:
 
 ```sh
 npm run codegen
 npm run profile:check
 npm run check
-npm run compatibility:check -- /path/to/fit-file-parser-5.2.1 /path/to/fit-corpus
+npm run compatibility:check -- /path/to/reference-package /path/to/fit-corpus
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery
 ```
 

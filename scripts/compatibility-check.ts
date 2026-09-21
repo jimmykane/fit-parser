@@ -58,7 +58,7 @@ async function main(): Promise<void> {
   const corpusRoot = process.argv[3]
   if (!previousInput || !corpusRoot) {
     process.stderr.write(
-      'Usage: npm run compatibility:check -- /path/to/fit-file-parser-5.2.1 /path/to/fit-corpus\n',
+      'Usage: npm run compatibility:check -- /path/to/reference-package /path/to/fit-corpus\n',
     )
     process.exitCode = 2
     return

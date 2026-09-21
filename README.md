@@ -34,14 +34,13 @@ npm install fit-file-parser
 ## Migrating from 5.x to 6.0
 
 Version 6.0 replaces the profile-generation workflow with one static maintained
-table that preserves every message, field, type, enum value, and product
-identifier exposed by 5.2.1.
+table containing the maintained message, field, type, enum value, and product
+identifier mappings.
 
-There is no intentional loss of the 5.2.1 semantic or TypeScript surface. The
-static profile contains 126 messages, 1,444 fields, 200 types, and 4,403 mapped
-values. Pass `includeUnmappedMessages: true` to retain fields outside that
-maintained surface by number and exact bytes; applications that need all bytes
-for recognized messages can also opt into `raw_messages`.
+The static profile contains 126 messages, 1,444 fields, 200 types, and 4,403
+mapped values. Pass `includeUnmappedMessages: true` to retain fields outside
+that maintained surface by number and exact bytes; applications that need all
+bytes for recognized messages can also opt into `raw_messages`.
 
 ## Migrating from 4.x to 5.0
 
@@ -299,9 +298,9 @@ unchanged.
 
 Recognized message names, field names, enum values, wire types, scales,
 offsets, arrays, and units come from the community-maintained table in
-`src/profile.ts`. Its repository-history boundary and public 5.2.1
-compatibility contract are documented in [`PROFILE.md`](./PROFILE.md). The
-package contains no external profile generator or SDK dependency.
+`src/profile.ts`. Its maintenance and verification contract is documented in
+[`PROFILE.md`](./PROFILE.md). The package contains no external profile
+generator or SDK dependency.
 
 Public names use `snake_case` while preserving established alphanumeric tokens
 such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number
@@ -431,7 +430,7 @@ git clone https://github.com/ThomasKuehne/FIT-test-files.git ../FIT-test-files
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery --raw-messages-with-decoded-output
-npm run compatibility:check -- /path/to/fit-file-parser-5.2.1 ../FIT-test-files
+npm run compatibility:check -- /path/to/reference-package ../FIT-test-files
 ```
 
 The command accepts any corpus path; the sibling location is only a convenient
@@ -444,9 +443,9 @@ that is expected to recover only in force mode. Reports never print file names
 or parsed activity values.
 
 `compatibility:check` parses every corpus file with both the current build and
-an installed 5.2.1 package, compares their complete default outputs, and reports
-only aggregate counts. Files rejected by both strict parsers are retried in
-force mode.
+a reference package, compares their complete default outputs, and reports only
+aggregate counts. Files rejected by both strict parsers are retried in force
+mode.
 
 Edit `src/profile.ts` only through reviewed profile changes with focused
 regression coverage and a documented source. Do not edit `src/fit_types.ts`

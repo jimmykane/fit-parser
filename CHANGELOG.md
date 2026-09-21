@@ -4,11 +4,11 @@
 
 ### Changed
 
-- Consolidate the complete public 5.2.1 message, field, wire-metadata, type,
-  enum, and product contract into one static maintained profile.
+- Consolidate the complete message, field, wire-metadata, type, enum, and
+  product contract into one static maintained profile.
 - Remove the external SDK dependency, generated profile, profile generator,
   and local SDK comparison workflow.
-- Preserve the 5.2.1 decoded output and generated TypeScript surface exactly.
+- Preserve decoded output and the generated TypeScript surface.
 
 ### Added
 
@@ -18,8 +18,7 @@
   messages, the immutable compatibility profile, and default-output stability.
 - Add an optional privacy-safe corpus summary for unmapped message/field IDs,
   wire base types, sizes, occurrences, and file counts.
-- Document the repository-history provenance, public 5.2.1 compatibility
-  contract, manual update requirements, and corpus verification workflow in
+- Document the manual update requirements and corpus verification workflow in
   `PROFILE.md`.
 
 ## 5.2.1

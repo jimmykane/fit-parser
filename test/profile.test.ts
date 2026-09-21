@@ -4,7 +4,6 @@ import FitParser from '../src/fit-parser.js'
 import { FIT } from '../src/fit.js'
 import {
   PROFILE_MESSAGES,
-  PROFILE_SOURCE,
   PROFILE_TYPES,
 } from '../src/profile.js'
 
@@ -19,12 +18,6 @@ describe('static FIT profile', () => {
   it('keeps the reviewed profile snapshot complete', () => {
     const profileMessages = Object.values(PROFILE_MESSAGES)
 
-    expect(PROFILE_SOURCE).toEqual({
-      compatibilityRelease: '5.2.1',
-      compatibilityCommit: 'baafe7ad1d7ffa5cefd117ae6acc1f03ace733cf',
-      compatibilityEvidence: 'published-runtime-contract',
-      kind: 'repository-history',
-    })
     expect(profileMessages).toHaveLength(126)
     expect(profileMessages.reduce(
       (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,

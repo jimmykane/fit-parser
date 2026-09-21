@@ -3,16 +3,9 @@ import process from 'node:process'
 import { FIT } from '../src/fit.js'
 import {
   PROFILE_MESSAGES,
-  PROFILE_SOURCE,
   PROFILE_TYPES,
 } from '../src/profile.js'
 
-const expectedSource = {
-  compatibilityRelease: '5.2.1',
-  compatibilityCommit: 'baafe7ad1d7ffa5cefd117ae6acc1f03ace733cf',
-  compatibilityEvidence: 'published-runtime-contract',
-  kind: 'repository-history',
-} as const
 const expectedCounts = {
   messages: 126,
   fields: 1444,
@@ -30,9 +23,6 @@ function fingerprint(value: unknown): string {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex')
 }
 
-if (JSON.stringify(PROFILE_SOURCE) !== JSON.stringify(expectedSource)) {
-  errors.push('Profile source boundary drift')
-}
 if (FIT.messages !== PROFILE_MESSAGES) {
   errors.push('Runtime messages do not use the maintained profile directly')
 }
@@ -106,7 +96,6 @@ Object.entries(expectedFingerprints).forEach(([name, expected]) => {
 })
 
 process.stdout.write(`${JSON.stringify({
-  source: PROFILE_SOURCE,
   ...counts,
   fingerprints,
   errors,

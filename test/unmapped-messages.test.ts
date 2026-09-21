@@ -76,7 +76,7 @@ describe('unmapped FIT data preservation', () => {
     expect(parsed.unmapped_messages).toBeUndefined()
   })
 
-  it('keeps the v5 default output unchanged', async () => {
+  it('keeps default output unchanged when preservation is disabled', async () => {
     const file = new FitEncoder().writeMessage(470, [
       { number: 7, size: 2, baseType: FitBaseType.Uint16, value: 0x1234 },
     ]).close()
