@@ -23,6 +23,12 @@ describe('profile maintenance boundary', () => {
     expect(packageJson.scripts?.['codegen:profile']).toBeUndefined()
     expect(packageJson.scripts?.['profile:diff:local']).toBeUndefined()
     expect(packageJson.scripts?.build).toContain('npm run clean')
+    expect(packageJson.exports?.['./profile']).toEqual({
+      types: './dist/profile-lookup.d.ts',
+      import: './dist/profile-lookup.js',
+      require: './dist/cjs/profile-lookup.js',
+    })
+    expect(packageJson.typesVersions?.['*']?.profile).toEqual(['dist/profile-lookup.d.ts'])
     expect(readdirSync(new URL('../codegen/', import.meta.url))).not.toContainEqual(
       expect.stringMatching(/profile[._-]generated/i),
     )
