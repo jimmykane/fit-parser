@@ -1,7 +1,7 @@
 {
   "name": "fit-file-parser",
   "type": "module",
-  "version": "5.2.1",
+  "version": "6.0.0",
   "private": false,
   "description": "Parse your .FIT files easily, directly from JS (Garmin, Polar, Suunto)",
   "author": {
@@ -44,6 +44,7 @@
     "CHANGELOG.md",
     "CONTRIBUTORS.md",
     "LICENSE",
+    "PROFILE.md",
     "README.md",
     "dist/"
   ],
@@ -54,13 +55,12 @@
     }
   ],
   "scripts": {
-    "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts --watch-path=src/garmin_profile.generated.ts codegen/codegen.ts",
-    "codegen:profile": "tsx codegen/garmin-profile.ts",
-    "codegen": "npm run codegen:profile && tsx codegen/codegen.ts",
-    "codegen:check": "tsx codegen/garmin-profile.ts --check && tsx codegen/codegen.ts --check",
-    "profile:audit": "npm run codegen:check && tsx scripts/profile-audit.ts",
+    "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts --watch-path=src/profile.ts codegen/codegen.ts",
+    "codegen": "tsx codegen/codegen.ts",
+    "codegen:check": "tsx codegen/codegen.ts --check",
+    "profile:check": "npm run codegen:check && tsx scripts/profile-check.ts",
     "corpus:check": "tsx scripts/corpus-check.ts",
-    "check": "npm run profile:audit && npm run lint && npm run type-check && npm test -- --run && npm run build",
+    "check": "npm run profile:check && npm run lint && npm run type-check && npm test -- --run && npm run build",
     "example-output": "node examples/parse.js examples/example.fit > examples/output-example.json",
     "example-output-tank": "node examples/parse.js examples/example-diving.fit > examples/output-diving.json",
     "example-output-summary-first": "node examples/parse.js examples/triathlon_summary_first.fit > examples/output_summary_first.json",
@@ -71,7 +71,8 @@
     "lint": "eslint .",
     "fmt": "eslint --fix .",
     "type-check": "tsc --noEmit",
-    "build": "tsc --noCheck && tsc --project tsconfig.cjs.json --noCheck && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "clean": "tsx scripts/clean-dist.ts",
+    "build": "npm run clean && tsc --noCheck && tsc --project tsconfig.cjs.json --noCheck && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "prepack": "npm run build"
   },
   "test": "vitest",
@@ -80,7 +81,6 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.2.0",
-    "@garmin/fitsdk": "21.208.0",
     "@types/node": "^24.10.1",
     "@vitest/coverage-v8": "^4.0.13",
     "eslint": "^9.10.0",

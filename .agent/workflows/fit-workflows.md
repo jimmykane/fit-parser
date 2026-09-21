@@ -49,37 +49,40 @@ them into `.agent`, `test`, or `examples`.
 
 ## Add or Update a FIT Profile Message
 
-1. Locate the message and field definitions in the pinned
-   `@garmin/fitsdk` profile.
-2. If it is standard, update the pinned SDK only when necessary. Use
-   `src/fit.ts` only for a corpus-observed vendor extension that does not
-   collide with the pinned SDK.
-3. Regenerate the profile and public types:
+1. Establish the message and field definitions from documented project
+   history, independently observed FIT files, or redistributable
+   interoperability documentation.
+2. Inspect `unmapped_messages` from a synthetic or externally held FIT file to
+   confirm the global message number, field number, wire type, and bytes.
+3. Update the focused correction table in `src/profile.ts`; do not copy a
+   complete external profile or add a second overlay elsewhere.
+4. Regenerate public types:
 
    ```sh
    npm run codegen
-   npm run profile:audit
+   npm run profile:check
    ```
 
-4. Review both generated files and add or update tests in `test/`.
-5. Verify generated output is current and run all checks:
+5. Review the profile and generated type diffs and add or update tests in
+   `test/`.
+6. Verify generated output is current and run all checks:
 
    ```sh
    npm run check
    ```
 
-## Update Garmin Product Mappings
+## Update Product Mappings
 
-1. Update the pinned `@garmin/fitsdk` dependency only when the required
-   profile data is absent from the current version.
-2. Regenerate the profile. Product names and other enum values are generated
-   without handwritten overrides.
-3. Run:
+1. Inspect the static product mapping in `src/profile.ts`.
+2. Establish each product identifier from project history, observed FIT data,
+   or redistributable interoperability documentation.
+3. Apply supported changes manually with focused regression tests.
+4. Run:
 
    ```sh
-   npm test -- --run test/garmin-product-profile.test.ts
+   npm test -- --run test/product-profile.test.ts
    npm run codegen
-   npm run profile:audit
+   npm run profile:check
    npm run check
    ```
 

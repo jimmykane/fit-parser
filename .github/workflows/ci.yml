@@ -29,5 +29,5 @@ jobs:
         if: matrix.node-version == '25.x'
       - run: npm run type-check
         if: matrix.node-version == '25.x'
-      - run: npm run profile:audit
+      - run: npm run profile:check
         if: matrix.node-version == '25.x'

@@ -419,11 +419,23 @@ describe('raw developer fields', () => {
       data(0, rawValue),
     ])
 
+    const automatic = await new FitParser({ force: false }).parseAsync(file.buffer)
     const parsed = await new FitParser({
       force: false,
       includeRawDeveloperFields: true,
     }).parseAsync(file.buffer)
 
+    expect(automatic.unmapped_messages).toEqual([{
+      global_message_number: 18,
+      message_index: 0,
+      little_endian: true,
+      fields: [],
+      developer_fields: [{
+        developer_data_index: 9,
+        field_definition_number: 42,
+        raw_value: Array.from(rawValue),
+      }],
+    }])
     expect(parsed.raw_developer_fields).toEqual([{
       global_message_number: 18,
       message_index: 0,

@@ -1,9 +1,12 @@
-import { Profile } from '@garmin/fitsdk'
 import { describe, expect, it } from 'vitest'
 import { FitBaseType, FitEncoder } from '../src/fit-encoder.js'
 import FitParser from '../src/fit-parser.js'
 import { FIT } from '../src/fit.js'
-import { GARMIN_PROFILE_VERSION } from '../src/garmin_profile.generated.js'
+import {
+  PROFILE_MESSAGES,
+  PROFILE_SOURCE,
+  PROFILE_TYPES,
+} from '../src/profile.js'
 
 function uint16Array(values: number[]): Uint8Array {
   const bytes = new Uint8Array(values.length * 2)
@@ -12,30 +15,36 @@ function uint16Array(values: number[]): Uint8Array {
   return bytes
 }
 
-describe('generated Garmin profile', () => {
-  it('tracks every message and field from the pinned SDK', () => {
-    const sdkMessages = Object.values(Profile.messages)
+describe('static FIT profile', () => {
+  it('keeps the reviewed profile snapshot complete', () => {
+    const profileMessages = Object.values(PROFILE_MESSAGES)
 
-    expect(GARMIN_PROFILE_VERSION).toMatchObject(Profile.version)
-    expect(sdkMessages).toHaveLength(124)
-    expect(sdkMessages.reduce(
-      (count, message) => count + Object.keys(message.fields).length,
+    expect(PROFILE_SOURCE).toEqual({
+      maintainedCommit: 'bdb75af90b750d6c96d12429a93495742122f135',
+      productCommit: '6b9eab173125e4d3be4fd9e0a7c1d79c8438d854',
+      packageVersion: '4.0.2',
+      kind: 'repository-history',
+    })
+    expect(profileMessages).toHaveLength(56)
+    expect(profileMessages.reduce(
+      (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,
       0,
-    )).toBe(1406)
+    )).toBe(818)
+    expect(Object.keys(PROFILE_TYPES)).toHaveLength(162)
 
-    sdkMessages.forEach((message) => {
-      const parsedMessage = FIT.messages[message.num]
-      expect(parsedMessage, `global message ${message.num}`).toBeDefined()
-      Object.values(message.fields).forEach((field) => {
+    Object.entries(PROFILE_MESSAGES).forEach(([messageId, message]) => {
+      const parsedMessage = FIT.messages[Number(messageId)]
+      expect(parsedMessage, `global message ${messageId}`).toBeDefined()
+      Object.keys(message).filter(key => key !== 'name').forEach((fieldId) => {
         expect(
-          parsedMessage[field.num],
-          `global message ${message.num}, field ${field.num}`,
+          parsedMessage[Number(fieldId)],
+          `global message ${messageId}, field ${fieldId}`,
         ).toBeDefined()
       })
     })
   })
 
-  it('parses messages that were absent from the handwritten profile', async () => {
+  it('parses messages covered by the maintained profile', async () => {
     const encoder = new FitEncoder()
       .writeMessage(188, [
         { number: 0, size: 1, baseType: FitBaseType.Enum, value: 1 },
@@ -84,7 +93,7 @@ describe('generated Garmin profile', () => {
     })
   })
 
-  it('uses pinned SDK metadata without compatibility aliases', async () => {
+  it('uses profile metadata without compatibility aliases', async () => {
     const encoder = new FitEncoder()
       .writeMessage(6, [
         { number: 19, size: 1, baseType: FitBaseType.Uint8, value: 20 },

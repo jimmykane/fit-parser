@@ -207,6 +207,7 @@ export default class FitParser {
         || Array.isArray(this.options.includeRawMessages)
         ? []
         : undefined
+    const unmappedMessages: ParsedRawFitMessage[] = []
     const messageCountsByGlobalNumber = new Map<number, number>()
 
     let loopIndex = headerLength
@@ -231,6 +232,8 @@ export default class FitParser {
         compressedTimestamp,
         rawFields: recordRawFields,
         rawDeveloperFields: recordRawDeveloperFields,
+        unmappedFields: recordUnmappedFields,
+        unmappedDeveloperFields: recordUnmappedDeveloperFields,
       } = readRecord(
         blob,
         messageTypes,
@@ -277,6 +280,29 @@ export default class FitParser {
             raw_value: field.rawValue,
           })
         })
+        if (
+          littleEndian !== undefined
+          && (recordUnmappedFields?.length || recordUnmappedDeveloperFields?.length)
+        ) {
+          unmappedMessages.push({
+            global_message_number: globalMessageNumber,
+            message_index: messageIndex,
+            little_endian: littleEndian,
+            ...(compressedTimestamp === undefined
+              ? {}
+              : { compressed_timestamp: compressedTimestamp }),
+            fields: (recordUnmappedFields ?? []).map(field => ({
+              field_definition_number: field.fieldDefinitionNumber,
+              base_type: field.baseType,
+              raw_value: field.rawValue,
+            })),
+            developer_fields: (recordUnmappedDeveloperFields ?? []).map(field => ({
+              developer_data_index: field.developerDataIndex,
+              field_definition_number: field.fieldDefinitionNumber,
+              raw_value: field.rawValue,
+            })),
+          })
+        }
       }
 
       if (this.options.rawMessagesOnly) {
@@ -413,6 +439,9 @@ export default class FitParser {
       if (rawMessages) {
         fitObj.raw_messages = rawMessages
       }
+      if (unmappedMessages.length > 0) {
+        fitObj.unmapped_messages = unmappedMessages
+      }
       callback(undefined, fitObj as ParsedFit)
       return
     }
@@ -441,6 +470,9 @@ export default class FitParser {
     }
     if (rawMessages) {
       fitObj.raw_messages = rawMessages
+    }
+    if (unmappedMessages.length > 0) {
+      fitObj.unmapped_messages = unmappedMessages
     }
 
     if (isCascadeNeeded) {

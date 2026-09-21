@@ -283,7 +283,7 @@ function formatByType(
         if (value === 'mask') {
           dataItem.value = data & Number(key)
         }
-        else {
+        else if (typeof value === 'string') {
           dataItem[value] = (data & Number(key)) !== 0
         }
       }
@@ -563,6 +563,8 @@ export function readRecord(
   compressedTimestamp?: number
   rawFields?: RawFieldValue[]
   rawDeveloperFields?: RawDeveloperFieldValue[]
+  unmappedFields?: RawFieldValue[]
+  unmappedDeveloperFields?: RawDeveloperFieldValue[]
 } {
   if (startIndex < 0 || startIndex >= dataEnd) {
     throw new Error('Invalid FIT record bounds')
@@ -713,6 +715,8 @@ export function readRecord(
   const rawFields: RawFieldValue[] | undefined = includeRawMessage ? [] : undefined
   const rawDeveloperFields: RawDeveloperFieldValue[] | undefined
     = includeRawDeveloperFields || includeRawMessage ? [] : undefined
+  const unmappedFields: RawFieldValue[] = []
+  const unmappedDeveloperFields: RawDeveloperFieldValue[] = []
   if (retainsRawMessages(options)) {
     const nativeSize = messageType.fieldDefs.reduce((total, field, index) => (
       total + (isCompressedTimestamp && index === 0 && field.fDefNo === 253 ? 0 : field.size)
@@ -735,15 +739,22 @@ export function readRecord(
       rawData[i] = InvalidFieldData
       continue
     }
-    if (rawFields && readDataFromIndex + fDef.size <= dataEnd) {
-      rawFields.push({
+    if (
+      (rawFields || !isOutputFieldName(fDef.name))
+      && readDataFromIndex + fDef.size <= dataEnd
+    ) {
+      const rawField = {
         fieldDefinitionNumber: fDef.fDefNo,
         baseType: fDef.baseTypeNo,
         rawValue: Array.from(blob.subarray(
           readDataFromIndex,
           readDataFromIndex + fDef.size,
         )),
-      })
+      }
+      rawFields?.push(rawField)
+      if (!isOutputFieldName(fDef.name)) {
+        unmappedFields.push(rawField)
+      }
     }
     const data = readData(blob, dataView, fDef, readDataFromIndex)
 
@@ -772,18 +783,20 @@ export function readRecord(
   for (let i = 0; i < developerFieldDefs.length; i++) {
     const developerFieldDef = developerFieldDefs[i]
     const rawDataIndex = messageType.fieldDefs.length + i
+    let rawDeveloperField: RawDeveloperFieldValue | undefined
     if (
-      rawDeveloperFields
+      (rawDeveloperFields || developerFieldDef.resolvedFieldDef === undefined)
       && readDataFromIndex + developerFieldDef.size <= dataEnd
     ) {
-      rawDeveloperFields.push({
+      rawDeveloperField = {
         developerDataIndex: developerFieldDef.developerDataIndex,
         fieldDefinitionNumber: developerFieldDef.fieldDefinitionNumber,
         rawValue: Array.from(blob.subarray(
           readDataFromIndex,
           readDataFromIndex + developerFieldDef.size,
         )),
-      })
+      }
+      rawDeveloperFields?.push(rawDeveloperField)
     }
     const fDef = resolveDeveloperFieldDefinition(
       developerFieldDef,
@@ -791,6 +804,10 @@ export function readRecord(
       developerFields,
       options,
     )
+
+    if (!fDef && rawDeveloperField) {
+      unmappedDeveloperFields.push(rawDeveloperField)
+    }
 
     if (fDef) {
       const data = readData(blob, dataView, fDef, readDataFromIndex)
@@ -931,6 +948,10 @@ export function readRecord(
     message: fields,
     rawFields,
     rawDeveloperFields,
+    unmappedFields: unmappedFields.length > 0 ? unmappedFields : undefined,
+    unmappedDeveloperFields: unmappedDeveloperFields.length > 0
+      ? unmappedDeveloperFields
+      : undefined,
   }
 }
 

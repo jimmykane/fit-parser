@@ -16,8 +16,8 @@ private FIT activities, generated output, or parsed data.
 
 - `src/binary.ts`: binary definition and data-message decoding.
 - `src/fit-parser.ts`: parser orchestration and output grouping.
-- `src/garmin_profile.generated.ts`: generated standard Garmin profile.
-- `src/fit.ts`: parser options and collision-checked vendor extensions.
+- `src/profile.ts`: static, project-maintained standard FIT profile.
+- `src/fit.ts`: parser options and runtime profile assembly.
 - `src/fit_types.ts`: generated public TypeScript types.
 - `src/type_generator.ts`: type generator.
 - `src/fit-encoder.ts`: FIT encoder used by consumers and synthetic tests.
@@ -25,8 +25,7 @@ private FIT activities, generated output, or parsed data.
 - `scripts/inspect_fit.js`: parsed-message inspection utility.
 - `scripts/deep_probe.js`: recursive numeric-value probe.
 - `codegen/codegen.ts`: generated-type entry point and consistency check.
-- `codegen/garmin-profile.ts`: pinned Garmin profile generator.
-- `scripts/profile-audit.ts`: exact standard profile and vendor extension audit.
+- `scripts/profile-check.ts`: maintained profile and source-boundary audit.
 - `scripts/corpus-check.ts`: privacy-safe external FIT corpus validator.
 
 ## Required preflight

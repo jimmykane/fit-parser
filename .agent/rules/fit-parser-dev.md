@@ -4,29 +4,33 @@ These repository-specific rules apply to automated and human contributors.
 
 ## Protocol correctness
 
-- Treat the pinned `@garmin/fitsdk` profile as the source of truth for
-  standard message IDs, field IDs, base types, scales, offsets, units, and
-  Garmin product mappings.
+- Treat the static profile in `src/profile.ts` as the source of truth
+  for standard message IDs, field IDs, base types, scales, offsets, units, and
+  product mappings.
 - Do not guess protocol IDs or infer them from nearby entries.
-- Preserve byte alignment under every parser mode. Unknown fields may be
-  omitted, but their declared byte sizes must still be consumed.
+- Preserve byte alignment under every parser mode. Unknown native and
+  unresolved developer fields must retain their exact bytes in
+  `unmapped_messages`.
 - Preserve existing public output names and unit conversions unless the
   change explicitly updates the public API. Do not add compatibility aliases
   or derived values to parsed messages.
 
-## Source and generated files
+## Profile and generated files
 
-- Standard profile definitions in `src/garmin_profile.generated.ts` come from
-  the pinned Garmin SDK. Do not edit that file manually.
-- Use `src/fit.ts` only for parser options and explicitly audited,
-  corpus-observed vendor extensions. Extensions must not replace a pinned SDK
-  message field or type value.
+- Standard profile definitions in `src/profile.ts` are maintained through
+  reviewed source changes. Every mapping change requires focused regression
+  coverage and a documented source.
+- Keep historical definitions and focused, evidence-backed corrections in
+  `src/profile.ts`; do not add a second profile or overlay table elsewhere.
 - `src/fit_types.ts` is generated. Do not edit it manually.
-- After changing the pinned SDK, `src/fit.ts`, either generator, or profile
-  handling, run `npm run codegen` and commit both generated results.
+- After changing `src/profile.ts`, `src/fit.ts`, the type generator, or profile
+  handling, run `npm run codegen` and commit the generated public types.
 - Use `npm run codegen:check` to detect stale generated output.
-- Use `npm run profile:audit` to verify complete standard-message coverage and
-  the expected private overlay set.
+- Use `npm run profile:check` to verify the immutable source boundary,
+  maintained counts, metadata structure, and runtime wiring.
+- Do not import, generate, or mechanically synchronize profile data from an
+  external SDK. Establish each change from project history, observed FIT data,
+  or redistributable interoperability documentation.
 
 ## Tests
 

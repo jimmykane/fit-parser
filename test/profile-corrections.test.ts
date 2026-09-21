@@ -68,7 +68,7 @@ describe('fit profile corrections', () => {
     ])
   })
 
-  it('keeps SDK-named cadence and power zone arrays distinct', async () => {
+  it('keeps cadence and power zone arrays distinct', async () => {
     const encoder = new FitEncoder()
     encoder.writeMessage(216, [
       {
@@ -105,7 +105,7 @@ describe('fit profile corrections', () => {
     )
 
     expect(parsed.time_in_zone?.[0]).toMatchObject({
-      cadence_zone_high_bondary: [90, 100, 110],
+      cadence_zone_high_boundary: [90, 100, 110],
       power_zone_high_boundary: [150, 250, 350],
       time_in_cadence_zone: [1, 2],
     })

@@ -142,7 +142,7 @@ export function generateTypes(types: { [typeName: string]: Record<number, string
             false,
           ),
           ...names
-            .filter(value => value !== 'mask')
+            .filter(value => typeof value === 'string' && value !== 'mask')
             .map(value => generateProperty(
               String(value),
               ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
@@ -393,6 +393,7 @@ export function generateFitType(): Statement {
     generateProperty('messages', ts.factory.createTypeReferenceNode('ParsedMessages')),
     generateArrayProperty('raw_developer_fields', ts.factory.createTypeReferenceNode('ParsedRawDeveloperField')),
     generateArrayProperty('raw_messages', ts.factory.createTypeReferenceNode('ParsedRawFitMessage')),
+    generateArrayProperty('unmapped_messages', ts.factory.createTypeReferenceNode('ParsedRawFitMessage')),
     ...Object.keys(referenceProperties).map(prop => generateProperty(prop, ts.factory.createTypeReferenceNode(
       snakeToCamel(referenceProperties[prop].replace('?', '')),
     ), referenceProperties[prop].startsWith('?'))),

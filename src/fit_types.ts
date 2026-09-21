@@ -40,108 +40,86 @@ export interface ParsedRawFitMessage {
 
 // parsed from Fit.types
 
-export type Activity = 'manual' | 'auto_multi_sport' | number
-export type ActivityClass = 'level_max' | 'level' | 'athlete' | number
-export type ActivityLevel = 'low' | 'medium' | 'high' | number
-export type ActivitySubtype = 'generic' | 'treadmill' | 'street' | 'trail' | 'track' | 'spin' | 'indoor_cycling' | 'road' | 'mountain' | 'downhill' | 'recumbent' | 'cyclocross' | 'hand_cycling' | 'track_cycling' | 'indoor_rowing' | 'elliptical' | 'stair_climbing' | 'lap_swimming' | 'open_water' | 'all' | number
-export type ActivityType = 'generic' | 'running' | 'cycling' | 'transition' | 'fitness_equipment' | 'swimming' | 'walking' | 'sedentary' | 'all' | number
-export type AnalogWatchfaceLayout = 'minimal' | 'traditional' | 'modern' | number
-export type AntChannelId = 'ant_device_number' | 'ant_device_type' | 'ant_transmission_type_lower_nibble' | 'ant_extended_device_number_upper_nibble' | number
-export type AntNetwork = 'public' | 'antplus' | 'antfs' | 'private' | number
-export type AntplusDeviceType = 'antfs' | 'bike_power' | 'environment_sensor_legacy' | 'multi_sport_speed_distance' | 'control' | 'fitness_equipment' | 'blood_pressure' | 'geocache_node' | 'light_electric_vehicle' | 'env_sensor' | 'racquet' | 'control_hub' | 'muscle_oxygen' | 'shifting' | 'bike_light_main' | 'bike_light_shared' | 'exd' | 'bike_radar' | 'bike_aero' | 'weight_scale' | 'heart_rate' | 'bike_speed_cadence' | 'bike_cadence' | 'bike_speed' | 'stride_speed_distance' | number
-export type AttitudeStage = 'failed' | 'aligning' | 'degraded' | 'valid' | number
-export type AttitudeValidity = 'track_angle_heading_valid' | 'pitch_valid' | 'roll_valid' | 'lateral_body_accel_valid' | 'normal_body_accel_valid' | 'turn_rate_valid' | 'hw_fail' | 'mag_invalid' | 'no_gps' | 'gps_invalid' | 'solution_coasting' | 'true_track_angle' | 'magnetic_heading' | number
-export type AutoActivityDetect = 'none' | 'running' | 'cycling' | 'swimming' | 'walking' | 'elliptical' | 'sedentary' | number
-export type AutolapTrigger = 'time' | 'distance' | 'position_start' | 'position_lap' | 'position_waypoint' | 'position_marked' | 'off' | 'auto_select' | number
-export type Autoscroll = 'none' | 'slow' | 'medium' | 'fast' | number
-export type AutoSyncFrequency = 'never' | 'occasionally' | 'frequent' | 'once_a_day' | 'remote' | number
-export type BacklightMode = 'off' | 'manual' | 'key_and_messages' | 'auto_brightness' | 'smart_notifications' | 'key_and_messages_night' | 'key_and_messages_and_smart_notifications' | number
-export type BacklightTimeout = 'infinite' | number
-export type BandedExercisesExerciseName = 'ab_twist' | 'back_extension' | 'bicycle_crunch' | 'calf_raises' | 'chest_press' | 'clam_shells' | 'curl' | 'deadbug' | 'deadlift' | 'donkey_kick' | 'external_rotation' | 'external_rotation_at90_degree_abduction' | 'face_pull' | 'fire_hydrant' | 'fly' | 'front_raise' | 'glute_bridge' | 'hamstring_curls' | 'high_plank_leg_lifts' | 'hip_extension' | 'internal_rotation' | 'jumping_jack' | 'kneeling_crunch' | 'lateral_band_walks' | 'lateral_raise' | 'latpull' | 'leg_abduction' | 'leg_adduction' | 'leg_extension' | 'lunge' | 'plank' | 'pull_apart' | 'push_ups' | 'reverse_crunch' | 'row' | 'shoulder_abduction' | 'shoulder_extension' | 'shoulder_external_rotation' | 'shoulder_flexion_to90_degrees' | 'side_plank_leg_lifts' | 'side_raise' | 'squat' | 'squat_to_press' | 'tricep_extension' | 'tricep_kickback' | 'upright_row' | 'wall_crawl_with_external_rotation' | 'lateral_raise_wheelchair' | 'triceps_extension_wheelchair' | 'chest_fly_incline_wheelchair' | 'chest_fly_decline_wheelchair' | 'pull_down_wheelchair' | 'straight_arm_pull_down_wheelchair' | 'curl_wheelchair' | 'overhead_curl_wheelchair' | 'face_pull_wheelchair' | 'around_the_world_wheelchair' | 'pull_apart_wheelchair' | 'side_curl_wheelchair' | 'overhead_press_wheelchair' | number
-export type BatteryStatus = 'new' | 'good' | 'ok' | 'low' | 'critical' | 'charging' | 'unknown' | number
-export type BattleRopeExerciseName = 'alternating_figure_eight' | 'alternating_jump_wave' | 'alternating_kneeling_to_standing_wave' | 'alternating_lunge_wave' | 'alternating_squat_wave' | 'alternating_wave' | 'alternating_wave_with_lateral_shuffle' | 'clap_wave' | 'double_arm_figure_eight' | 'double_arm_side_to_side_snake' | 'double_arm_side_wave' | 'double_arm_slam' | 'double_arm_wave' | 'grappler_toss' | 'hip_toss' | 'in_and_out_wave' | 'inside_circle' | 'jumping_jacks' | 'outside_circle' | 'rainbow' | 'side_plank_wave' | 'sidewinder' | 'sitting_russian_twist' | 'snake_wave' | 'split_jack' | 'stage_coach' | 'ultimate_warrior' | 'upper_cuts' | number
-export type BenchPressExerciseName = 'alternating_dumbbell_chest_press_on_swiss_ball' | 'barbell_bench_press' | 'barbell_board_bench_press' | 'barbell_floor_press' | 'close_grip_barbell_bench_press' | 'decline_dumbbell_bench_press' | 'dumbbell_bench_press' | 'dumbbell_floor_press' | 'incline_barbell_bench_press' | 'incline_dumbbell_bench_press' | 'incline_smith_machine_bench_press' | 'isometric_barbell_bench_press' | 'kettlebell_chest_press' | 'neutral_grip_dumbbell_bench_press' | 'neutral_grip_dumbbell_incline_bench_press' | 'one_arm_floor_press' | 'weighted_one_arm_floor_press' | 'partial_lockout' | 'reverse_grip_barbell_bench_press' | 'reverse_grip_incline_bench_press' | 'single_arm_cable_chest_press' | 'single_arm_dumbbell_bench_press' | 'smith_machine_bench_press' | 'swiss_ball_dumbbell_chest_press' | 'triple_stop_barbell_bench_press' | 'wide_grip_barbell_bench_press' | 'alternating_dumbbell_chest_press' | number
-export type BikeExerciseName = 'bike' | 'ride' | 'sprint' | number
-export type BikeLightBeamAngleMode = 'manual' | 'auto' | number
-export type BikeLightNetworkConfigType = 'auto' | 'individual' | 'high_visibility' | 'trail' | number
-export type BikeOutdoorExerciseName = 'bike' | number
-export type BleDeviceType = 'connected_gps' | 'heart_rate' | 'bike_power' | 'bike_speed_cadence' | 'bike_speed' | 'bike_cadence' | 'footpod' | 'bike_trainer' | number
-export type BodyLocation = 'left_leg' | 'left_calf' | 'left_shin' | 'left_hamstring' | 'left_quad' | 'left_glute' | 'right_leg' | 'right_calf' | 'right_shin' | 'right_hamstring' | 'right_quad' | 'right_glute' | 'torso_back' | 'left_lower_back' | 'left_upper_back' | 'right_lower_back' | 'right_upper_back' | 'torso_front' | 'left_abdomen' | 'left_chest' | 'right_abdomen' | 'right_chest' | 'left_arm' | 'left_shoulder' | 'left_bicep' | 'left_tricep' | 'left_brachioradialis' | 'left_forearm_extensors' | 'right_arm' | 'right_shoulder' | 'right_bicep' | 'right_tricep' | 'right_brachioradialis' | 'right_forearm_extensors' | 'neck' | 'throat' | 'waist_mid_back' | 'waist_front' | 'waist_left' | 'waist_right' | number
-export type BpStatus = 'no_error' | 'error_incomplete_data' | 'error_no_measurement' | 'error_data_out_of_range' | 'error_irregular_heart_rate' | number
-export type CalfRaiseExerciseName = '3_way_calf_raise' | '3_way_weighted_calf_raise' | '3_way_single_leg_calf_raise' | '3_way_weighted_single_leg_calf_raise' | 'donkey_calf_raise' | 'weighted_donkey_calf_raise' | 'seated_calf_raise' | 'weighted_seated_calf_raise' | 'seated_dumbbell_toe_raise' | 'single_leg_bent_knee_calf_raise' | 'weighted_single_leg_bent_knee_calf_raise' | 'single_leg_decline_push_up' | 'single_leg_donkey_calf_raise' | 'weighted_single_leg_donkey_calf_raise' | 'single_leg_hip_raise_with_knee_hold' | 'single_leg_standing_calf_raise' | 'single_leg_standing_dumbbell_calf_raise' | 'standing_barbell_calf_raise' | 'standing_calf_raise' | 'weighted_standing_calf_raise' | 'standing_dumbbell_calf_raise' | number
-export type CameraEventType = 'video_start' | 'video_split' | 'video_end' | 'photo_taken' | 'video_second_stream_start' | 'video_second_stream_split' | 'video_second_stream_end' | 'video_split_start' | 'video_second_stream_split_start' | 'video_pause' | 'video_second_stream_pause' | 'video_resume' | 'video_second_stream_resume' | number
-export type CameraOrientationType = 'camera_orientation0' | 'camera_orientation90' | 'camera_orientation180' | 'camera_orientation270' | number
-export type CardioExerciseName = 'bob_and_weave_circle' | 'weighted_bob_and_weave_circle' | 'cardio_core_crawl' | 'weighted_cardio_core_crawl' | 'double_under' | 'weighted_double_under' | 'jump_rope' | 'weighted_jump_rope' | 'jump_rope_crossover' | 'weighted_jump_rope_crossover' | 'jump_rope_jog' | 'weighted_jump_rope_jog' | 'jumping_jacks' | 'weighted_jumping_jacks' | 'ski_moguls' | 'weighted_ski_moguls' | 'split_jacks' | 'weighted_split_jacks' | 'squat_jacks' | 'weighted_squat_jacks' | 'triple_under' | 'weighted_triple_under' | 'elliptical' | 'spinning' | 'pole_paddle_forward_wheelchair' | 'pole_paddle_backward_wheelchair' | 'pole_handcycle_forward_wheelchair' | 'pole_handcycle_backward_wheelchair' | 'pole_rainbow_wheelchair' | 'double_punch_forward_wheelchair' | 'double_punch_down_wheelchair' | 'double_punch_sideways_wheelchair' | 'double_punch_up_wheelchair' | 'sit_ski_wheelchair' | 'sitting_jacks_wheelchair' | 'punch_forward_wheelchair' | 'punch_down_wheelchair' | 'punch_sideways_wheelchair' | 'punch_up_wheelchair' | 'punch_bag_wheelchair' | 'pole_dd_ff_uu_wheelchair' | 'butterfly_arms_wheelchair' | 'punch' | number
-export type CarryExerciseName = 'bar_holds' | 'farmers_walk' | 'farmers_walk_on_toes' | 'hex_dumbbell_hold' | 'overhead_carry' | 'dumbbell_waiter_carry' | 'farmers_carry_walk_lunge' | 'farmers_carry' | 'farmers_carry_on_toes' | number
-export type CcrSetpointSwitchMode = 'manual' | 'automatic' | number
-export type Checksum = 'clear' | 'ok' | number
-export type ChopExerciseName = 'cable_pull_through' | 'cable_rotational_lift' | 'cable_woodchop' | 'cross_chop_to_knee' | 'weighted_cross_chop_to_knee' | 'dumbbell_chop' | 'half_kneeling_rotation' | 'weighted_half_kneeling_rotation' | 'half_kneeling_rotational_chop' | 'half_kneeling_rotational_reverse_chop' | 'half_kneeling_stability_chop' | 'half_kneeling_stability_reverse_chop' | 'kneeling_rotational_chop' | 'kneeling_rotational_reverse_chop' | 'kneeling_stability_chop' | 'kneeling_woodchopper' | 'medicine_ball_wood_chops' | 'power_squat_chops' | 'weighted_power_squat_chops' | 'standing_rotational_chop' | 'standing_split_rotational_chop' | 'standing_split_rotational_reverse_chop' | 'standing_stability_reverse_chop' | number
-export type ClimbProEvent = 'approach' | 'start' | 'complete' | number
-export type CommTimeoutType = 'wildcard_pairing_timeout' | 'pairing_timeout' | 'connection_lost' | 'connection_timeout' | number
-export type ConnectivityCapabilities = 'bluetooth' | 'bluetooth_le' | 'ant' | 'activity_upload' | 'course_download' | 'workout_download' | 'live_track' | 'weather_conditions' | 'weather_alerts' | 'gps_ephemeris_download' | 'explicit_archive' | 'setup_incomplete' | 'continue_sync_after_software_update' | 'connect_iq_app_download' | 'golf_course_download' | 'device_initiates_sync' | 'connect_iq_watch_app_download' | 'connect_iq_widget_download' | 'connect_iq_watch_face_download' | 'connect_iq_data_field_download' | 'connect_iq_app_managment' | 'swing_sensor' | 'swing_sensor_remote' | 'incident_detection' | 'audio_prompts' | 'wifi_verification' | 'true_up' | 'find_my_watch' | 'remote_manual_sync' | 'live_track_auto_start' | 'live_track_messaging' | 'instant_input' | number
-export type CoreExerciseName = 'abs_jabs' | 'weighted_abs_jabs' | 'alternating_plate_reach' | 'barbell_rollout' | 'weighted_barbell_rollout' | 'body_bar_oblique_twist' | 'cable_core_press' | 'cable_side_bend' | 'side_bend' | 'weighted_side_bend' | 'crescent_circle' | 'weighted_crescent_circle' | 'cycling_russian_twist' | 'weighted_cycling_russian_twist' | 'elevated_feet_russian_twist' | 'weighted_elevated_feet_russian_twist' | 'half_turkish_get_up' | 'kettlebell_windmill' | 'kneeling_ab_wheel' | 'weighted_kneeling_ab_wheel' | 'modified_front_lever' | 'open_knee_tucks' | 'weighted_open_knee_tucks' | 'side_abs_leg_lift' | 'weighted_side_abs_leg_lift' | 'swiss_ball_jackknife' | 'weighted_swiss_ball_jackknife' | 'swiss_ball_pike' | 'weighted_swiss_ball_pike' | 'swiss_ball_rollout' | 'weighted_swiss_ball_rollout' | 'triangle_hip_press' | 'weighted_triangle_hip_press' | 'trx_suspended_jackknife' | 'weighted_trx_suspended_jackknife' | 'u_boat' | 'weighted_u_boat' | 'windmill_switches' | 'weighted_windmill_switches' | 'alternating_slide_out' | 'weighted_alternating_slide_out' | 'ghd_back_extensions' | 'weighted_ghd_back_extensions' | 'overhead_walk' | 'inchworm' | 'weighted_modified_front_lever' | 'russian_twist' | 'abdominal_leg_rotations' | 'arm_and_leg_extension_on_knees' | 'bicycle' | 'bicep_curl_with_leg_extension' | 'cat_cow' | 'corkscrew' | 'criss_cross' | 'criss_cross_with_ball' | 'double_leg_stretch' | 'knee_folds' | 'lower_lift' | 'neck_pull' | 'pelvic_clocks' | 'roll_over' | 'roll_up' | 'rolling' | 'rowing1' | 'rowing2' | 'scissors' | 'single_leg_circles' | 'single_leg_stretch' | 'snake_twist1_and2' | 'swan' | 'swimming' | 'teaser' | 'the_hundred' | 'bicep_curl_with_leg_extension_with_weights' | 'hanging_l_sit' | 'lower_lift_with_weights' | 'ring_l_sit' | 'rowing1_with_weights' | 'rowing2_with_weights' | 'scissors_with_weights' | 'single_leg_stretch_with_weights' | 'toes_to_elbows' | 'weighted_criss_cross' | 'weighted_double_leg_stretch' | 'weighted_the_hundred' | 'l_sit' | 'turkish_get_up' | 'weighted_ring_l_sit' | 'weighted_hanging_l_sit' | 'weighted_l_sit' | 'side_bend_low_wheelchair' | 'side_bend_mid_wheelchair' | 'side_bend_high_wheelchair' | 'seated_side_bend' | number
-export type CourseCapabilities = 'processed' | 'valid' | 'time' | 'distance' | 'position' | 'heart_rate' | 'power' | 'cadence' | 'training' | 'navigation' | 'bikeway' | 'aviation' | number
-export type CoursePoint = 'generic' | 'summit' | 'valley' | 'water' | 'food' | 'danger' | 'left' | 'right' | 'straight' | 'first_aid' | 'fourth_category' | 'third_category' | 'second_category' | 'first_category' | 'hors_category' | 'sprint' | 'left_fork' | 'right_fork' | 'middle_fork' | 'slight_left' | 'sharp_left' | 'slight_right' | 'sharp_right' | 'u_turn' | 'segment_start' | 'segment_end' | 'campsite' | 'aid_station' | 'rest_area' | 'general_distance' | 'service' | 'energy_gel' | 'sports_drink' | 'mile_marker' | 'checkpoint' | 'shelter' | 'meeting_spot' | 'overlook' | 'toilet' | 'shower' | 'gear' | 'sharp_curve' | 'steep_incline' | 'tunnel' | 'bridge' | 'obstacle' | 'crossing' | 'store' | 'transition' | 'navaid' | 'transport' | 'alert' | 'info' | number
-export type CrunchExerciseName = 'bicycle_crunch' | 'cable_crunch' | 'circular_arm_crunch' | 'crossed_arms_crunch' | 'weighted_crossed_arms_crunch' | 'cross_leg_reverse_crunch' | 'weighted_cross_leg_reverse_crunch' | 'crunch_chop' | 'weighted_crunch_chop' | 'double_crunch' | 'weighted_double_crunch' | 'elbow_to_knee_crunch' | 'weighted_elbow_to_knee_crunch' | 'flutter_kicks' | 'weighted_flutter_kicks' | 'foam_roller_reverse_crunch_on_bench' | 'weighted_foam_roller_reverse_crunch_on_bench' | 'foam_roller_reverse_crunch_with_dumbbell' | 'foam_roller_reverse_crunch_with_medicine_ball' | 'frog_press' | 'hanging_knee_raise_oblique_crunch' | 'weighted_hanging_knee_raise_oblique_crunch' | 'hip_crossover' | 'weighted_hip_crossover' | 'hollow_rock' | 'weighted_hollow_rock' | 'incline_reverse_crunch' | 'weighted_incline_reverse_crunch' | 'kneeling_cable_crunch' | 'kneeling_cross_crunch' | 'weighted_kneeling_cross_crunch' | 'kneeling_oblique_cable_crunch' | 'knees_to_elbow' | 'leg_extensions' | 'weighted_leg_extensions' | 'leg_levers' | 'mcgill_curl_up' | 'weighted_mcgill_curl_up' | 'modified_pilates_roll_up_with_ball' | 'weighted_modified_pilates_roll_up_with_ball' | 'pilates_crunch' | 'weighted_pilates_crunch' | 'pilates_roll_up_with_ball' | 'weighted_pilates_roll_up_with_ball' | 'raised_legs_crunch' | 'weighted_raised_legs_crunch' | 'reverse_crunch' | 'weighted_reverse_crunch' | 'reverse_crunch_on_a_bench' | 'weighted_reverse_crunch_on_a_bench' | 'reverse_curl_and_lift' | 'weighted_reverse_curl_and_lift' | 'rotational_lift' | 'weighted_rotational_lift' | 'seated_alternating_reverse_crunch' | 'weighted_seated_alternating_reverse_crunch' | 'seated_leg_u' | 'weighted_seated_leg_u' | 'side_to_side_crunch_and_weave' | 'weighted_side_to_side_crunch_and_weave' | 'single_leg_reverse_crunch' | 'weighted_single_leg_reverse_crunch' | 'skater_crunch_cross' | 'weighted_skater_crunch_cross' | 'standing_cable_crunch' | 'standing_side_crunch' | 'step_climb' | 'weighted_step_climb' | 'swiss_ball_crunch' | 'swiss_ball_reverse_crunch' | 'weighted_swiss_ball_reverse_crunch' | 'swiss_ball_russian_twist' | 'weighted_swiss_ball_russian_twist' | 'swiss_ball_side_crunch' | 'weighted_swiss_ball_side_crunch' | 'thoracic_crunches_on_foam_roller' | 'weighted_thoracic_crunches_on_foam_roller' | 'triceps_crunch' | 'weighted_bicycle_crunch' | 'weighted_crunch' | 'weighted_swiss_ball_crunch' | 'toes_to_bar' | 'weighted_toes_to_bar' | 'crunch' | 'straight_leg_crunch_with_ball' | 'leg_climb_crunch' | number
-export type CurlExerciseName = 'alternating_dumbbell_biceps_curl' | 'alternating_dumbbell_biceps_curl_on_swiss_ball' | 'alternating_incline_dumbbell_biceps_curl' | 'barbell_biceps_curl' | 'barbell_reverse_wrist_curl' | 'barbell_wrist_curl' | 'behind_the_back_barbell_reverse_wrist_curl' | 'behind_the_back_one_arm_cable_curl' | 'cable_biceps_curl' | 'cable_hammer_curl' | 'cheating_barbell_biceps_curl' | 'close_grip_ez_bar_biceps_curl' | 'cross_body_dumbbell_hammer_curl' | 'dead_hang_biceps_curl' | 'decline_hammer_curl' | 'dumbbell_biceps_curl_with_static_hold' | 'dumbbell_hammer_curl' | 'dumbbell_reverse_wrist_curl' | 'dumbbell_wrist_curl' | 'ez_bar_preacher_curl' | 'forward_bend_biceps_curl' | 'hammer_curl_to_press' | 'incline_dumbbell_biceps_curl' | 'incline_offset_thumb_dumbbell_curl' | 'kettlebell_biceps_curl' | 'lying_concentration_cable_curl' | 'one_arm_preacher_curl' | 'plate_pinch_curl' | 'preacher_curl_with_cable' | 'reverse_ez_bar_curl' | 'reverse_grip_wrist_curl' | 'reverse_grip_barbell_biceps_curl' | 'seated_alternating_dumbbell_biceps_curl' | 'seated_dumbbell_biceps_curl' | 'seated_reverse_dumbbell_curl' | 'split_stance_offset_pinky_dumbbell_curl' | 'standing_alternating_dumbbell_curls' | 'standing_dumbbell_biceps_curl' | 'standing_ez_bar_biceps_curl' | 'static_curl' | 'swiss_ball_dumbbell_overhead_triceps_extension' | 'swiss_ball_ez_bar_preacher_curl' | 'twisting_standing_dumbbell_biceps_curl' | 'wide_grip_ez_bar_biceps_curl' | 'one_arm_concentration_curl' | 'standing_zottman_biceps_curl' | 'dumbbell_biceps_curl' | 'drag_curl_wheelchair' | 'dumbbell_biceps_curl_wheelchair' | 'bottle_curl' | 'seated_bottle_curl' | number
-export type DateMode = 'day_month' | 'month_day' | number
-export type DateTime = 'min' | number
-export type DayOfWeek = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | number
-export type DeadliftExerciseName = 'barbell_deadlift' | 'barbell_straight_leg_deadlift' | 'dumbbell_deadlift' | 'dumbbell_single_leg_deadlift_to_row' | 'dumbbell_straight_leg_deadlift' | 'kettlebell_floor_to_shelf' | 'one_arm_one_leg_deadlift' | 'rack_pull' | 'rotational_dumbbell_straight_leg_deadlift' | 'single_arm_deadlift' | 'single_leg_barbell_deadlift' | 'single_leg_barbell_straight_leg_deadlift' | 'single_leg_deadlift_with_barbell' | 'single_leg_rdl_circuit' | 'single_leg_romanian_deadlift_with_dumbbell' | 'sumo_deadlift' | 'sumo_deadlift_high_pull' | 'trap_bar_deadlift' | 'wide_grip_barbell_deadlift' | 'kettlebell_deadlift' | 'kettlebell_sumo_deadlift' | 'romanian_deadlift' | 'single_leg_romanian_deadlift_circuit' | 'straight_leg_deadlift' | number
-export type DeviceIndex = 'creator' | number
-export type DigitalWatchfaceLayout = 'traditional' | 'modern' | 'bold' | number
-export type DisplayHeart = 'bpm' | 'max' | 'reserve' | number
-export type DisplayMeasure = 'metric' | 'statute' | 'nautical' | number
-export type DisplayOrientation = 'auto' | 'portrait' | 'landscape' | 'portrait_flipped' | 'landscape_flipped' | number
-export type DisplayPosition = 'degree' | 'degree_minute' | 'degree_minute_second' | 'austrian_grid' | 'british_grid' | 'dutch_grid' | 'hungarian_grid' | 'finnish_grid' | 'german_grid' | 'icelandic_grid' | 'indonesian_equatorial' | 'indonesian_irian' | 'indonesian_southern' | 'india_zone0' | 'india_zone_ia' | 'india_zone_ib' | 'india_zone_iia' | 'india_zone_iib' | 'india_zone_iiia' | 'india_zone_iiib' | 'india_zone_iva' | 'india_zone_ivb' | 'irish_transverse' | 'irish_grid' | 'loran' | 'maidenhead_grid' | 'mgrs_grid' | 'new_zealand_grid' | 'new_zealand_transverse' | 'qatar_grid' | 'modified_swedish_grid' | 'swedish_grid' | 'south_african_grid' | 'swiss_grid' | 'taiwan_grid' | 'united_states_grid' | 'utm_ups_grid' | 'west_malayan' | 'borneo_rso' | 'estonian_grid' | 'latvian_grid' | 'swedish_ref99_grid' | number
-export type DisplayPower = 'watts' | 'percent_ftp' | number
-export type DiveAlarmType = 'depth' | 'time' | 'speed' | number
-export type DiveAlert = 'ndl_reached' | 'gas_switch_prompted' | 'near_surface' | 'approaching_ndl' | 'po2_warn' | 'po2_crit_high' | 'po2_crit_low' | 'time_alert' | 'depth_alert' | 'deco_ceiling_broken' | 'deco_complete' | 'safety_stop_broken' | 'safety_stop_complete' | 'cns_warning' | 'cns_critical' | 'otu_warning' | 'otu_critical' | 'ascent_critical' | 'alert_dismissed_by_key' | 'alert_dismissed_by_timeout' | 'battery_low' | 'battery_critical' | 'safety_stop_started' | 'approaching_first_deco_stop' | 'setpoint_switch_auto_low' | 'setpoint_switch_auto_high' | 'setpoint_switch_manual_low' | 'setpoint_switch_manual_high' | 'auto_setpoint_switch_ignored' | 'switched_to_open_circuit' | 'switched_to_closed_circuit' | 'tank_battery_low' | 'po2_ccr_dil_low' | 'deco_stop_cleared' | 'apnea_neutral_buoyancy' | 'apnea_target_depth' | 'apnea_surface' | 'apnea_high_speed' | 'apnea_low_speed' | number
-export type DiveBacklightMode = 'at_depth' | 'always_on' | number
-export type DiveGasMode = 'open_circuit' | 'closed_circuit_diluent' | number
-export type DiveGasStatus = 'disabled' | 'enabled' | 'backup_only' | number
-export type EllipticalExerciseName = 'elliptical' | number
-export type Event = 'timer' | 'workout' | 'workout_step' | 'power_down' | 'power_up' | 'off_course' | 'session' | 'lap' | 'course_point' | 'battery' | 'virtual_partner_pace' | 'hr_high_alert' | 'hr_low_alert' | 'speed_high_alert' | 'speed_low_alert' | 'cad_high_alert' | 'cad_low_alert' | 'power_high_alert' | 'power_low_alert' | 'recovery_hr' | 'battery_low' | 'time_duration_alert' | 'distance_duration_alert' | 'calorie_duration_alert' | 'activity' | 'fitness_equipment' | 'length' | 'user_marker' | 'sport_point' | 'calibration' | 'front_gear_change' | 'rear_gear_change' | 'rider_position_change' | 'elev_high_alert' | 'elev_low_alert' | 'comm_timeout' | 'auto_activity_detect' | 'dive_alert' | 'dive_gas_switched' | 'tank_pressure_reserve' | 'tank_pressure_critical' | 'tank_lost' | 'radar_threat_alert' | 'tank_battery_low' | 'tank_pod_connected' | 'tank_pod_disconnected' | number
-export type EventType = 'start' | 'stop' | 'consecutive_depreciated' | 'marker' | 'stop_all' | 'begin_depreciated' | 'end_depreciated' | 'end_all_depreciated' | 'stop_disable' | 'stop_disable_all' | number
-export type ExdDataUnits = 'no_units' | 'laps' | 'miles_per_hour' | 'kilometers_per_hour' | 'feet_per_hour' | 'meters_per_hour' | 'degrees_celsius' | 'degrees_farenheit' | 'zone' | 'gear' | 'rpm' | 'bpm' | 'degrees' | 'millimeters' | 'meters' | 'kilometers' | 'feet' | 'yards' | 'kilofeet' | 'miles' | 'time' | 'enum_turn_type' | 'percent' | 'watts' | 'watts_per_kilogram' | 'enum_battery_status' | 'enum_bike_light_beam_angle_mode' | 'enum_bike_light_battery_status' | 'enum_bike_light_network_config_type' | 'lights' | 'seconds' | 'minutes' | 'hours' | 'calories' | 'kilojoules' | 'milliseconds' | 'second_per_mile' | 'second_per_kilometer' | 'centimeter' | 'enum_course_point' | 'bradians' | 'enum_sport' | 'inches_hg' | 'mm_hg' | 'mbars' | 'hecto_pascals' | 'feet_per_min' | 'meters_per_min' | 'meters_per_sec' | 'eight_cardinal' | number
-export type ExdDescriptors = 'bike_light_battery_status' | 'beam_angle_status' | 'batery_level' | 'light_network_mode' | 'number_lights_connected' | 'cadence' | 'distance' | 'estimated_time_of_arrival' | 'heading' | 'time' | 'battery_level' | 'trainer_resistance' | 'trainer_target_power' | 'time_seated' | 'time_standing' | 'elevation' | 'grade' | 'ascent' | 'descent' | 'vertical_speed' | 'di2_battery_level' | 'front_gear' | 'rear_gear' | 'gear_ratio' | 'heart_rate' | 'heart_rate_zone' | 'time_in_heart_rate_zone' | 'heart_rate_reserve' | 'calories' | 'gps_accuracy' | 'gps_signal_strength' | 'temperature' | 'time_of_day' | 'balance' | 'pedal_smoothness' | 'power' | 'functional_threshold_power' | 'intensity_factor' | 'work' | 'power_ratio' | 'normalized_power' | 'training_stress_score' | 'time_on_zone' | 'speed' | 'laps' | 'reps' | 'workout_step' | 'course_distance' | 'navigation_distance' | 'course_estimated_time_of_arrival' | 'navigation_estimated_time_of_arrival' | 'course_time' | 'navigation_time' | 'course_heading' | 'navigation_heading' | 'power_zone' | 'torque_effectiveness' | 'timer_time' | 'power_weight_ratio' | 'left_platform_center_offset' | 'right_platform_center_offset' | 'left_power_phase_start_angle' | 'right_power_phase_start_angle' | 'left_power_phase_finish_angle' | 'right_power_phase_finish_angle' | 'gears' | 'pace' | 'training_effect' | 'vertical_oscillation' | 'vertical_ratio' | 'ground_contact_time' | 'left_ground_contact_time_balance' | 'right_ground_contact_time_balance' | 'stride_length' | 'running_cadence' | 'performance_condition' | 'course_type' | 'time_in_power_zone' | 'navigation_turn' | 'course_location' | 'navigation_location' | 'compass' | 'gear_combo' | 'muscle_oxygen' | 'icon' | 'compass_heading' | 'gps_heading' | 'gps_elevation' | 'anaerobic_training_effect' | 'course' | 'off_course' | 'glide_ratio' | 'vertical_distance' | 'vmg' | 'ambient_pressure' | 'pressure' | 'vam' | number
-export type ExdDisplayType = 'numerical' | 'simple' | 'graph' | 'bar' | 'circle_graph' | 'virtual_partner' | 'balance' | 'string_list' | 'string' | 'simple_dynamic_icon' | 'gauge' | number
-export type ExdLayout = 'full_screen' | 'half_vertical' | 'half_horizontal' | 'half_vertical_right_split' | 'half_horizontal_bottom_split' | 'full_quarter_split' | 'half_vertical_left_split' | 'half_horizontal_top_split' | 'dynamic' | number
-export type ExdQualifiers = 'no_qualifier' | 'instantaneous' | 'average' | 'lap' | 'maximum' | 'maximum_average' | 'maximum_lap' | 'last_lap' | 'average_lap' | 'to_destination' | 'to_go' | 'to_next' | 'next_course_point' | 'total' | 'three_second_average' | 'ten_second_average' | 'thirty_second_average' | 'percent_maximum' | 'percent_maximum_average' | 'lap_percent_maximum' | 'elapsed' | 'sunrise' | 'sunset' | 'compared_to_virtual_partner' | 'maximum24h' | 'minimum24h' | 'minimum' | 'first' | 'second' | 'third' | 'shifter' | 'last_sport' | 'moving' | 'stopped' | 'estimated_total' | 'zone9' | 'zone8' | 'zone7' | 'zone6' | 'zone5' | 'zone4' | 'zone3' | 'zone2' | 'zone1' | number
-export type ExerciseCategory = 'bench_press' | 'calf_raise' | 'cardio' | 'carry' | 'chop' | 'core' | 'crunch' | 'curl' | 'deadlift' | 'flye' | 'hip_raise' | 'hip_stability' | 'hip_swing' | 'hyperextension' | 'lateral_raise' | 'leg_curl' | 'leg_raise' | 'lunge' | 'olympic_lift' | 'plank' | 'plyo' | 'pull_up' | 'push_up' | 'row' | 'shoulder_press' | 'shoulder_stability' | 'shrug' | 'sit_up' | 'squat' | 'total_body' | 'triceps_extension' | 'warm_up' | 'run' | 'bike' | 'cardio_sensors' | 'move' | 'pose' | 'banded_exercises' | 'battle_rope' | 'elliptical' | 'floor_climb' | 'indoor_bike' | 'indoor_row' | 'ladder' | 'sandbag' | 'sled' | 'sledge_hammer' | 'stair_stepper' | 'suspension' | 'tire' | 'run_indoor' | 'bike_outdoor' | 'unknown' | number
-export type FaveroProduct = 'assioma_uno' | 'assioma_duo' | number
 export type File = 'device' | 'settings' | 'sport' | 'activity' | 'workout' | 'course' | 'schedules' | 'weight' | 'totals' | 'goals' | 'blood_pressure' | 'monitoring_a' | 'activity_summary' | 'monitoring_daily' | 'monitoring_b' | 'segment' | 'segment_list' | 'exd_configuration' | 'mfg_range_min' | 'mfg_range_max' | number
-export type FileFlags = 'read' | 'write' | 'erase' | number
-export type FitBaseType = 'enum' | 'sint8' | 'uint8' | 'string' | 'uint8z' | 'byte' | 'sint16' | 'uint16' | 'sint32' | 'uint32' | 'float32' | 'float64' | 'uint16z' | 'uint32z' | 'sint64' | 'uint64' | 'uint64z' | number
-export type FitBaseUnit = 'other' | 'kilogram' | 'pound' | number
-export type FitnessEquipmentState = 'ready' | 'in_use' | 'paused' | 'unknown' | number
-export type FloorClimbExerciseName = 'floor_climb' | number
-export type FlyeExerciseName = 'cable_crossover' | 'decline_dumbbell_flye' | 'dumbbell_flye' | 'incline_dumbbell_flye' | 'kettlebell_flye' | 'kneeling_rear_flye' | 'single_arm_standing_cable_reverse_flye' | 'swiss_ball_dumbbell_flye' | 'arm_rotations' | 'hug_a_tree' | 'face_down_incline_reverse_flye' | 'incline_reverse_flye' | 'rear_delt_fly_wheelchair' | number
-export type GarminProduct = 'hrm1' | 'axh01' | 'axb01' | 'axb02' | 'hrm2ss' | 'dsi_alf02' | 'hrm3ss' | 'hrm_run_single_byte_product_id' | 'bsm' | 'bcm' | 'axs01' | 'hrm_tri_single_byte_product_id' | 'hrm4_run_single_byte_product_id' | 'fr225_single_byte_product_id' | 'gen3_bsm_single_byte_product_id' | 'gen3_bcm_single_byte_product_id' | 'hrm_fit_single_byte_product_id' | 'o_hr' | 'fr301_china' | 'fr301_japan' | 'fr301_korea' | 'fr301_taiwan' | 'fr405' | 'fr50' | 'fr405_japan' | 'fr60' | 'dsi_alf01' | 'fr310xt' | 'edge500' | 'fr110' | 'edge800' | 'edge500_taiwan' | 'edge500_japan' | 'chirp' | 'fr110_japan' | 'edge200' | 'fr910xt' | 'edge800_taiwan' | 'edge800_japan' | 'alf04' | 'fr610' | 'fr210_japan' | 'vector_ss' | 'vector_cp' | 'edge800_china' | 'edge500_china' | 'approach_g10' | 'fr610_japan' | 'edge500_korea' | 'fr70' | 'fr310xt4t' | 'amx' | 'fr10' | 'edge800_korea' | 'swim' | 'fr910xt_china' | 'fenix' | 'edge200_taiwan' | 'edge510' | 'edge810' | 'tempe' | 'fr910xt_japan' | 'fr620' | 'fr220' | 'fr910xt_korea' | 'fr10_japan' | 'edge810_japan' | 'virb_elite' | 'edge_touring' | 'edge510_japan' | 'hrm_tri' | 'hrm_run' | 'fr920xt' | 'edge510_asia' | 'edge810_china' | 'edge810_taiwan' | 'edge1000' | 'vivo_fit' | 'virb_remote' | 'vivo_ki' | 'fr15' | 'vivo_active' | 'edge510_korea' | 'fr620_japan' | 'fr620_china' | 'fr220_japan' | 'fr220_china' | 'approach_s6' | 'vivo_smart' | 'fenix2' | 'epix' | 'fenix3' | 'edge1000_taiwan' | 'edge1000_japan' | 'fr15_japan' | 'edge520' | 'edge1000_china' | 'fr620_russia' | 'fr220_russia' | 'vector_s' | 'edge1000_korea' | 'fr920xt_taiwan' | 'fr920xt_china' | 'fr920xt_japan' | 'virbx' | 'vivo_smart_apac' | 'etrex_touch' | 'edge25' | 'fr25' | 'vivo_fit2' | 'fr225' | 'fr630' | 'fr230' | 'fr735xt' | 'vivo_active_apac' | 'vector2' | 'vector2s' | 'virbxe' | 'fr620_taiwan' | 'fr220_taiwan' | 'truswing' | 'd2airvenu' | 'fenix3_china' | 'fenix3_twn' | 'varia_headlight' | 'varia_taillight_old' | 'edge_explore1000' | 'fr225_asia' | 'varia_radar_taillight' | 'varia_radar_display' | 'edge20' | 'edge520_asia' | 'edge520_japan' | 'd2_bravo' | 'approach_s20' | 'vivo_smart2' | 'edge1000_thai' | 'varia_remote' | 'edge25_asia' | 'edge25_jpn' | 'edge20_asia' | 'approach_x40' | 'fenix3_japan' | 'vivo_smart_emea' | 'fr630_asia' | 'fr630_jpn' | 'fr230_jpn' | 'hrm4_run' | 'epix_japan' | 'vivo_active_hr' | 'vivo_smart_gps_hr' | 'vivo_smart_hr' | 'vivo_smart_hr_asia' | 'vivo_smart_gps_hr_asia' | 'vivo_move' | 'varia_taillight' | 'fr235_asia' | 'fr235_japan' | 'varia_vision' | 'vivo_fit3' | 'fenix3_korea' | 'fenix3_sea' | 'fenix3_hr' | 'virb_ultra30' | 'index_smart_scale' | 'fr235' | 'fenix3_chronos' | 'oregon7xx' | 'rino7xx' | 'epix_korea' | 'fenix3_hr_chn' | 'fenix3_hr_twn' | 'fenix3_hr_jpn' | 'fenix3_hr_sea' | 'fenix3_hr_kor' | 'nautix' | 'vivo_active_hr_apac' | 'fr35' | 'oregon7xx_ww' | 'edge820' | 'edge_explore820' | 'fr735xt_apac' | 'fr735xt_japan' | 'fenix5s' | 'd2_bravo_titanium' | 'varia_ut800' | 'running_dynamics_pod' | 'edge820_china' | 'edge820_japan' | 'fenix5x' | 'vivo_fit_jr' | 'vivo_smart3' | 'vivo_sport' | 'edge820_taiwan' | 'edge820_korea' | 'edge820_sea' | 'fr35_hebrew' | 'approach_s60' | 'fr35_apac' | 'fr35_japan' | 'fenix3_chronos_asia' | 'virb360' | 'fr935' | 'fenix5' | 'vivoactive3' | 'edge1030' | 'fr35_sea' | 'fr235_china_nfc' | 'foretrex601_701' | 'vivo_move_hr' | 'vector3' | 'fenix5_asia' | 'fenix5s_asia' | 'fenix5x_asia' | 'approach_z80' | 'fr35_korea' | 'd2charlie' | 'vivo_smart3_apac' | 'vivo_sport_apac' | 'fr935_asia' | 'descent' | 'vivo_fit4' | 'fr645' | 'fr645m' | 'fr30' | 'fenix5s_plus' | 'edge130' | 'edge1030_asia' | 'vivosmart4' | 'vivo_move_hr_asia' | 'approach_x10' | 'fr30_asia' | 'vivoactive3m_w' | 'fr645_asia' | 'fr645m_asia' | 'edge_explore' | 'gpsmap66' | 'approach_s10' | 'vivoactive3m_l' | 'fr245' | 'fr245_music' | 'approach_g80' | 'edge130_asia' | 'edge1030_bontrager' | 'fenix5_plus' | 'fenix5x_plus' | 'edge520_plus' | 'fr945' | 'edge530' | 'edge830' | 'instinct_esports' | 'fenix5s_plus_apac' | 'fenix5x_plus_apac' | 'edge520_plus_apac' | 'descent_t1' | 'fr235l_asia' | 'fr245_asia' | 'vivo_active3m_apac' | 'gen3_bsm' | 'gen3_bcm' | 'vivo_smart4_asia' | 'vivoactive4_small' | 'vivoactive4_large' | 'venu' | 'marq_driver' | 'marq_aviator' | 'marq_captain' | 'marq_commander' | 'marq_expedition' | 'marq_athlete' | 'descent_mk2' | 'fr45' | 'gpsmap66i' | 'fenix6_s_sport' | 'fenix6_s' | 'fenix6_sport' | 'fenix6' | 'fenix6x' | 'hrm_dual' | 'hrm_pro' | 'vivo_move3_premium' | 'approach_s40' | 'fr245m_asia' | 'edge530_apac' | 'edge830_apac' | 'vivo_move3' | 'vivo_active4_small_asia' | 'vivo_active4_large_asia' | 'vivo_active4_oled_asia' | 'swim2' | 'marq_driver_asia' | 'marq_aviator_asia' | 'vivo_move3_asia' | 'fr945_asia' | 'vivo_active3t_chn' | 'marq_captain_asia' | 'marq_commander_asia' | 'marq_expedition_asia' | 'marq_athlete_asia' | 'index_smart_scale2' | 'instinct_solar' | 'fr45_asia' | 'vivoactive3_daimler' | 'legacy_rey' | 'legacy_darth_vader' | 'legacy_captain_marvel' | 'legacy_first_avenger' | 'fenix6s_sport_asia' | 'fenix6s_asia' | 'fenix6_sport_asia' | 'fenix6_asia' | 'fenix6x_asia' | 'legacy_captain_marvel_asia' | 'legacy_first_avenger_asia' | 'legacy_rey_asia' | 'legacy_darth_vader_asia' | 'descent_mk2s' | 'edge130_plus' | 'edge1030_plus' | 'rally200' | 'fr745' | 'venusq_music' | 'venusq_music_v2' | 'venusq' | 'lily' | 'marq_adventurer' | 'enduro' | 'swim2_apac' | 'marq_adventurer_asia' | 'fr945_lte' | 'descent_mk2_asia' | 'venu2' | 'venu2s' | 'venu_daimler_asia' | 'marq_golfer' | 'venu_daimler' | 'fr745_asia' | 'varia_rct715' | 'lily_asia' | 'edge1030_plus_asia' | 'edge130_plus_asia' | 'approach_s12' | 'venusq_asia' | 'edge1040' | 'marq_golfer_asia' | 'venu2_plus' | 'gnss' | 'fr55' | 'enduro_asia' | 'instinct2' | 'instinct2s' | 'fenix7s' | 'fenix7' | 'fenix7x' | 'fenix7s_apac' | 'fenix7_apac' | 'fenix7x_apac' | 'approach_g12' | 'descent_mk2s_asia' | 'approach_s42' | 'epix_gen2' | 'epix_gen2_apac' | 'venu2s_asia' | 'venu2_asia' | 'fr945_lte_asia' | 'vivo_move_sport' | 'vivomove_trend' | 'approach_s12_asia' | 'fr255_music' | 'fr255_small_music' | 'fr255' | 'fr255_small' | 'approach_g12_asia' | 'approach_s42_asia' | 'descent_g1' | 'venu2_plus_asia' | 'fr955' | 'fr55_asia' | 'edge540' | 'edge840' | 'vivosmart5' | 'instinct2_asia' | 'marq_gen2' | 'venusq2' | 'venusq2music' | 'marq_gen2_aviator' | 'd2_air_x10' | 'hrm_pro_plus' | 'descent_g1_asia' | 'tactix7' | 'instinct_crossover' | 'edge_explore2' | 'descent_mk3' | 'descent_mk3i' | 'approach_s70' | 'fr265_large' | 'fr265_small' | 'venu3' | 'venu3s' | 'tacx_neo_smart' | 'tacx_neo2_smart' | 'tacx_neo2_t_smart' | 'tacx_neo_smart_bike' | 'tacx_satori_smart' | 'tacx_flow_smart' | 'tacx_vortex_smart' | 'tacx_bushido_smart' | 'tacx_genius_smart' | 'tacx_flux_flux_s_smart' | 'tacx_flux2_smart' | 'tacx_magnum' | 'edge1040_asia' | 'epix_gen2_pro42' | 'epix_gen2_pro47' | 'epix_gen2_pro51' | 'fr965' | 'enduro2' | 'fenix7s_pro_solar' | 'fenix7_pro_solar' | 'fenix7x_pro_solar' | 'lily2' | 'instinct2x' | 'vivoactive5' | 'fr165' | 'fr165_music' | 'edge1050' | 'descent_t2' | 'hrm_fit' | 'marq_gen2_commander' | 'lily_athlete' | 'rally_x10' | 'fenix8_solar' | 'fenix8_solar_large' | 'fenix8_small' | 'fenix8' | 'd2_mach1_pro' | 'enduro3' | 'instinct_e40mm' | 'instinct_e45mm' | 'instinct3_solar45mm' | 'instinct3_amoled45mm' | 'instinct3_amoled50mm' | 'descent_g2' | 'venu_x1' | 'hrm200' | 'vivoactive6' | 'fenix8_pro' | 'edge550' | 'edge850' | 'venu4' | 'venu4s' | 'approach_s44' | 'edge_mtb' | 'approach_s50' | 'fenix_e' | 'instinct_crossover_amoled' | 'bounce2' | 'instinct3_solar50mm' | 'tactix8_amoled' | 'tactix8_solar' | 'fr170_music' | 'fr170' | 'approach_j1' | 'd2_mach2' | 'fr702026' | 'd2_air_x15' | 'd2_mach2_pro' | 'sdm4' | 'edge_remote' | 'training_center' | 'tacx_training_app_win' | 'tacx_training_app_mac' | 'tacx_training_app_mac_catalyst' | 'tacx_training_app_android' | 'tacx_training_app_ios' | 'tacx_training_app_legacy' | 'connectiq_simulator' | 'android_antplus_plugin' | 'connect' | number
-export type GasConsumptionRateType = 'pressure_sac' | 'volume_sac' | 'rmv' | number
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'ohr_settings' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'monitoring_hr_data' | 'time_in_zone' | 'set' | 'stress_level' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'sleep_level' | 'jump' | 'split' | 'split_summary' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'o_hr_settings' | 'mfg_range_min' | 'mfg_range_max' | 'definition' | number
+export type Checksum = 'clear' | 'ok' | number
+export type FileFlags = '0' | 'read' | 'write' | 'erase' | number
+export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type' | number
+export type DateTime = '0' | 'min' | number
+export type LocalDateTime = '0' | 'min' | number
+export interface MessageIndex {
+  value: number
+  reserved: boolean
+  selected: boolean
+}
 export type Gender = 'female' | 'male' | number
+export type Language = 'english' | 'french' | 'italian' | 'german' | 'spanish' | 'croatian' | 'czech' | 'danish' | 'dutch' | 'finnish' | 'greek' | 'hungarian' | 'norwegian' | 'polish' | 'portuguese' | 'slovakian' | 'slovenian' | 'swedish' | 'russian' | 'turkish' | 'latvian' | 'ukrainian' | 'arabic' | 'farsi' | 'bulgarian' | 'romanian' | 'chinese' | 'japanese' | 'korean' | 'taiwanese' | 'thai' | 'hebrew' | 'brazilian_portuguese' | 'indonesian' | 'malaysian' | 'vietnamese' | 'burmese' | 'mongolian' | 'custom' | number
+export type LanguageBits0 = '0' | 'english' | 'french' | 'italian' | 'german' | 'spanish' | 'croatian' | 'czech' | 'danish' | number
+export type LanguageBits1 = '0' | 'dutch' | 'finnish' | 'greek' | 'hungarian' | 'norwegian' | 'polish' | 'portuguese' | 'slovakian' | number
+export type LanguageBits2 = '0' | 'slovenian' | 'swedish' | 'russian' | 'turkish' | 'latvian' | 'ukrainian' | 'arabic' | 'farsi' | number
+export type LanguageBits3 = '0' | 'bulgarian' | 'romanian' | 'chinese' | 'japanese' | 'korean' | 'taiwanese' | 'thai' | 'hebrew' | number
+export type LanguageBits4 = '0' | 'brazilian_portuguese' | 'indonesian' | 'malaysian' | 'vietnamese' | 'burmese' | 'mongolian' | number
+export type TimeZone = 'almaty' | 'bangkok' | 'bombay' | 'brasilia' | 'cairo' | 'cape_verde_is' | 'darwin' | 'eniwetok' | 'fiji' | 'hong_kong' | 'islamabad' | 'kabul' | 'magadan' | 'mid_atlantic' | 'moscow' | 'muscat' | 'newfoundland' | 'samoa' | 'sydney' | 'tehran' | 'tokyo' | 'us_alaska' | 'us_atlantic' | 'us_central' | 'us_eastern' | 'us_hawaii' | 'us_mountain' | 'us_pacific' | 'other' | 'auckland' | 'kathmandu' | 'europe_western_wet' | 'europe_central_cet' | 'europe_eastern_eet' | 'jakarta' | 'perth' | 'adelaide' | 'brisbane' | 'tasmania' | 'iceland' | 'amsterdam' | 'athens' | 'barcelona' | 'berlin' | 'brussels' | 'budapest' | 'copenhagen' | 'dublin' | 'helsinki' | 'lisbon' | 'london' | 'madrid' | 'munich' | 'oslo' | 'paris' | 'prague' | 'reykjavik' | 'rome' | 'stockholm' | 'vienna' | 'warsaw' | 'zurich' | 'quebec' | 'ontario' | 'manitoba' | 'saskatchewan' | 'alberta' | 'british_columbia' | 'boise' | 'boston' | 'chicago' | 'dallas' | 'denver' | 'kansas_city' | 'las_vegas' | 'los_angeles' | 'miami' | 'minneapolis' | 'new_york' | 'new_orleans' | 'phoenix' | 'santa_fe' | 'seattle' | 'washington_dc' | 'us_arizona' | 'chita' | 'ekaterinburg' | 'irkutsk' | 'kaliningrad' | 'krasnoyarsk' | 'novosibirsk' | 'petropavlovsk_kamchatskiy' | 'samara' | 'vladivostok' | 'mexico_central' | 'mexico_mountain' | 'mexico_pacific' | 'cape_town' | 'winkhoek' | 'lagos' | 'riyahd' | 'venezuela' | 'australia_lh' | 'santiago' | 'manual' | 'automatic' | number
+export type DisplayMeasure = 'metric' | 'statute' | 'nautical' | number
+export type DisplayHeart = 'bpm' | 'max' | 'reserve' | number
+export type DisplayPower = 'watts' | 'percent_ftp' | number
+export type DisplayPosition = 'degree' | 'degree_minute' | 'degree_minute_second' | 'austrian_grid' | 'british_grid' | 'dutch_grid' | 'hungarian_grid' | 'finnish_grid' | 'german_grid' | 'icelandic_grid' | 'indonesian_equatorial' | 'indonesian_irian' | 'indonesian_southern' | 'india_zone_0' | 'india_zone_IA' | 'india_zone_IB' | 'india_zone_IIA' | 'india_zone_IIB' | 'india_zone_IIIA' | 'india_zone_IIIB' | 'india_zone_IVA' | 'india_zone_IVB' | 'irish_transverse' | 'irish_grid' | 'loran' | 'maidenhead_grid' | 'mgrs_grid' | 'new_zealand_grid' | 'new_zealand_transverse' | 'qatar_grid' | 'modified_swedish_grid' | 'swedish_grid' | 'south_african_grid' | 'swiss_grid' | 'taiwan_grid' | 'united_states_grid' | 'utm_ups_grid' | 'west_malayan' | 'borneo_rso' | 'estonian_grid' | 'latvian_grid' | 'swedish_ref_99_grid' | number
+export type Switch = 'off' | 'on' | 'auto' | number
+export type Sport = 'generic' | 'running' | 'cycling' | 'transition' | 'fitness_equipment' | 'swimming' | 'basketball' | 'soccer' | 'tennis' | 'american_football' | 'training' | 'walking' | 'cross_country_skiing' | 'alpine_skiing' | 'snowboarding' | 'rowing' | 'mountaineering' | 'hiking' | 'multisport' | 'paddling' | 'flying' | 'e_biking' | 'motorcycling' | 'boating' | 'driving' | 'golf' | 'hang_gliding' | 'horseback_riding' | 'hunting' | 'fishing' | 'inline_skating' | 'rock_climbing' | 'sailing' | 'ice_skating' | 'sky_diving' | 'snowshoeing' | 'snowmobiling' | 'stand_up_paddleboarding' | 'surfing' | 'wakeboarding' | 'water_skiing' | 'kayaking' | 'rafting' | 'windsurfing' | 'kitesurfing' | 'tactical' | 'jumpmaster' | 'boxing' | 'floor_climbing' | 'diving' | 'snorkeling' | 'all' | number
+export type SportBits0 = '0' | 'generic' | 'running' | 'cycling' | 'transition' | 'fitness_equipment' | 'swimming' | 'basketball' | 'soccer' | number
+export type SportBits1 = '0' | 'tennis' | 'american_football' | 'training' | 'walking' | 'cross_country_skiing' | 'alpine_skiing' | 'snowboarding' | 'rowing' | number
+export type SportBits2 = '0' | 'mountaineering' | 'hiking' | 'multisport' | 'paddling' | 'flying' | 'e_biking' | 'motorcycling' | 'boating' | number
+export type SportBits3 = '0' | 'driving' | 'golf' | 'hang_gliding' | 'horseback_riding' | 'hunting' | 'fishing' | 'inline_skating' | 'rock_climbing' | number
+export type SportBits4 = '0' | 'sailing' | 'ice_skating' | 'sky_diving' | 'snowshoeing' | 'snowmobiling' | 'stand_up_paddleboarding' | 'surfing' | 'wakeboarding' | number
+export type SportBits5 = '0' | 'water_skiing' | 'kayaking' | 'rafting' | 'windsurfing' | 'kitesurfing' | 'tactical' | 'jumpmaster' | 'boxing' | number
+export type SportBits6 = '0' | 'floor_climbing' | number
+export type SubSport = 'generic' | 'treadmill' | 'street' | 'trail' | 'track' | 'spin' | 'indoor_cycling' | 'road' | 'mountain' | 'downhill' | 'recumbent' | 'cyclocross' | 'hand_cycling' | 'track_cycling' | 'indoor_rowing' | 'elliptical' | 'stair_climbing' | 'lap_swimming' | 'open_water' | 'flexibility_training' | 'strength_training' | 'warm_up' | 'match' | 'exercise' | 'challenge' | 'indoor_skiing' | 'cardio_training' | 'indoor_walking' | 'e_bike_fitness' | 'bmx' | 'casual_walking' | 'speed_walking' | 'bike_to_run_transition' | 'run_to_bike_transition' | 'swim_to_bike_transition' | 'atv' | 'motocross' | 'backcountry' | 'resort' | 'rc_drone' | 'wingsuit' | 'whitewater' | 'skate_skiing' | 'yoga' | 'pilates' | 'indoor_running' | 'gravel_cycling' | 'e_bike_mountain' | 'commuting' | 'mixed_surface' | 'navigate' | 'track_me' | 'map' | 'single_gas_diving' | 'multi_gas_diving' | 'gauge_diving' | 'apnea_diving' | 'apnea_hunting' | 'virtual_activity' | 'obstacle' | 'all' | number
+export type SportEvent = 'uncategorized' | 'geocaching' | 'fitness' | 'recreation' | 'race' | 'special_event' | 'training' | 'transportation' | 'touring' | number
+export type Activity = 'manual' | 'auto_multi_sport' | number
+export type Intensity = 'active' | 'rest' | 'warmup' | 'cooldown' | 'recovery' | 'interval' | 'other' | number
+export type SessionTrigger = 'activity_end' | 'manual' | 'auto_multi_sport' | 'fitness_equipment' | number
+export type AutolapTrigger = 'time' | 'distance' | 'position_start' | 'position_lap' | 'position_waypoint' | 'position_marked' | 'off' | number
+export type LapTrigger = 'manual' | 'time' | 'distance' | 'position_start' | 'position_lap' | 'position_waypoint' | 'position_marked' | 'session_end' | 'fitness_equipment' | number
+export type TimeMode = 'hour12' | 'hour24' | 'military' | 'hour_12_with_seconds' | 'hour_24_with_seconds' | 'utc' | number
+export type BacklightMode = 'off' | 'manual' | 'key_and_messages' | 'auto_brightness' | 'smart_notifications' | 'key_and_messages_night' | 'key_and_messages_and_smart_notifications' | number
+export type DateMode = 'day_month' | 'month_day' | number
+export type BacklightTimeout = 'infinite' | number
+export type Event = 'timer' | 'workout' | 'workout_step' | 'power_down' | 'power_up' | 'off_course' | 'session' | 'lap' | 'course_point' | 'battery' | 'virtual_partner_pace' | 'hr_high_alert' | 'hr_low_alert' | 'speed_high_alert' | 'speed_low_alert' | 'cad_high_alert' | 'cad_low_alert' | 'power_high_alert' | 'power_low_alert' | 'recovery_hr' | 'battery_low' | 'time_duration_alert' | 'distance_duration_alert' | 'calorie_duration_alert' | 'activity' | 'fitness_equipment' | 'length' | 'user_marker' | 'sport_point' | 'calibration' | 'front_gear_change' | 'rear_gear_change' | 'rider_position_change' | 'elev_high_alert' | 'elev_low_alert' | 'comm_timeout' | number
+export type EventType = 'start' | 'stop' | 'consecutive_depreciated' | 'marker' | 'stop_all' | 'begin_depreciated' | 'end_depreciated' | 'end_all_depreciated' | 'stop_disable' | 'stop_disable_all' | number
+export type TimerTrigger = 'manual' | 'auto' | 'fitness_equipment' | number
+export type FitnessEquipmentState = 'ready' | 'in_use' | 'paused' | 'unknown' | number
+export type Tone = 'off' | 'tone' | 'vibrate' | 'tone_and_vibrate' | number
+export type Autoscroll = 'none' | 'slow' | 'medium' | 'fast' | number
+export type ActivityClass = '0' | 'level_max' | 'level' | 'athlete' | number
+export type HrZoneCalc = 'custom' | 'percent_max_hr' | 'percent_hrr' | number
+export type PwrZoneCalc = 'custom' | 'percent_ftp' | number
+export type WktStepDuration = 'time' | 'distance' | 'hr_less_than' | 'hr_greater_than' | 'calories' | 'open' | 'repeat_until_steps_cmplt' | 'repeat_until_time' | 'repeat_until_distance' | 'repeat_until_calories' | 'repeat_until_hr_less_than' | 'repeat_until_hr_greater_than' | 'repeat_until_power_less_than' | 'repeat_until_power_greater_than' | 'power_less_than' | 'power_greater_than' | 'training_peaks_tss' | 'repeat_until_power_last_lap_less_than' | 'repeat_until_max_power_last_lap_less_than' | 'power_3s_less_than' | 'power_10s_less_than' | 'power_30s_less_than' | 'power_3s_greater_than' | 'power_10s_greater_than' | 'power_30s_greater_than' | 'power_lap_less_than' | 'power_lap_greater_than' | 'repeat_until_training_peaks_tss' | 'repetition_time' | 'reps' | number
+export type WktStepTarget = 'speed' | 'heart_rate' | 'open' | 'cadence' | 'power' | 'grade' | 'resistance' | 'power_3s' | 'power_10s' | 'power_30s' | 'power_lap' | 'swim_stroke' | 'speed_lap' | 'heart_rate_lap' | number
 export type Goal = 'time' | 'distance' | 'calories' | 'frequency' | 'steps' | 'ascent' | 'active_minutes' | number
 export type GoalRecurrence = 'off' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom' | number
 export type GoalSource = 'auto' | 'community' | 'user' | number
-export type HipRaiseExerciseName = 'barbell_hip_thrust_on_floor' | 'barbell_hip_thrust_with_bench' | 'bent_knee_swiss_ball_reverse_hip_raise' | 'weighted_bent_knee_swiss_ball_reverse_hip_raise' | 'bridge_with_leg_extension' | 'weighted_bridge_with_leg_extension' | 'clam_bridge' | 'front_kick_tabletop' | 'weighted_front_kick_tabletop' | 'hip_extension_and_cross' | 'weighted_hip_extension_and_cross' | 'hip_raise' | 'weighted_hip_raise' | 'hip_raise_with_feet_on_swiss_ball' | 'weighted_hip_raise_with_feet_on_swiss_ball' | 'hip_raise_with_head_on_bosu_ball' | 'weighted_hip_raise_with_head_on_bosu_ball' | 'hip_raise_with_head_on_swiss_ball' | 'weighted_hip_raise_with_head_on_swiss_ball' | 'hip_raise_with_knee_squeeze' | 'weighted_hip_raise_with_knee_squeeze' | 'incline_rear_leg_extension' | 'weighted_incline_rear_leg_extension' | 'kettlebell_swing' | 'marching_hip_raise' | 'weighted_marching_hip_raise' | 'marching_hip_raise_with_feet_on_a_swiss_ball' | 'weighted_marching_hip_raise_with_feet_on_a_swiss_ball' | 'reverse_hip_raise' | 'weighted_reverse_hip_raise' | 'single_leg_hip_raise' | 'weighted_single_leg_hip_raise' | 'single_leg_hip_raise_with_foot_on_bench' | 'weighted_single_leg_hip_raise_with_foot_on_bench' | 'single_leg_hip_raise_with_foot_on_bosu_ball' | 'weighted_single_leg_hip_raise_with_foot_on_bosu_ball' | 'single_leg_hip_raise_with_foot_on_foam_roller' | 'weighted_single_leg_hip_raise_with_foot_on_foam_roller' | 'single_leg_hip_raise_with_foot_on_medicine_ball' | 'weighted_single_leg_hip_raise_with_foot_on_medicine_ball' | 'single_leg_hip_raise_with_head_on_bosu_ball' | 'weighted_single_leg_hip_raise_with_head_on_bosu_ball' | 'weighted_clam_bridge' | 'single_leg_swiss_ball_hip_raise_and_leg_curl' | 'clams' | 'inner_thigh_circles' | 'inner_thigh_side_lift' | 'leg_circles' | 'leg_lift' | 'leg_lift_in_external_rotation' | number
-export type HipStabilityExerciseName = 'band_side_lying_leg_raise' | 'dead_bug' | 'weighted_dead_bug' | 'external_hip_raise' | 'weighted_external_hip_raise' | 'fire_hydrant_kicks' | 'weighted_fire_hydrant_kicks' | 'hip_circles' | 'weighted_hip_circles' | 'inner_thigh_lift' | 'weighted_inner_thigh_lift' | 'lateral_walks_with_band_at_ankles' | 'pretzel_side_kick' | 'weighted_pretzel_side_kick' | 'prone_hip_internal_rotation' | 'weighted_prone_hip_internal_rotation' | 'quadruped' | 'quadruped_hip_extension' | 'weighted_quadruped_hip_extension' | 'quadruped_with_leg_lift' | 'weighted_quadruped_with_leg_lift' | 'side_lying_leg_raise' | 'weighted_side_lying_leg_raise' | 'sliding_hip_adduction' | 'weighted_sliding_hip_adduction' | 'standing_adduction' | 'weighted_standing_adduction' | 'standing_cable_hip_abduction' | 'standing_hip_abduction' | 'weighted_standing_hip_abduction' | 'standing_rear_leg_raise' | 'weighted_standing_rear_leg_raise' | 'supine_hip_internal_rotation' | 'weighted_supine_hip_internal_rotation' | 'lying_abduction_stretch' | number
-export type HipSwingExerciseName = 'single_arm_kettlebell_swing' | 'single_arm_dumbbell_swing' | 'step_out_swing' | 'one_arm_swing' | number
+export type Schedule = 'workout' | 'course' | number
+export type CoursePoint = 'generic' | 'summit' | 'valley' | 'water' | 'food' | 'danger' | 'left' | 'right' | 'straight' | 'first_aid' | 'fourth_category' | 'third_category' | 'second_category' | 'first_category' | 'hors_category' | 'sprint' | 'left_fork' | 'right_fork' | 'middle_fork' | 'slight_left' | 'sharp_left' | 'slight_right' | 'sharp_right' | 'u_turn' | 'segment_start' | 'segment_end' | 'campsite' | 'aid_station' | 'rest_area' | 'general_distance' | 'service' | 'energy_gel' | 'sports_drink' | 'mile_marker' | 'checkpoint' | 'shelter' | 'meeting_spot' | 'overlook' | 'toilet' | 'shower' | 'gear' | 'sharp_curve' | 'steep_incline' | 'tunnel' | 'bridge' | 'obstacle' | 'crossing' | 'store' | 'transition' | 'navaid' | 'transport' | 'alert' | 'info' | number
+export type Manufacturer = '0' | 'garmin' | 'garmin_fr405_antfs' | 'zephyr' | 'dayton' | 'idt' | 'srm' | 'quarq' | 'ibike' | 'saris' | 'spark_hk' | 'tanita' | 'echowell' | 'dynastream_oem' | 'nautilus' | 'dynastream' | 'timex' | 'metrigear' | 'xelic' | 'beurer' | 'cardiosport' | 'a_and_d' | 'hmm' | 'suunto' | 'thita_elektronik' | 'gpulse' | 'clean_mobile' | 'pedal_brain' | 'peaksware' | 'saxonar' | 'lemond_fitness' | 'dexcom' | 'wahoo_fitness' | 'octane_fitness' | 'archinoetics' | 'the_hurt_box' | 'citizen_systems' | 'magellan' | 'osynce' | 'holux' | 'concept2' | 'one_giant_leap' | 'ace_sensor' | 'brim_brothers' | 'xplova' | 'perception_digital' | 'bf1systems' | 'pioneer' | 'spantec' | 'metalogics' | '4iiiis' | 'seiko_epson' | 'seiko_epson_oem' | 'ifor_powell' | 'maxwell_guider' | 'star_trac' | 'breakaway' | 'alatech_technology_ltd' | 'mio_technology_europe' | 'rotor' | 'geonaute' | 'id_bike' | 'specialized' | 'wtek' | 'physical_enterprises' | 'north_pole_engineering' | 'bkool' | 'cateye' | 'stages_cycling' | 'sigmasport' | 'tomtom' | 'peripedal' | 'wattbike' | 'moxy' | 'ciclosport' | 'powerbahn' | 'acorn_projects_aps' | 'lifebeam' | 'bontrager' | 'wellgo' | 'scosche' | 'magura' | 'woodway' | 'elite' | 'nielsen_kellerman' | 'dk_city' | 'tacx' | 'direction_technology' | 'magtonic' | '1partcarbon' | 'inside_ride_technologies' | 'sound_of_motion' | 'stryd' | 'icg' | 'mipulse' | 'bsx_athletics' | 'look' | 'campagnolo_srl' | 'body_bike_smart' | 'praxisworks' | 'limits_technology' | 'topaction_technology' | 'cosinuss' | 'fitcare' | 'magene' | 'giant_manufacturing_co' | 'tigrasport' | 'salutron' | 'technogym' | 'bryton_sensors' | 'latitude_limited' | 'soaring_technology' | 'igpsport' | 'thinkrider' | 'gopher_sport' | 'waterrower' | 'orangetheory' | 'inpeak' | 'kinetic' | 'johnson_health_tech' | 'polar_electro' | 'seesense' | 'nci_technology' | 'development' | 'healthandlife' | 'lezyne' | 'scribe_labs' | 'zwift' | 'watteam' | 'recon' | 'favero_electronics' | 'dynovelo' | 'strava' | 'precor' | 'bryton' | 'sram' | 'navman' | 'cobi' | 'spivi' | 'mio_magellan' | 'evesports' | 'sensitivus_gauge' | 'podoon' | 'life_time_fitness' | 'falco_e_motors' | 'minoura' | 'cycliq' | 'luxottica' | 'trainer_road' | 'the_sufferfest' | 'fullspeedahead' | 'virtualtraining' | 'feedbacksports' | 'omata' | 'vdo' | 'magneticdays' | 'hammerhead' | 'kinetic_by_kurt' | 'shapelog' | 'dabuziduo' | 'jetblack' | 'coros' | 'virtugo' | 'velosense' | 'actigraphcorp' | number
+export type GarminProduct = 'hrm_bike' | 'hrm1' | 'axh01' | 'axb01' | 'axb02' | 'hrm2ss' | 'dsi_alf02' | 'hrm3ss' | 'hrm_run_single_byte_product_id' | 'bsm' | 'bcm' | 'axs01' | 'hrm_tri_single_byte_product_id' | 'fr225_single_byte_product_id' | 'fr301_china' | 'fr301_japan' | 'fr301_korea' | 'fr301_taiwan' | 'fr405' | 'fr50' | 'fr405_japan' | 'fr60' | 'dsi_alf01' | 'fr310xt' | 'edge500' | 'fr110' | 'edge800' | 'edge500_taiwan' | 'edge500_japan' | 'chirp' | 'fr110_japan' | 'edge200' | 'fr910xt' | 'edge800_taiwan' | 'edge800_japan' | 'alf04' | 'fr610' | 'fr210_japan' | 'vector_ss' | 'vector_cp' | 'edge800_china' | 'edge500_china' | 'fr610_japan' | 'edge500_korea' | 'fr70' | 'fr310xt_4t' | 'amx' | 'fr10' | 'edge800_korea' | 'swim' | 'fr910xt_china' | 'fenix' | 'edge200_taiwan' | 'edge510' | 'edge810' | 'tempe' | 'fr910xt_japan' | 'fr620' | 'fr220' | 'fr910xt_korea' | 'fr10_japan' | 'edge810_japan' | 'virb_elite' | 'edge_touring' | 'edge510_japan' | 'hrm_tri' | 'hrm_run' | 'fr920xt' | 'edge510_asia' | 'edge810_china' | 'edge810_taiwan' | 'edge1000' | 'vivo_fit' | 'virb_remote' | 'vivo_ki' | 'fr15' | 'vivo_active' | 'edge510_korea' | 'fr620_japan' | 'fr620_china' | 'fr220_japan' | 'fr220_china' | 'approach_s6' | 'vivo_smart' | 'fenix2' | 'epix' | 'fenix3' | 'edge1000_taiwan' | 'edge1000_japan' | 'fr15_japan' | 'edge520' | 'edge1000_china' | 'fr620_russia' | 'fr220_russia' | 'vector_s' | 'edge1000_korea' | 'fr920xt_taiwan' | 'fr920xt_china' | 'fr920xt_japan' | 'virbx' | 'vivo_smart_apac' | 'etrex_touch' | 'edge25' | 'fr25' | 'vivo_fit2' | 'fr225' | 'fr630' | 'fr230' | 'fr735xt' | 'vivo_active_apac' | 'vector_2' | 'vector_2s' | 'virbxe' | 'fr620_taiwan' | 'fr220_taiwan' | 'truswing' | 'fenix3_china' | 'fenix3_twn' | 'varia_headlight' | 'varia_taillight_old' | 'edge_explore_1000' | 'fr225_asia' | 'varia_radar_taillight' | 'varia_radar_display' | 'edge20' | 'd2_bravo' | 'approach_s20' | 'varia_remote' | 'hrm4_run' | 'vivo_active_hr' | 'vivo_smart_hr' | 'vivo_move' | 'varia_vision' | 'vivo_fit3' | 'fenix3_hr' | 'virb_ultra_30' | 'index_smart_scale' | 'fr235' | 'fenix3_chronos' | 'oregon7xx' | 'rino7xx' | 'nautix' | 'edge_820' | 'edge_explore_820' | 'fenix5s' | 'd2_bravo_titanium' | 'varia_ut800' | 'running_dynamics_pod' | 'fenix5x' | 'vivo_fit_jr' | 'fr935' | 'fenix5' | 'descent' | 'fr945' | 'sdm4' | 'edge_remote' | 'training_center' | 'connectiq_simulator' | 'android_antplus_plugin' | 'connect' | number
+export type AntplusDeviceType = 'antfs' | 'bike_power' | 'environment_sensor_legacy' | 'multi_sport_speed_distance' | 'control' | 'fitness_equipment' | 'blood_pressure' | 'geocache_node' | 'light_electric_vehicle' | 'env_sensor' | 'racquet' | 'control_hub' | 'muscle_oxygen' | 'shifting' | 'bike_light_main' | 'bike_light_shared' | 'exd' | 'bike_radar' | 'bike_aero' | 'weight_scale' | 'heart_rate' | 'bike_speed_cadence' | 'bike_cadence' | 'bike_speed' | 'stride_speed_distance' | number
+export type LocalDeviceType = 'gps' | 'glonass' | 'gps_glonass' | 'accelerometer' | 'barometer' | 'temperature' | 'whr' | 'sensor_hub' | number
+export type BleDeviceType = 'connected_gps' | 'heart_rate' | 'bike_power' | 'bike_speed_cadence' | 'bike_speed' | 'bike_cadence' | 'footpod' | 'bike_trainer' | number
+export type AntNetwork = 'public' | 'antplus' | 'antfs' | 'private' | number
+export type WorkoutCapabilities = '0' | 'interval' | 'custom' | 'fitness_equipment' | 'firstbeat' | 'new_leaf' | 'tcx' | 'speed' | 'heart_rate' | 'distance' | 'cadence' | 'power' | 'grade' | 'resistance' | 'protected' | number
+export type BatteryStatus = '0' | 'new' | 'good' | 'ok' | 'low' | 'critical' | 'charging' | 'unknown' | number
 export type HrType = 'normal' | 'irregular' | number
-export type HrvStatus = 'none' | 'poor' | 'low' | 'unbalanced' | 'balanced' | number
-export type HrZoneCalc = 'custom' | 'percent_max_hr' | 'percent_hrr' | 'percent_lthr' | number
-export type HyperextensionExerciseName = 'back_extension_with_opposite_arm_and_leg_reach' | 'weighted_back_extension_with_opposite_arm_and_leg_reach' | 'base_rotations' | 'weighted_base_rotations' | 'bent_knee_reverse_hyperextension' | 'weighted_bent_knee_reverse_hyperextension' | 'hollow_hold_and_roll' | 'weighted_hollow_hold_and_roll' | 'kicks' | 'weighted_kicks' | 'knee_raises' | 'weighted_knee_raises' | 'kneeling_superman' | 'weighted_kneeling_superman' | 'lat_pull_down_with_row' | 'medicine_ball_deadlift_to_reach' | 'one_arm_one_leg_row' | 'one_arm_row_with_band' | 'overhead_lunge_with_medicine_ball' | 'plank_knee_tucks' | 'weighted_plank_knee_tucks' | 'side_step' | 'weighted_side_step' | 'single_leg_back_extension' | 'weighted_single_leg_back_extension' | 'spine_extension' | 'weighted_spine_extension' | 'static_back_extension' | 'weighted_static_back_extension' | 'superman_from_floor' | 'weighted_superman_from_floor' | 'swiss_ball_back_extension' | 'weighted_swiss_ball_back_extension' | 'swiss_ball_hyperextension' | 'weighted_swiss_ball_hyperextension' | 'swiss_ball_opposite_arm_and_leg_lift' | 'weighted_swiss_ball_opposite_arm_and_leg_lift' | 'superman_on_swiss_ball' | 'cobra' | 'supine_floor_barre' | number
-export type IndoorBikeExerciseName = 'air_bike' | 'assault_bike' | 'stationary_bike' | number
-export type IndoorRowExerciseName = 'rowing_machine' | number
-export type Intensity = 'active' | 'rest' | 'warmup' | 'cooldown' | 'recovery' | 'interval' | 'other' | number
-export type LadderExerciseName = 'agility' | 'speed' | number
-export type Language = 'english' | 'french' | 'italian' | 'german' | 'spanish' | 'croatian' | 'czech' | 'danish' | 'dutch' | 'finnish' | 'greek' | 'hungarian' | 'norwegian' | 'polish' | 'portuguese' | 'slovakian' | 'slovenian' | 'swedish' | 'russian' | 'turkish' | 'latvian' | 'ukrainian' | 'arabic' | 'farsi' | 'bulgarian' | 'romanian' | 'chinese' | 'japanese' | 'korean' | 'taiwanese' | 'thai' | 'hebrew' | 'brazilian_portuguese' | 'indonesian' | 'malaysian' | 'vietnamese' | 'burmese' | 'mongolian' | 'custom' | number
-export type LanguageBits0 = 'english' | 'french' | 'italian' | 'german' | 'spanish' | 'croatian' | 'czech' | 'danish' | number
-export type LanguageBits1 = 'dutch' | 'finnish' | 'greek' | 'hungarian' | 'norwegian' | 'polish' | 'portuguese' | 'slovakian' | number
-export type LanguageBits2 = 'slovenian' | 'swedish' | 'russian' | 'turkish' | 'latvian' | 'ukrainian' | 'arabic' | 'farsi' | number
-export type LanguageBits3 = 'bulgarian' | 'romanian' | 'chinese' | 'japanese' | 'korean' | 'taiwanese' | 'thai' | 'hebrew' | number
-export type LanguageBits4 = 'brazilian_portuguese' | 'indonesian' | 'malaysian' | 'vietnamese' | 'burmese' | 'mongolian' | number
-export type LapTrigger = 'manual' | 'time' | 'distance' | 'position_start' | 'position_lap' | 'position_waypoint' | 'position_marked' | 'session_end' | 'fitness_equipment' | number
-export type LateralRaiseExerciseName = '45_degree_cable_external_rotation' | 'alternating_lateral_raise_with_static_hold' | 'bar_muscle_up' | 'bent_over_lateral_raise' | 'cable_diagonal_raise' | 'cable_front_raise' | 'calorie_row' | 'combo_shoulder_raise' | 'dumbbell_diagonal_raise' | 'dumbbell_v_raise' | 'front_raise' | 'leaning_dumbbell_lateral_raise' | 'lying_dumbbell_raise' | 'muscle_up' | 'one_arm_cable_lateral_raise' | 'overhand_grip_rear_lateral_raise' | 'plate_raises' | 'ring_dip' | 'weighted_ring_dip' | 'ring_muscle_up' | 'weighted_ring_muscle_up' | 'rope_climb' | 'weighted_rope_climb' | 'scaption' | 'seated_lateral_raise' | 'seated_rear_lateral_raise' | 'side_lying_lateral_raise' | 'standing_lift' | 'suspended_row' | 'underhand_grip_rear_lateral_raise' | 'wall_slide' | 'weighted_wall_slide' | 'arm_circles' | 'shaving_the_head' | 'dumbbell_lateral_raise' | 'ring_dip_kipping' | 'wall_walk' | 'dumbbell_front_raise_wheelchair' | 'dumbbell_lateral_raise_wheelchair' | 'pole_double_arm_overhead_and_forward_wheelchair' | 'pole_straight_arm_overhead_wheelchair' | number
+export type CourseCapabilities = '0' | 'processed' | 'valid' | 'time' | 'distance' | 'position' | 'heart_rate' | 'power' | 'cadence' | 'training' | 'navigation' | 'bikeway' | number
+export type Weight = '0' | 'calculating' | number
+export type WorkoutHr = '0' | 'bpm_offset' | number
+export type WorkoutPower = '0' | 'watts_offset' | number
+export type BpStatus = 'no_error' | 'error_incomplete_data' | 'error_no_measurement' | 'error_data_out_of_range' | 'error_irregular_heart_rate' | number
+export type UserLocalId = 'local_min' | 'local_max' | 'stationary_min' | 'stationary_max' | 'portable_min' | 'portable_max' | number
+export type SwimStroke = 'freestyle' | 'backstroke' | 'breaststroke' | 'butterfly' | 'drill' | 'mixed' | 'im' | number
+export type ActivityType = 'generic' | 'running' | 'cycling' | 'transition' | 'fitness_equipment' | 'swimming' | 'walking' | 'sedentary' | 'all' | number
+export type ActivitySubtype = 'generic' | 'treadmill' | 'street' | 'trail' | 'track' | 'spin' | 'indoor_cycling' | 'road' | 'mountain' | 'downhill' | 'recumbent' | 'cyclocross' | 'hand_cycling' | 'track_cycling' | 'indoor_rowing' | 'elliptical' | 'stair_climbing' | 'lap_swimming' | 'open_water' | 'all' | number
+export type ActivityLevel = 'low' | 'medium' | 'high' | number
+export type Side = 'right' | 'left' | number
 export interface LeftRightBalance {
   value: number
   right: boolean
@@ -150,106 +128,90 @@ export interface LeftRightBalance100 {
   value: number
   right: boolean
 }
-export type LegCurlExerciseName = 'leg_curl' | 'weighted_leg_curl' | 'good_morning' | 'seated_barbell_good_morning' | 'single_leg_barbell_good_morning' | 'single_leg_sliding_leg_curl' | 'sliding_leg_curl' | 'split_barbell_good_morning' | 'split_stance_extension' | 'staggered_stance_good_morning' | 'swiss_ball_hip_raise_and_leg_curl' | 'zercher_good_morning' | 'band_good_morning' | 'bar_good_morning' | number
-export type LegRaiseExerciseName = 'hanging_knee_raise' | 'hanging_leg_raise' | 'weighted_hanging_leg_raise' | 'hanging_single_leg_raise' | 'weighted_hanging_single_leg_raise' | 'kettlebell_leg_raises' | 'leg_lowering_drill' | 'weighted_leg_lowering_drill' | 'lying_straight_leg_raise' | 'weighted_lying_straight_leg_raise' | 'medicine_ball_leg_drops' | 'quadruped_leg_raise' | 'weighted_quadruped_leg_raise' | 'reverse_leg_raise' | 'weighted_reverse_leg_raise' | 'reverse_leg_raise_on_swiss_ball' | 'weighted_reverse_leg_raise_on_swiss_ball' | 'single_leg_lowering_drill' | 'weighted_single_leg_lowering_drill' | 'weighted_hanging_knee_raise' | 'lateral_stepover' | 'weighted_lateral_stepover' | number
 export type LengthType = 'idle' | 'active' | number
-export type LocalDateTime = 'min' | number
-export type LocalDeviceType = 'gps' | 'glonass' | 'gps_glonass' | 'accelerometer' | 'barometer' | 'temperature' | 'whr' | 'sensor_hub' | number
-export type LocaltimeIntoDay = number
-export type LungeExerciseName = 'overhead_lunge' | 'lunge_matrix' | 'weighted_lunge_matrix' | 'alternating_barbell_forward_lunge' | 'alternating_dumbbell_lunge_with_reach' | 'back_foot_elevated_dumbbell_split_squat' | 'barbell_box_lunge' | 'barbell_bulgarian_split_squat' | 'barbell_crossover_lunge' | 'barbell_front_split_squat' | 'barbell_lunge' | 'barbell_reverse_lunge' | 'barbell_side_lunge' | 'barbell_split_squat' | 'core_control_rear_lunge' | 'diagonal_lunge' | 'drop_lunge' | 'dumbbell_box_lunge' | 'dumbbell_bulgarian_split_squat' | 'dumbbell_crossover_lunge' | 'dumbbell_diagonal_lunge' | 'dumbbell_lunge' | 'dumbbell_lunge_and_rotation' | 'dumbbell_overhead_bulgarian_split_squat' | 'dumbbell_reverse_lunge_to_high_knee_and_press' | 'dumbbell_side_lunge' | 'elevated_front_foot_barbell_split_squat' | 'front_foot_elevated_dumbbell_split_squat' | 'gunslinger_lunge' | 'lawnmower_lunge' | 'low_lunge_with_isometric_adduction' | 'low_side_to_side_lunge' | 'lunge' | 'weighted_lunge' | 'lunge_with_arm_reach' | 'lunge_with_diagonal_reach' | 'lunge_with_side_bend' | 'offset_dumbbell_lunge' | 'offset_dumbbell_reverse_lunge' | 'overhead_bulgarian_split_squat' | 'overhead_dumbbell_reverse_lunge' | 'overhead_dumbbell_split_squat' | 'overhead_lunge_with_rotation' | 'reverse_barbell_box_lunge' | 'reverse_box_lunge' | 'reverse_dumbbell_box_lunge' | 'reverse_dumbbell_crossover_lunge' | 'reverse_dumbbell_diagonal_lunge' | 'reverse_lunge_with_reach_back' | 'weighted_reverse_lunge_with_reach_back' | 'reverse_lunge_with_twist_and_overhead_reach' | 'weighted_reverse_lunge_with_twist_and_overhead_reach' | 'reverse_sliding_box_lunge' | 'weighted_reverse_sliding_box_lunge' | 'reverse_sliding_lunge' | 'weighted_reverse_sliding_lunge' | 'runners_lunge_to_balance' | 'weighted_runners_lunge_to_balance' | 'shifting_side_lunge' | 'side_and_crossover_lunge' | 'weighted_side_and_crossover_lunge' | 'side_lunge' | 'weighted_side_lunge' | 'side_lunge_and_press' | 'side_lunge_jump_off' | 'side_lunge_sweep' | 'weighted_side_lunge_sweep' | 'side_lunge_to_crossover_tap' | 'weighted_side_lunge_to_crossover_tap' | 'side_to_side_lunge_chops' | 'weighted_side_to_side_lunge_chops' | 'siff_jump_lunge' | 'weighted_siff_jump_lunge' | 'single_arm_reverse_lunge_and_press' | 'sliding_lateral_lunge' | 'weighted_sliding_lateral_lunge' | 'walking_barbell_lunge' | 'walking_dumbbell_lunge' | 'walking_lunge' | 'weighted_walking_lunge' | 'wide_grip_overhead_barbell_split_squat' | 'alternating_dumbbell_lunge' | 'dumbbell_reverse_lunge' | 'overhead_dumbbell_lunge' | 'scissor_power_switch' | 'dumbbell_overhead_walking_lunge' | 'curtsy_lunge' | 'weighted_curtsy_lunge' | 'weighted_shifting_side_lunge' | 'weighted_side_lunge_and_press' | 'weighted_side_lunge_jump_off' | number
-export type Manufacturer = 'garmin' | 'garmin_fr405_antfs' | 'zephyr' | 'dayton' | 'idt' | 'srm' | 'quarq' | 'ibike' | 'saris' | 'spark_hk' | 'tanita' | 'echowell' | 'dynastream_oem' | 'nautilus' | 'dynastream' | 'timex' | 'metrigear' | 'xelic' | 'beurer' | 'cardiosport' | 'a_and_d' | 'hmm' | 'suunto' | 'thita_elektronik' | 'gpulse' | 'clean_mobile' | 'pedal_brain' | 'peaksware' | 'saxonar' | 'lemond_fitness' | 'dexcom' | 'wahoo_fitness' | 'octane_fitness' | 'archinoetics' | 'the_hurt_box' | 'citizen_systems' | 'magellan' | 'osynce' | 'holux' | 'concept2' | 'shimano' | 'one_giant_leap' | 'ace_sensor' | 'brim_brothers' | 'xplova' | 'perception_digital' | 'bf1systems' | 'pioneer' | 'spantec' | 'metalogics' | '4iiiis' | 'seiko_epson' | 'seiko_epson_oem' | 'ifor_powell' | 'maxwell_guider' | 'star_trac' | 'breakaway' | 'alatech_technology_ltd' | 'mio_technology_europe' | 'rotor' | 'geonaute' | 'id_bike' | 'specialized' | 'wtek' | 'physical_enterprises' | 'north_pole_engineering' | 'bkool' | 'cateye' | 'stages_cycling' | 'sigmasport' | 'tomtom' | 'peripedal' | 'wattbike' | 'moxy' | 'ciclosport' | 'powerbahn' | 'acorn_projects_aps' | 'lifebeam' | 'bontrager' | 'wellgo' | 'scosche' | 'magura' | 'woodway' | 'elite' | 'nielsen_kellerman' | 'dk_city' | 'tacx' | 'direction_technology' | 'magtonic' | '1partcarbon' | 'inside_ride_technologies' | 'sound_of_motion' | 'stryd' | 'icg' | 'mi_pulse' | 'bsx_athletics' | 'look' | 'campagnolo_srl' | 'body_bike_smart' | 'praxisworks' | 'limits_technology' | 'topaction_technology' | 'cosinuss' | 'fitcare' | 'magene' | 'giant_manufacturing_co' | 'tigrasport' | 'salutron' | 'technogym' | 'bryton_sensors' | 'latitude_limited' | 'soaring_technology' | 'igpsport' | 'thinkrider' | 'gopher_sport' | 'waterrower' | 'orangetheory' | 'inpeak' | 'kinetic' | 'johnson_health_tech' | 'polar_electro' | 'seesense' | 'nci_technology' | 'iqsquare' | 'leomo' | 'ifit_com' | 'coros_byte' | 'versa_design' | 'chileaf' | 'cycplus' | 'gravaa_byte' | 'sigeyi' | 'coospo' | 'geoid' | 'bosch' | 'kyto' | 'kinetic_sports' | 'decathlon_byte' | 'tq_systems' | 'tag_heuer' | 'keiser_fitness' | 'zwift_byte' | 'porsche_ep' | 'blackbird' | 'meilan_byte' | 'ezon' | 'laisi' | 'myzone' | 'abawo' | 'bafang' | 'luhong_technology' | 'development' | 'healthandlife' | 'lezyne' | 'scribe_labs' | 'zwift' | 'watteam' | 'recon' | 'favero_electronics' | 'dynovelo' | 'strava' | 'precor' | 'bryton' | 'sram' | 'navman' | 'cobi' | 'spivi' | 'mio_magellan' | 'evesports' | 'sensitivus_gauge' | 'podoon' | 'life_time_fitness' | 'falco_e_motors' | 'minoura' | 'cycliq' | 'luxottica' | 'trainer_road' | 'the_sufferfest' | 'fullspeedahead' | 'virtualtraining' | 'feedbacksports' | 'omata' | 'vdo' | 'magneticdays' | 'hammerhead' | 'kinetic_by_kurt' | 'shapelog' | 'dabuziduo' | 'jetblack' | 'coros' | 'virtugo' | 'velosense' | 'cycligentinc' | 'trailforks' | 'mahle_ebikemotion' | 'nurvv' | 'microprogram' | 'zone5cloud' | 'greenteg' | 'yamaha_motors' | 'whoop' | 'gravaa' | 'onelap' | 'monark_exercise' | 'form' | 'decathlon' | 'syncros' | 'heatup' | 'cannondale' | 'true_fitness' | 'r_gt_cycling' | 'vasa' | 'race_republic' | 'fazua' | 'oreka_training' | 'lsec' | 'lululemon_studio' | 'shanyue' | 'spinning_mda' | 'hilldating' | 'aero_sensor' | 'nike' | 'magicshine' | 'ictrainer' | 'absolute_cycling' | 'eo_swimbetter' | 'mywhoosh' | 'ravemen' | 'tektro_racing_products' | 'darad_innovation_corporation' | 'cycloptim' | 'runna' | 'zepp' | 'peloton' | 'carv' | 'tissot' | 'real_velo' | 'wetech' | 'jespr' | 'huawei' | 'gotoes' | 'cadence_app' | 'actigraphcorp' | number
-export type MaxMetCategory = 'generic' | 'cycling' | number
-export type MaxMetHeartRateSource = 'whr' | 'hrm' | number
-export type MaxMetSpeedSource = 'onboard_gps' | 'connected_gps' | 'cadence' | number
-export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type' | number
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'training_settings' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'ohr_settings' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'monitoring_hr_data' | 'time_in_zone' | 'set' | 'stress_level' | 'max_met_data' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'spo2_data' | 'sleep_level' | 'jump' | 'aad_accel_features' | 'beat_intervals' | 'respiration_rate' | 'hsa_accelerometer_data' | 'hsa_step_data' | 'hsa_spo2_data' | 'hsa_stress_data' | 'hsa_respiration_data' | 'hsa_heart_rate_data' | 'split' | 'split_summary' | 'hsa_body_battery_data' | 'hsa_event' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'sleep_assessment' | 'hrv_status_summary' | 'hrv_value' | 'raw_bbi' | 'device_aux_battery_info' | 'hsa_gyroscope_data' | 'chrono_shot_session' | 'chrono_shot_data' | 'hsa_configuration_data' | 'dive_apnea_alarm' | 'skin_temp_overnight' | 'hsa_wrist_temperature_data' | 'nap_event' | 'sleep_disruption_severity_period' | 'sleep_disruption_overnight_severity' | 'mfg_range_min' | 'mfg_range_max' | 'definition' | number
-export interface MessageIndex {
-  value: number
-  reserved: boolean
-  selected: boolean
-}
-export type MoveExerciseName = 'arch_and_curl' | 'arm_circles_with_ball_band_and_weight' | 'arm_stretch' | 'back_massage' | 'belly_breathing' | 'bridge_with_ball' | 'diamond_leg_crunch' | 'diamond_leg_lift' | 'eight_point_shoulder_opener' | 'foot_rolling' | 'footwork' | 'footwork_on_disc' | 'forward_fold' | 'frog_with_band' | 'half_roll_up' | 'hamstring_curl' | 'hamstring_stretch' | 'hip_stretch' | 'hug_a_tree_with_ball_band_and_weight' | 'knee_circles' | 'knee_folds_on_disc' | 'lateral_flexion' | 'leg_stretch_with_band' | 'leg_stretch_with_leg_circles' | 'lower_lift_on_disc' | 'lunge_squat' | 'lunges_with_knee_lift' | 'mermaid_stretch' | 'neutral_pelvic_position' | 'pelvic_clocks_on_disc' | 'pilates_plie_squats_parallel_turned_out_flat_and_heels_with_chair' | 'piriformis_stretch' | 'plank_knee_crosses' | 'plank_knee_pulls' | 'plank_up_downs' | 'prayer_mudra' | 'psoas_lunge_stretch' | 'ribcage_breathing' | 'roll_down' | 'roll_up_with_weight_and_band' | 'saw' | 'scapular_stabilization' | 'scissors_on_disc' | 'seated_hip_stretchup' | 'seated_twist' | 'shaving_the_head_with_ball_band_and_weight' | 'spinal_twist' | 'spinal_twist_stretch' | 'spine_stretch_forward' | 'squat_open_arm_twist_pose' | 'squats_with_ball' | 'stand_and_hang' | 'standing_side_stretch' | 'standing_single_leg_forward_bend_with_it_band_opener' | 'straight_leg_crunch_with_leg_lift' | 'straight_leg_crunch_with_leg_lift_with_ball' | 'straight_leg_crunch_with_legs_crossed' | 'straight_leg_crunch_with_legs_crossed_with_ball' | 'straight_leg_diagonal_crunch' | 'straight_leg_diagonal_crunch_with_ball' | 'tailbone_curl' | 'throat_lock' | 'tick_tock_side_roll' | 'twist' | 'v_leg_crunches' | 'v_sit' | 'forward_fold_wheelchair' | 'forward_fold_plus_wheelchair' | 'arm_circles_low_forward_wheelchair' | 'arm_circles_mid_forward_wheelchair' | 'arm_circles_high_forward_wheelchair' | 'arm_circles_low_backward_wheelchair' | 'arm_circles_mid_backward_wheelchair' | 'arm_circles_high_backward_wheelchair' | 'core_twists_wheelchair' | 'arm_raise_wheelchair' | 'chest_expand_wheelchair' | 'arm_extend_wheelchair' | 'forward_bend_wheelchair' | 'toe_touch_wheelchair' | 'extended_toe_touch_wheelchair' | 'seated_arm_circles' | 'trunk_rotations' | 'seated_trunk_rotations' | 'toe_touch' | number
-export type NapPeriodFeedback = 'none' | 'multiple_naps_during_day' | 'jetlag_ideal_timing_ideal_duration' | 'jetlag_ideal_timing_long_duration' | 'jetlag_late_timing_ideal_duration' | 'jetlag_late_timing_long_duration' | 'ideal_timing_ideal_duration_low_need' | 'ideal_timing_ideal_duration_high_need' | 'ideal_timing_long_duration_low_need' | 'ideal_timing_long_duration_high_need' | 'late_timing_ideal_duration_low_need' | 'late_timing_ideal_duration_high_need' | 'late_timing_long_duration_low_need' | 'late_timing_long_duration_high_need' | 'ideal_duration_low_need' | 'ideal_duration_high_need' | 'long_duration_low_need' | 'long_duration_high_need' | number
-export type NapSource = 'automatic' | 'manual_device' | 'manual_gc' | number
-export type NoFlyTimeMode = 'standard' | 'flat24_hours' | number
-export type OlympicLiftExerciseName = 'barbell_hang_power_clean' | 'barbell_hang_squat_clean' | 'barbell_power_clean' | 'barbell_power_snatch' | 'barbell_squat_clean' | 'clean_and_jerk' | 'barbell_hang_power_snatch' | 'barbell_hang_pull' | 'barbell_high_pull' | 'barbell_snatch' | 'barbell_split_jerk' | 'clean' | 'dumbbell_clean' | 'dumbbell_hang_pull' | 'one_hand_dumbbell_split_snatch' | 'push_jerk' | 'single_arm_dumbbell_snatch' | 'single_arm_hang_snatch' | 'single_arm_kettlebell_snatch' | 'split_jerk' | 'squat_clean_and_jerk' | 'dumbbell_hang_snatch' | 'dumbbell_power_clean_and_jerk' | 'dumbbell_power_clean_and_push_press' | 'dumbbell_power_clean_and_strict_press' | 'dumbbell_snatch' | 'medicine_ball_clean' | 'clean_and_press' | 'snatch' | number
-export type PlankExerciseName = '45_degree_plank' | 'weighted45_degree_plank' | '90_degree_static_hold' | 'weighted90_degree_static_hold' | 'bear_crawl' | 'weighted_bear_crawl' | 'cross_body_mountain_climber' | 'weighted_cross_body_mountain_climber' | 'elbow_plank_pike_jacks' | 'weighted_elbow_plank_pike_jacks' | 'elevated_feet_plank' | 'weighted_elevated_feet_plank' | 'elevator_abs' | 'weighted_elevator_abs' | 'extended_plank' | 'weighted_extended_plank' | 'full_plank_passe_twist' | 'weighted_full_plank_passe_twist' | 'inching_elbow_plank' | 'weighted_inching_elbow_plank' | 'inchworm_to_side_plank' | 'weighted_inchworm_to_side_plank' | 'kneeling_plank' | 'weighted_kneeling_plank' | 'kneeling_side_plank_with_leg_lift' | 'weighted_kneeling_side_plank_with_leg_lift' | 'lateral_roll' | 'weighted_lateral_roll' | 'lying_reverse_plank' | 'weighted_lying_reverse_plank' | 'medicine_ball_mountain_climber' | 'weighted_medicine_ball_mountain_climber' | 'modified_mountain_climber_and_extension' | 'weighted_modified_mountain_climber_and_extension' | 'mountain_climber' | 'weighted_mountain_climber' | 'mountain_climber_on_sliding_discs' | 'weighted_mountain_climber_on_sliding_discs' | 'mountain_climber_with_feet_on_bosu_ball' | 'weighted_mountain_climber_with_feet_on_bosu_ball' | 'mountain_climber_with_hands_on_bench' | 'mountain_climber_with_hands_on_swiss_ball' | 'weighted_mountain_climber_with_hands_on_swiss_ball' | 'plank' | 'plank_jacks_with_feet_on_sliding_discs' | 'weighted_plank_jacks_with_feet_on_sliding_discs' | 'plank_knee_twist' | 'weighted_plank_knee_twist' | 'plank_pike_jumps' | 'weighted_plank_pike_jumps' | 'plank_pikes' | 'weighted_plank_pikes' | 'plank_to_stand_up' | 'weighted_plank_to_stand_up' | 'plank_with_arm_raise' | 'weighted_plank_with_arm_raise' | 'plank_with_knee_to_elbow' | 'weighted_plank_with_knee_to_elbow' | 'plank_with_oblique_crunch' | 'weighted_plank_with_oblique_crunch' | 'plyometric_side_plank' | 'weighted_plyometric_side_plank' | 'rolling_side_plank' | 'weighted_rolling_side_plank' | 'side_kick_plank' | 'weighted_side_kick_plank' | 'side_plank' | 'weighted_side_plank' | 'side_plank_and_row' | 'weighted_side_plank_and_row' | 'side_plank_lift' | 'weighted_side_plank_lift' | 'side_plank_with_elbow_on_bosu_ball' | 'weighted_side_plank_with_elbow_on_bosu_ball' | 'side_plank_with_feet_on_bench' | 'weighted_side_plank_with_feet_on_bench' | 'side_plank_with_knee_circle' | 'weighted_side_plank_with_knee_circle' | 'side_plank_with_knee_tuck' | 'weighted_side_plank_with_knee_tuck' | 'side_plank_with_leg_lift' | 'weighted_side_plank_with_leg_lift' | 'side_plank_with_reach_under' | 'weighted_side_plank_with_reach_under' | 'single_leg_elevated_feet_plank' | 'weighted_single_leg_elevated_feet_plank' | 'single_leg_flex_and_extend' | 'weighted_single_leg_flex_and_extend' | 'single_leg_side_plank' | 'weighted_single_leg_side_plank' | 'spiderman_plank' | 'weighted_spiderman_plank' | 'straight_arm_plank' | 'weighted_straight_arm_plank' | 'straight_arm_plank_with_shoulder_touch' | 'weighted_straight_arm_plank_with_shoulder_touch' | 'swiss_ball_plank' | 'weighted_swiss_ball_plank' | 'swiss_ball_plank_leg_lift' | 'weighted_swiss_ball_plank_leg_lift' | 'swiss_ball_plank_leg_lift_and_hold' | 'swiss_ball_plank_with_feet_on_bench' | 'weighted_swiss_ball_plank_with_feet_on_bench' | 'swiss_ball_prone_jackknife' | 'weighted_swiss_ball_prone_jackknife' | 'swiss_ball_side_plank' | 'weighted_swiss_ball_side_plank' | 'three_way_plank' | 'weighted_three_way_plank' | 'towel_plank_and_knee_in' | 'weighted_towel_plank_and_knee_in' | 't_stabilization' | 'weighted_t_stabilization' | 'turkish_get_up_to_side_plank' | 'weighted_turkish_get_up_to_side_plank' | 'two_point_plank' | 'weighted_two_point_plank' | 'weighted_plank' | 'wide_stance_plank_with_diagonal_arm_lift' | 'weighted_wide_stance_plank_with_diagonal_arm_lift' | 'wide_stance_plank_with_diagonal_leg_lift' | 'weighted_wide_stance_plank_with_diagonal_leg_lift' | 'wide_stance_plank_with_leg_lift' | 'weighted_wide_stance_plank_with_leg_lift' | 'wide_stance_plank_with_opposite_arm_and_leg_lift' | 'weighted_mountain_climber_with_hands_on_bench' | 'weighted_swiss_ball_plank_leg_lift_and_hold' | 'weighted_wide_stance_plank_with_opposite_arm_and_leg_lift' | 'plank_with_feet_on_swiss_ball' | 'side_plank_to_plank_with_reach_under' | 'bridge_with_glute_lower_lift' | 'bridge_one_leg_bridge' | 'plank_with_arm_variations' | 'plank_with_leg_lift' | 'reverse_plank_with_leg_pull' | 'ring_plank_sprawls' | number
-export type PlyoExerciseName = 'alternating_jump_lunge' | 'weighted_alternating_jump_lunge' | 'barbell_jump_squat' | 'body_weight_jump_squat' | 'weighted_jump_squat' | 'cross_knee_strike' | 'weighted_cross_knee_strike' | 'depth_jump' | 'weighted_depth_jump' | 'dumbbell_jump_squat' | 'dumbbell_split_jump' | 'front_knee_strike' | 'weighted_front_knee_strike' | 'high_box_jump' | 'weighted_high_box_jump' | 'isometric_explosive_body_weight_jump_squat' | 'weighted_isometric_explosive_jump_squat' | 'lateral_leap_and_hop' | 'weighted_lateral_leap_and_hop' | 'lateral_plyo_squats' | 'weighted_lateral_plyo_squats' | 'lateral_slide' | 'weighted_lateral_slide' | 'medicine_ball_overhead_throws' | 'medicine_ball_side_throw' | 'medicine_ball_slam' | 'side_to_side_medicine_ball_throws' | 'side_to_side_shuffle_jump' | 'weighted_side_to_side_shuffle_jump' | 'squat_jump_onto_box' | 'weighted_squat_jump_onto_box' | 'squat_jumps_in_and_out' | 'weighted_squat_jumps_in_and_out' | 'box_jump' | 'box_jump_overs' | 'box_jump_overs_over_the_box' | 'star_jump_squats' | 'jump_squat' | number
-export type PoseExerciseName = 'all_fours' | 'ankle_to_knee' | 'baby_cobra' | 'boat' | 'bound_angle' | 'bound_seated_single_leg_forward_bend' | 'bow' | 'bowed_half_moon' | 'bridge' | 'cat' | 'chair' | 'childs' | 'corpse' | 'cow_face' | 'cow' | 'devotional_warrior' | 'dolphin_plank' | 'dolphin' | 'down_dog_knee_to_nose' | 'down_dog_split' | 'down_dog_split_open_hip_bent_knee' | 'downward_facing_dog' | 'eagle' | 'easy_seated' | 'extended_puppy' | 'extended_side_angle' | 'fish' | 'four_limbed_staff' | 'full_split' | 'gate' | 'half_chair_half_ankle_to_knee' | 'half_moon' | 'head_to_knee' | 'heron' | 'heros' | 'high_lunge' | 'knees_chest_chin' | 'lizard' | 'locust' | 'low_lunge' | 'low_lunge_twist' | 'low_lunge_with_knee_down' | 'mermaid' | 'mountain' | 'one_legged_downward_facing_pose_open_hip_bent_knee' | 'one_legged_pigeon' | 'peaceful_warrior' | 'plank' | 'plow' | 'reclined_hand_to_foot' | 'revolved_half_moon' | 'revolved_head_to_knee' | 'revolved_triangle' | 'runners_lunge' | 'seated_easy_side_bend' | 'seated_easy_twist' | 'seated_long_leg_forward_bend' | 'seated_wide_leg_forward_bend' | 'shoulder_stand' | 'side_boat' | 'side_plank' | 'sphinx' | 'squat_open_arm_twist' | 'squat_palm_press' | 'staff' | 'standing_arms_up' | 'standing_forward_bend_halfway_up' | 'standing_forward_bend' | 'standing_side_opener' | 'standing_single_leg_forward_bend' | 'standing_split' | 'standing_wide_leg_forward_bend' | 'standing_wide_leg_forward_bend_with_twist' | 'supine_spinal_twist' | 'table_top' | 'thread_the_needle' | 'thunderbolt' | 'thunderbolt_pose_both_sides_arm_stretch' | 'tree' | 'triangle' | 'up_dog' | 'upward_facing_plank' | 'warrior_one' | 'warrior_three' | 'warrior_two' | 'wheel' | 'wide_side_lunge' | 'deep_breathing_wheelchair' | 'deep_breathing_low_wheelchair' | 'deep_breathing_mid_wheelchair' | 'deep_breathing_high_wheelchair' | 'prayer_wheelchair' | 'overhead_prayer_wheelchair' | 'cactus_wheelchair' | 'breathing_punches_wheelchair' | 'breathing_punches_extended_wheelchair' | 'breathing_punches_overhead_wheelchair' | 'breathing_punches_overhead_and_down_wheelchair' | 'breathing_punches_side_wheelchair' | 'breathing_punches_extended_side_wheelchair' | 'breathing_punches_overhead_side_wheelchair' | 'breathing_punches_overhead_and_down_side_wheelchair' | 'left_hand_back_wheelchair' | 'triangle_wheelchair' | 'thread_the_needle_wheelchair' | 'neck_flexion_and_extension_wheelchair' | 'neck_lateral_flexion_wheelchair' | 'spine_flexion_and_extension_wheelchair' | 'spine_rotation_wheelchair' | 'spine_lateral_flexion_wheelchair' | 'alternative_skiing_wheelchair' | 'reach_forward_wheelchair' | 'warrior_wheelchair' | 'reverse_warrior_wheelchair' | 'downward_facing_dog_to_cobra' | 'seated_cat_cow' | number
-export type PowerPhaseType = 'power_phase_start_angle' | 'power_phase_end_angle' | 'power_phase_arc_length' | 'power_phase_center' | number
-export type ProjectileType = 'arrow' | 'rifle_cartridge' | 'pistol_cartridge' | 'shotshell' | 'air_rifle_pellet' | 'other' | number
-export type PullUpExerciseName = 'banded_pull_ups' | '30_degree_lat_pulldown' | 'band_assisted_chin_up' | 'close_grip_chin_up' | 'weighted_close_grip_chin_up' | 'close_grip_lat_pulldown' | 'crossover_chin_up' | 'weighted_crossover_chin_up' | 'ez_bar_pullover' | 'hanging_hurdle' | 'weighted_hanging_hurdle' | 'kneeling_lat_pulldown' | 'kneeling_underhand_grip_lat_pulldown' | 'lat_pulldown' | 'mixed_grip_chin_up' | 'weighted_mixed_grip_chin_up' | 'mixed_grip_pull_up' | 'weighted_mixed_grip_pull_up' | 'reverse_grip_pulldown' | 'standing_cable_pullover' | 'straight_arm_pulldown' | 'swiss_ball_ez_bar_pullover' | 'towel_pull_up' | 'weighted_towel_pull_up' | 'weighted_pull_up' | 'wide_grip_lat_pulldown' | 'wide_grip_pull_up' | 'weighted_wide_grip_pull_up' | 'burpee_pull_up' | 'weighted_burpee_pull_up' | 'jumping_pull_ups' | 'weighted_jumping_pull_ups' | 'kipping_pull_up' | 'weighted_kipping_pull_up' | 'l_pull_up' | 'weighted_l_pull_up' | 'suspended_chin_up' | 'weighted_suspended_chin_up' | 'pull_up' | 'chin_up' | 'neutral_grip_chin_up' | 'weighted_chin_up' | 'band_assisted_pull_up' | 'neutral_grip_pull_up' | 'weighted_neutral_grip_chin_up' | 'weighted_neutral_grip_pull_up' | number
-export type PushUpExerciseName = 'chest_press_with_band' | 'alternating_staggered_push_up' | 'weighted_alternating_staggered_push_up' | 'alternating_hands_medicine_ball_push_up' | 'weighted_alternating_hands_medicine_ball_push_up' | 'bosu_ball_push_up' | 'weighted_bosu_ball_push_up' | 'clapping_push_up' | 'weighted_clapping_push_up' | 'close_grip_medicine_ball_push_up' | 'weighted_close_grip_medicine_ball_push_up' | 'close_hands_push_up' | 'weighted_close_hands_push_up' | 'decline_push_up' | 'weighted_decline_push_up' | 'diamond_push_up' | 'weighted_diamond_push_up' | 'explosive_crossover_push_up' | 'weighted_explosive_crossover_push_up' | 'explosive_push_up' | 'weighted_explosive_push_up' | 'feet_elevated_side_to_side_push_up' | 'weighted_feet_elevated_side_to_side_push_up' | 'hand_release_push_up' | 'weighted_hand_release_push_up' | 'handstand_push_up' | 'weighted_handstand_push_up' | 'incline_push_up' | 'weighted_incline_push_up' | 'isometric_explosive_push_up' | 'weighted_isometric_explosive_push_up' | 'judo_push_up' | 'weighted_judo_push_up' | 'kneeling_push_up' | 'weighted_kneeling_push_up' | 'medicine_ball_chest_pass' | 'medicine_ball_push_up' | 'weighted_medicine_ball_push_up' | 'one_arm_push_up' | 'weighted_one_arm_push_up' | 'weighted_push_up' | 'push_up_and_row' | 'weighted_push_up_and_row' | 'push_up_plus' | 'weighted_push_up_plus' | 'push_up_with_feet_on_swiss_ball' | 'weighted_push_up_with_feet_on_swiss_ball' | 'push_up_with_one_hand_on_medicine_ball' | 'weighted_push_up_with_one_hand_on_medicine_ball' | 'shoulder_push_up' | 'weighted_shoulder_push_up' | 'single_arm_medicine_ball_push_up' | 'weighted_single_arm_medicine_ball_push_up' | 'spiderman_push_up' | 'weighted_spiderman_push_up' | 'stacked_feet_push_up' | 'weighted_stacked_feet_push_up' | 'staggered_hands_push_up' | 'weighted_staggered_hands_push_up' | 'suspended_push_up' | 'weighted_suspended_push_up' | 'swiss_ball_push_up' | 'weighted_swiss_ball_push_up' | 'swiss_ball_push_up_plus' | 'weighted_swiss_ball_push_up_plus' | 't_push_up' | 'weighted_t_push_up' | 'triple_stop_push_up' | 'weighted_triple_stop_push_up' | 'wide_hands_push_up' | 'weighted_wide_hands_push_up' | 'parallette_handstand_push_up' | 'weighted_parallette_handstand_push_up' | 'ring_handstand_push_up' | 'weighted_ring_handstand_push_up' | 'ring_push_up' | 'weighted_ring_push_up' | 'push_up' | 'pilates_pushup' | 'dynamic_push_up' | 'kipping_handstand_push_up' | 'shoulder_tapping_push_up' | 'biceps_push_up' | 'hindu_push_up' | 'pike_push_up' | 'wide_grip_push_up' | 'weighted_biceps_push_up' | 'weighted_hindu_push_up' | 'weighted_pike_push_up' | 'kipping_parallette_handstand_push_up' | 'wall_push_up' | number
-export type PwrZoneCalc = 'custom' | 'percent_ftp' | number
-export type RadarThreatLevelType = 'threat_unknown' | 'threat_none' | 'threat_approaching' | 'threat_approaching_fast' | number
-export type RiderPositionType = 'seated' | 'standing' | 'transition_to_seated' | 'transition_to_standing' | number
-export type RowExerciseName = 'barbell_straight_leg_deadlift_to_row' | 'cable_row_standing' | 'dumbbell_row' | 'elevated_feet_inverted_row' | 'weighted_elevated_feet_inverted_row' | 'face_pull' | 'face_pull_with_external_rotation' | 'inverted_row_with_feet_on_swiss_ball' | 'weighted_inverted_row_with_feet_on_swiss_ball' | 'kettlebell_row' | 'modified_inverted_row' | 'weighted_modified_inverted_row' | 'neutral_grip_alternating_dumbbell_row' | 'one_arm_bent_over_row' | 'one_legged_dumbbell_row' | 'renegade_row' | 'reverse_grip_barbell_row' | 'rope_handle_cable_row' | 'seated_cable_row' | 'seated_dumbbell_row' | 'single_arm_cable_row' | 'single_arm_cable_row_and_rotation' | 'single_arm_inverted_row' | 'weighted_single_arm_inverted_row' | 'single_arm_neutral_grip_dumbbell_row' | 'single_arm_neutral_grip_dumbbell_row_and_rotation' | 'suspended_inverted_row' | 'weighted_suspended_inverted_row' | 't_bar_row' | 'towel_grip_inverted_row' | 'weighted_towel_grip_inverted_row' | 'underhand_grip_cable_row' | 'v_grip_cable_row' | 'wide_grip_seated_cable_row' | 'alternating_dumbbell_row' | 'inverted_row' | 'row' | 'weighted_row' | 'indoor_row' | 'banded_face_pulls' | 'chest_supported_dumbbell_row' | 'decline_ring_row' | 'elevated_ring_row' | 'rdl_bent_over_row_with_barbell_dumbbell' | 'ring_row' | 'barbell_row' | 'bent_over_row_with_barbell' | 'bent_over_row_with_dumbell' | 'seated_underhand_grip_cable_row' | 'trx_inverted_row' | 'weighted_inverted_row' | 'weighted_trx_inverted_row' | 'dumbbell_row_wheelchair' | number
-export type RunExerciseName = 'run' | 'walk' | 'jog' | 'sprint' | 'run_or_walk' | 'speed_walk' | 'warm_up' | number
-export type RunIndoorExerciseName = 'indoor_track_run' | 'treadmill' | number
-export type SandbagExerciseName = 'around_the_world' | 'back_squat' | 'bear_crawl_pull_through' | 'bear_hug_squat' | 'clean' | 'clean_and_press' | 'curl' | 'front_carry' | 'front_squat' | 'lunge' | 'overhead_press' | 'plank_pull_through' | 'rotational_lunge' | 'row' | 'russian_twist' | 'shouldering' | 'shoveling' | 'side_lunge' | 'sprint' | 'zercher_squat' | number
-export type Schedule = 'workout' | 'course' | number
-export type SegmentDeleteStatus = 'do_not_delete' | 'delete_one' | 'delete_all' | number
-export type SegmentLapStatus = 'end' | 'fail' | number
-export type SegmentLeaderboardType = 'overall' | 'personal_best' | 'connections' | 'group' | 'challenger' | 'kom' | 'qom' | 'pr' | 'goal' | 'carrot' | 'club_leader' | 'rival' | 'last' | 'recent_best' | 'course_record' | number
-export type SegmentSelectionType = 'starred' | 'suggested' | number
-export type SensorType = 'accelerometer' | 'gyroscope' | 'compass' | 'barometer' | number
-export type SessionTrigger = 'activity_end' | 'manual' | 'auto_multi_sport' | 'fitness_equipment' | number
-export type SetType = 'rest' | 'active' | number
-export type ShoulderPressExerciseName = 'alternating_dumbbell_shoulder_press' | 'arnold_press' | 'barbell_front_squat_to_push_press' | 'barbell_push_press' | 'barbell_shoulder_press' | 'dead_curl_press' | 'dumbbell_alternating_shoulder_press_and_twist' | 'dumbbell_hammer_curl_to_lunge_to_press' | 'dumbbell_push_press' | 'floor_inverted_shoulder_press' | 'weighted_floor_inverted_shoulder_press' | 'inverted_shoulder_press' | 'weighted_inverted_shoulder_press' | 'one_arm_push_press' | 'overhead_barbell_press' | 'overhead_dumbbell_press' | 'seated_barbell_shoulder_press' | 'seated_dumbbell_shoulder_press' | 'single_arm_dumbbell_shoulder_press' | 'single_arm_step_up_and_press' | 'smith_machine_overhead_press' | 'split_stance_hammer_curl_to_press' | 'swiss_ball_dumbbell_shoulder_press' | 'weight_plate_front_raise' | 'dumbbell_shoulder_press' | 'military_press' | 'strict_press' | 'dumbbell_front_raise' | 'dumbbell_curl_to_overhead_press_wheelchair' | 'arnold_press_wheelchair' | 'overhead_dumbbell_press_wheelchair' | number
-export type ShoulderStabilityExerciseName = '90_degree_cable_external_rotation' | 'band_external_rotation' | 'band_internal_rotation' | 'bent_arm_lateral_raise_and_external_rotation' | 'cable_external_rotation' | 'dumbbell_face_pull_with_external_rotation' | 'floor_i_raise' | 'weighted_floor_i_raise' | 'floor_t_raise' | 'weighted_floor_t_raise' | 'floor_y_raise' | 'weighted_floor_y_raise' | 'incline_i_raise' | 'weighted_incline_i_raise' | 'incline_l_raise' | 'weighted_incline_l_raise' | 'incline_t_raise' | 'weighted_incline_t_raise' | 'incline_w_raise' | 'weighted_incline_w_raise' | 'incline_y_raise' | 'weighted_incline_y_raise' | 'lying_external_rotation' | 'seated_dumbbell_external_rotation' | 'standing_l_raise' | 'swiss_ball_i_raise' | 'weighted_swiss_ball_i_raise' | 'swiss_ball_t_raise' | 'weighted_swiss_ball_t_raise' | 'swiss_ball_w_raise' | 'weighted_swiss_ball_w_raise' | 'swiss_ball_y_raise' | 'weighted_swiss_ball_y_raise' | 'cable_internal_rotation' | 'lying_internal_rotation' | 'seated_dumbbell_internal_rotation' | number
-export type ShrugExerciseName = 'barbell_jump_shrug' | 'barbell_shrug' | 'barbell_upright_row' | 'behind_the_back_smith_machine_shrug' | 'dumbbell_jump_shrug' | 'dumbbell_shrug' | 'dumbbell_upright_row' | 'incline_dumbbell_shrug' | 'overhead_barbell_shrug' | 'overhead_dumbbell_shrug' | 'scaption_and_shrug' | 'scapular_retraction' | 'serratus_chair_shrug' | 'weighted_serratus_chair_shrug' | 'serratus_shrug' | 'weighted_serratus_shrug' | 'wide_grip_jump_shrug' | 'wide_grip_barbell_shrug' | 'behind_the_back_shrug' | 'dumbbell_shrug_wheelchair' | 'shrug_wheelchair' | 'shrug_arm_down_wheelchair' | 'shrug_arm_mid_wheelchair' | 'shrug_arm_up_wheelchair' | 'upright_row' | number
-export type Side = 'right' | 'left' | number
-export type SitUpExerciseName = 'alternating_sit_up' | 'weighted_alternating_sit_up' | 'bent_knee_v_up' | 'weighted_bent_knee_v_up' | 'butterfly_sit_up' | 'weighted_butterfly_situp' | 'cross_punch_roll_up' | 'weighted_cross_punch_roll_up' | 'crossed_arms_sit_up' | 'weighted_crossed_arms_sit_up' | 'get_up_sit_up' | 'weighted_get_up_sit_up' | 'hovering_sit_up' | 'weighted_hovering_sit_up' | 'kettlebell_sit_up' | 'medicine_ball_alternating_v_up' | 'medicine_ball_sit_up' | 'medicine_ball_v_up' | 'modified_sit_up' | 'negative_sit_up' | 'one_arm_full_sit_up' | 'reclining_circle' | 'weighted_reclining_circle' | 'reverse_curl_up' | 'weighted_reverse_curl_up' | 'single_leg_swiss_ball_jackknife' | 'weighted_single_leg_swiss_ball_jackknife' | 'the_teaser' | 'the_teaser_weighted' | 'three_part_roll_down' | 'weighted_three_part_roll_down' | 'v_up' | 'weighted_v_up' | 'weighted_russian_twist_on_swiss_ball' | 'weighted_sit_up' | 'x_abs' | 'weighted_x_abs' | 'sit_up' | 'ghd_sit_ups' | 'sit_up_turkish_get_up' | 'russian_twist_on_swiss_ball' | number
-export type SledExerciseName = 'backward_drag' | 'chest_press' | 'forward_drag' | 'low_push' | 'push' | 'row' | number
-export type SledgeHammerExerciseName = 'lateral_swing' | 'hammer_slam' | number
-export type SleepDisruptionSeverity = 'none' | 'low' | 'medium' | 'high' | number
-export type SleepLevel = 'unmeasurable' | 'awake' | 'light' | 'deep' | 'rem' | number
-export type SourceType = 'ant' | 'antplus' | 'bluetooth' | 'bluetooth_low_energy' | 'wifi' | 'local' | number
-export type SplitType = 'ascent_split' | 'descent_split' | 'interval_active' | 'interval_rest' | 'interval_warmup' | 'interval_cooldown' | 'interval_recovery' | 'interval_other' | 'climb_active' | 'climb_rest' | 'surf_active' | 'run_active' | 'run_rest' | 'workout_round' | 'rwd_run' | 'rwd_walk' | 'windsurf_active' | 'rwd_stand' | 'transition' | 'ski_lift_split' | 'ski_run_split' | number
-export type Spo2MeasurementType = 'off_wrist' | 'spot_check' | 'continuous_check' | 'periodic' | number
-export type Sport = 'generic' | 'running' | 'cycling' | 'transition' | 'fitness_equipment' | 'swimming' | 'basketball' | 'soccer' | 'tennis' | 'american_football' | 'training' | 'walking' | 'cross_country_skiing' | 'alpine_skiing' | 'snowboarding' | 'rowing' | 'mountaineering' | 'hiking' | 'multisport' | 'paddling' | 'flying' | 'e_biking' | 'motorcycling' | 'boating' | 'driving' | 'golf' | 'hang_gliding' | 'horseback_riding' | 'hunting' | 'fishing' | 'inline_skating' | 'rock_climbing' | 'sailing' | 'ice_skating' | 'sky_diving' | 'snowshoeing' | 'snowmobiling' | 'stand_up_paddleboarding' | 'surfing' | 'wakeboarding' | 'water_skiing' | 'kayaking' | 'rafting' | 'windsurfing' | 'kitesurfing' | 'tactical' | 'jumpmaster' | 'boxing' | 'floor_climbing' | 'baseball' | 'diving' | 'shooting' | 'winter_sport' | 'grinding' | 'hiit' | 'video_gaming' | 'racket' | 'wheelchair_push_walk' | 'wheelchair_push_run' | 'meditation' | 'para_sport' | 'disc_golf' | 'team_sport' | 'cricket' | 'rugby' | 'hockey' | 'lacrosse' | 'volleyball' | 'water_tubing' | 'wakesurfing' | 'water_sport' | 'archery' | 'mixed_martial_arts' | 'motor_sports' | 'snorkeling' | 'dance' | 'jump_rope' | 'pool_apnea' | 'mobility' | 'geocaching' | 'canoeing' | 'all' | number
-export type SportBits0 = 'generic' | 'running' | 'cycling' | 'transition' | 'fitness_equipment' | 'swimming' | 'basketball' | 'soccer' | number
-export type SportBits1 = 'tennis' | 'american_football' | 'training' | 'walking' | 'cross_country_skiing' | 'alpine_skiing' | 'snowboarding' | 'rowing' | number
-export type SportBits2 = 'mountaineering' | 'hiking' | 'multisport' | 'paddling' | 'flying' | 'e_biking' | 'motorcycling' | 'boating' | number
-export type SportBits3 = 'driving' | 'golf' | 'hang_gliding' | 'horseback_riding' | 'hunting' | 'fishing' | 'inline_skating' | 'rock_climbing' | number
-export type SportBits4 = 'sailing' | 'ice_skating' | 'sky_diving' | 'snowshoeing' | 'snowmobiling' | 'stand_up_paddleboarding' | 'surfing' | 'wakeboarding' | number
-export type SportBits5 = 'water_skiing' | 'kayaking' | 'rafting' | 'windsurfing' | 'kitesurfing' | 'tactical' | 'jumpmaster' | 'boxing' | number
-export type SportBits6 = 'floor_climbing' | number
-export type SportEvent = 'uncategorized' | 'geocaching' | 'fitness' | 'recreation' | 'race' | 'special_event' | 'training' | 'transportation' | 'touring' | number
-export type SquatExerciseName = 'leg_press' | 'back_squat_with_body_bar' | 'back_squats' | 'weighted_back_squats' | 'balancing_squat' | 'weighted_balancing_squat' | 'barbell_back_squat' | 'barbell_box_squat' | 'barbell_front_squat' | 'barbell_hack_squat' | 'barbell_hang_squat_snatch' | 'barbell_lateral_step_up' | 'barbell_quarter_squat' | 'barbell_siff_squat' | 'barbell_squat_snatch' | 'barbell_squat_with_heels_raised' | 'barbell_stepover' | 'barbell_step_up' | 'bench_squat_with_rotational_chop' | 'weighted_bench_squat_with_rotational_chop' | 'body_weight_wall_squat' | 'weighted_wall_squat' | 'box_step_squat' | 'weighted_box_step_squat' | 'braced_squat' | 'crossed_arm_barbell_front_squat' | 'crossover_dumbbell_step_up' | 'dumbbell_front_squat' | 'dumbbell_split_squat' | 'dumbbell_squat' | 'dumbbell_squat_clean' | 'dumbbell_stepover' | 'dumbbell_step_up' | 'elevated_single_leg_squat' | 'weighted_elevated_single_leg_squat' | 'figure_four_squats' | 'weighted_figure_four_squats' | 'goblet_squat' | 'kettlebell_squat' | 'kettlebell_swing_overhead' | 'kettlebell_swing_with_flip_to_squat' | 'lateral_dumbbell_step_up' | 'one_legged_squat' | 'overhead_dumbbell_squat' | 'overhead_squat' | 'partial_single_leg_squat' | 'weighted_partial_single_leg_squat' | 'pistol_squat' | 'weighted_pistol_squat' | 'plie_slides' | 'weighted_plie_slides' | 'plie_squat' | 'weighted_plie_squat' | 'prisoner_squat' | 'weighted_prisoner_squat' | 'single_leg_bench_get_up' | 'weighted_single_leg_bench_get_up' | 'single_leg_bench_squat' | 'weighted_single_leg_bench_squat' | 'single_leg_squat_on_swiss_ball' | 'weighted_single_leg_squat_on_swiss_ball' | 'squat' | 'weighted_squat' | 'squats_with_band' | 'staggered_squat' | 'weighted_staggered_squat' | 'step_up' | 'weighted_step_up' | 'suitcase_squats' | 'sumo_squat' | 'sumo_squat_slide_in' | 'weighted_sumo_squat_slide_in' | 'sumo_squat_to_high_pull' | 'sumo_squat_to_stand' | 'weighted_sumo_squat_to_stand' | 'sumo_squat_with_rotation' | 'weighted_sumo_squat_with_rotation' | 'swiss_ball_body_weight_wall_squat' | 'weighted_swiss_ball_wall_squat' | 'thrusters' | 'uneven_squat' | 'weighted_uneven_squat' | 'waist_slimming_squat' | 'wall_ball' | 'wide_stance_barbell_squat' | 'wide_stance_goblet_squat' | 'zercher_squat' | 'kbs_overhead' | 'squat_and_side_kick' | 'squat_jumps_in_n_out' | 'pilates_plie_squats_parallel_turned_out_flat_and_heels' | 'releve_straight_leg_and_knee_bent_with_one_leg_variation' | 'alternating_box_dumbbell_step_ups' | 'dumbbell_overhead_squat_single_arm' | 'dumbbell_squat_snatch' | 'medicine_ball_squat' | 'wall_ball_squat_and_press' | 'squat_american_swing' | 'air_squat' | 'dumbbell_thrusters' | 'overhead_barbell_squat' | number
-export type StairStepperExerciseName = 'stair_stepper' | number
-export type StrokeType = 'no_event' | 'other' | 'serve' | 'forehand' | 'backhand' | 'smash' | number
-export type SubSport = 'generic' | 'treadmill' | 'street' | 'trail' | 'track' | 'spin' | 'indoor_cycling' | 'road' | 'mountain' | 'downhill' | 'recumbent' | 'cyclocross' | 'hand_cycling' | 'track_cycling' | 'indoor_rowing' | 'elliptical' | 'stair_climbing' | 'lap_swimming' | 'open_water' | 'flexibility_training' | 'strength_training' | 'warm_up' | 'match' | 'exercise' | 'challenge' | 'indoor_skiing' | 'cardio_training' | 'indoor_walking' | 'e_bike_fitness' | 'bmx' | 'casual_walking' | 'speed_walking' | 'bike_to_run_transition' | 'run_to_bike_transition' | 'swim_to_bike_transition' | 'atv' | 'motocross' | 'backcountry' | 'resort' | 'rc_drone' | 'wingsuit' | 'whitewater' | 'skate_skiing' | 'yoga' | 'pilates' | 'indoor_running' | 'gravel_cycling' | 'e_bike_mountain' | 'commuting' | 'mixed_surface' | 'navigate' | 'track_me' | 'map' | 'single_gas_diving' | 'multi_gas_diving' | 'gauge_diving' | 'apnea_diving' | 'apnea_hunting' | 'virtual_activity' | 'obstacle' | 'breathing' | 'ccr_diving' | 'sail_race' | 'expedition' | 'ultra' | 'indoor_climbing' | 'bouldering' | 'hiit' | 'indoor_grinding' | 'hunting_with_dogs' | 'amrap' | 'emom' | 'tabata' | 'esport' | 'triathlon' | 'duathlon' | 'brick' | 'swim_run' | 'adventure_race' | 'trucker_workout' | 'pickleball' | 'padel' | 'indoor_wheelchair_walk' | 'indoor_wheelchair_run' | 'indoor_hand_cycling' | 'field' | 'ice' | 'ultimate' | 'platform' | 'squash' | 'badminton' | 'racquetball' | 'table_tennis' | 'overland' | 'trolling_motor' | 'fly_canopy' | 'fly_paraglide' | 'fly_paramotor' | 'fly_pressurized' | 'fly_navigate' | 'fly_timer' | 'fly_altimeter' | 'fly_wx' | 'fly_vfr' | 'fly_ifr' | 'dynamic_apnea' | 'enduro' | 'rucking' | 'rally' | 'pool_triathlon' | 'e_bike_enduro' | 'all' | number
-export type SupportedExdScreenLayouts = 'full_screen' | 'half_vertical' | 'half_horizontal' | 'half_vertical_right_split' | 'half_horizontal_bottom_split' | 'full_quarter_split' | 'half_vertical_left_split' | 'half_horizontal_top_split' | number
-export type SuspensionExerciseName = 'chest_fly' | 'chest_press' | 'crunch' | 'curl' | 'dip' | 'face_pull' | 'glute_bridge' | 'hamstring_curl' | 'hip_drop' | 'inverted_row' | 'knee_drive_jump' | 'knee_to_chest' | 'lat_pullover' | 'lunge' | 'mountain_climber' | 'pendulum' | 'pike' | 'plank' | 'power_pull' | 'pull_up' | 'push_up' | 'reverse_mountain_climber' | 'reverse_plank' | 'rollout' | 'row' | 'side_lunge' | 'side_plank' | 'single_leg_deadlift' | 'single_leg_squat' | 'sit_up' | 'split' | 'squat' | 'squat_jump' | 'tricep_press' | 'y_fly' | number
-export type SwimStroke = 'freestyle' | 'backstroke' | 'breaststroke' | 'butterfly' | 'drill' | 'mixed' | 'im' | 'im_by_round' | 'rimo' | number
-export type Switch = 'off' | 'on' | 'auto' | number
-export type TapSensitivity = 'high' | 'medium' | 'low' | number
-export type TimeIntoDay = number
-export type TimeMode = 'hour12' | 'hour24' | 'military' | 'hour12_with_seconds' | 'hour24_with_seconds' | 'utc' | number
-export type TimerTrigger = 'manual' | 'auto' | 'fitness_equipment' | number
-export type TimeZone = 'almaty' | 'bangkok' | 'bombay' | 'brasilia' | 'cairo' | 'cape_verde_is' | 'darwin' | 'eniwetok' | 'fiji' | 'hong_kong' | 'islamabad' | 'kabul' | 'magadan' | 'mid_atlantic' | 'moscow' | 'muscat' | 'newfoundland' | 'samoa' | 'sydney' | 'tehran' | 'tokyo' | 'us_alaska' | 'us_atlantic' | 'us_central' | 'us_eastern' | 'us_hawaii' | 'us_mountain' | 'us_pacific' | 'other' | 'auckland' | 'kathmandu' | 'europe_western_wet' | 'europe_central_cet' | 'europe_eastern_eet' | 'jakarta' | 'perth' | 'adelaide' | 'brisbane' | 'tasmania' | 'iceland' | 'amsterdam' | 'athens' | 'barcelona' | 'berlin' | 'brussels' | 'budapest' | 'copenhagen' | 'dublin' | 'helsinki' | 'lisbon' | 'london' | 'madrid' | 'munich' | 'oslo' | 'paris' | 'prague' | 'reykjavik' | 'rome' | 'stockholm' | 'vienna' | 'warsaw' | 'zurich' | 'quebec' | 'ontario' | 'manitoba' | 'saskatchewan' | 'alberta' | 'british_columbia' | 'boise' | 'boston' | 'chicago' | 'dallas' | 'denver' | 'kansas_city' | 'las_vegas' | 'los_angeles' | 'miami' | 'minneapolis' | 'new_york' | 'new_orleans' | 'phoenix' | 'santa_fe' | 'seattle' | 'washington_dc' | 'us_arizona' | 'chita' | 'ekaterinburg' | 'irkutsk' | 'kaliningrad' | 'krasnoyarsk' | 'novosibirsk' | 'petropavlovsk_kamchatskiy' | 'samara' | 'vladivostok' | 'mexico_central' | 'mexico_mountain' | 'mexico_pacific' | 'cape_town' | 'winkhoek' | 'lagos' | 'riyahd' | 'venezuela' | 'australia_lh' | 'santiago' | 'manual' | 'automatic' | number
-export type TireExerciseName = 'flip' | number
-export type TissueModelType = 'zhl16c' | number
-export type Tone = 'off' | 'tone' | 'vibrate' | 'tone_and_vibrate' | number
-export type TotalBodyExerciseName = 'burpee' | 'weighted_burpee' | 'burpee_box_jump' | 'weighted_burpee_box_jump' | 'high_pull_burpee' | 'man_makers' | 'one_arm_burpee' | 'squat_thrusts' | 'weighted_squat_thrusts' | 'squat_plank_push_up' | 'weighted_squat_plank_push_up' | 'standing_t_rotation_balance' | 'weighted_standing_t_rotation_balance' | 'barbell_burpee' | 'burpee_box_jump_over_yes_literally_jumping_over_the_box' | 'burpee_box_jump_step_up_over' | 'lateral_barbell_burpee' | 'total_body_burpee_over_bar' | 'burpee_box_jump_over' | 'burpee_wheelchair' | number
-export type TricepsExtensionExerciseName = 'bench_dip' | 'weighted_bench_dip' | 'body_weight_dip' | 'cable_kickback' | 'cable_lying_triceps_extension' | 'cable_overhead_triceps_extension' | 'dumbbell_kickback' | 'dumbbell_lying_triceps_extension' | 'ez_bar_overhead_triceps_extension' | 'incline_dip' | 'weighted_incline_dip' | 'incline_ez_bar_lying_triceps_extension' | 'lying_dumbbell_pullover_to_extension' | 'lying_ez_bar_triceps_extension' | 'lying_triceps_extension_to_close_grip_bench_press' | 'overhead_dumbbell_triceps_extension' | 'reclining_triceps_press' | 'reverse_grip_pressdown' | 'reverse_grip_triceps_pressdown' | 'rope_pressdown' | 'seated_barbell_overhead_triceps_extension' | 'seated_dumbbell_overhead_triceps_extension' | 'seated_ez_bar_overhead_triceps_extension' | 'seated_single_arm_overhead_dumbbell_extension' | 'single_arm_dumbbell_overhead_triceps_extension' | 'single_dumbbell_seated_overhead_triceps_extension' | 'single_leg_bench_dip_and_kick' | 'weighted_single_leg_bench_dip_and_kick' | 'single_leg_dip' | 'weighted_single_leg_dip' | 'static_lying_triceps_extension' | 'suspended_dip' | 'weighted_suspended_dip' | 'swiss_ball_dumbbell_lying_triceps_extension' | 'swiss_ball_ez_bar_lying_triceps_extension' | 'swiss_ball_ez_bar_overhead_triceps_extension' | 'tabletop_dip' | 'weighted_tabletop_dip' | 'triceps_extension_on_floor' | 'triceps_pressdown' | 'weighted_dip' | 'alternating_dumbbell_lying_triceps_extension' | 'triceps_press' | 'dumbbell_kickback_wheelchair' | 'overhead_dumbbell_triceps_extension_wheelchair' | number
-export type TurnType = 'arriving_idx' | 'arriving_left_idx' | 'arriving_right_idx' | 'arriving_via_idx' | 'arriving_via_left_idx' | 'arriving_via_right_idx' | 'bear_keep_left_idx' | 'bear_keep_right_idx' | 'continue_idx' | 'exit_left_idx' | 'exit_right_idx' | 'ferry_idx' | 'roundabout45_idx' | 'roundabout90_idx' | 'roundabout135_idx' | 'roundabout180_idx' | 'roundabout225_idx' | 'roundabout270_idx' | 'roundabout315_idx' | 'roundabout360_idx' | 'roundabout_neg45_idx' | 'roundabout_neg90_idx' | 'roundabout_neg135_idx' | 'roundabout_neg180_idx' | 'roundabout_neg225_idx' | 'roundabout_neg270_idx' | 'roundabout_neg315_idx' | 'roundabout_neg360_idx' | 'roundabout_generic_idx' | 'roundabout_neg_generic_idx' | 'sharp_turn_left_idx' | 'sharp_turn_right_idx' | 'turn_left_idx' | 'turn_right_idx' | 'uturn_left_idx' | 'uturn_right_idx' | 'icon_inv_idx' | 'icon_idx_cnt' | number
-export type UserLocalId = 'local_min' | 'local_max' | 'stationary_min' | 'stationary_max' | 'portable_min' | 'portable_max' | number
-export type WarmUpExerciseName = 'quadruped_rocking' | 'neck_tilts' | 'ankle_circles' | 'ankle_dorsiflexion_with_band' | 'ankle_internal_rotation' | 'arm_circles' | 'bent_over_reach_to_sky' | 'cat_camel' | 'elbow_to_foot_lunge' | 'forward_and_backward_leg_swings' | 'groiners' | 'inverted_hamstring_stretch' | 'lateral_duck_under' | 'neck_rotations' | 'opposite_arm_and_leg_balance' | 'reach_roll_and_lift' | 'scorpion' | 'shoulder_circles' | 'side_to_side_leg_swings' | 'sleeper_stretch' | 'slide_out' | 'swiss_ball_hip_crossover' | 'swiss_ball_reach_roll_and_lift' | 'swiss_ball_windshield_wipers' | 'thoracic_rotation' | 'walking_high_kicks' | 'walking_high_knees' | 'walking_knee_hugs' | 'walking_leg_cradles' | 'walkout' | 'walkout_from_push_up_position' | 'biceps_stretch' | 'glutes_stretch' | 'standing_hamstring_stretch' | 'stretch90_90' | 'stretch_abs' | 'stretch_butterfly' | 'stretch_calf' | 'stretch_cat_cow' | 'stretch_childs_pose' | 'stretch_cobra' | 'stretch_forearms' | 'stretch_forward_glutes' | 'stretch_front_split' | 'stretch_hamstring' | 'stretch_hip_flexor_and_quad' | 'stretch_lat' | 'stretch_levator_scapulae' | 'stretch_lunge_with_spinal_twist' | 'stretch_lunging_hip_flexor' | 'stretch_lying_abduction' | 'stretch_lying_it_band' | 'stretch_lying_knee_to_chest' | 'stretch_lying_piriformis' | 'stretch_lying_spinal_twist' | 'stretch_neck' | 'stretch_obliques' | 'stretch_over_under_shoulder' | 'stretch_pectoral' | 'stretch_pigeon_pose' | 'stretch_piriformis' | 'stretch_quad' | 'stretch_scorpion' | 'stretch_shoulder' | 'stretch_side' | 'stretch_side_lunge' | 'stretch_side_split' | 'stretch_standing_it_band' | 'stretch_straddle' | 'stretch_triceps' | 'stretch_wall_chest_and_shoulder' | 'neck_rotations_wheelchair' | 'half_kneeling_arm_rotation' | 'three_way_ankle_mobilization' | 'ninety_ninety_hip_switch' | 'active_frog' | 'shoulder_sweeps' | 'ankle_lunges' | 'back_roll_foam_roller' | 'bear_crawl' | 'latissimus_dorsi_foam_roll' | 'reverse_t_hip_opener' | 'shoulder_rolls' | 'chest_openers' | 'triceps_stretch' | 'upper_back_stretch' | 'hip_circles' | 'ankle_stretch' | 'marching_in_place' | 'triceps_stretch_wheelchair' | 'upper_back_stretch_wheelchair' | number
-export type WatchfaceMode = 'digital' | 'analog' | 'connect_iq' | 'disabled' | number
-export type WaterType = 'fresh' | 'salt' | 'en13319' | 'custom' | number
+export type DayOfWeek = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | number
+export type ConnectivityCapabilities = '0' | 'bluetooth' | 'bluetooth_le' | 'ant' | 'activity_upload' | 'course_download' | 'workout_download' | 'live_track' | 'weather_conditions' | 'weather_alerts' | 'gps_ephemeris_download' | 'explicit_archive' | 'setup_incomplete' | 'continue_sync_after_software_update' | 'connect_iq_app_download' | 'golf_course_download' | 'device_initiates_sync' | 'connect_iq_watch_app_download' | 'connect_iq_widget_download' | 'connect_iq_watch_face_download' | 'connect_iq_data_field_download' | 'connect_iq_app_managment' | 'swing_sensor' | 'swing_sensor_remote' | 'incident_detection' | 'audio_prompts' | 'wifi_verification' | 'true_up' | 'find_my_watch' | 'remote_manual_sync' | 'live_track_auto_start' | 'live_track_messaging' | 'instant_input' | number
 export type WeatherReport = 'current' | 'hourly_forecast' | 'daily_forecast' | number
-export type WeatherSevereType = 'unspecified' | 'tornado' | 'tsunami' | 'hurricane' | 'extreme_wind' | 'typhoon' | 'inland_hurricane' | 'hurricane_force_wind' | 'waterspout' | 'severe_thunderstorm' | 'wreckhouse_winds' | 'les_suetes_wind' | 'avalanche' | 'flash_flood' | 'tropical_storm' | 'inland_tropical_storm' | 'blizzard' | 'ice_storm' | 'freezing_rain' | 'debris_flow' | 'flash_freeze' | 'dust_storm' | 'high_wind' | 'winter_storm' | 'heavy_freezing_spray' | 'extreme_cold' | 'wind_chill' | 'cold_wave' | 'heavy_snow_alert' | 'lake_effect_blowing_snow' | 'snow_squall' | 'lake_effect_snow' | 'winter_weather' | 'sleet' | 'snowfall' | 'snow_and_blowing_snow' | 'blowing_snow' | 'snow_alert' | 'arctic_outflow' | 'freezing_drizzle' | 'storm' | 'storm_surge' | 'rainfall' | 'areal_flood' | 'coastal_flood' | 'lakeshore_flood' | 'excessive_heat' | 'heat' | 'weather' | 'high_heat_and_humidity' | 'humidex_and_health' | 'humidex' | 'gale' | 'freezing_spray' | 'special_marine' | 'squall' | 'strong_wind' | 'lake_wind' | 'marine_weather' | 'wind' | 'small_craft_hazardous_seas' | 'hazardous_seas' | 'small_craft' | 'small_craft_winds' | 'small_craft_rough_bar' | 'high_water_level' | 'ashfall' | 'freezing_fog' | 'dense_fog' | 'dense_smoke' | 'blowing_dust' | 'hard_freeze' | 'freeze' | 'frost' | 'fire_weather' | 'flood' | 'rip_tide' | 'high_surf' | 'smog' | 'air_quality' | 'brisk_wind' | 'air_stagnation' | 'low_water' | 'hydrological' | 'special_weather' | number
-export type WeatherSeverity = 'unknown' | 'warning' | 'watch' | 'advisory' | 'statement' | number
 export type WeatherStatus = 'clear' | 'partly_cloudy' | 'mostly_cloudy' | 'rain' | 'snow' | 'windy' | 'thunderstorms' | 'wintry_mix' | 'fog' | 'hazy' | 'hail' | 'scattered_showers' | 'scattered_thunderstorms' | 'unknown_precipitation' | 'light_rain' | 'heavy_rain' | 'light_snow' | 'heavy_snow' | 'light_rain_snow' | 'heavy_rain_snow' | 'cloudy' | number
-export type Weight = 'calculating' | number
-export type WktStepDuration = 'time' | 'distance' | 'hr_less_than' | 'hr_greater_than' | 'calories' | 'open' | 'repeat_until_steps_cmplt' | 'repeat_until_time' | 'repeat_until_distance' | 'repeat_until_calories' | 'repeat_until_hr_less_than' | 'repeat_until_hr_greater_than' | 'repeat_until_power_less_than' | 'repeat_until_power_greater_than' | 'power_less_than' | 'power_greater_than' | 'training_peaks_tss' | 'repeat_until_power_last_lap_less_than' | 'repeat_until_max_power_last_lap_less_than' | 'power3s_less_than' | 'power10s_less_than' | 'power30s_less_than' | 'power3s_greater_than' | 'power10s_greater_than' | 'power30s_greater_than' | 'power_lap_less_than' | 'power_lap_greater_than' | 'repeat_until_training_peaks_tss' | 'repetition_time' | 'reps' | 'time_only' | number
-export type WktStepTarget = 'speed' | 'heart_rate' | 'open' | 'cadence' | 'power' | 'grade' | 'resistance' | 'power3s' | 'power10s' | 'power30s' | 'power_lap' | 'swim_stroke' | 'speed_lap' | 'heart_rate_lap' | number
-export type WorkoutCapabilities = 'interval' | 'custom' | 'fitness_equipment' | 'firstbeat' | 'new_leaf' | 'tcx' | 'speed' | 'heart_rate' | 'distance' | 'cadence' | 'power' | 'grade' | 'resistance' | 'protected' | number
+export type WeatherSeverity = 'unknown' | 'warning' | 'watch' | 'advisory' | 'statement' | number
+export type WeatherSevereType = 'unspecified' | 'tornado' | 'tsunami' | 'hurricane' | 'extreme_wind' | 'typhoon' | 'inland_hurricane' | 'hurricane_force_wind' | 'waterspout' | 'severe_thunderstorm' | 'wreckhouse_winds' | 'les_suetes_wind' | 'avalanche' | 'flash_flood' | 'tropical_storm' | 'inland_tropical_storm' | 'blizzard' | 'ice_storm' | 'freezing_rain' | 'debris_flow' | 'flash_freeze' | 'dust_storm' | 'high_wind' | 'winter_storm' | 'heavy_freezing_spray' | 'extreme_cold' | 'wind_chill' | 'cold_wave' | 'heavy_snow_alert' | 'lake_effect_blowing_snow' | 'snow_squall' | 'lake_effect_snow' | 'winter_weather' | 'sleet' | 'snowfall' | 'snow_and_blowing_snow' | 'blowing_snow' | 'snow_alert' | 'arctic_outflow' | 'freezing_drizzle' | 'storm' | 'storm_surge' | 'rainfall' | 'areal_flood' | 'coastal_flood' | 'lakeshore_flood' | 'excessive_heat' | 'heat' | 'weather' | 'high_heat_and_humidity' | 'humidex_and_health' | 'humidex' | 'gale' | 'freezing_spray' | 'special_marine' | 'squall' | 'strong_wind' | 'lake_wind' | 'marine_weather' | 'wind' | 'small_craft_hazardous_seas' | 'hazardous_seas' | 'small_craft' | 'small_craft_winds' | 'small_craft_rough_bar' | 'high_water_level' | 'ashfall' | 'freezing_fog' | 'dense_fog' | 'dense_smoke' | 'blowing_dust' | 'hard_freeze' | 'freeze' | 'frost' | 'fire_weather' | 'flood' | 'rip_tide' | 'high_surf' | 'smog' | 'air_quality' | 'brisk_wind' | 'air_stagnation' | 'low_water' | 'hydrological' | 'special_weather' | number
+export type StrokeType = 'no_event' | 'other' | 'serve' | 'forehand' | 'backhand' | 'smash' | number
+export type BodyLocation = 'left_leg' | 'left_calf' | 'left_shin' | 'left_hamstring' | 'left_quad' | 'left_glute' | 'right_leg' | 'right_calf' | 'right_shin' | 'right_hamstring' | 'right_quad' | 'right_glute' | 'torso_back' | 'left_lower_back' | 'left_upper_back' | 'right_lower_back' | 'right_upper_back' | 'torso_front' | 'left_abdomen' | 'left_chest' | 'right_abdomen' | 'right_chest' | 'left_arm' | 'left_shoulder' | 'left_bicep' | 'left_tricep' | 'left_brachioradialis' | 'left_forearm_extensors' | 'right_arm' | 'right_shoulder' | 'right_bicep' | 'right_tricep' | 'right_brachioradialis' | 'right_forearm_extensors' | 'neck' | 'throat' | 'waist_mid_back' | 'waist_front' | 'waist_left' | 'waist_right' | number
+export type SegmentLapStatus = 'end' | 'fail' | number
+export type SegmentLeaderboardType = 'overall' | 'personal_best' | 'connections' | 'group' | 'challenger' | 'kom' | 'qom' | 'pr' | 'goal' | 'rival' | 'club_leader' | number
+export type SegmentDeleteStatus = 'do_not_delete' | 'delete_one' | 'delete_all' | number
+export type SegmentSelectionType = 'starred' | 'suggested' | number
+export type SplitType = 'ascent_split' | 'descent_split' | 'interval_active' | 'interval_rest' | 'interval_warmup' | 'interval_cooldown' | 'interval_recovery' | 'interval_other' | 'climb_active' | 'climb_rest' | 'surf_active' | 'run_active' | 'run_rest' | 'workout_round' | 'rwd_run' | 'rwd_walk' | 'windsurf_active' | 'rwd_stand' | 'transition' | 'ski_lift_split' | 'ski_run_split' | number
+export type SourceType = 'ant' | 'antplus' | 'bluetooth' | 'bluetooth_low_energy' | 'wifi' | 'local' | number
+export type DisplayOrientation = 'auto' | 'portrait' | 'landscape' | 'portrait_flipped' | 'landscape_flipped' | number
 export type WorkoutEquipment = 'none' | 'swim_fins' | 'swim_kickboard' | 'swim_paddles' | 'swim_pull_buoy' | 'swim_snorkel' | number
-export type WorkoutHr = 'bpm_offset' | number
-export type WorkoutPower = 'watts_offset' | number
+export type WatchfaceMode = 'digital' | 'analog' | 'connect_iq' | 'disabled' | number
+export type DigitalWatchfaceLayout = 'traditional' | 'modern' | 'bold' | number
+export type AnalogWatchfaceLayout = 'minimal' | 'traditional' | 'modern' | number
+export type RiderPositionType = 'seated' | 'standing' | 'transition_to_seated' | 'transition_to_standing' | number
+export type PowerPhaseType = 'power_phase_start_angle' | 'power_phase_end_angle' | 'power_phase_arc_length' | 'power_phase_center' | number
+export type CameraEventType = 'video_start' | 'video_split' | 'video_end' | 'photo_taken' | 'video_second_stream_start' | 'video_second_stream_split' | 'video_second_stream_end' | 'video_split_start' | 'video_second_stream_split_start' | 'video_pause' | 'video_second_stream_pause' | 'video_resume' | 'video_second_stream_resume' | number
+export type SensorType = 'accelerometer' | 'gyroscope' | 'compass' | 'barometer' | number
+export type BikeLightNetworkConfigType = 'auto' | 'individual' | 'high_visibility' | 'trail' | number
+export type CommTimeoutType = 'wildcard_pairing_timeout' | 'pairing_timeout' | 'connection_lost' | 'connection_timeout' | number
+export type CameraOrientationType = 'camera_orientation_0' | 'camera_orientation_90' | 'camera_orientation_180' | 'camera_orientation_270' | number
+export type AttitudeStage = 'failed' | 'aligning' | 'degraded' | 'valid' | number
+export type AttitudeValidity = '0' | 'track_angle_heading_valid' | 'pitch_valid' | 'roll_valid' | 'lateral_body_accel_valid' | 'normal_body_accel_valid' | 'turn_rate_valid' | 'hw_fail' | 'mag_invalid' | 'no_gps' | 'gps_invalid' | 'solution_coasting' | 'true_track_angle' | 'magnetic_heading' | number
+export type AutoSyncFrequency = 'never' | 'occasionally' | 'frequent' | 'once_a_day' | 'remote' | number
+export type ExdLayout = 'full_screen' | 'half_vertical' | 'half_horizontal' | 'half_vertical_right_split' | 'half_horizontal_bottom_split' | 'full_quarter_split' | 'half_vertical_left_split' | 'half_horizontal_top_split' | number
+export type ExdDisplayType = 'numerical' | 'simple' | 'graph' | 'bar' | 'circle_graph' | 'virtual_partner' | 'balance' | 'string_list' | 'string' | 'simple_dynamic_icon' | 'gauge' | number
+export type ExdDataUnits = 'no_units' | 'laps' | 'miles_per_hour' | 'kilometers_per_hour' | 'feet_per_hour' | 'meters_per_hour' | 'degrees_celsius' | 'degrees_farenheit' | 'zone' | 'gear' | 'rpm' | 'bpm' | 'degrees' | 'millimeters' | 'meters' | 'kilometers' | 'feet' | 'yards' | 'kilofeet' | 'miles' | 'time' | 'enum_turn_type' | 'percent' | 'watts' | 'watts_per_kilogram' | 'enum_battery_status' | 'enum_bike_light_beam_angle_mode' | 'enum_bike_light_battery_status' | 'enum_bike_light_network_config_type' | 'lights' | 'seconds' | 'minutes' | 'hours' | 'calories' | 'kilojoules' | 'milliseconds' | 'second_per_mile' | 'second_per_kilometer' | 'centimeter' | 'enum_course_point' | 'bradians' | 'enum_sport' | 'inches_hg' | 'mm_hg' | 'mbars' | 'hecto_pascals' | 'feet_per_min' | 'meters_per_min' | 'meters_per_sec' | 'eight_cardinal' | number
+export type ExdQualifiers = 'no_qualifier' | 'instantaneous' | 'average' | 'lap' | 'maximum' | 'maximum_average' | 'maximum_lap' | 'last_lap' | 'average_lap' | 'to_destination' | 'to_go' | 'to_next' | 'next_course_point' | 'total' | 'three_second_average' | 'ten_second_average' | 'thirty_second_average' | 'percent_maximum' | 'percent_maximum_average' | 'lap_percent_maximum' | 'elapsed' | 'sunrise' | 'sunset' | 'compared_to_virtual_partner' | 'maximum_24h' | 'minimum_24h' | 'minimum' | 'first' | 'second' | 'third' | 'shifter' | 'last_sport' | 'moving' | 'stopped' | 'estimated_total' | 'zone_9' | 'zone_8' | 'zone_7' | 'zone_6' | 'zone_5' | 'zone_4' | 'zone_3' | 'zone_2' | 'zone_1' | number
+export type ExdDescriptors = 'bike_light_battery_status' | 'beam_angle_status' | 'batery_level' | 'light_network_mode' | 'number_lights_connected' | 'cadence' | 'distance' | 'estimated_time_of_arrival' | 'heading' | 'time' | 'battery_level' | 'trainer_resistance' | 'trainer_target_power' | 'time_seated' | 'time_standing' | 'elevation' | 'grade' | 'ascent' | 'descent' | 'vertical_speed' | 'di2_battery_level' | 'front_gear' | 'rear_gear' | 'gear_ratio' | 'heart_rate' | 'heart_rate_zone' | 'time_in_heart_rate_zone' | 'heart_rate_reserve' | 'calories' | 'gps_accuracy' | 'gps_signal_strength' | 'temperature' | 'time_of_day' | 'balance' | 'pedal_smoothness' | 'power' | 'functional_threshold_power' | 'intensity_factor' | 'work' | 'power_ratio' | 'normalized_power' | 'training_stress_Score' | 'time_on_zone' | 'speed' | 'laps' | 'reps' | 'workout_step' | 'course_distance' | 'navigation_distance' | 'course_estimated_time_of_arrival' | 'navigation_estimated_time_of_arrival' | 'course_time' | 'navigation_time' | 'course_heading' | 'navigation_heading' | 'power_zone' | 'torque_effectiveness' | 'timer_time' | 'power_weight_ratio' | 'left_platform_center_offset' | 'right_platform_center_offset' | 'left_power_phase_start_angle' | 'right_power_phase_start_angle' | 'left_power_phase_finish_angle' | 'right_power_phase_finish_angle' | 'gears' | 'pace' | 'training_effect' | 'vertical_oscillation' | 'vertical_ratio' | 'ground_contact_time' | 'left_ground_contact_time_balance' | 'right_ground_contact_time_balance' | 'stride_length' | 'running_cadence' | 'performance_condition' | 'course_type' | 'time_in_power_zone' | 'navigation_turn' | 'course_location' | 'navigation_location' | 'compass' | 'gear_combo' | 'muscle_oxygen' | 'icon' | 'compass_heading' | 'gps_heading' | 'gps_elevation' | 'anaerobic_training_effect' | 'course' | 'off_course' | 'glide_ratio' | 'vertical_distance' | 'vmg' | 'ambient_pressure' | 'pressure' | 'vam' | number
+export type AutoActivityDetect = 'none' | 'running' | 'cycling' | 'swimming' | 'walking' | 'elliptical' | 'sedentary' | number
+export type SupportedExdScreenLayouts = '0' | 'full_screen' | 'half_vertical' | 'half_horizontal' | 'half_vertical_right_split' | 'half_horizontal_bottom_split' | 'full_quarter_split' | 'half_vertical_left_split' | 'half_horizontal_top_split' | number
+export type FitBaseType = 'enum' | 'sint8' | 'uint8' | 'string' | 'uint8z' | 'byte' | 'sint16' | 'uint16' | 'sint32' | 'uint32' | 'float32' | 'float64' | 'uint16z' | 'uint32z' | 'sint64' | 'uint64' | 'uint64z' | number
+export type TurnType = 'arriving_idx' | 'arriving_left_idx' | 'arriving_right_idx' | 'arriving_via_idx' | 'arriving_via_left_idx' | 'arriving_via_right_idx' | 'bear_keep_left_idx' | 'bear_keep_right_idx' | 'continue_idx' | 'exit_left_idx' | 'exit_right_idx' | 'ferry_idx' | 'roundabout_45_idx' | 'roundabout_90_idx' | 'roundabout_135_idx' | 'roundabout_180_idx' | 'roundabout_225_idx' | 'roundabout_270_idx' | 'roundabout_315_idx' | 'roundabout_360_idx' | 'roundabout_neg_45_idx' | 'roundabout_neg_90_idx' | 'roundabout_neg_135_idx' | 'roundabout_neg_180_idx' | 'roundabout_neg_225_idx' | 'roundabout_neg_270_idx' | 'roundabout_neg_315_idx' | 'roundabout_neg_360_idx' | 'roundabout_generic_idx' | 'roundabout_neg_generic_idx' | 'sharp_turn_left_idx' | 'sharp_turn_right_idx' | 'turn_left_idx' | 'turn_right_idx' | 'uturn_left_idx' | 'uturn_right_idx' | 'icon_inv_idx' | 'icon_idx_cnt' | number
+export type BikeLightBeamAngleMode = 'manual' | 'auto' | number
+export type FitBaseUnit = 'other' | 'kilogram' | 'pound' | number
+export type SetType = 'rest' | 'active' | number
+export type ExerciseCategory = 'bench_press' | 'calf_raise' | 'cardio' | 'carry' | 'chop' | 'core' | 'crunch' | 'curl' | 'deadlift' | 'flye' | 'hip_raise' | 'hip_stability' | 'hip_swing' | 'hyperextension' | 'lateral_raise' | 'leg_curl' | 'leg_raise' | 'lunge' | 'olympic_lift' | 'plank' | 'plyo' | 'pull_up' | 'push_up' | 'row' | 'shoulder_press' | 'shoulder_stability' | 'shrug' | 'sit_up' | 'squat' | 'total_body' | 'triceps_extension' | 'warm_up' | 'run' | 'unknown' | number
+export type BenchPressExerciseName = 'alternating_dumbbell_chest_press_on_swiss_ball' | 'barbell_bench_press' | 'barbell_board_bench_press' | 'barbell_floor_press' | 'close_grip_barbell_bench_press' | 'decline_dumbbell_bench_press' | 'dumbbell_bench_press' | 'dumbbell_floor_press' | 'incline_barbell_bench_press' | 'incline_dumbbell_bench_press' | 'incline_smith_machine_bench_press' | 'isometric_barbell_bench_press' | 'kettlebell_chest_press' | 'neutral_grip_dumbbell_bench_press' | 'neutral_grip_dumbbell_incline_bench_press' | 'one_arm_floor_press' | 'weighted_one_arm_floor_press' | 'partial_lockout' | 'reverse_grip_barbell_bench_press' | 'reverse_grip_incline_bench_press' | 'single_arm_cable_chest_press' | 'single_arm_dumbbell_bench_press' | 'smith_machine_bench_press' | 'swiss_ball_dumbbell_chest_press' | 'triple_stop_barbell_bench_press' | 'wide_grip_barbell_bench_press' | 'alternating_dumbbell_chest_press' | number
+export type CalfRaiseExerciseName = '3_way_calf_raise' | '3_way_weighted_calf_raise' | '3_way_single_leg_calf_raise' | '3_way_weighted_single_leg_calf_raise' | 'donkey_calf_raise' | 'weighted_donkey_calf_raise' | 'seated_calf_raise' | 'weighted_seated_calf_raise' | 'seated_dumbbell_toe_raise' | 'single_leg_bent_knee_calf_raise' | 'weighted_single_leg_bent_knee_calf_raise' | 'single_leg_decline_push_up' | 'single_leg_donkey_calf_raise' | 'weighted_single_leg_donkey_calf_raise' | 'single_leg_hip_raise_with_knee_hold' | 'single_leg_standing_calf_raise' | 'single_leg_standing_dumbbell_calf_raise' | 'standing_barbell_calf_raise' | 'standing_calf_raise' | 'weighted_standing_calf_raise' | 'standing_dumbbell_calf_raise' | number
+export type CardioExerciseName = 'bob_and_weave_circle' | 'weighted_bob_and_weave_circle' | 'cardio_core_crawl' | 'weighted_cardio_core_crawl' | 'double_under' | 'weighted_double_under' | 'jump_rope' | 'weighted_jump_rope' | 'jump_rope_crossover' | 'weighted_jump_rope_crossover' | 'jump_rope_jog' | 'weighted_jump_rope_jog' | 'jumping_jacks' | 'weighted_jumping_jacks' | 'ski_moguls' | 'weighted_ski_moguls' | 'split_jacks' | 'weighted_split_jacks' | 'squat_jacks' | 'weighted_squat_jacks' | 'triple_under' | 'weighted_triple_under' | number
+export type CarryExerciseName = 'bar_holds' | 'farmers_walk' | 'farmers_walk_on_toes' | 'hex_dumbbell_hold' | 'overhead_carry' | number
+export type ChopExerciseName = 'cable_pull_through' | 'cable_rotational_lift' | 'cable_woodchop' | 'cross_chop_to_knee' | 'weighted_cross_chop_to_knee' | 'dumbbell_chop' | 'half_kneeling_rotation' | 'weighted_half_kneeling_rotation' | 'half_kneeling_rotational_chop' | 'half_kneeling_rotational_reverse_chop' | 'half_kneeling_stability_chop' | 'half_kneeling_stability_reverse_chop' | 'kneeling_rotational_chop' | 'kneeling_rotational_reverse_chop' | 'kneeling_stability_chop' | 'kneeling_woodchopper' | 'medicine_ball_wood_chops' | 'power_squat_chops' | 'weighted_power_squat_chops' | 'standing_rotational_chop' | 'standing_split_rotational_chop' | 'standing_split_rotational_reverse_chop' | 'standing_stability_reverse_chop' | number
+export type CoreExerciseName = 'abs_jabs' | 'weighted_abs_jabs' | 'alternating_plate_reach' | 'barbell_rollout' | 'weighted_barbell_rollout' | 'body_bar_oblique_twist' | 'cable_core_press' | 'cable_side_bend' | 'side_bend' | 'weighted_side_bend' | 'crescent_circle' | 'weighted_crescent_circle' | 'cycling_russian_twist' | 'weighted_cycling_russian_twist' | 'elevated_feet_russian_twist' | 'weighted_elevated_feet_russian_twist' | 'half_turkish_get_up' | 'kettlebell_windmill' | 'kneeling_ab_wheel' | 'weighted_kneeling_ab_wheel' | 'modified_front_lever' | 'open_knee_tucks' | 'weighted_open_knee_tucks' | 'side_abs_leg_lift' | 'weighted_side_abs_leg_lift' | 'swiss_ball_jackknife' | 'weighted_swiss_ball_jackknife' | 'swiss_ball_pike' | 'weighted_swiss_ball_pike' | 'swiss_ball_rollout' | 'weighted_swiss_ball_rollout' | 'triangle_hip_press' | 'weighted_triangle_hip_press' | 'trx_suspended_jackknife' | 'weighted_trx_suspended_jackknife' | 'u_boat' | 'weighted_u_boat' | 'windmill_switches' | 'weighted_windmill_switches' | 'alternating_slide_out' | 'weighted_alternating_slide_out' | 'ghd_back_extensions' | 'weighted_ghd_back_extensions' | 'overhead_walk' | 'inchworm' | 'weighted_modified_front_lever' | 'russian_twist' | 'abdominal_leg_rotations' | 'arm_and_leg_extension_on_knees' | 'bicycle' | 'bicep_curl_with_leg_extension' | 'cat_cow' | 'corkscrew' | 'criss_cross' | 'criss_cross_with_ball' | 'double_leg_stretch' | 'knee_folds' | 'lower_lift' | 'neck_pull' | 'pelvic_clocks' | 'roll_over' | 'roll_up' | 'rolling' | 'rowing_1' | 'rowing_2' | 'scissors' | 'single_leg_circles' | 'single_leg_stretch' | 'snake_twist_1_and_2' | 'swan' | 'swimming' | 'teaser' | 'the_hundred' | number
+export type CrunchExerciseName = 'bicycle_crunch' | 'cable_crunch' | 'circular_arm_crunch' | 'crossed_arms_crunch' | 'weighted_crossed_arms_crunch' | 'cross_leg_reverse_crunch' | 'weighted_cross_leg_reverse_crunch' | 'crunch_chop' | 'weighted_crunch_chop' | 'double_crunch' | 'weighted_double_crunch' | 'elbow_to_knee_crunch' | 'weighted_elbow_to_knee_crunch' | 'flutter_kicks' | 'weighted_flutter_kicks' | 'foam_roller_reverse_crunch_on_bench' | 'weighted_foam_roller_reverse_crunch_on_bench' | 'foam_roller_reverse_crunch_with_dumbbell' | 'foam_roller_reverse_crunch_with_medicine_ball' | 'frog_press' | 'hanging_knee_raise_oblique_crunch' | 'weighted_hanging_knee_raise_oblique_crunch' | 'hip_crossover' | 'weighted_hip_crossover' | 'hollow_rock' | 'weighted_hollow_rock' | 'incline_reverse_crunch' | 'weighted_incline_reverse_crunch' | 'kneeling_cable_crunch' | 'kneeling_cross_crunch' | 'weighted_kneeling_cross_crunch' | 'kneeling_oblique_cable_crunch' | 'knees_to_elbow' | 'leg_extensions' | 'weighted_leg_extensions' | 'leg_levers' | 'mcgill_curl_up' | 'weighted_mcgill_curl_up' | 'modified_pilates_roll_up_with_ball' | 'weighted_modified_pilates_roll_up_with_ball' | 'pilates_crunch' | 'weighted_pilates_crunch' | 'pilates_roll_up_with_ball' | 'weighted_pilates_roll_up_with_ball' | 'raised_legs_crunch' | 'weighted_raised_legs_crunch' | 'reverse_crunch' | 'weighted_reverse_crunch' | 'reverse_crunch_on_a_bench' | 'weighted_reverse_crunch_on_a_bench' | 'reverse_curl_and_lift' | 'weighted_reverse_curl_and_lift' | 'rotational_lift' | 'weighted_rotational_lift' | 'seated_alternating_reverse_crunch' | 'weighted_seated_alternating_reverse_crunch' | 'seated_leg_u' | 'weighted_seated_leg_u' | 'side_to_side_crunch_and_weave' | 'weighted_side_to_side_crunch_and_weave' | 'single_leg_reverse_crunch' | 'weighted_single_leg_reverse_crunch' | 'skater_crunch_cross' | 'weighted_skater_crunch_cross' | 'standing_cable_crunch' | 'standing_side_crunch' | 'step_climb' | 'weighted_step_climb' | 'swiss_ball_crunch' | 'swiss_ball_reverse_crunch' | 'weighted_swiss_ball_reverse_crunch' | 'swiss_ball_russian_twist' | 'weighted_swiss_ball_russian_twist' | 'swiss_ball_side_crunch' | 'weighted_swiss_ball_side_crunch' | 'thoracic_crunches_on_foam_roller' | 'weighted_thoracic_crunches_on_foam_roller' | 'triceps_crunch' | 'weighted_bicycle_crunch' | 'weighted_crunch' | 'weighted_swiss_ball_crunch' | 'toes_to_bar' | 'weighted_toes_to_bar' | 'crunch' | 'straight_leg_crunch_with_ball' | number
+export type CurlExerciseName = 'alternating_dumbbell_biceps_curl' | 'alternating_dumbbell_biceps_curl_on_swiss_ball' | 'alternating_incline_dumbbell_biceps_curl' | 'barbell_biceps_curl' | 'barbell_reverse_wrist_curl' | 'barbell_wrist_curl' | 'behind_the_back_barbell_reverse_wrist_curl' | 'behind_the_back_one_arm_cable_curl' | 'cable_biceps_curl' | 'cable_hammer_curl' | 'cheating_barbell_biceps_curl' | 'close_grip_ez_bar_biceps_curl' | 'cross_body_dumbbell_hammer_curl' | 'dead_hang_biceps_curl' | 'decline_hammer_curl' | 'dumbbell_biceps_curl_with_static_hold' | 'dumbbell_hammer_curl' | 'dumbbell_reverse_wrist_curl' | 'dumbbell_wrist_curl' | 'ez_bar_preacher_curl' | 'forward_bend_biceps_curl' | 'hammer_curl_to_press' | 'incline_dumbbell_biceps_curl' | 'incline_offset_thumb_dumbbell_curl' | 'kettlebell_biceps_curl' | 'lying_concentration_cable_curl' | 'one_arm_preacher_curl' | 'plate_pinch_curl' | 'preacher_curl_with_cable' | 'reverse_ez_bar_curl' | 'reverse_grip_wrist_curl' | 'reverse_grip_barbell_biceps_curl' | 'seated_alternating_dumbbell_biceps_curl' | 'seated_dumbbell_biceps_curl' | 'seated_reverse_dumbbell_curl' | 'split_stance_offset_pinky_dumbbell_curl' | 'standing_alternating_dumbbell_curls' | 'standing_dumbbell_biceps_curl' | 'standing_ez_bar_biceps_curl' | 'static_curl' | 'swiss_ball_dumbbell_overhead_triceps_extension' | 'swiss_ball_ez_bar_preacher_curl' | 'twisting_standing_dumbbell_biceps_curl' | 'wide_grip_ez_bar_biceps_curl' | number
+export type DeadliftExerciseName = 'barbell_deadlift' | 'barbell_straight_leg_deadlift' | 'dumbbell_deadlift' | 'dumbbell_single_leg_deadlift_to_row' | 'dumbbell_straight_leg_deadlift' | 'kettlebell_floor_to_shelf' | 'one_arm_one_leg_deadlift' | 'rack_pull' | 'rotational_dumbbell_straight_leg_deadlift' | 'single_arm_deadlift' | 'single_leg_barbell_deadlift' | 'single_leg_barbell_straight_leg_deadlift' | 'single_leg_deadlift_with_barbell' | 'single_leg_rdl_circuit' | 'single_leg_romanian_deadlift_with_dumbbell' | 'sumo_deadlift' | 'sumo_deadlift_high_pull' | 'trap_bar_deadlift' | 'wide_grip_barbell_deadlift' | number
+export type FlyeExerciseName = 'cable_crossover' | 'decline_dumbbell_flye' | 'dumbbell_flye' | 'incline_dumbbell_flye' | 'kettlebell_flye' | 'kneeling_rear_flye' | 'single_arm_standing_cable_reverse_flye' | 'swiss_ball_dumbbell_flye' | 'arm_rotations' | 'hug_a_tree' | number
+export type HipRaiseExerciseName = 'barbell_hip_thrust_on_floor' | 'barbell_hip_thrust_with_bench' | 'bent_knee_swiss_ball_reverse_hip_raise' | 'weighted_bent_knee_swiss_ball_reverse_hip_raise' | 'bridge_with_leg_extension' | 'weighted_bridge_with_leg_extension' | 'clam_bridge' | 'front_kick_tabletop' | 'weighted_front_kick_tabletop' | 'hip_extension_and_cross' | 'weighted_hip_extension_and_cross' | 'hip_raise' | 'weighted_hip_raise' | 'hip_raise_with_feet_on_swiss_ball' | 'weighted_hip_raise_with_feet_on_swiss_ball' | 'hip_raise_with_head_on_bosu_ball' | 'weighted_hip_raise_with_head_on_bosu_ball' | 'hip_raise_with_head_on_swiss_ball' | 'weighted_hip_raise_with_head_on_swiss_ball' | 'hip_raise_with_knee_squeeze' | 'weighted_hip_raise_with_knee_squeeze' | 'incline_rear_leg_extension' | 'weighted_incline_rear_leg_extension' | 'kettlebell_swing' | 'marching_hip_raise' | 'weighted_marching_hip_raise' | 'marching_hip_raise_with_feet_on_a_swiss_ball' | 'weighted_marching_hip_raise_with_feet_on_a_swiss_ball' | 'reverse_hip_raise' | 'weighted_reverse_hip_raise' | 'single_leg_hip_raise' | 'weighted_single_leg_hip_raise' | 'single_leg_hip_raise_with_foot_on_bench' | 'weighted_single_leg_hip_raise_with_foot_on_bench' | 'single_leg_hip_raise_with_foot_on_bosu_ball' | 'weighted_single_leg_hip_raise_with_foot_on_bosu_ball' | 'single_leg_hip_raise_with_foot_on_foam_roller' | 'weighted_single_leg_hip_raise_with_foot_on_foam_roller' | 'single_leg_hip_raise_with_foot_on_medicine_ball' | 'weighted_single_leg_hip_raise_with_foot_on_medicine_ball' | 'single_leg_hip_raise_with_head_on_bosu_ball' | 'weighted_single_leg_hip_raise_with_head_on_bosu_ball' | 'weighted_clam_bridge' | 'single_leg_swiss_ball_hip_raise_and_leg_curl' | 'clams' | 'inner_thigh_circles' | 'inner_thigh_side_lift' | 'leg_circles' | 'leg_lift' | 'leg_lift_in_external_rotation' | number
+export type HipStabilityExerciseName = 'band_side_lying_leg_raise' | 'dead_bug' | 'weighted_dead_bug' | 'external_hip_raise' | 'weighted_external_hip_raise' | 'fire_hydrant_kicks' | 'weighted_fire_hydrant_kicks' | 'hip_circles' | 'weighted_hip_circles' | 'inner_thigh_lift' | 'weighted_inner_thigh_lift' | 'lateral_walks_with_band_at_ankles' | 'pretzel_side_kick' | 'weighted_pretzel_side_kick' | 'prone_hip_internal_rotation' | 'weighted_prone_hip_internal_rotation' | 'quadruped' | 'quadruped_hip_extension' | 'weighted_quadruped_hip_extension' | 'quadruped_with_leg_lift' | 'weighted_quadruped_with_leg_lift' | 'side_lying_leg_raise' | 'weighted_side_lying_leg_raise' | 'sliding_hip_adduction' | 'weighted_sliding_hip_adduction' | 'standing_adduction' | 'weighted_standing_adduction' | 'standing_cable_hip_abduction' | 'standing_hip_abduction' | 'weighted_standing_hip_abduction' | 'standing_rear_leg_raise' | 'weighted_standing_rear_leg_raise' | 'supine_hip_internal_rotation' | 'weighted_supine_hip_internal_rotation' | number
+export type HipSwingExcerciseName = 'single_arm_kettlebell_swing' | 'single_arm_dumbbell_swing' | 'step_out_swing' | number
+export type HyperextensionExerciseName = 'back_extension_with_opposite_arm_and_leg_reach' | 'weighted_back_extension_with_opposite_arm_and_leg_reach' | 'base_rotations' | 'weighted_base_rotations' | 'bent_knee_reverse_hyperextension' | 'weighted_bent_knee_reverse_hyperextension' | 'hollow_hold_and_roll' | 'weighted_hollow_hold_and_roll' | 'kicks' | 'weighted_kicks' | 'knee_raises' | 'weighted_knee_raises' | 'kneeling_superman' | 'weighted_kneeling_superman' | 'lat_pull_down_with_row' | 'medicine_ball_deadlift_to_reach' | 'one_arm_one_leg_row' | 'one_arm_row_with_band' | 'overhead_lunge_with_medicine_ball' | 'plank_knee_tucks' | 'weighted_plank_knee_tucks' | 'side_step' | 'weighted_side_step' | 'single_leg_back_extension' | 'weighted_single_leg_back_extension' | 'spine_extension' | 'weighted_spine_extension' | 'static_back_extension' | 'weighted_static_back_extension' | 'superman_from_floor' | 'weighted_superman_from_floor' | 'swiss_ball_back_extension' | 'weighted_swiss_ball_back_extension' | 'swiss_ball_hyperextension' | 'weighted_swiss_ball_hyperextension' | 'swiss_ball_opposite_arm_and_leg_lift' | 'weighted_swiss_ball_opposite_arm_and_leg_lift' | 'superman_on_swiss_ball' | 'cobra' | 'supine_floor_barre' | number
+export type LateralRaiseExerciseName = '45_degree_cable_external_rotation' | 'alternating_lateral_raise_with_static_hold' | 'bar_muscle_up' | 'bent_over_lateral_raise' | 'cable_diagonal_raise' | 'cable_front_raise' | 'calorie_row' | 'combo_shoulder_raise' | 'dumbbell_diagonal_raise' | 'dumbbell_v_raise' | 'front_raise' | 'leaning_dumbbell_lateral_raise' | 'lying_dumbbell_raise' | 'muscle_up' | 'one_arm_cable_lateral_raise' | 'overhand_grip_rear_lateral_raise' | 'plate_raises' | 'ring_dip' | 'weighted_ring_dip' | 'ring_muscle_up' | 'weighted_ring_muscle_up' | 'rope_climb' | 'weighted_rope_climb' | 'scaption' | 'seated_lateral_raise' | 'seated_rear_lateral_raise' | 'side_lying_lateral_raise' | 'standing_lift' | 'suspended_row' | 'underhand_grip_rear_lateral_raise' | 'wall_slide' | 'weighted_wall_slide' | 'arm_circles' | 'shaving_the_head' | number
+export type LegCurlExerciseName = 'leg_curl' | 'weighted_leg_curl' | 'good_morning' | 'seated_barbell_good_morning' | 'single_leg_barbell_good_morning' | 'single_leg_sliding_leg_curl' | 'sliding_leg_curl' | 'split_barbell_good_morning' | 'split_stance_extension' | 'staggered_stance_good_morning' | 'swiss_ball_hip_raise_and_leg_curl' | 'zercher_good_morning' | number
+export type LegRaiseExerciseName = 'hanging_knee_raise' | 'hanging_leg_raise' | 'weighted_hanging_leg_raise' | 'hanging_single_leg_raise' | 'weighted_hanging_single_leg_raise' | 'kettlebell_leg_raises' | 'leg_lowering_drill' | 'weighted_leg_lowering_drill' | 'lying_straight_leg_raise' | 'weighted_lying_straight_leg_raise' | 'medicine_ball_leg_drops' | 'quadruped_leg_raise' | 'weighted_quadruped_leg_raise' | 'reverse_leg_raise' | 'weighted_reverse_leg_raise' | 'reverse_leg_raise_on_swiss_ball' | 'weighted_reverse_leg_raise_on_swiss_ball' | 'single_leg_lowering_drill' | 'weighted_single_leg_lowering_drill' | 'weighted_hanging_knee_raise' | 'lateral_stepover' | 'weighted_lateral_stepover' | number
+export type LungeExerciseName = 'overhead_lunge' | 'lunge_matrix' | 'weighted_lunge_matrix' | 'alternating_barbell_forward_lunge' | 'alternating_dumbbell_lunge_with_reach' | 'back_foot_elevated_dumbbell_split_squat' | 'barbell_box_lunge' | 'barbell_bulgarian_split_squat' | 'barbell_crossover_lunge' | 'barbell_front_split_squat' | 'barbell_lunge' | 'barbell_reverse_lunge' | 'barbell_side_lunge' | 'barbell_split_squat' | 'core_control_rear_lunge' | 'diagonal_lunge' | 'drop_lunge' | 'dumbbell_box_lunge' | 'dumbbell_bulgarian_split_squat' | 'dumbbell_crossover_lunge' | 'dumbbell_diagonal_lunge' | 'dumbbell_lunge' | 'dumbbell_lunge_and_rotation' | 'dumbbell_overhead_bulgarian_split_squat' | 'dumbbell_reverse_lunge_to_high_knee_and_press' | 'dumbbell_side_lunge' | 'elevated_front_foot_barbell_split_squat' | 'front_foot_elevated_dumbbell_split_squat' | 'gunslinger_lunge' | 'lawnmower_lunge' | 'low_lunge_with_isometric_adduction' | 'low_side_to_side_lunge' | 'lunge' | 'weighted_lunge' | 'lunge_with_arm_reach' | 'lunge_with_diagonal_reach' | 'lunge_with_side_bend' | 'offset_dumbbell_lunge' | 'offset_dumbbell_reverse_lunge' | 'overhead_bulgarian_split_squat' | 'overhead_dumbbell_reverse_lunge' | 'overhead_dumbbell_split_squat' | 'overhead_lunge_with_rotation' | 'reverse_barbell_box_lunge' | 'reverse_box_lunge' | 'reverse_dumbbell_box_lunge' | 'reverse_dumbbell_crossover_lunge' | 'reverse_dumbbell_diagonal_lunge' | 'reverse_lunge_with_reach_back' | 'weighted_reverse_lunge_with_reach_back' | 'reverse_lunge_with_twist_and_overhead_reach' | 'weighted_reverse_lunge_with_twist_and_overhead_reach' | 'reverse_sliding_box_lunge' | 'weighted_reverse_sliding_box_lunge' | 'reverse_sliding_lunge' | 'weighted_reverse_sliding_lunge' | 'runners_lunge_to_balance' | 'weighted_runners_lunge_to_balance' | 'shifting_side_lunge' | 'side_and_crossover_lunge' | 'weighted_side_and_crossover_lunge' | 'side_lunge' | 'weighted_side_lunge' | 'side_lunge_and_press' | 'side_lunge_jump_off' | 'side_lunge_sweep' | 'weighted_side_lunge_sweep' | 'side_lunge_to_crossover_tap' | 'weighted_side_lunge_to_crossover_tap' | 'side_to_side_lunge_chops' | 'weighted_side_to_side_lunge_chops' | 'siff_jump_lunge' | 'weighted_siff_jump_lunge' | 'single_arm_reverse_lunge_and_press' | 'sliding_lateral_lunge' | 'weighted_sliding_lateral_lunge' | 'walking_barbell_lunge' | 'walking_dumbbell_lunge' | 'walking_lunge' | 'weighted_walking_lunge' | 'wide_grip_overhead_barbell_split_squat' | number
+export type OlympicLiftExerciseName = 'barbell_hang_power_clean' | 'barbell_hang_squat_clean' | 'barbell_power_clean' | 'barbell_power_snatch' | 'barbell_squat_clean' | 'clean_and_jerk' | 'barbell_hang_power_snatch' | 'barbell_hang_pull' | 'barbell_high_pull' | 'barbell_snatch' | 'barbell_split_jerk' | 'clean' | 'dumbbell_clean' | 'dumbbell_hang_pull' | 'one_hand_dumbbell_split_snatch' | 'push_jerk' | 'single_arm_dumbbell_snatch' | 'single_arm_hang_snatch' | 'single_arm_kettlebell_snatch' | 'split_jerk' | 'squat_clean_and_jerk' | number
+export type PlankExerciseName = '45_degree_plank' | 'weighted_45_degree_plank' | '90_degree_static_hold' | 'weighted_90_degree_static_hold' | 'bear_crawl' | 'weighted_bear_crawl' | 'cross_body_mountain_climber' | 'weighted_cross_body_mountain_climber' | 'elbow_plank_pike_jacks' | 'weighted_elbow_plank_pike_jacks' | 'elevated_feet_plank' | 'weighted_elevated_feet_plank' | 'elevator_abs' | 'weighted_elevator_abs' | 'extended_plank' | 'weighted_extended_plank' | 'full_plank_passe_twist' | 'weighted_full_plank_passe_twist' | 'inching_elbow_plank' | 'weighted_inching_elbow_plank' | 'inchworm_to_side_plank' | 'weighted_inchworm_to_side_plank' | 'kneeling_plank' | 'weighted_kneeling_plank' | 'kneeling_side_plank_with_leg_lift' | 'weighted_kneeling_side_plank_with_leg_lift' | 'lateral_roll' | 'weighted_lateral_roll' | 'lying_reverse_plank' | 'weighted_lying_reverse_plank' | 'medicine_ball_mountain_climber' | 'weighted_medicine_ball_mountain_climber' | 'modified_mountain_climber_and_extension' | 'weighted_modified_mountain_climber_and_extension' | 'mountain_climber' | 'weighted_mountain_climber' | 'mountain_climber_on_sliding_discs' | 'weighted_mountain_climber_on_sliding_discs' | 'mountain_climber_with_feet_on_bosu_ball' | 'weighted_mountain_climber_with_feet_on_bosu_ball' | 'mountain_climber_with_hands_on_bench' | 'mountain_climber_with_hands_on_swiss_ball' | 'weighted_mountain_climber_with_hands_on_swiss_ball' | 'plank' | 'plank_jacks_with_feet_on_sliding_discs' | 'weighted_plank_jacks_with_feet_on_sliding_discs' | 'plank_knee_twist' | 'weighted_plank_knee_twist' | 'plank_pike_jumps' | 'weighted_plank_pike_jumps' | 'plank_pikes' | 'weighted_plank_pikes' | 'plank_to_stand_up' | 'weighted_plank_to_stand_up' | 'plank_with_arm_raise' | 'weighted_plank_with_arm_raise' | 'plank_with_knee_to_elbow' | 'weighted_plank_with_knee_to_elbow' | 'plank_with_oblique_crunch' | 'weighted_plank_with_oblique_crunch' | 'plyometric_side_plank' | 'weighted_plyometric_side_plank' | 'rolling_side_plank' | 'weighted_rolling_side_plank' | 'side_kick_plank' | 'weighted_side_kick_plank' | 'side_plank' | 'weighted_side_plank' | 'side_plank_and_row' | 'weighted_side_plank_and_row' | 'side_plank_lift' | 'weighted_side_plank_lift' | 'side_plank_with_elbow_on_bosu_ball' | 'weighted_side_plank_with_elbow_on_bosu_ball' | 'side_plank_with_feet_on_bench' | 'weighted_side_plank_with_feet_on_bench' | 'side_plank_with_knee_circle' | 'weighted_side_plank_with_knee_circle' | 'side_plank_with_knee_tuck' | 'weighted_side_plank_with_knee_tuck' | 'side_plank_with_leg_lift' | 'weighted_side_plank_with_leg_lift' | 'side_plank_with_reach_under' | 'weighted_side_plank_with_reach_under' | 'single_leg_elevated_feet_plank' | 'weighted_single_leg_elevated_feet_plank' | 'single_leg_flex_and_extend' | 'weighted_single_leg_flex_and_extend' | 'single_leg_side_plank' | 'weighted_single_leg_side_plank' | 'spiderman_plank' | 'weighted_spiderman_plank' | 'straight_arm_plank' | 'weighted_straight_arm_plank' | 'straight_arm_plank_with_shoulder_touch' | 'weighted_straight_arm_plank_with_shoulder_touch' | 'swiss_ball_plank' | 'weighted_swiss_ball_plank' | 'swiss_ball_plank_leg_lift' | 'weighted_swiss_ball_plank_leg_lift' | 'swiss_ball_plank_leg_lift_and_hold' | 'swiss_ball_plank_with_feet_on_bench' | 'weighted_swiss_ball_plank_with_feet_on_bench' | 'swiss_ball_prone_jackknife' | 'weighted_swiss_ball_prone_jackknife' | 'swiss_ball_side_plank' | 'weighted_swiss_ball_side_plank' | 'three_way_plank' | 'weighted_three_way_plank' | 'towel_plank_and_knee_in' | 'weighted_towel_plank_and_knee_in' | 't_stabilization' | 'weighted_t_stabilization' | 'turkish_get_up_to_side_plank' | 'weighted_turkish_get_up_to_side_plank' | 'two_point_plank' | 'weighted_two_point_plank' | 'weighted_plank' | 'wide_stance_plank_with_diagonal_arm_lift' | 'weighted_wide_stance_plank_with_diagonal_arm_lift' | 'wide_stance_plank_with_diagonal_leg_lift' | 'weighted_wide_stance_plank_with_diagonal_leg_lift' | 'wide_stance_plank_with_leg_lift' | 'weighted_wide_stance_plank_with_leg_lift' | 'wide_stance_plank_with_opposite_arm_and_leg_lift' | 'weighted_mountain_climber_with_hands_on_bench' | 'weighted_swiss_ball_plank_leg_lift_and_hold' | 'weighted_wide_stance_plank_with_opposite_arm_and_leg_lift' | 'plank_with_feet_on_swiss_ball' | 'side_plank_to_plank_with_reach_under' | 'bridge_with_glute_lower_lift' | 'bridge_one_leg_bridge' | 'plank_with_arm_variations' | 'plank_with_leg_lift' | 'reverse_plank_with_leg_pull' | number
+export type PlyoExerciseName = 'alternating_jump_lunge' | 'weighted_alternating_jump_lunge' | 'barbell_jump_squat' | 'body_weight_jump_squat' | 'weighted_jump_squat' | 'cross_knee_strike' | 'weighted_cross_knee_strike' | 'depth_jump' | 'weighted_depth_jump' | 'dumbbell_jump_squat' | 'dumbbell_split_jump' | 'front_knee_strike' | 'weighted_front_knee_strike' | 'high_box_jump' | 'weighted_high_box_jump' | 'isometric_explosive_body_weight_jump_squat' | 'weighted_isometric_explosive_jump_squat' | 'lateral_leap_and_hop' | 'weighted_lateral_leap_and_hop' | 'lateral_plyo_squats' | 'weighted_lateral_plyo_squats' | 'lateral_slide' | 'weighted_lateral_slide' | 'medicine_ball_overhead_throws' | 'medicine_ball_side_throw' | 'medicine_ball_slam' | 'side_to_side_medicine_ball_throws' | 'side_to_side_shuffle_jump' | 'weighted_side_to_side_shuffle_jump' | 'squat_jump_onto_box' | 'weighted_squat_jump_onto_box' | 'squat_jumps_in_and_out' | 'weighted_squat_jumps_in_and_out' | number
+export type PullUpExerciseName = 'banded_pull_ups' | '30_degree_lat_pulldown' | 'band_assisted_chin_up' | 'close_grip_chin_up' | 'weighted_close_grip_chin_up' | 'close_grip_lat_pulldown' | 'crossover_chin_up' | 'weighted_crossover_chin_up' | 'ez_bar_pullover' | 'hanging_hurdle' | 'weighted_hanging_hurdle' | 'kneeling_lat_pulldown' | 'kneeling_underhand_grip_lat_pulldown' | 'lat_pulldown' | 'mixed_grip_chin_up' | 'weighted_mixed_grip_chin_up' | 'mixed_grip_pull_up' | 'weighted_mixed_grip_pull_up' | 'reverse_grip_pulldown' | 'standing_cable_pullover' | 'straight_arm_pulldown' | 'swiss_ball_ez_bar_pullover' | 'towel_pull_up' | 'weighted_towel_pull_up' | 'weighted_pull_up' | 'wide_grip_lat_pulldown' | 'wide_grip_pull_up' | 'weighted_wide_grip_pull_up' | 'burpee_pull_up' | 'weighted_burpee_pull_up' | 'jumping_pull_ups' | 'weighted_jumping_pull_ups' | 'kipping_pull_up' | 'weighted_kipping_pull_up' | 'l_pull_up' | 'weighted_l_pull_up' | 'suspended_chin_up' | 'weighted_suspended_chin_up' | 'pull_up' | number
+export type PushUpExerciseName = 'chest_press_with_band' | 'alternating_staggered_push_up' | 'weighted_alternating_staggered_push_up' | 'alternating_hands_medicine_ball_push_up' | 'weighted_alternating_hands_medicine_ball_push_up' | 'bosu_ball_push_up' | 'weighted_bosu_ball_push_up' | 'clapping_push_up' | 'weighted_clapping_push_up' | 'close_grip_medicine_ball_push_up' | 'weighted_close_grip_medicine_ball_push_up' | 'close_hands_push_up' | 'weighted_close_hands_push_up' | 'decline_push_up' | 'weighted_decline_push_up' | 'diamond_push_up' | 'weighted_diamond_push_up' | 'explosive_crossover_push_up' | 'weighted_explosive_crossover_push_up' | 'explosive_push_up' | 'weighted_explosive_push_up' | 'feet_elevated_side_to_side_push_up' | 'weighted_feet_elevated_side_to_side_push_up' | 'hand_release_push_up' | 'weighted_hand_release_push_up' | 'handstand_push_up' | 'weighted_handstand_push_up' | 'incline_push_up' | 'weighted_incline_push_up' | 'isometric_explosive_push_up' | 'weighted_isometric_explosive_push_up' | 'judo_push_up' | 'weighted_judo_push_up' | 'kneeling_push_up' | 'weighted_kneeling_push_up' | 'medicine_ball_chest_pass' | 'medicine_ball_push_up' | 'weighted_medicine_ball_push_up' | 'one_arm_push_up' | 'weighted_one_arm_push_up' | 'weighted_push_up' | 'push_up_and_row' | 'weighted_push_up_and_row' | 'push_up_plus' | 'weighted_push_up_plus' | 'push_up_with_feet_on_swiss_ball' | 'weighted_push_up_with_feet_on_swiss_ball' | 'push_up_with_one_hand_on_medicine_ball' | 'weighted_push_up_with_one_hand_on_medicine_ball' | 'shoulder_push_up' | 'weighted_shoulder_push_up' | 'single_arm_medicine_ball_push_up' | 'weighted_single_arm_medicine_ball_push_up' | 'spiderman_push_up' | 'weighted_spiderman_push_up' | 'stacked_feet_push_up' | 'weighted_stacked_feet_push_up' | 'staggered_hands_push_up' | 'weighted_staggered_hands_push_up' | 'suspended_push_up' | 'weighted_suspended_push_up' | 'swiss_ball_push_up' | 'weighted_swiss_ball_push_up' | 'swiss_ball_push_up_plus' | 'weighted_swiss_ball_push_up_plus' | 't_push_up' | 'weighted_t_push_up' | 'triple_stop_push_up' | 'weighted_triple_stop_push_up' | 'wide_hands_push_up' | 'weighted_wide_hands_push_up' | 'parallette_handstand_push_up' | 'weighted_parallette_handstand_push_up' | 'ring_handstand_push_up' | 'weighted_ring_handstand_push_up' | 'ring_push_up' | 'weighted_ring_push_up' | 'push_up' | 'pilates_pushup' | number
+export type RowExerciseName = 'barbell_straight_leg_deadlift_to_row' | 'cable_row_standing' | 'dumbbell_row' | 'elevated_feet_inverted_row' | 'weighted_elevated_feet_inverted_row' | 'face_pull' | 'face_pull_with_external_rotation' | 'inverted_row_with_feet_on_swiss_ball' | 'weighted_inverted_row_with_feet_on_swiss_ball' | 'kettlebell_row' | 'modified_inverted_row' | 'weighted_modified_inverted_row' | 'neutral_grip_alternating_dumbbell_row' | 'one_arm_bent_over_row' | 'one_legged_dumbbell_row' | 'renegade_row' | 'reverse_grip_barbell_row' | 'rope_handle_cable_row' | 'seated_cable_row' | 'seated_dumbbell_row' | 'single_arm_cable_row' | 'single_arm_cable_row_and_rotation' | 'single_arm_inverted_row' | 'weighted_single_arm_inverted_row' | 'single_arm_neutral_grip_dumbbell_row' | 'single_arm_neutral_grip_dumbbell_row_and_rotation' | 'suspended_inverted_row' | 'weighted_suspended_inverted_row' | 't_bar_row' | 'towel_grip_inverted_row' | 'weighted_towel_grip_inverted_row' | 'underhand_grip_cable_row' | 'v_grip_cable_row' | 'wide_grip_seated_cable_row' | number
+export type ShoulderPressExerciseName = 'alternating_dumbbell_shoulder_press' | 'arnold_press' | 'barbell_front_squat_to_push_press' | 'barbell_push_press' | 'barbell_shoulder_press' | 'dead_curl_press' | 'dumbbell_alternating_shoulder_press_and_twist' | 'dumbbell_hammer_curl_to_lunge_to_press' | 'dumbbell_push_press' | 'floor_inverted_shoulder_press' | 'weighted_floor_inverted_shoulder_press' | 'inverted_shoulder_press' | 'weighted_inverted_shoulder_press' | 'one_arm_push_press' | 'overhead_barbell_press' | 'overhead_dumbbell_press' | 'seated_barbell_shoulder_press' | 'seated_dumbbell_shoulder_press' | 'single_arm_dumbbell_shoulder_press' | 'single_arm_step_up_and_press' | 'smith_machine_overhead_press' | 'split_stance_hammer_curl_to_press' | 'swiss_ball_dumbbell_shoulder_press' | 'weight_plate_front_raise' | number
+export type ShoulderStabilityExerciseName = '90_degree_cable_external_rotation' | 'band_external_rotation' | 'band_internal_rotation' | 'bent_arm_lateral_raise_and_external_rotation' | 'cable_external_rotation' | 'dumbbell_face_pull_with_external_rotation' | 'floor_i_raise' | 'weighted_floor_i_raise' | 'floor_t_raise' | 'weighted_floor_t_raise' | 'floor_y_raise' | 'weighted_floor_y_raise' | 'incline_i_raise' | 'weighted_incline_i_raise' | 'incline_l_raise' | 'weighted_incline_l_raise' | 'incline_t_raise' | 'weighted_incline_t_raise' | 'incline_w_raise' | 'weighted_incline_w_raise' | 'incline_y_raise' | 'weighted_incline_y_raise' | 'lying_external_rotation' | 'seated_dumbbell_external_rotation' | 'standing_l_raise' | 'swiss_ball_i_raise' | 'weighted_swiss_ball_i_raise' | 'swiss_ball_t_raise' | 'weighted_swiss_ball_t_raise' | 'swiss_ball_w_raise' | 'weighted_swiss_ball_w_raise' | 'swiss_ball_y_raise' | 'weighted_swiss_ball_y_raise' | number
+export type ShrugExerciseName = 'barbell_jump_shrug' | 'barbell_shrug' | 'barbell_upright_row' | 'behind_the_back_smith_machine_shrug' | 'dumbbell_jump_shrug' | 'dumbbell_shrug' | 'dumbbell_upright_row' | 'incline_dumbbell_shrug' | 'overhead_barbell_shrug' | 'overhead_dumbbell_shrug' | 'scaption_and_shrug' | 'scapular_retraction' | 'serratus_chair_shrug' | 'weighted_serratus_chair_shrug' | 'serratus_shrug' | 'weighted_serratus_shrug' | 'wide_grip_jump_shrug' | number
+export type SitUpExerciseName = 'alternating_sit_up' | 'weighted_alternating_sit_up' | 'bent_knee_v_up' | 'weighted_bent_knee_v_up' | 'butterfly_sit_up' | 'weighted_butterfly_situp' | 'cross_punch_roll_up' | 'weighted_cross_punch_roll_up' | 'crossed_arms_sit_up' | 'weighted_crossed_arms_sit_up' | 'get_up_sit_up' | 'weighted_get_up_sit_up' | 'hovering_sit_up' | 'weighted_hovering_sit_up' | 'kettlebell_sit_up' | 'medicine_ball_alternating_v_up' | 'medicine_ball_sit_up' | 'medicine_ball_v_up' | 'modified_sit_up' | 'negative_sit_up' | 'one_arm_full_sit_up' | 'reclining_circle' | 'weighted_reclining_circle' | 'reverse_curl_up' | 'weighted_reverse_curl_up' | 'single_leg_swiss_ball_jackknife' | 'weighted_single_leg_swiss_ball_jackknife' | 'the_teaser' | 'the_teaser_weighted' | 'three_part_roll_down' | 'weighted_three_part_roll_down' | 'v_up' | 'weighted_v_up' | 'weighted_russian_twist_on_swiss_ball' | 'weighted_sit_up' | 'x_abs' | 'weighted_x_abs' | 'sit_up' | number
+export type SquatExerciseName = 'leg_press' | 'back_squat_with_body_bar' | 'back_squats' | 'weighted_back_squats' | 'balancing_squat' | 'weighted_balancing_squat' | 'barbell_back_squat' | 'barbell_box_squat' | 'barbell_front_squat' | 'barbell_hack_squat' | 'barbell_hang_squat_snatch' | 'barbell_lateral_step_up' | 'barbell_quarter_squat' | 'barbell_siff_squat' | 'barbell_squat_snatch' | 'barbell_squat_with_heels_raised' | 'barbell_stepover' | 'barbell_step_up' | 'bench_squat_with_rotational_chop' | 'weighted_bench_squat_with_rotational_chop' | 'body_weight_wall_squat' | 'weighted_wall_squat' | 'box_step_squat' | 'weighted_box_step_squat' | 'braced_squat' | 'crossed_arm_barbell_front_squat' | 'crossover_dumbbell_step_up' | 'dumbbell_front_squat' | 'dumbbell_split_squat' | 'dumbbell_squat' | 'dumbbell_squat_clean' | 'dumbbell_stepover' | 'dumbbell_step_up' | 'elevated_single_leg_squat' | 'weighted_elevated_single_leg_squat' | 'figure_four_squats' | 'weighted_figure_four_squats' | 'goblet_squat' | 'kettlebell_squat' | 'kettlebell_swing_overhead' | 'kettlebell_swing_with_flip_to_squat' | 'lateral_dumbbell_step_up' | 'one_legged_squat' | 'overhead_dumbbell_squat' | 'overhead_squat' | 'partial_single_leg_squat' | 'weighted_partial_single_leg_squat' | 'pistol_squat' | 'weighted_pistol_squat' | 'plie_slides' | 'weighted_plie_slides' | 'plie_squat' | 'weighted_plie_squat' | 'prisoner_squat' | 'weighted_prisoner_squat' | 'single_leg_bench_get_up' | 'weighted_single_leg_bench_get_up' | 'single_leg_bench_squat' | 'weighted_single_leg_bench_squat' | 'single_leg_squat_on_swiss_ball' | 'weighted_single_leg_squat_on_swiss_ball' | 'squat' | 'weighted_squat' | 'squats_with_band' | 'staggered_squat' | 'weighted_staggered_squat' | 'step_up' | 'weighted_step_up' | 'suitcase_squats' | 'sumo_squat' | 'sumo_squat_slide_in' | 'weighted_sumo_squat_slide_in' | 'sumo_squat_to_high_pull' | 'sumo_squat_to_stand' | 'weighted_sumo_squat_to_stand' | 'sumo_squat_with_rotation' | 'weighted_sumo_squat_with_rotation' | 'swiss_ball_body_weight_wall_squat' | 'weighted_swiss_ball_wall_squat' | 'thrusters' | 'uneven_squat' | 'weighted_uneven_squat' | 'waist_slimming_squat' | 'wall_ball' | 'wide_stance_barbell_squat' | 'wide_stance_goblet_squat' | 'zercher_squat' | 'kbs_overhead' | 'squat_and_side_kick' | 'squat_jumps_in_n_out' | 'pilates_plie_squats_parallel_turned_out_flat_and_heels' | 'releve_straight_leg_and_knee_bent_with_one_leg_variation' | number
+export type TotalBodyExerciseName = 'burpee' | 'weighted_burpee' | 'burpee_box_jump' | 'weighted_burpee_box_jump' | 'high_pull_burpee' | 'man_makers' | 'one_arm_burpee' | 'squat_thrusts' | 'weighted_squat_thrusts' | 'squat_plank_push_up' | 'weighted_squat_plank_push_up' | 'standing_t_rotation_balance' | 'weighted_standing_t_rotation_balance' | number
+export type TricepsExtensionExerciseName = 'bench_dip' | 'weighted_bench_dip' | 'body_weight_dip' | 'cable_kickback' | 'cable_lying_triceps_extension' | 'cable_overhead_triceps_extension' | 'dumbbell_kickback' | 'dumbbell_lying_triceps_extension' | 'ez_bar_overhead_triceps_extension' | 'incline_dip' | 'weighted_incline_dip' | 'incline_ez_bar_lying_triceps_extension' | 'lying_dumbbell_pullover_to_extension' | 'lying_ez_bar_triceps_extension' | 'lying_triceps_extension_to_close_grip_bench_press' | 'overhead_dumbbell_triceps_extension' | 'reclining_triceps_press' | 'reverse_grip_pressdown' | 'reverse_grip_triceps_pressdown' | 'rope_pressdown' | 'seated_barbell_overhead_triceps_extension' | 'seated_dumbbell_overhead_triceps_extension' | 'seated_ez_bar_overhead_triceps_extension' | 'seated_single_arm_overhead_dumbbell_extension' | 'single_arm_dumbbell_overhead_triceps_extension' | 'single_dumbbell_seated_overhead_triceps_extension' | 'single_leg_bench_dip_and_kick' | 'weighted_single_leg_bench_dip_and_kick' | 'single_leg_dip' | 'weighted_single_leg_dip' | 'static_lying_triceps_extension' | 'suspended_dip' | 'weighted_suspended_dip' | 'swiss_ball_dumbbell_lying_triceps_extension' | 'swiss_ball_ez_bar_lying_triceps_extension' | 'swiss_ball_ez_bar_overhead_triceps_extension' | 'tabletop_dip' | 'weighted_tabletop_dip' | 'triceps_extension_on_floor' | 'triceps_pressdown' | 'weighted_dip' | number
+export type WarmUpExerciseName = 'quadruped_rocking' | 'neck_tilts' | 'ankle_circles' | 'ankle_dorsiflexion_with_band' | 'ankle_internal_rotation' | 'arm_circles' | 'bent_over_reach_to_sky' | 'cat_camel' | 'elbow_to_foot_lunge' | 'forward_and_backward_leg_swings' | 'groiners' | 'inverted_hamstring_stretch' | 'lateral_duck_under' | 'neck_rotations' | 'opposite_arm_and_leg_balance' | 'reach_roll_and_lift' | 'scorpion' | 'shoulder_circles' | 'side_to_side_leg_swings' | 'sleeper_stretch' | 'slide_out' | 'swiss_ball_hip_crossover' | 'swiss_ball_reach_roll_and_lift' | 'swiss_ball_windshield_wipers' | 'thoracic_rotation' | 'walking_high_kicks' | 'walking_high_knees' | 'walking_knee_hugs' | 'walking_leg_cradles' | 'walkout' | 'walkout_from_push_up_position' | number
+export type RunExerciseName = 'run' | 'walk' | 'jog' | 'sprint' | number
+export type WaterType = 'fresh' | 'salt' | 'en13319' | 'custom' | number
+export type TissueModelType = 'zhl_16c' | number
+export type DiveGasStatus = 'disabled' | 'enabled' | 'backup_only' | number
+export type DiveAlarmType = 'depth' | 'time' | number
+export type DiveBacklightMode = 'at_depth' | 'always_on' | number
+export type FaveroProduct = 'assioma_uno' | 'assioma_duo' | number
+export type DiveGasMode = 'open_circuit' | 'closed_circuit_diluent' | number
+export type SleepLevel = 'unmeasurable' | 'awake' | 'light' | 'deep' | 'rem' | number
 
 // parsed from Fit.options
 
@@ -277,36 +239,20 @@ export interface ParsedFileId {
   product_name?: string
 }
 export interface ParsedCapabilities {
-  languages?: (number | null)[]
-  sports?: (SportBits0 | null)[]
+  languages?: number
+  sports?: SportBits0
   workouts_supported?: WorkoutCapabilities
   connectivity_supported?: ConnectivityCapabilities
 }
 export interface ParsedDeviceSettings {
   active_time_zone?: number
   utc_offset?: number
-  time_offset?: (number | null)[]
-  time_mode?: (TimeMode | null)[]
-  time_zone_offset?: (number | null)[]
-  backlight_mode?: BacklightMode
-  activity_tracker_enabled?: number
-  clock_time?: Date
-  pages_enabled?: (number | null)[]
-  move_alert_enabled?: number
-  date_mode?: DateMode
+  time_offset?: number
+  time_zone_offset?: number
   display_orientation?: DisplayOrientation
   mounting_side?: Side
-  default_page?: (number | null)[]
-  autosync_min_steps?: number
-  autosync_min_time?: number
-  lactate_threshold_autodetect_enabled?: number
-  ble_auto_upload_enabled?: number
-  auto_sync_frequency?: AutoSyncFrequency
-  auto_activity_detect?: AutoActivityDetect
   number_of_screens?: number
   smart_notification_display_orientation?: DisplayOrientation
-  tap_interface?: Switch
-  tap_sensitivity?: TapSensitivity
 }
 export interface ParsedUserProfile {
   friendly_name?: string
@@ -329,14 +275,10 @@ export interface ParsedUserProfile {
   position_setting?: DisplayPosition
   temperature_setting?: DisplayMeasure
   local_id?: UserLocalId
-  global_id?: (number | null)[]
+  global_id?: number
   wake_time?: number
   sleep_time?: number
   height_setting?: DisplayMeasure
-  user_running_step_length?: number
-  user_walking_step_length?: number
-  depth_setting?: DisplayMeasure
-  dive_count?: number
   message_index?: MessageIndex
 }
 export interface ParsedHrmProfile {
@@ -384,9 +326,9 @@ export interface ParsedBikeProfile {
   bike_power_ant_id_trans_type?: number
   odometer_rollover?: number
   front_gear_num?: number
-  front_gear?: (number | null)[]
+  front_gear?: number
   rear_gear_num?: number
-  rear_gear?: (number | null)[]
+  rear_gear?: number
   shimano_di2_enabled?: number
   message_index?: MessageIndex
 }
@@ -418,12 +360,6 @@ export interface ParsedSport {
   sub_sport?: SubSport
   name?: string
 }
-export interface ParsedTrainingSettings {
-  target_distance?: number
-  target_speed?: number
-  target_time?: number
-  precise_target_speed?: number
-}
 export interface ParsedGoal {
   sport?: Sport
   sub_sport?: SubSport
@@ -436,7 +372,6 @@ export interface ParsedGoal {
   recurrence?: GoalRecurrence
   recurrence_value?: number
   enabled?: number
-  source?: GoalSource
   message_index?: MessageIndex
 }
 export interface ParsedSession {
@@ -472,7 +407,6 @@ export interface ParsedSession {
   nec_long?: number
   swc_lat?: number
   swc_long?: number
-  num_lengths?: number
   normalized_power?: number
   training_stress_score?: number
   intensity_factor?: number
@@ -510,12 +444,11 @@ export interface ParsedSession {
   avg_lap_time?: number
   best_lap_index?: number
   min_altitude?: number
-  active_time?: number
   player_score?: number
   opponent_score?: number
   opponent_name?: string
-  stroke_count?: (number | null)[]
-  zone_count?: (number | null)[]
+  stroke_count?: number
+  zone_count?: number
   max_ball_speed?: number
   avg_ball_speed?: number
   avg_vertical_oscillation?: number
@@ -524,12 +457,12 @@ export interface ParsedSession {
   avg_fractional_cadence?: number
   max_fractional_cadence?: number
   total_fractional_cycles?: number
-  avg_total_hemoglobin_conc?: (number | null)[]
-  min_total_hemoglobin_conc?: (number | null)[]
-  max_total_hemoglobin_conc?: (number | null)[]
-  avg_saturated_hemoglobin_percent?: (number | null)[]
-  min_saturated_hemoglobin_percent?: (number | null)[]
-  max_saturated_hemoglobin_percent?: (number | null)[]
+  avg_total_hemoglobin_conc?: number
+  min_total_hemoglobin_conc?: number
+  max_total_hemoglobin_conc?: number
+  avg_saturated_hemoglobin_percent?: number
+  min_saturated_hemoglobin_percent?: number
+  max_saturated_hemoglobin_percent?: number
   avg_left_torque_effectiveness?: number
   avg_right_torque_effectiveness?: number
   avg_left_pedal_smoothness?: number
@@ -541,14 +474,14 @@ export interface ParsedSession {
   stand_count?: number
   avg_left_pco?: number
   avg_right_pco?: number
-  avg_left_power_phase?: (number | null)[]
-  avg_left_power_phase_peak?: (number | null)[]
-  avg_right_power_phase?: (number | null)[]
-  avg_right_power_phase_peak?: (number | null)[]
-  avg_power_position?: (number | null)[]
-  max_power_position?: (number | null)[]
-  avg_cadence_position?: (number | null)[]
-  max_cadence_position?: (number | null)[]
+  avg_left_power_phase?: number
+  avg_left_power_phase_peak?: number
+  avg_right_power_phase?: number
+  avg_right_power_phase_peak?: number
+  avg_power_position?: number
+  max_power_position?: number
+  avg_cadence_position?: number
+  max_cadence_position?: number
   enhanced_avg_speed?: number
   enhanced_max_speed?: number
   enhanced_avg_altitude?: number
@@ -563,18 +496,7 @@ export interface ParsedSession {
   total_anaerobic_training_effect?: number
   avg_vam?: number
   avg_depth?: number
-  max_depth?: number
-  surface_interval?: number
-  start_cns?: number
-  end_cns?: number
-  start_n2?: number
-  end_n2?: number
-  avg_respiration_rate?: number
-  max_respiration_rate?: number
-  min_respiration_rate?: number
   min_temperature?: number
-  o2_toxicity?: number
-  dive_number?: number
   training_load_peak?: number
   enhanced_avg_respiration_rate?: number
   enhanced_max_respiration_rate?: number
@@ -588,19 +510,10 @@ export interface ParsedSession {
   primary_benefit?: number
   workout_feel?: number
   workout_rpe?: number
-  avg_spo2?: number
-  avg_stress?: number
   metabolic_calories?: number
-  sdrr_hrv?: number
-  rmssd_hrv?: number
-  total_fractional_ascent?: number
-  total_fractional_descent?: number
   beginning_potential_stamina?: number
   ending_potential_stamina?: number
   min_stamina?: number
-  avg_core_temperature?: number
-  min_core_temperature?: number
-  max_core_temperature?: number
   timestamp?: Date
   message_index?: MessageIndex
   laps?: ParsedLap[]
@@ -664,11 +577,10 @@ export interface ParsedLap {
   repetition_num?: number
   min_altitude?: number
   min_heart_rate?: number
-  active_time?: number
   wkt_step_index?: MessageIndex
   opponent_score?: number
-  stroke_count?: (number | null)[]
-  zone_count?: (number | null)[]
+  stroke_count?: number
+  zone_count?: number
   avg_vertical_oscillation?: number
   avg_stance_time_percent?: number
   avg_stance_time?: number
@@ -676,12 +588,12 @@ export interface ParsedLap {
   max_fractional_cadence?: number
   total_fractional_cycles?: number
   player_score?: number
-  avg_total_hemoglobin_conc?: (number | null)[]
-  min_total_hemoglobin_conc?: (number | null)[]
-  max_total_hemoglobin_conc?: (number | null)[]
-  avg_saturated_hemoglobin_percent?: (number | null)[]
-  min_saturated_hemoglobin_percent?: (number | null)[]
-  max_saturated_hemoglobin_percent?: (number | null)[]
+  avg_total_hemoglobin_conc?: number
+  min_total_hemoglobin_conc?: number
+  max_total_hemoglobin_conc?: number
+  avg_saturated_hemoglobin_percent?: number
+  min_saturated_hemoglobin_percent?: number
+  max_saturated_hemoglobin_percent?: number
   avg_left_torque_effectiveness?: number
   avg_right_torque_effectiveness?: number
   avg_left_pedal_smoothness?: number
@@ -691,14 +603,14 @@ export interface ParsedLap {
   stand_count?: number
   avg_left_pco?: number
   avg_right_pco?: number
-  avg_left_power_phase?: (number | null)[]
-  avg_left_power_phase_peak?: (number | null)[]
-  avg_right_power_phase?: (number | null)[]
-  avg_right_power_phase_peak?: (number | null)[]
-  avg_power_position?: (number | null)[]
-  max_power_position?: (number | null)[]
-  avg_cadence_position?: (number | null)[]
-  max_cadence_position?: (number | null)[]
+  avg_left_power_phase?: number
+  avg_left_power_phase_peak?: number
+  avg_right_power_phase?: number
+  avg_right_power_phase_peak?: number
+  avg_power_position?: number
+  max_power_position?: number
+  avg_cadence_position?: number
+  max_cadence_position?: number
   enhanced_avg_speed?: number
   enhanced_max_speed?: number
   enhanced_avg_altitude?: number
@@ -711,23 +623,10 @@ export interface ParsedLap {
   avg_stance_time_balance?: number
   avg_step_length?: number
   avg_vam?: number
-  avg_depth?: number
-  max_depth?: number
-  min_temperature?: number
-  enhanced_avg_respiration_rate?: number
-  enhanced_max_respiration_rate?: number
-  avg_respiration_rate?: number
-  max_respiration_rate?: number
   total_grit?: number
   total_flow?: number
-  jump_count?: number
   avg_grit?: number
   avg_flow?: number
-  total_fractional_ascent?: number
-  total_fractional_descent?: number
-  avg_core_temperature?: number
-  min_core_temperature?: number
-  max_core_temperature?: number
   timestamp?: Date
   message_index?: MessageIndex
   records?: ParsedRecord[]
@@ -742,7 +641,7 @@ export interface ParsedRecord {
   distance?: number
   speed?: number
   power?: number
-  compressed_speed_distance?: (number | null)[]
+  compressed_speed_distance?: number
   grade?: number
   resistance?: number
   time_from_course?: number
@@ -781,10 +680,10 @@ export interface ParsedRecord {
   device_index?: number
   left_pco?: number
   right_pco?: number
-  left_power_phase?: (number | null)[]
-  left_power_phase_peak?: (number | null)[]
-  right_power_phase?: (number | null)[]
-  right_power_phase_peak?: (number | null)[]
+  left_power_phase?: number
+  left_power_phase_peak?: number
+  right_power_phase?: number
+  right_power_phase_peak?: number
   enhanced_speed?: number
   enhanced_altitude?: number
   battery_soc?: number
@@ -792,7 +691,6 @@ export interface ParsedRecord {
   vertical_ratio?: number
   stance_time_balance?: number
   step_length?: number
-  cycle_length16?: number
   garmin_performance_condition?: number
   absolute_pressure?: number
   depth?: number
@@ -802,15 +700,8 @@ export interface ParsedRecord {
   ndl_time?: number
   cns_load?: number
   n2_load?: number
-  respiration_rate?: number
-  enhanced_respiration_rate?: number
   grit?: number
   flow?: number
-  current_stress?: number
-  ebike_travel_range?: number
-  ebike_battery_level?: number
-  ebike_assist_mode?: number
-  ebike_assist_level_percent?: number
   air_time_remaining?: number
   pressure_sac?: number
   volume_sac?: number
@@ -819,7 +710,6 @@ export interface ParsedRecord {
   po2?: number
   potential_stamina?: number
   stamina?: number
-  core_temperature?: number
   timestamp?: Date
 }
 export interface ParsedEvent {
@@ -835,12 +725,6 @@ export interface ParsedEvent {
   rear_gear_num?: number
   rear_gear?: number
   device_index?: number
-  activity_type?: ActivityType
-  start_timestamp?: Date
-  radar_threat_level_max?: RadarThreatLevelType
-  radar_threat_count?: number
-  radar_threat_avg_approach_speed?: number
-  radar_threat_max_approach_speed?: number
   timestamp?: Date
 }
 export interface ParsedDeviceInfo {
@@ -870,11 +754,6 @@ export interface ParsedWorkout {
   capabilities?: WorkoutCapabilities
   num_valid_steps?: number
   wkt_name?: string
-  sub_sport?: SubSport
-  pool_length?: number
-  pool_length_unit?: DisplayMeasure
-  wkt_description?: string
-  message_index?: MessageIndex
 }
 export interface ParsedWorkoutStep {
   wkt_step_name?: string
@@ -885,29 +764,10 @@ export interface ParsedWorkoutStep {
   custom_target_value_low?: number
   custom_target_value_high?: number
   intensity?: Intensity
-  notes?: string
-  equipment?: WorkoutEquipment
-  exercise_category?: ExerciseCategory
-  exercise_name?: number
-  exercise_weight?: number
-  weight_display_unit?: FitBaseUnit
-  secondary_target_type?: WktStepTarget
-  secondary_target_value?: number
-  secondary_custom_target_value_low?: number
-  secondary_custom_target_value_high?: number
   message_index?: MessageIndex
 }
-export interface ParsedSchedule {
-  manufacturer?: Manufacturer
-  product?: number
-  serial_number?: number
-  time_created?: Date
-  completed?: number
-  type?: Schedule
-  scheduled_time?: Date
-}
 export interface ParsedWeightScale {
-  weight?: number
+  weight?: Weight
   percent_fat?: number
   percent_hydration?: number
   visceral_fat_mass?: number
@@ -919,7 +779,6 @@ export interface ParsedWeightScale {
   metabolic_age?: number
   visceral_fat_rating?: number
   user_profile_index?: MessageIndex
-  bmi?: number
   timestamp?: Date
 }
 export interface ParsedCourse {
@@ -1005,7 +864,7 @@ export interface ParsedBloodPressure {
   systolic_pressure?: number
   diastolic_pressure?: number
   mean_arterial_pressure?: number
-  map3_sample_mean?: number
+  map_3_sample_mean?: number
   map_morning_values?: number
   map_evening_values?: number
   heart_rate?: number
@@ -1013,11 +872,6 @@ export interface ParsedBloodPressure {
   status?: BpStatus
   user_profile_index?: MessageIndex
   timestamp?: Date
-}
-export interface ParsedSpeedZone {
-  high_value?: number
-  name?: string
-  message_index?: MessageIndex
 }
 export interface ParsedMonitoring {
   device_index?: number
@@ -1031,7 +885,7 @@ export interface ParsedMonitoring {
   distance16?: number
   cycles16?: number
   active_time16?: number
-  local_timestamp?: Date
+  local_timestamp?: number
   temperature?: number
   temperature_min?: number
   temperature_max?: number
@@ -1047,16 +901,8 @@ export interface ParsedMonitoring {
   ascent?: number
   descent?: number
   moderate_activity_minutes?: number
-  vigorous_activity_minutes?: number
-  timestamp?: Date
-}
-export interface ParsedTrainingFile {
-  type?: File
-  manufacturer?: Manufacturer
-  product?: number
-  serial_number?: number
-  time_created?: Date
-  timestamp?: Date
+  vigorous_activity_inutes?: number
+  timestamp?: number
 }
 export interface ParsedHrv {
   time?: (number | null)[]
@@ -1077,29 +923,6 @@ export interface ParsedUserMetrics {
   end_of_previous_activity?: Date
   timestamp?: Date
 }
-export interface ParsedAntRx {
-  fractional_timestamp?: number
-  mesg_id?: number
-  mesg_data?: (number | null)[]
-  channel_number?: number
-  data?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedAntTx {
-  fractional_timestamp?: number
-  mesg_id?: number
-  mesg_data?: (number | null)[]
-  channel_number?: number
-  data?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedAntChannelId {
-  channel_number?: number
-  device_type?: number
-  device_number?: number
-  transmission_type?: number
-  device_index?: number
-}
 export interface ParsedLength {
   event?: Event
   event_type?: EventType
@@ -1115,81 +938,21 @@ export interface ParsedLength {
   length_type?: LengthType
   player_score?: number
   opponent_score?: number
-  stroke_count?: (number | null)[]
-  zone_count?: (number | null)[]
-  enhanced_avg_respiration_rate?: number
-  enhanced_max_respiration_rate?: number
-  avg_respiration_rate?: number
-  max_respiration_rate?: number
+  stroke_count?: number
+  zone_count?: number
   timestamp?: Date
   message_index?: MessageIndex
 }
 export interface ParsedMonitoringInfo {
-  local_timestamp?: Date
-  activity_type?: (ActivityType | null)[]
+  local_timestamp?: number
+  activity_type?: ActivityType
   cycles_to_distance?: (number | null)[]
   cycles_to_calories?: (number | null)[]
   resting_metabolic_rate?: number
   timestamp?: Date
 }
-export interface ParsedPad {
-}
-export interface ParsedSlaveDevice {
-  manufacturer?: Manufacturer
-  product?: number
-}
-export interface ParsedConnectivity {
-  bluetooth_enabled?: number
-  bluetooth_le_enabled?: number
-  ant_enabled?: number
-  name?: string
-  live_tracking_enabled?: number
-  weather_conditions_enabled?: number
-  weather_alerts_enabled?: number
-  auto_activity_upload_enabled?: number
-  course_download_enabled?: number
-  workout_download_enabled?: number
-  gps_ephemeris_download_enabled?: number
-  incident_detection_enabled?: number
-  grouptrack_enabled?: number
-}
-export interface ParsedWeatherConditions {
-  weather_report?: WeatherReport
-  temperature?: number
-  condition?: WeatherStatus
-  wind_direction?: number
-  wind_speed?: number
-  precipitation_probability?: number
-  temperature_feels_like?: number
-  relative_humidity?: number
-  location?: string
-  observed_at_time?: Date
-  observed_location_lat?: number
-  observed_location_long?: number
-  day_of_week?: DayOfWeek
-  high_temperature?: number
-  low_temperature?: number
-  timestamp?: Date
-}
-export interface ParsedWeatherAlert {
-  report_id?: string
-  issue_time?: Date
-  expire_time?: Date
-  severity?: WeatherSeverity
-  type?: WeatherSevereType
-  timestamp?: Date
-}
-export interface ParsedCadenceZone {
-  high_value?: number
-  name?: string
-  message_index?: MessageIndex
-}
-export interface ParsedHr {
-  fractional_timestamp?: number
-  time256?: number
-  filtered_bpm?: (number | null)[]
-  event_timestamp?: (number | null)[]
-  event_timestamp12?: (number | null)[]
+export interface ParsedOHrSettings {
+  enabled?: number
   timestamp?: Date
 }
 export interface ParsedActivityMetrics {
@@ -1207,367 +970,34 @@ export interface ParsedActivityMetrics {
   avg_heart_rate?: number
 }
 export interface ParsedSegmentLap {
-  event?: Event
-  event_type?: EventType
-  start_time?: Date
-  start_position_lat?: number
-  start_position_long?: number
-  end_position_lat?: number
-  end_position_long?: number
-  total_elapsed_time?: number
-  total_timer_time?: number
-  total_distance?: number
-  total_cycles?: number
-  total_calories?: number
-  total_fat_calories?: number
-  avg_speed?: number
-  max_speed?: number
-  avg_heart_rate?: number
-  max_heart_rate?: number
-  avg_cadence?: number
-  max_cadence?: number
-  avg_power?: number
-  max_power?: number
-  total_ascent?: number
-  total_descent?: number
-  sport?: Sport
-  event_group?: number
-  nec_lat?: number
-  nec_long?: number
-  swc_lat?: number
-  swc_long?: number
-  name?: string
-  normalized_power?: number
-  left_right_balance?: LeftRightBalance100
-  sub_sport?: SubSport
-  total_work?: number
-  avg_altitude?: number
-  max_altitude?: number
-  gps_accuracy?: number
-  avg_grade?: number
-  avg_pos_grade?: number
-  avg_neg_grade?: number
-  max_pos_grade?: number
-  max_neg_grade?: number
-  avg_temperature?: number
-  max_temperature?: number
-  total_moving_time?: number
-  avg_pos_vertical_speed?: number
-  avg_neg_vertical_speed?: number
-  max_pos_vertical_speed?: number
-  max_neg_vertical_speed?: number
-  time_in_hr_zone?: (number | null)[]
-  time_in_speed_zone?: (number | null)[]
-  time_in_cadence_zone?: (number | null)[]
-  time_in_power_zone?: (number | null)[]
-  repetition_num?: number
-  min_altitude?: number
-  min_heart_rate?: number
-  active_time?: number
-  wkt_step_index?: MessageIndex
-  sport_event?: SportEvent
-  avg_left_torque_effectiveness?: number
-  avg_right_torque_effectiveness?: number
-  avg_left_pedal_smoothness?: number
-  avg_right_pedal_smoothness?: number
-  avg_combined_pedal_smoothness?: number
-  status?: SegmentLapStatus
-  uuid?: string
-  avg_fractional_cadence?: number
-  max_fractional_cadence?: number
-  total_fractional_cycles?: number
-  front_gear_shift_count?: number
-  rear_gear_shift_count?: number
-  time_standing?: number
-  stand_count?: number
-  avg_left_pco?: number
-  avg_right_pco?: number
-  avg_left_power_phase?: (number | null)[]
-  avg_left_power_phase_peak?: (number | null)[]
-  avg_right_power_phase?: (number | null)[]
-  avg_right_power_phase_peak?: (number | null)[]
-  avg_power_position?: (number | null)[]
-  max_power_position?: (number | null)[]
-  avg_cadence_position?: (number | null)[]
-  max_cadence_position?: (number | null)[]
-  manufacturer?: Manufacturer
   total_grit?: number
   total_flow?: number
   avg_grit?: number
   avg_flow?: number
-  total_fractional_ascent?: number
-  total_fractional_descent?: number
-  enhanced_avg_altitude?: number
-  enhanced_max_altitude?: number
-  enhanced_min_altitude?: number
-  timestamp?: Date
-  message_index?: MessageIndex
-}
-export interface ParsedMemoGlob {
-  memo?: (number | null)[]
-  mesg_num?: MesgNum
-  parent_index?: MessageIndex
-  field_num?: number
-  data?: (number | null)[]
-  part_index?: number
-}
-export interface ParsedSegmentId {
-  name?: string
-  uuid?: string
-  sport?: Sport
-  enabled?: number
-  user_profile_primary_key?: number
-  device_id?: number
-  default_race_leader?: number
-  delete_status?: SegmentDeleteStatus
-  selection_type?: SegmentSelectionType
-}
-export interface ParsedSegmentLeaderboardEntry {
-  name?: string
-  type?: SegmentLeaderboardType
-  group_primary_key?: number
-  activity_id?: number
-  segment_time?: number
-  activity_id_string?: string
-  message_index?: MessageIndex
-}
-export interface ParsedSegmentPoint {
-  position_lat?: number
-  position_long?: number
-  distance?: number
-  altitude?: number
-  leader_time?: (number | null)[]
-  enhanced_altitude?: number
-  message_index?: MessageIndex
-}
-export interface ParsedSegmentFile {
-  file_uuid?: string
-  enabled?: number
-  user_profile_primary_key?: number
-  leader_type?: (SegmentLeaderboardType | null)[]
-  leader_group_primary_key?: (number | null)[]
-  leader_activity_id?: (number | null)[]
-  leader_activity_id_string?: string
-  default_race_leader?: number
-  message_index?: MessageIndex
-}
-export interface ParsedWorkoutSession {
-  sport?: Sport
-  sub_sport?: SubSport
-  num_valid_steps?: number
-  first_step_index?: number
-  pool_length?: number
-  pool_length_unit?: DisplayMeasure
-  message_index?: MessageIndex
-}
-export interface ParsedWatchfaceSettings {
-  mode?: WatchfaceMode
-  layout?: number
-  message_index?: MessageIndex
-}
-export interface ParsedGpsMetadata {
-  timestamp_ms?: number
-  position_lat?: number
-  position_long?: number
-  enhanced_altitude?: number
-  enhanced_speed?: number
-  heading?: number
-  utc_timestamp?: Date
-  velocity?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedCameraEvent {
-  timestamp_ms?: number
-  camera_event_type?: CameraEventType
-  camera_file_uuid?: string
-  camera_orientation?: CameraOrientationType
-  timestamp?: Date
-}
-export interface ParsedTimestampCorrelation {
-  fractional_timestamp?: number
-  system_timestamp?: Date
-  fractional_system_timestamp?: number
-  local_timestamp?: Date
-  timestamp_ms?: number
-  system_timestamp_ms?: number
-  timestamp?: Date
-}
-export interface ParsedGyroscopeData {
-  timestamp_ms?: number
-  sample_time_offset?: (number | null)[]
-  gyro_x?: (number | null)[]
-  gyro_y?: (number | null)[]
-  gyro_z?: (number | null)[]
-  calibrated_gyro_x?: (number | null)[]
-  calibrated_gyro_y?: (number | null)[]
-  calibrated_gyro_z?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedAccelerometerData {
-  timestamp_ms?: number
-  sample_time_offset?: (number | null)[]
-  accel_x?: (number | null)[]
-  accel_y?: (number | null)[]
-  accel_z?: (number | null)[]
-  calibrated_accel_x?: (number | null)[]
-  calibrated_accel_y?: (number | null)[]
-  calibrated_accel_z?: (number | null)[]
-  compressed_calibrated_accel_x?: (number | null)[]
-  compressed_calibrated_accel_y?: (number | null)[]
-  compressed_calibrated_accel_z?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedThreeDSensorCalibration {
-  sensor_type?: SensorType
-  calibration_factor?: number
-  calibration_divisor?: number
-  level_shift?: number
-  offset_cal?: (number | null)[]
-  orientation_matrix?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedVideoFrame {
-  timestamp_ms?: number
-  frame_number?: number
-  timestamp?: Date
-}
-export interface ParsedObdiiData {
-  timestamp_ms?: number
-  time_offset?: (number | null)[]
-  pid?: number
-  raw_data?: (number | null)[]
-  pid_data_size?: (number | null)[]
-  system_time?: (number | null)[]
-  start_timestamp?: Date
-  start_timestamp_ms?: number
-  timestamp?: Date
-}
-export interface ParsedNmeaSentence {
-  timestamp_ms?: number
-  sentence?: string
-  timestamp?: Date
-}
-export interface ParsedAviationAttitude {
-  timestamp_ms?: number
-  system_time?: (number | null)[]
-  pitch?: (number | null)[]
-  roll?: (number | null)[]
-  accel_lateral?: (number | null)[]
-  accel_normal?: (number | null)[]
-  turn_rate?: (number | null)[]
-  stage?: (AttitudeStage | null)[]
-  attitude_stage_complete?: (number | null)[]
-  track?: (number | null)[]
-  validity?: (AttitudeValidity | null)[]
-  timestamp?: Date
-}
-export interface ParsedVideo {
-  url?: string
-  hosting_provider?: string
-  duration?: number
-}
-export interface ParsedVideoTitle {
-  message_count?: number
-  text?: string
-  message_index?: MessageIndex
-}
-export interface ParsedVideoDescription {
-  message_count?: number
-  text?: string
-  message_index?: MessageIndex
-}
-export interface ParsedVideoClip {
-  clip_number?: number
-  start_timestamp?: Date
-  start_timestamp_ms?: number
-  end_timestamp?: Date
-  end_timestamp_ms?: number
-  clip_start?: number
-  clip_end?: number
 }
 export interface ParsedOhrSettings {
   enabled?: Switch
-  timestamp?: Date
-}
-export interface ParsedExdScreenConfiguration {
-  screen_index?: number
-  field_count?: number
-  layout?: ExdLayout
-  screen_enabled?: number
-}
-export interface ParsedExdDataFieldConfiguration {
-  screen_index?: number
-  concept_field?: number
-  field_id?: number
-  concept_count?: number
-  display_type?: ExdDisplayType
-  title?: string
-}
-export interface ParsedExdDataConceptConfiguration {
-  screen_index?: number
-  concept_field?: number
-  field_id?: number
-  concept_index?: number
-  data_page?: number
-  concept_key?: number
-  scaling?: number
-  data_units?: ExdDataUnits
-  qualifier?: ExdQualifiers
-  descriptor?: ExdDescriptors
-  is_signed?: number
 }
 export interface ParsedFieldDescription {
   developer_data_index?: number
   field_definition_number?: number
   fit_base_type_id?: FitBaseType
   field_name?: string
-  array?: number
-  components?: string
   scale?: number
   offset?: number
   units?: string
-  bits?: string
-  accumulate?: string
-  fit_base_unit_id?: FitBaseUnit
-  native_mesg_num?: MesgNum
   native_field_num?: number
 }
 export interface ParsedDeveloperDataId {
-  developer_id?: (number | null)[]
+  developer_id?: number
   application_id?: (number | null)[]
   manufacturer_id?: Manufacturer
   developer_data_index?: number
   application_version?: number
 }
-export interface ParsedMagnetometerData {
-  timestamp_ms?: number
-  sample_time_offset?: (number | null)[]
-  mag_x?: (number | null)[]
-  mag_y?: (number | null)[]
-  mag_z?: (number | null)[]
-  calibrated_mag_x?: (number | null)[]
-  calibrated_mag_y?: (number | null)[]
-  calibrated_mag_z?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedBarometerData {
-  timestamp_ms?: number
-  sample_time_offset?: (number | null)[]
-  baro_pres?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedOneDSensorCalibration {
-  sensor_type?: SensorType
-  calibration_factor?: number
-  calibration_divisor?: number
-  level_shift?: number
-  offset_cal?: number
-  timestamp?: Date
-}
 export interface ParsedMonitoringHrData {
   resting_heart_rate?: number
   current_day_resting_heart_rate?: number
-  timestamp?: Date
 }
 export interface ParsedTimeInZone {
   reference_mesg?: MesgNum
@@ -1578,9 +1008,9 @@ export interface ParsedTimeInZone {
   time_in_power_zone?: (number | null)[]
   hr_zone_high_boundary?: (number | null)[]
   speed_zone_high_boundary?: (number | null)[]
-  cadence_zone_high_bondary?: (number | null)[]
+  cadence_zone_high_boundary?: (number | null)[]
   power_zone_high_boundary?: (number | null)[]
-  hr_calc_type?: HrZoneCalc
+  max_heart_rate_deprecated?: number
   max_heart_rate?: number
   resting_heart_rate?: number
   threshold_heart_rate?: number
@@ -1604,16 +1034,9 @@ export interface ParsedSet {
 export interface ParsedStressLevel {
   stress_level_value?: number
   stress_level_time?: Date
-}
-export interface ParsedMaxMetData {
-  update_time?: Date
-  vo2_max?: number
-  sport?: Sport
-  sub_sport?: SubSport
-  max_met_category?: MaxMetCategory
-  calibrated_data?: number
-  hr_source?: MaxMetHeartRateSource
-  speed_source?: MaxMetSpeedSource
+  field_two?: number
+  body_battery?: number
+  field_four?: number
 }
 export interface ParsedDiveSettings {
   name?: string
@@ -1633,23 +1056,10 @@ export interface ParsedDiveSettings {
   backlight_mode?: DiveBacklightMode
   backlight_brightness?: number
   backlight_timeout?: BacklightTimeout
-  repeat_dive_interval?: number
+  repeat_dive_time?: number
   safety_stop_time?: number
   heart_rate_source_type?: SourceType
   heart_rate_source?: number
-  travel_gas?: MessageIndex
-  ccr_low_setpoint_switch_mode?: CcrSetpointSwitchMode
-  ccr_low_setpoint?: number
-  ccr_low_setpoint_depth?: number
-  ccr_high_setpoint_switch_mode?: CcrSetpointSwitchMode
-  ccr_high_setpoint?: number
-  ccr_high_setpoint_depth?: number
-  gas_consumption_display?: GasConsumptionRateType
-  up_key_enabled?: number
-  dive_sounds?: Tone
-  last_stop_multiple?: number
-  no_fly_time_mode?: NoFlyTimeMode
-  timestamp?: Date
   message_index?: MessageIndex
 }
 export interface ParsedDiveGas {
@@ -1665,19 +1075,7 @@ export interface ParsedDiveAlarm {
   enabled?: number
   alarm_type?: DiveAlarmType
   sound?: Tone
-  dive_types?: (SubSport | null)[]
-  id?: number
-  popup_enabled?: number
-  trigger_on_descent?: number
-  trigger_on_ascent?: number
-  repeating?: number
-  speed?: number
-  message_index?: MessageIndex
-}
-export interface ParsedExerciseTitle {
-  exercise_category?: ExerciseCategory
-  exercise_name?: number
-  wkt_step_name?: string
+  dive_types?: SubSport
   message_index?: MessageIndex
 }
 export interface ParsedDiveSummary {
@@ -1705,15 +1103,8 @@ export interface ParsedDiveSummary {
   hang_time?: number
   timestamp?: Date
 }
-export interface ParsedSpo2Data {
-  reading_spo2?: number
-  reading_confidence?: number
-  mode?: Spo2MeasurementType
-  timestamp?: Date
-}
 export interface ParsedSleepLevel {
   sleep_level?: SleepLevel
-  timestamp?: Date
 }
 export interface ParsedJump {
   distance?: number
@@ -1725,59 +1116,6 @@ export interface ParsedJump {
   position_long?: number
   speed?: number
   enhanced_speed?: number
-  timestamp?: Date
-}
-export interface ParsedAadAccelFeatures {
-  time?: number
-  energy_total?: number
-  zero_cross_cnt?: number
-  instance?: number
-  time_above_threshold?: number
-  timestamp?: Date
-}
-export interface ParsedBeatIntervals {
-  timestamp_ms?: number
-  time?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedRespirationRate {
-  respiration_rate?: number
-  timestamp?: Date
-}
-export interface ParsedHsaAccelerometerData {
-  timestamp_ms?: number
-  sampling_interval?: number
-  accel_x?: (number | null)[]
-  accel_y?: (number | null)[]
-  accel_z?: (number | null)[]
-  timestamp32k?: number
-  timestamp?: Date
-}
-export interface ParsedHsaStepData {
-  processing_interval?: number
-  steps?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedHsaSpo2Data {
-  processing_interval?: number
-  reading_spo2?: (number | null)[]
-  confidence?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedHsaStressData {
-  processing_interval?: number
-  stress_level?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedHsaRespirationData {
-  processing_interval?: number
-  respiration_rate?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedHsaHeartRateData {
-  processing_interval?: number
-  status?: number
-  heart_rate?: (number | null)[]
   timestamp?: Date
 }
 export interface ParsedSplit {
@@ -1822,158 +1160,16 @@ export interface ParsedSplitSummary {
   total_moving_time?: number
   message_index?: MessageIndex
 }
-export interface ParsedHsaBodyBatteryData {
-  processing_interval?: number
-  level?: (number | null)[]
-  charged?: (number | null)[]
-  uncharged?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedHsaEvent {
-  event_id?: number
-  timestamp?: Date
-}
-export interface ParsedClimbPro {
-  position_lat?: number
-  position_long?: number
-  climb_pro_event?: ClimbProEvent
-  climb_number?: number
-  climb_category?: number
-  current_dist?: number
-  timestamp?: Date
-}
 export interface ParsedTankUpdate {
-  sensor?: AntChannelId
+  sensor?: number
   pressure?: number
   timestamp?: Date
 }
 export interface ParsedTankSummary {
-  sensor?: AntChannelId
+  sensor?: number
   start_pressure?: number
   end_pressure?: number
   volume_used?: number
-  timestamp?: Date
-}
-export interface ParsedSleepAssessment {
-  combined_awake_score?: number
-  awake_time_score?: number
-  awakenings_count_score?: number
-  deep_sleep_score?: number
-  sleep_duration_score?: number
-  light_sleep_score?: number
-  overall_sleep_score?: number
-  sleep_quality_score?: number
-  sleep_recovery_score?: number
-  rem_sleep_score?: number
-  sleep_restlessness_score?: number
-  awakenings_count?: number
-  interruptions_score?: number
-  average_stress_during_sleep?: number
-}
-export interface ParsedHrvStatusSummary {
-  weekly_average?: number
-  last_night_average?: number
-  last_night5_min_high?: number
-  baseline_low_upper?: number
-  baseline_balanced_lower?: number
-  baseline_balanced_upper?: number
-  status?: HrvStatus
-  timestamp?: Date
-}
-export interface ParsedHrvValue {
-  value?: number
-  timestamp?: Date
-}
-export interface ParsedRawBbi {
-  timestamp_ms?: number
-  data?: (number | null)[]
-  time?: (number | null)[]
-  quality?: (number | null)[]
-  gap?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedDeviceAuxBatteryInfo {
-  device_index?: number
-  battery_voltage?: number
-  battery_status?: BatteryStatus
-  battery_identifier?: number
-  timestamp?: Date
-}
-export interface ParsedHsaGyroscopeData {
-  timestamp_ms?: number
-  sampling_interval?: number
-  gyro_x?: (number | null)[]
-  gyro_y?: (number | null)[]
-  gyro_z?: (number | null)[]
-  timestamp32k?: number
-  timestamp?: Date
-}
-export interface ParsedChronoShotSession {
-  min_speed?: number
-  max_speed?: number
-  avg_speed?: number
-  shot_count?: number
-  projectile_type?: ProjectileType
-  grain_weight?: number
-  standard_deviation?: number
-  timestamp?: Date
-}
-export interface ParsedChronoShotData {
-  shot_speed?: number
-  shot_num?: number
-  timestamp?: Date
-}
-export interface ParsedHsaConfigurationData {
-  data?: (number | null)[]
-  data_size?: number
-  timestamp?: Date
-}
-export interface ParsedDiveApneaAlarm {
-  depth?: number
-  time?: number
-  enabled?: number
-  alarm_type?: DiveAlarmType
-  sound?: Tone
-  dive_types?: (SubSport | null)[]
-  id?: number
-  popup_enabled?: number
-  trigger_on_descent?: number
-  trigger_on_ascent?: number
-  repeating?: number
-  speed?: number
-  message_index?: MessageIndex
-}
-export interface ParsedSkinTempOvernight {
-  local_timestamp?: Date
-  average_deviation?: number
-  average7_day_deviation?: number
-  nightly_value?: number
-  timestamp?: Date
-}
-export interface ParsedHsaWristTemperatureData {
-  processing_interval?: number
-  value?: (number | null)[]
-  timestamp?: Date
-}
-export interface ParsedNapEvent {
-  start_time?: Date
-  start_timezone_offset?: number
-  end_time?: Date
-  end_timezone_offset?: number
-  feedback?: NapPeriodFeedback
-  is_deleted?: number
-  source?: NapSource
-  update_timestamp?: Date
-  timestamp?: Date
-  message_index?: MessageIndex
-}
-export interface ParsedSleepDisruptionSeverityPeriod {
-  severity?: SleepDisruptionSeverity
-  timestamp?: Date
-  message_index?: MessageIndex
-}
-export interface ParsedSleepDisruptionOvernightSeverity {
-  severity?: SleepDisruptionSeverity
   timestamp?: Date
 }
 
@@ -1992,7 +1188,6 @@ export interface ParsedMessages {
   power_zone?: ParsedPowerZone[]
   met_zone?: ParsedMetZone[]
   sport?: ParsedSport[]
-  training_settings?: ParsedTrainingSettings[]
   goal?: ParsedGoal[]
   session?: ParsedSession[]
   lap?: ParsedLap[]
@@ -2001,7 +1196,6 @@ export interface ParsedMessages {
   device_info?: ParsedDeviceInfo[]
   workout?: ParsedWorkout[]
   workout_step?: ParsedWorkoutStep[]
-  schedule?: ParsedSchedule[]
   weight_scale?: ParsedWeightScale[]
   course?: ParsedCourse[]
   course_point?: ParsedCoursePoint[]
@@ -2013,99 +1207,31 @@ export interface ParsedMessages {
   field_capabilities?: ParsedFieldCapabilities[]
   file_creator?: ParsedFileCreator[]
   blood_pressure?: ParsedBloodPressure[]
-  speed_zone?: ParsedSpeedZone[]
   monitoring?: ParsedMonitoring[]
-  training_file?: ParsedTrainingFile[]
   hrv?: ParsedHrv[]
   user_metrics?: ParsedUserMetrics[]
-  ant_rx?: ParsedAntRx[]
-  ant_tx?: ParsedAntTx[]
-  ant_channel_id?: ParsedAntChannelId[]
   length?: ParsedLength[]
   monitoring_info?: ParsedMonitoringInfo[]
-  pad?: ParsedPad[]
-  slave_device?: ParsedSlaveDevice[]
-  connectivity?: ParsedConnectivity[]
-  weather_conditions?: ParsedWeatherConditions[]
-  weather_alert?: ParsedWeatherAlert[]
-  cadence_zone?: ParsedCadenceZone[]
-  hr?: ParsedHr[]
+  o_hr_settings?: ParsedOHrSettings[]
   activity_metrics?: ParsedActivityMetrics[]
   segment_lap?: ParsedSegmentLap[]
-  memo_glob?: ParsedMemoGlob[]
-  segment_id?: ParsedSegmentId[]
-  segment_leaderboard_entry?: ParsedSegmentLeaderboardEntry[]
-  segment_point?: ParsedSegmentPoint[]
-  segment_file?: ParsedSegmentFile[]
-  workout_session?: ParsedWorkoutSession[]
-  watchface_settings?: ParsedWatchfaceSettings[]
-  gps_metadata?: ParsedGpsMetadata[]
-  camera_event?: ParsedCameraEvent[]
-  timestamp_correlation?: ParsedTimestampCorrelation[]
-  gyroscope_data?: ParsedGyroscopeData[]
-  accelerometer_data?: ParsedAccelerometerData[]
-  three_d_sensor_calibration?: ParsedThreeDSensorCalibration[]
-  video_frame?: ParsedVideoFrame[]
-  obdii_data?: ParsedObdiiData[]
-  nmea_sentence?: ParsedNmeaSentence[]
-  aviation_attitude?: ParsedAviationAttitude[]
-  video?: ParsedVideo[]
-  video_title?: ParsedVideoTitle[]
-  video_description?: ParsedVideoDescription[]
-  video_clip?: ParsedVideoClip[]
   ohr_settings?: ParsedOhrSettings[]
-  exd_screen_configuration?: ParsedExdScreenConfiguration[]
-  exd_data_field_configuration?: ParsedExdDataFieldConfiguration[]
-  exd_data_concept_configuration?: ParsedExdDataConceptConfiguration[]
   field_description?: ParsedFieldDescription[]
   developer_data_id?: ParsedDeveloperDataId[]
-  magnetometer_data?: ParsedMagnetometerData[]
-  barometer_data?: ParsedBarometerData[]
-  one_d_sensor_calibration?: ParsedOneDSensorCalibration[]
   monitoring_hr_data?: ParsedMonitoringHrData[]
   time_in_zone?: ParsedTimeInZone[]
   set?: ParsedSet[]
   stress_level?: ParsedStressLevel[]
-  max_met_data?: ParsedMaxMetData[]
   dive_settings?: ParsedDiveSettings[]
   dive_gas?: ParsedDiveGas[]
   dive_alarm?: ParsedDiveAlarm[]
-  exercise_title?: ParsedExerciseTitle[]
   dive_summary?: ParsedDiveSummary[]
-  spo2_data?: ParsedSpo2Data[]
   sleep_level?: ParsedSleepLevel[]
   jump?: ParsedJump[]
-  aad_accel_features?: ParsedAadAccelFeatures[]
-  beat_intervals?: ParsedBeatIntervals[]
-  respiration_rate?: ParsedRespirationRate[]
-  hsa_accelerometer_data?: ParsedHsaAccelerometerData[]
-  hsa_step_data?: ParsedHsaStepData[]
-  hsa_spo2_data?: ParsedHsaSpo2Data[]
-  hsa_stress_data?: ParsedHsaStressData[]
-  hsa_respiration_data?: ParsedHsaRespirationData[]
-  hsa_heart_rate_data?: ParsedHsaHeartRateData[]
   split?: ParsedSplit[]
   split_summary?: ParsedSplitSummary[]
-  hsa_body_battery_data?: ParsedHsaBodyBatteryData[]
-  hsa_event?: ParsedHsaEvent[]
-  climb_pro?: ParsedClimbPro[]
   tank_update?: ParsedTankUpdate[]
   tank_summary?: ParsedTankSummary[]
-  sleep_assessment?: ParsedSleepAssessment[]
-  hrv_status_summary?: ParsedHrvStatusSummary[]
-  hrv_value?: ParsedHrvValue[]
-  raw_bbi?: ParsedRawBbi[]
-  device_aux_battery_info?: ParsedDeviceAuxBatteryInfo[]
-  hsa_gyroscope_data?: ParsedHsaGyroscopeData[]
-  chrono_shot_session?: ParsedChronoShotSession[]
-  chrono_shot_data?: ParsedChronoShotData[]
-  hsa_configuration_data?: ParsedHsaConfigurationData[]
-  dive_apnea_alarm?: ParsedDiveApneaAlarm[]
-  skin_temp_overnight?: ParsedSkinTempOvernight[]
-  hsa_wrist_temperature_data?: ParsedHsaWristTemperatureData[]
-  nap_event?: ParsedNapEvent[]
-  sleep_disruption_severity_period?: ParsedSleepDisruptionSeverityPeriod[]
-  sleep_disruption_overnight_severity?: ParsedSleepDisruptionOvernightSeverity[]
 }
 
 // the returned type after parsing a .fit file
@@ -2116,6 +1242,7 @@ export interface ParsedFit {
   messages?: ParsedMessages
   raw_developer_fields?: ParsedRawDeveloperField[]
   raw_messages?: ParsedRawFitMessage[]
+  unmapped_messages?: ParsedRawFitMessage[]
   file_creator: ParsedFileCreator
   device_settings: ParsedDeviceSettings
   dive_summary?: ParsedDiveSummary
@@ -2157,11 +1284,9 @@ export interface ParsedFit {
   sdm_profile?: ParsedSdmProfile
   bike_profile?: ParsedBikeProfile
   met_zone?: ParsedMetZone
-  training_settings?: ParsedTrainingSettings
   goal?: ParsedGoal
   workout?: ParsedWorkout
   workout_step?: ParsedWorkoutStep
-  schedule?: ParsedSchedule
   weight_scale?: ParsedWeightScale
   course?: ParsedCourse
   totals?: ParsedTotals
@@ -2169,78 +1294,10 @@ export interface ParsedFit {
   mesg_capabilities?: ParsedMesgCapabilities
   field_capabilities?: ParsedFieldCapabilities
   blood_pressure?: ParsedBloodPressure
-  speed_zone?: ParsedSpeedZone
-  training_file?: ParsedTrainingFile
-  ant_rx?: ParsedAntRx
-  ant_tx?: ParsedAntTx
-  ant_channel_id?: ParsedAntChannelId
-  pad?: ParsedPad
-  slave_device?: ParsedSlaveDevice
-  connectivity?: ParsedConnectivity
-  weather_conditions?: ParsedWeatherConditions
-  weather_alert?: ParsedWeatherAlert
-  cadence_zone?: ParsedCadenceZone
-  hr?: ParsedHr
+  o_hr_settings?: ParsedOHrSettings
   segment_lap?: ParsedSegmentLap
-  memo_glob?: ParsedMemoGlob
-  segment_id?: ParsedSegmentId
-  segment_leaderboard_entry?: ParsedSegmentLeaderboardEntry
-  segment_point?: ParsedSegmentPoint
-  segment_file?: ParsedSegmentFile
-  workout_session?: ParsedWorkoutSession
-  watchface_settings?: ParsedWatchfaceSettings
-  gps_metadata?: ParsedGpsMetadata
-  camera_event?: ParsedCameraEvent
-  timestamp_correlation?: ParsedTimestampCorrelation
-  gyroscope_data?: ParsedGyroscopeData
-  accelerometer_data?: ParsedAccelerometerData
-  three_d_sensor_calibration?: ParsedThreeDSensorCalibration
-  video_frame?: ParsedVideoFrame
-  obdii_data?: ParsedObdiiData
-  nmea_sentence?: ParsedNmeaSentence
-  aviation_attitude?: ParsedAviationAttitude
-  video?: ParsedVideo
-  video_title?: ParsedVideoTitle
-  video_description?: ParsedVideoDescription
-  video_clip?: ParsedVideoClip
   ohr_settings?: ParsedOhrSettings
-  exd_screen_configuration?: ParsedExdScreenConfiguration
-  exd_data_field_configuration?: ParsedExdDataFieldConfiguration
-  exd_data_concept_configuration?: ParsedExdDataConceptConfiguration
-  magnetometer_data?: ParsedMagnetometerData
-  barometer_data?: ParsedBarometerData
-  one_d_sensor_calibration?: ParsedOneDSensorCalibration
   monitoring_hr_data?: ParsedMonitoringHrData
-  max_met_data?: ParsedMaxMetData
   dive_alarm?: ParsedDiveAlarm
-  exercise_title?: ParsedExerciseTitle
-  spo2_data?: ParsedSpo2Data
   sleep_level?: ParsedSleepLevel
-  aad_accel_features?: ParsedAadAccelFeatures
-  beat_intervals?: ParsedBeatIntervals
-  respiration_rate?: ParsedRespirationRate
-  hsa_accelerometer_data?: ParsedHsaAccelerometerData
-  hsa_step_data?: ParsedHsaStepData
-  hsa_spo2_data?: ParsedHsaSpo2Data
-  hsa_stress_data?: ParsedHsaStressData
-  hsa_respiration_data?: ParsedHsaRespirationData
-  hsa_heart_rate_data?: ParsedHsaHeartRateData
-  hsa_body_battery_data?: ParsedHsaBodyBatteryData
-  hsa_event?: ParsedHsaEvent
-  climb_pro?: ParsedClimbPro
-  sleep_assessment?: ParsedSleepAssessment
-  hrv_status_summary?: ParsedHrvStatusSummary
-  hrv_value?: ParsedHrvValue
-  raw_bbi?: ParsedRawBbi
-  device_aux_battery_info?: ParsedDeviceAuxBatteryInfo
-  hsa_gyroscope_data?: ParsedHsaGyroscopeData
-  chrono_shot_session?: ParsedChronoShotSession
-  chrono_shot_data?: ParsedChronoShotData
-  hsa_configuration_data?: ParsedHsaConfigurationData
-  dive_apnea_alarm?: ParsedDiveApneaAlarm
-  skin_temp_overnight?: ParsedSkinTempOvernight
-  hsa_wrist_temperature_data?: ParsedHsaWristTemperatureData
-  nap_event?: ParsedNapEvent
-  sleep_disruption_severity_period?: ParsedSleepDisruptionSeverityPeriod
-  sleep_disruption_overnight_severity?: ParsedSleepDisruptionOvernightSeverity
 }

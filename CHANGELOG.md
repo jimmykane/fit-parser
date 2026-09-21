@@ -1,6 +1,26 @@
 # Change Log
 
-## Unreleased
+## 6.0.0 - Unreleased
+
+### Changed
+
+- Rebuild the maintained profile from the last handwritten repository table,
+  restore the earlier product map, and retain only focused fixture-backed
+  corrections.
+- Remove the external SDK dependency, generated profile, profile generator,
+  and local SDK comparison workflow.
+- Treat this as a breaking profile change: names present only in the expanded
+  5.x table now remain available as numbered wire data instead of unverified
+  semantic fields.
+
+### Added
+
+- Preserve every unmapped native and unresolved developer field automatically
+  in `unmapped_messages`, including its exact bytes and definition metadata.
+- Add regression coverage for unknown messages, unknown fields inside known
+  messages, and the immutable historical source boundary.
+- Document the repository-history provenance, manual update requirements, and
+  corpus verification workflow in `PROFILE.md`.
 
 ## 5.2.1
 

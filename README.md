@@ -15,6 +15,8 @@ including developer-defined data.
 - Convert speed, length, temperature, and pressure fields to preferred units.
 - Decode developer fields while preserving record alignment when descriptions
   arrive after their definitions.
+- Preserve every unmapped native or unresolved developer field automatically
+  in `unmapped_messages` with its exact wire bytes.
 - Encode profile-agnostic FIT messages with validated field definitions and
   CRCs.
 - Use ESM or CommonJS with bundled TypeScript declarations.
@@ -29,14 +31,35 @@ including developer-defined data.
 npm install fit-file-parser
 ```
 
+## Migrating from 5.x to 6.0
+
+Version 6.0 replaces the expanded generated profile with the project's last
+handwritten profile table, a pre-synchronization product map, and a focused set
+of fixture-backed corrections. Core activity, session, lap, record, developer,
+dive, strength, stamina, jump, and monitoring behavior remains covered by the
+test suite.
+
+Messages or enum values that were present only in the expanded 5.x table are
+no longer assigned an unverified semantic name. Their bytes are not discarded:
+they appear automatically in `unmapped_messages` with their global message
+number, field number, base type, endianness, occurrence index, and exact wire
+value. Applications that need all bytes for recognized messages can still opt
+into `raw_messages`.
+
+The generated TypeScript declarations now describe the maintained community
+table rather than every name exposed by 5.x. Review references to newer
+message-specific properties and handle their numbered representation in
+`unmapped_messages` until an independently supported mapping is added.
+
 ## Migrating from 4.x to 5.0
 
-Version 5.0 is a breaking release because parsed output now follows the pinned
-Garmin FIT SDK profile without compatibility aliases or guessed fields. Parser
-construction, module imports, output modes, and parser options are unchanged.
+Version 5.0 is a breaking release because parsed output follows the expanded
+standard profile snapshot without compatibility aliases or guessed fields.
+Parser construction, module imports, output modes, and parser options are
+unchanged.
 
 Update field access, destructuring, persisted schemas, and snapshots to use the
-SDK-backed names. Common migrations include:
+5.x names. Common migrations include:
 
 | 4.x name                       | 5.0 name                     |
 | ------------------------------ | ---------------------------- |
@@ -59,7 +82,8 @@ SDK-backed names. Common migrations include:
 The same alphanumeric-token rule applies to enum strings, for example
 `camera_orientation_90` becomes `camera_orientation90`, `po_2_warn` becomes
 `po2_warn`, and `power_3s` becomes `power3s`. The generated TypeScript
-declarations are the exhaustive name and value reference for the pinned SDK.
+declarations are the exhaustive name and value reference for the maintained
+profile.
 
 Parser 4 exposed standard session field 196 (`metabolic_calories`) a second
 time as `resting_calories`; use the canonical `metabolic_calories` name in 5.0.
@@ -186,6 +210,27 @@ provider-specific semantics. Pass `true` to retain developer fields from every
 global message, or an array such as `[18]` to bound collection to specific FIT
 message numbers.
 
+### Automatically preserved unmapped fields
+
+Fields that are absent from the maintained profile or belong to an unknown
+global message are returned automatically in `unmapped_messages`. Only
+unmapped fields are retained, so normal known fields are not duplicated:
+
+```javascript
+for (const message of data.unmapped_messages ?? []) {
+  console.log({
+    globalMessageNumber: message.global_message_number,
+    messageIndex: message.message_index,
+    fields: message.fields,
+    developerFields: message.developer_fields,
+  })
+}
+```
+
+Each entry uses the same wire-level field representation as `raw_messages`.
+This is always enabled so a newer FIT field cannot disappear merely because it
+does not yet have a reviewed semantic mapping.
+
 ### Lossless selected messages
 
 Set `includeRawMessages` when a consumer needs native FIT numeric codes rather
@@ -256,16 +301,15 @@ unchanged.
 
 ## Profile-backed output
 
-Standard message names, field names, enum values, wire types, scales, offsets,
-arrays, and units come from the exactly pinned Garmin FIT SDK profile. Public
-names use the parser's generated `snake_case` form while preserving SDK
-alphanumeric tokens such as `n2`, `po2`, and `time128`. The parser does not add
-compatibility aliases for alternate field spellings.
+Recognized message names, field names, enum values, wire types, scales,
+offsets, arrays, and units come from the community-maintained table in
+`src/profile.ts`. Its immutable repository-history boundary and the focused
+fixture-backed corrections are documented in [`PROFILE.md`](./PROFILE.md).
+The package contains no external profile generator or SDK dependency.
 
-The small vendor extension table contains only Garmin fields and private
-messages observed in the external FIT corpus. Extensions cannot replace a
-standard SDK field or type value; the profile audit rejects collisions and
-unregistered additions.
+Public names use `snake_case` while preserving established alphanumeric tokens
+such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number
+and exact bytes in `unmapped_messages` rather than receiving guessed names.
 
 Only values present in the FIT input are emitted. In particular,
 `product_name` is not inferred from `manufacturer` and `product`, and record
@@ -363,21 +407,22 @@ const {
 
 Run commands from the repository root.
 
-| Command                            | Purpose                                            |
-| ---------------------------------- | -------------------------------------------------- |
-| `npm ci`                           | Install locked dependencies.                       |
-| `npm run build`                    | Build ESM and CommonJS output.                     |
-| `npm test -- --run`                | Run the complete test suite once.                  |
-| `npm test -- --run test/<file>.ts` | Run a focused test file.                           |
-| `npm run codegen`                  | Regenerate the Garmin profile and public types.    |
-| `npm run codegen:check`            | Verify both generated files are current.           |
-| `npm run profile:audit`            | Audit SDK profile coverage and private overlays.   |
-| `npm run corpus:check -- <path>`   | Validate an external FIT corpus without file data. |
-| `npm run lint`                     | Check lint and formatting rules.                   |
-| `npm run fmt`                      | Apply the configured formatting rules.             |
-| `npm run type-check`               | Run TypeScript without emitting files.             |
-| `npm run examples`                 | Build and regenerate checked-in example outputs.   |
-| `npm run check`                    | Run profile audit, lint, types, tests, and builds. |
+| Command                            | Purpose                                             |
+| ---------------------------------- | --------------------------------------------------- |
+| `npm ci`                           | Install locked dependencies.                        |
+| `npm run build`                    | Build ESM and CommonJS output.                      |
+| `npm run clean`                    | Remove the generated build output.                  |
+| `npm test -- --run`                | Run the complete test suite once.                   |
+| `npm test -- --run test/<file>.ts` | Run a focused test file.                            |
+| `npm run codegen`                  | Regenerate public types from the static profile.    |
+| `npm run codegen:check`            | Verify generated public types are current.          |
+| `npm run profile:check`            | Audit the maintained profile and source boundary.   |
+| `npm run corpus:check -- <path>`   | Validate an external FIT corpus without file data.  |
+| `npm run lint`                     | Check lint and formatting rules.                    |
+| `npm run fmt`                      | Apply the configured formatting rules.              |
+| `npm run type-check`               | Run TypeScript without emitting files.              |
+| `npm run examples`                 | Build and regenerate checked-in example outputs.    |
+| `npm run check`                    | Run profile checks, lint, types, tests, and builds. |
 
 ### External FIT corpus (optional)
 
@@ -399,9 +444,9 @@ verify the ordinary decoded output path. The corpus contains a known header-CRC
 failure that is expected to recover only in force mode. It reports aggregate
 counts and never prints file names or parsed activity data.
 
-Do not edit `src/garmin_profile.generated.ts` or `src/fit_types.ts` manually.
-Update the pinned SDK, audited vendor extensions, or a generator, then run
-`npm run codegen`.
+Edit `src/profile.ts` only through reviewed profile changes with focused
+regression coverage and a documented source. Do not edit `src/fit_types.ts`
+manually; run `npm run codegen` after changing the maintained profile.
 
 Repository-specific automation guidance is tracked in
 [`.agent/README.md`](./.agent/README.md). More examples are available in the
