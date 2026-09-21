@@ -3,10 +3,13 @@ import { describe, expect, it } from 'vitest'
 import FitParser, {
   FitBaseType,
   FitEncoder,
+  getFitCoursePointId,
   getFitGarminProductDisplayName,
   getFitGarminProductName,
   getFitManufacturerName,
+  getFitSportId,
   getFitSportName,
+  getFitSubSportId,
   getFitSubSportName,
 } from '../src/fit-parser.js'
 import { PROFILE_TYPES } from '../src/profile.js'
@@ -67,6 +70,34 @@ describe('fit profile lookup API', () => {
     expect(getFitSportName('4')).toBe('fitness_equipment')
     expect(getFitSubSportName(153)).toBe('mountain_enduro')
     expect(getFitSubSportName('154')).toBe('mountain_downhill')
+  })
+
+  it('resolves every maintained sport name back to its profile identifier', () => {
+    Object.entries(PROFILE_TYPES.sport).forEach(([id, name]) => {
+      expect(getFitSportId(String(name))).toBe(Number(id))
+    })
+    Object.entries(PROFILE_TYPES.sub_sport).forEach(([id, name]) => {
+      expect(getFitSubSportId(String(name))).toBe(Number(id))
+    })
+  })
+
+  it('resolves every maintained course-point name back to its profile identifier', () => {
+    Object.entries(PROFILE_TYPES.course_point).forEach(([id, name]) => {
+      expect(getFitCoursePointId(String(name))).toBe(Number(id))
+    })
+  })
+
+  it('resolves canonical sport names and separator-insensitive spellings', () => {
+    expect(getFitSportId('cycling')).toBe(2)
+    expect(getFitSportId(' fitness_equipment ')).toBe(4)
+    expect(getFitSubSportId('indoor_cycling')).toBe(6)
+    expect(getFitSubSportId('virtual_activity')).toBe(58)
+    expect(getFitCoursePointId('rest_area')).toBe(29)
+    expect(getFitCoursePointId('Sharp Curve')).toBe(42)
+    expect(getFitSportId('Fitness Equipment')).toBe(4)
+    expect(getFitSubSportId('indoorcycling')).toBe(6)
+    expect(getFitSportId('2')).toBeNull()
+    expect(getFitSubSportId(undefined)).toBeNull()
   })
 
   it('returns null for absent or unknown profile identifiers', () => {

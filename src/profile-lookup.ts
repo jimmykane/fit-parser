@@ -2,10 +2,27 @@ import { PROFILE_TYPES } from './profile.js'
 
 type FitProfileValueMap = Readonly<Record<number, string | number>>
 
+function normalizeProfileName(value: string): string {
+  return value.trim().toLowerCase().replace(/[\s_-]/g, '')
+}
+
 const FIT_PROFILE_MANUFACTURERS = PROFILE_TYPES.manufacturer
 const FIT_PROFILE_GARMIN_PRODUCTS = PROFILE_TYPES.garmin_product
 const FIT_PROFILE_SPORTS = PROFILE_TYPES.sport
 const FIT_PROFILE_SUB_SPORTS = PROFILE_TYPES.sub_sport
+const FIT_PROFILE_COURSE_POINTS = PROFILE_TYPES.course_point
+
+function createProfileIdMap(mapping: FitProfileValueMap): ReadonlyMap<string, number> {
+  return new Map(
+    Object.entries(mapping)
+      .filter((entry): entry is [string, string] => typeof entry[1] === 'string')
+      .map(([id, name]) => [normalizeProfileName(name), Number(id)]),
+  )
+}
+
+const FIT_PROFILE_SPORT_IDS = createProfileIdMap(FIT_PROFILE_SPORTS)
+const FIT_PROFILE_SUB_SPORT_IDS = createProfileIdMap(FIT_PROFILE_SUB_SPORTS)
+const FIT_PROFILE_COURSE_POINT_IDS = createProfileIdMap(FIT_PROFILE_COURSE_POINTS)
 
 function getProfileName(
   mapping: FitProfileValueMap,
@@ -33,6 +50,20 @@ function getProfileName(
   return typeof name === 'string' ? name : null
 }
 
+function getProfileId(
+  mapping: ReadonlyMap<string, number>,
+  value: string | null | undefined,
+): number | null {
+  if (typeof value !== 'string') {
+    return null
+  }
+  const name = normalizeProfileName(value)
+  if (name === '') {
+    return null
+  }
+  return mapping.get(name) ?? null
+}
+
 /** Resolves a FIT manufacturer identifier to its canonical profile name. */
 export function getFitManufacturerName(value: number | string | null | undefined): string | null {
   return getProfileName(FIT_PROFILE_MANUFACTURERS, value)
@@ -51,6 +82,21 @@ export function getFitSportName(value: number | string | null | undefined): stri
 /** Resolves a FIT sub-sport identifier to its canonical profile name. */
 export function getFitSubSportName(value: number | string | null | undefined): string | null {
   return getProfileName(FIT_PROFILE_SUB_SPORTS, value)
+}
+
+/** Resolves a FIT sport name to its numeric profile identifier. */
+export function getFitSportId(value: string | null | undefined): number | null {
+  return getProfileId(FIT_PROFILE_SPORT_IDS, value)
+}
+
+/** Resolves a FIT sub-sport name to its numeric profile identifier. */
+export function getFitSubSportId(value: string | null | undefined): number | null {
+  return getProfileId(FIT_PROFILE_SUB_SPORT_IDS, value)
+}
+
+/** Resolves a FIT course-point name to its numeric profile identifier. */
+export function getFitCoursePointId(value: string | null | undefined): number | null {
+  return getProfileId(FIT_PROFILE_COURSE_POINT_IDS, value)
 }
 
 /**

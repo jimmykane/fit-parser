@@ -2,8 +2,14 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 interface PackageJson {
+  exports?: Record<string, {
+    types: string
+    import: string
+    require: string
+  }>
   files?: string[]
   scripts?: Record<string, string>
+  typesVersions?: Record<string, Record<string, string[]>>
 }
 
 describe('profile maintenance boundary', () => {
@@ -28,7 +34,19 @@ describe('profile maintenance boundary', () => {
       import: './dist/profile-lookup.js',
       require: './dist/cjs/profile-lookup.js',
     })
+    expect(packageJson.exports?.['./encoder']).toEqual({
+      types: './dist/fit-encoder.d.ts',
+      import: './dist/fit-encoder.js',
+      require: './dist/cjs/fit-encoder.js',
+    })
+    expect(packageJson.exports?.['./raw']).toEqual({
+      types: './dist/raw-message-reader.d.ts',
+      import: './dist/raw-message-reader.js',
+      require: './dist/cjs/raw-message-reader.js',
+    })
+    expect(packageJson.typesVersions?.['*']?.encoder).toEqual(['dist/fit-encoder.d.ts'])
     expect(packageJson.typesVersions?.['*']?.profile).toEqual(['dist/profile-lookup.d.ts'])
+    expect(packageJson.typesVersions?.['*']?.raw).toEqual(['dist/raw-message-reader.d.ts'])
     expect(readdirSync(new URL('../codegen/', import.meta.url))).not.toContainEqual(
       expect.stringMatching(/profile[._-]generated/i),
     )

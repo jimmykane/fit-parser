@@ -1,6 +1,6 @@
 # Change Log
 
-## 6.1.0 - 2026-09-21
+## 6.1.1 - 2026-09-21
 
 ### Added
 
@@ -8,6 +8,11 @@
   sub-sport identifiers from the package root.
 - Export the same helpers from the lightweight `fit-file-parser/profile`
   entry point for lookup-only consumers.
+- Add reverse sport, sub-sport, and course-point identifier lookups.
+- Add lightweight `fit-file-parser/raw` and `fit-file-parser/encoder` entry
+  points for profile-independent message scanning and encoding.
+- Add a strict raw-message reader with CRC, definition, developer-field, and
+  compressed-timestamp validation.
 - Export an opt-in Garmin product display-name helper without changing parsed
   `product` or `product_name` fields.
 - Decode mountain enduro and mountain downhill sub-sport identifiers.

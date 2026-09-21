@@ -46,12 +46,33 @@ export type {
   ParsedRawFitMessageDeveloperField,
 } from './fit_types.js'
 export {
+  getFitCoursePointId,
   getFitGarminProductDisplayName,
   getFitGarminProductName,
   getFitManufacturerName,
+  getFitSportId,
   getFitSportName,
+  getFitSubSportId,
   getFitSubSportName,
 } from './profile-lookup.js'
+export {
+  FitMessageReaderError,
+  fitTimestampToUnixMilliseconds,
+  getFitBaseTypeId,
+  readFitMessages,
+  readFitStringField,
+  readFitUnsignedField,
+} from './raw-message-reader.js'
+export type {
+  FitMessageReaderErrorCode,
+  FitMessageReaderIssue,
+  FitMessageReaderIssueCode,
+  FitMessageReaderOptions,
+  FitMessageReaderResult,
+  FitRawDeveloperField,
+  FitRawField,
+  FitRawMessage,
+} from './raw-message-reader.js'
 
 export interface FitParserOptions {
   force?: boolean

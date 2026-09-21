@@ -258,13 +258,16 @@ are `null`. All profile fields are optional because each FIT message definition
 chooses which fields are present.
 
 Applications that need profile lookups independently of parsing can use the
-exported manufacturer, Garmin product, sport, and sub-sport helpers:
+exported manufacturer, Garmin product, sport, sub-sport, and course-point helpers:
 
 ```javascript
 import {
+  getFitCoursePointId,
   getFitGarminProductDisplayName,
   getFitManufacturerName,
+  getFitSportId,
   getFitSportName,
+  getFitSubSportId,
   getFitSubSportName,
 } from 'fit-file-parser'
 
@@ -272,6 +275,9 @@ getFitManufacturerName(1) // "garmin"
 getFitGarminProductDisplayName(4655) // "Edge MTB"
 getFitSportName(2) // "cycling"
 getFitSubSportName(153) // "mountain_enduro"
+getFitSportId('cycling') // 2
+getFitSubSportId('indoor_cycling') // 6
+getFitCoursePointId('rest_area') // 29
 ```
 
 These helpers read the same maintained profile used by the decoder. The product
@@ -280,6 +286,27 @@ display helper is opt-in and does not synthesize or overwrite parsed
 
 Lookup-only consumers can import the same helpers from
 `fit-file-parser/profile` without loading the parser entry point.
+
+### Lightweight raw messages
+
+Consumers that need strict FIT framing, CRC validation, compressed timestamps,
+and exact fields without loading the semantic profile can use the lightweight
+raw entry point:
+
+```javascript
+import { readFitMessages } from 'fit-file-parser/raw'
+
+const { messages } = readFitMessages(content, {
+  messageNumbers: [18, 26, 72],
+  maxInputBytes: 64 * 1024 * 1024,
+})
+```
+
+The result retains native and developer fields as defensive `Uint8Array`
+copies. It does not apply names, enum formatting, scales, units, or
+provider-specific interpretation. Invalid input throws `FitMessageReaderError`
+with a stable `code` such as `invalid_header`, `invalid_crc`, or
+`invalid_structure`.
 
 ## Inputs
 
@@ -307,7 +334,7 @@ base types, sizes, and values in their raw FIT representation. Applying FIT
 scales and offsets is the caller's responsibility.
 
 ```javascript
-import { FitBaseType, FitEncoder } from 'fit-file-parser'
+import { FitBaseType, FitEncoder } from 'fit-file-parser/encoder'
 
 const encoder = new FitEncoder()
 encoder.writeMessage(0, [
@@ -342,6 +369,9 @@ The encoder also provides:
 Scalar 64-bit values use `bigint`. Strings, numeric arrays, and other
 variable-length values use exact-size `Uint8Array` values. Invalid field
 definitions or numeric ranges throw before a partial message is written.
+
+The encoder remains available from the package root; the `/encoder` entry
+point avoids loading the decoder and semantic profile.
 
 ## TypeScript and module formats
 
