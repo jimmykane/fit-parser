@@ -1,6 +1,6 @@
 # Change Log
 
-## 6.0.0 - Unreleased
+## 6.0.0 - 2026-09-21
 
 ### Changed
 
