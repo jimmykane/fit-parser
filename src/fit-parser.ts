@@ -45,6 +45,13 @@ export type {
   ParsedRawFitMessage,
   ParsedRawFitMessageDeveloperField,
 } from './fit_types.js'
+export {
+  getFitGarminProductDisplayName,
+  getFitGarminProductName,
+  getFitManufacturerName,
+  getFitSportName,
+  getFitSubSportName,
+} from './profile-lookup.js'
 
 export interface FitParserOptions {
   force?: boolean

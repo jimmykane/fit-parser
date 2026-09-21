@@ -17479,6 +17479,8 @@ export const PROFILE_TYPES: Record<string, Record<number, string | number>> = {
     125: 'rally',
     126: 'pool_triathlon',
     127: 'e_bike_enduro',
+    153: 'mountain_enduro',
+    154: 'mountain_downhill',
     254: 'all',
   },
   supported_exd_screen_layouts: {

@@ -257,6 +257,27 @@ unknown enum IDs remain numbers, and invalid entries retained inside FIT arrays
 are `null`. All profile fields are optional because each FIT message definition
 chooses which fields are present.
 
+Applications that need profile lookups independently of parsing can use the
+exported manufacturer, Garmin product, sport, and sub-sport helpers:
+
+```javascript
+import {
+  getFitGarminProductDisplayName,
+  getFitManufacturerName,
+  getFitSportName,
+  getFitSubSportName,
+} from 'fit-file-parser'
+
+getFitManufacturerName(1) // "garmin"
+getFitGarminProductDisplayName(4655) // "Edge MTB"
+getFitSportName(2) // "cycling"
+getFitSubSportName(153) // "mountain_enduro"
+```
+
+These helpers read the same maintained profile used by the decoder. The product
+display helper is opt-in and does not synthesize or overwrite parsed
+`product_name` values.
+
 ## Inputs
 
 Both parser methods accept:

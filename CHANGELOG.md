@@ -1,5 +1,21 @@
 # Change Log
 
+## 6.1.0 - 2026-09-21
+
+### Added
+
+- Export lookup helpers for FIT manufacturer, Garmin product, sport, and
+  sub-sport identifiers from the package root.
+- Export an opt-in Garmin product display-name helper without changing parsed
+  `product` or `product_name` fields.
+- Decode mountain enduro and mountain downhill sub-sport identifiers.
+
+### Compatibility
+
+- Existing parsed output remains unchanged except that sub-sport IDs 153 and
+  154 now resolve to `mountain_enduro` and `mountain_downhill`.
+- Existing Garmin product display names ported from SportsLib are preserved.
+
 ## 6.0.2 - 2026-09-21
 
 ### Changed
