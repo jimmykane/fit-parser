@@ -1,5 +1,21 @@
 # Change Log
 
+## 6.1.2 - 2026-09-22
+
+### Changed
+
+- Keep the manufacturer, Garmin product, sport, sub-sport, and course-point
+  lookup maps in one authoritative internal module shared by the full decoder
+  profile and the lightweight `fit-file-parser/profile` entry point.
+- Prevent lookup-only consumers from loading the full decoder profile and its
+  message definitions.
+- Enforce the lookup entry point's dependency graph and a 25 KB minified bundle
+  ceiling in the profile checks run by CI.
+
+### Compatibility
+
+- Profile mappings, parsed output, and the public TypeScript API are unchanged.
+
 ## 6.1.1 - 2026-09-21
 
 ### Added

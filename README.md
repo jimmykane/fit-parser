@@ -240,8 +240,9 @@ unchanged.
 ## Profile-backed output
 
 Recognized message names, field names, enum values, wire types, scales,
-offsets, arrays, and units come from the community-maintained table in
-`src/profile.ts`. Its maintenance and verification contract is documented in
+offsets, arrays, and units come from the community-maintained profile in
+`src/profile.ts` and `src/profile-lookup-data.ts`. Its maintenance and
+verification contract is documented in
 [`PROFILE.md`](./PROFILE.md).
 
 Public names use `snake_case` while preserving established alphanumeric tokens
@@ -443,9 +444,10 @@ a reference package, compares their complete default outputs, and reports only
 aggregate counts. Files rejected by both strict parsers are retried in force
 mode.
 
-Edit `src/profile.ts` only through reviewed profile changes with focused
-regression coverage and a documented source. Do not edit `src/fit_types.ts`
-manually; run `npm run codegen` after changing the maintained profile.
+Edit `src/profile.ts` and `src/profile-lookup-data.ts` only through reviewed
+profile changes with focused regression coverage and a documented source. Do
+not edit `src/fit_types.ts` manually; run `npm run codegen` after changing the
+maintained profile.
 
 Repository-specific automation guidance is tracked in
 [`.agent/README.md`](./.agent/README.md). More examples are available in the

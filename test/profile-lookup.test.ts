@@ -12,6 +12,13 @@ import FitParser, {
   getFitSubSportId,
   getFitSubSportName,
 } from '../src/fit-parser.js'
+import {
+  FIT_PROFILE_COURSE_POINTS,
+  FIT_PROFILE_GARMIN_PRODUCTS,
+  FIT_PROFILE_MANUFACTURERS,
+  FIT_PROFILE_SPORTS,
+  FIT_PROFILE_SUB_SPORTS,
+} from '../src/profile-lookup-data.js'
 import { PROFILE_TYPES } from '../src/profile.js'
 
 function fingerprint(mapping: Readonly<Record<number, string | number>>): string {
@@ -21,6 +28,14 @@ function fingerprint(mapping: Readonly<Record<number, string | number>>): string
 }
 
 describe('fit profile lookup API', () => {
+  it('shares authoritative lookup maps with the full decoder profile', () => {
+    expect(PROFILE_TYPES.manufacturer).toBe(FIT_PROFILE_MANUFACTURERS)
+    expect(PROFILE_TYPES.garmin_product).toBe(FIT_PROFILE_GARMIN_PRODUCTS)
+    expect(PROFILE_TYPES.sport).toBe(FIT_PROFILE_SPORTS)
+    expect(PROFILE_TYPES.sub_sport).toBe(FIT_PROFILE_SUB_SPORTS)
+    expect(PROFILE_TYPES.course_point).toBe(FIT_PROFILE_COURSE_POINTS)
+  })
+
   it('locks the complete lookup surface', () => {
     const mappings = {
       manufacturers: PROFILE_TYPES.manufacturer,

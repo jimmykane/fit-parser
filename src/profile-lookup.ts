@@ -1,16 +1,15 @@
-import { PROFILE_TYPES } from './profile.js'
-
-type FitProfileValueMap = Readonly<Record<number, string | number>>
+import type { FitProfileValueMap } from './profile-lookup-data.js'
+import {
+  FIT_PROFILE_COURSE_POINTS,
+  FIT_PROFILE_GARMIN_PRODUCTS,
+  FIT_PROFILE_MANUFACTURERS,
+  FIT_PROFILE_SPORTS,
+  FIT_PROFILE_SUB_SPORTS,
+} from './profile-lookup-data.js'
 
 function normalizeProfileName(value: string): string {
   return value.trim().toLowerCase().replace(/[\s_-]/g, '')
 }
-
-const FIT_PROFILE_MANUFACTURERS = PROFILE_TYPES.manufacturer
-const FIT_PROFILE_GARMIN_PRODUCTS = PROFILE_TYPES.garmin_product
-const FIT_PROFILE_SPORTS = PROFILE_TYPES.sport
-const FIT_PROFILE_SUB_SPORTS = PROFILE_TYPES.sub_sport
-const FIT_PROFILE_COURSE_POINTS = PROFILE_TYPES.course_point
 
 function createProfileIdMap(mapping: FitProfileValueMap): ReadonlyMap<string, number> {
   return new Map(

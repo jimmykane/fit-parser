@@ -24,11 +24,11 @@ describe('profile maintenance boundary', () => {
     new URL('../.github/workflows/publish.yml', import.meta.url),
     'utf8',
   )
-
   it('uses one static maintained profile', () => {
     expect(packageJson.scripts?.['codegen:profile']).toBeUndefined()
     expect(packageJson.scripts?.['profile:diff:local']).toBeUndefined()
     expect(packageJson.scripts?.build).toContain('npm run clean')
+    expect(packageJson.scripts?.['profile:check']).toContain('npm run profile:budget')
     expect(packageJson.exports?.['./profile']).toEqual({
       types: './dist/profile-lookup.d.ts',
       import: './dist/profile-lookup.js',

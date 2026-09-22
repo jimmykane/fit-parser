@@ -1,7 +1,7 @@
 {
   "name": "fit-file-parser",
   "type": "module",
-  "version": "6.1.1",
+  "version": "6.1.2",
   "private": false,
   "description": "Parse your .FIT files easily, directly from JS (Garmin, Polar, Suunto)",
   "author": {
@@ -83,10 +83,11 @@
     }
   ],
   "scripts": {
-    "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts --watch-path=src/profile.ts codegen/codegen.ts",
+    "dev": "tsx --watch --watch-path=src/type_generator.ts --watch-path=src/fit.ts --watch-path=src/profile.ts --watch-path=src/profile-lookup-data.ts codegen/codegen.ts",
     "codegen": "tsx codegen/codegen.ts",
     "codegen:check": "tsx codegen/codegen.ts --check",
-    "profile:check": "npm run codegen:check && tsx scripts/profile-check.ts",
+    "profile:budget": "tsx scripts/profile-lookup-budget.ts",
+    "profile:check": "npm run codegen:check && tsx scripts/profile-check.ts && npm run profile:budget",
     "compatibility:check": "npm run build && tsx scripts/compatibility-check.ts",
     "corpus:check": "tsx scripts/corpus-check.ts",
     "check": "npm run profile:check && npm run lint && npm run type-check && npm test -- --run && npm run build",
@@ -112,6 +113,7 @@
     "@antfu/eslint-config": "^6.2.0",
     "@types/node": "^24.10.1",
     "@vitest/coverage-v8": "^4.0.13",
+    "esbuild": "^0.25.12",
     "eslint": "^9.10.0",
     "eslint-plugin-format": "^1.1.0",
     "tsx": "^4.21.0",
