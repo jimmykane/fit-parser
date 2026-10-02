@@ -3,7 +3,7 @@
   "type": "module",
   "version": "6.1.2",
   "private": false,
-  "description": "Parse your .FIT files easily, directly from JS (Garmin, Polar, Suunto)",
+  "description": "JavaScript and TypeScript library for parsing and encoding FIT files, with developer-field support, raw message access, and ESM/CommonJS builds.",
   "author": {
     "name": "jimmykane"
   },
@@ -24,13 +24,22 @@
     "url": "git+ssh://git@github.com/jimmykane/fit-parser.git"
   },
   "bugs": {
-    "url": "https://github.com/jimmykane/fit-parser"
+    "url": "https://github.com/jimmykane/fit-parser/issues"
   },
   "keywords": [
     "fit",
-    "ant",
+    "fit-file",
+    "fit-parser",
+    "fit-file-parsing",
+    "fit-encoder",
+    "javascript",
+    "typescript",
+    "nodejs",
+    "fitness",
     "garmin",
-    "parse"
+    "polar",
+    "suunto",
+    "binary-parser"
   ],
   "exports": {
     ".": {
