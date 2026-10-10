@@ -1,5 +1,37 @@
 # Change Log
 
+## 6.2.0 - 2026-10-10
+
+### Added
+
+- Add `parseFilesAsync()` to return every complete FIT file in concatenated
+  input as a separate result, with independent decoder state and file order.
+- Decode documented session and lap swimming summaries, segment and gear-shift
+  counts, lap bounds, metabolic calories, and grade-adjusted speed.
+- Retain every battery sample in `batteries` and `messages.battery`, including
+  timestamp and capacity percentage when present.
+- Add `--all-files` to the external corpus checker to validate appended files.
+
+### Fixed
+
+- Preserve exact bytes for developer fields without usable names in opt-in
+  `unmapped_messages`, including fields whose descriptions have been cached.
+- Recover unsigned-byte record temperatures from 0 through 126 with normal
+  unit conversion, while retaining their original bytes in opt-in output.
+- Reject records and definitions extending beyond the declared data section
+  when using the complete-file `parseFilesAsync()` API.
+
+### Compatibility
+
+- Existing `parseAsync()` and callback APIs retain their single-file output
+  and recovery behavior. Newly supported fields and battery collections are
+  additive.
+- `parseFilesAsync()` returns a one-element array for ordinary FIT input and
+  rejects incomplete files or trailing non-FIT data, even with `force: true`.
+  CRC validation follows the caller's `force` option for every file.
+- Unsigned temperature bytes from 127 through 255 and other undocumented or
+  incompatible fields remain undecoded and available through opt-in retention.
+
 ## 6.1.2 - 2026-09-22
 
 ### Changed
