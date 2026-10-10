@@ -18,11 +18,11 @@ describe('static FIT profile', () => {
   it('keeps the reviewed profile snapshot complete', () => {
     const profileMessages = Object.values(PROFILE_MESSAGES)
 
-    expect(profileMessages).toHaveLength(126)
+    expect(profileMessages).toHaveLength(127)
     expect(profileMessages.reduce(
       (count, message) => count + Object.keys(message).filter(key => key !== 'name').length,
       0,
-    )).toBe(1444)
+    )).toBe(1462)
     expect(Object.keys(PROFILE_TYPES)).toHaveLength(200)
 
     Object.entries(PROFILE_MESSAGES).forEach(([messageId, message]) => {

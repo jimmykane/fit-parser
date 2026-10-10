@@ -1,3 +1,4 @@
+import type { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
@@ -10,6 +11,8 @@ interface CorpusReport {
   unrecoverable: number
   strictFailures: Record<string, number>
   forceFailures: Record<string, number>
+  parsedFitFiles?: number
+  concatenatedInputs?: number
   unmapped?: UnmappedSummary
 }
 
@@ -168,9 +171,10 @@ async function main(): Promise<void> {
   const rawMessages = process.argv.includes('--raw-messages')
     || rawMessagesWithDecodedOutput
   const includeUnmappedSummary = process.argv.includes('--unmapped-summary')
+  const allFiles = process.argv.includes('--all-files')
   if (!directory) {
     process.stderr.write(
-      'Usage: npm run corpus:check -- /path/to/fit-files [--allow-force-recovery] [--unmapped-summary] [--raw-messages | --raw-messages-with-decoded-output]\n',
+      'Usage: npm run corpus:check -- /path/to/fit-files [--allow-force-recovery] [--all-files] [--unmapped-summary] [--raw-messages | --raw-messages-with-decoded-output]\n',
     )
     process.exitCode = 1
     return
@@ -184,38 +188,38 @@ async function main(): Promise<void> {
     unrecoverable: 0,
     strictFailures: {},
     forceFailures: {},
+    ...(allFiles ? { parsedFitFiles: 0, concatenatedInputs: 0 } : {}),
   }
   const unmappedAggregates = new Map<number, UnmappedMessageAggregate>()
+  const options = {
+    includeUnmappedMessages: includeUnmappedSummary,
+    ...(rawMessages
+      ? {
+          includeRawMessages: true,
+          rawMessagesOnly: !rawMessagesWithDecodedOutput,
+        }
+      : {}),
+  }
+  const strictParser = new FitParser({ ...options, force: false })
+  const recoveryParser = new FitParser({ ...options, force: true })
+
+  async function parse(parser: FitParser, content: Buffer<ArrayBuffer>) {
+    return allFiles
+      ? parser.parseFilesAsync(content)
+      : [await parser.parseAsync(content)]
+  }
 
   for (const file of files) {
     const content = await fs.readFile(file)
-    let parsed: Awaited<ReturnType<FitParser['parseAsync']>> | undefined
+    let parsed: Awaited<ReturnType<FitParser['parseFilesAsync']>> | undefined
     try {
-      parsed = await new FitParser({
-        force: false,
-        includeUnmappedMessages: includeUnmappedSummary,
-        ...(rawMessages
-          ? {
-              includeRawMessages: true,
-              rawMessagesOnly: !rawMessagesWithDecodedOutput,
-            }
-          : {}),
-      }).parseAsync(content)
+      parsed = await parse(strictParser, content)
       report.strictPassed++
     }
     catch (strictError) {
       increment(report.strictFailures, strictError)
       try {
-        parsed = await new FitParser({
-          force: true,
-          includeUnmappedMessages: includeUnmappedSummary,
-          ...(rawMessages
-            ? {
-                includeRawMessages: true,
-                rawMessagesOnly: !rawMessagesWithDecodedOutput,
-              }
-            : {}),
-        }).parseAsync(content)
+        parsed = await parse(recoveryParser, content)
         report.forceRecovered++
       }
       catch (forceError) {
@@ -223,8 +227,18 @@ async function main(): Promise<void> {
         report.unrecoverable++
       }
     }
-    if (includeUnmappedSummary && parsed?.unmapped_messages) {
-      collectUnmapped(parsed.unmapped_messages, unmappedAggregates)
+    if (allFiles && parsed) {
+      report.parsedFitFiles! += parsed.length
+      if (parsed.length > 1) {
+        report.concatenatedInputs!++
+      }
+    }
+    if (includeUnmappedSummary && parsed) {
+      for (const result of parsed) {
+        if (result.unmapped_messages) {
+          collectUnmapped(result.unmapped_messages, unmappedAggregates)
+        }
+      }
     }
   }
 

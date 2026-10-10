@@ -3,6 +3,7 @@ import type { DecoderState, MessageTypeDefinition } from './binary.js'
 import type {
   ParsedActivity,
   ParsedActivityMetrics,
+  ParsedBattery,
   ParsedCoursePoint,
   ParsedDeveloperDataId,
   ParsedDeviceInfo,
@@ -126,7 +127,79 @@ export default class FitParser {
     })
   }
 
+  /**
+   * Parses every complete FIT file in an input, preserving file order and
+   * independent decoder state. Rejects incomplete files and trailing bytes;
+   * each file uses this parser's options, including its CRC policy.
+   * Rejects with an Error when any file cannot be parsed.
+   */
+  async parseFilesAsync(content: ArrayBuffer | Buffer<ArrayBuffer>): Promise<ParsedFit[]> {
+    const blob = content instanceof ArrayBuffer
+      ? new Uint8Array(content)
+      : new Uint8Array(content.buffer, content.byteOffset, content.byteLength)
+    const results: ParsedFit[] = []
+    let start = 0
+
+    do {
+      const remaining = blob.length - start
+      if (remaining < 12) {
+        throw new Error('File to small to be a FIT file')
+      }
+      const headerLength = blob[start]
+      if (headerLength !== 12 && headerLength !== 14) {
+        throw new Error('Incorrect header size')
+      }
+      if (remaining < headerLength) {
+        throw new Error('File to small to be a FIT file')
+      }
+      if (
+        blob[start + 8] !== 0x2E
+        || blob[start + 9] !== 0x46
+        || blob[start + 10] !== 0x49
+        || blob[start + 11] !== 0x54
+      ) {
+        throw new Error('Missing \'.FIT\' in header')
+      }
+      const dataLength = new DataView(blob.buffer, blob.byteOffset + start, remaining)
+        .getUint32(4, true)
+      const crcStart = start + headerLength + dataLength
+      if (crcStart > blob.length) {
+        throw new Error('File data exceeds input length')
+      }
+      if (crcStart + 2 > blob.length) {
+        throw new Error('File CRC missing')
+      }
+      const end = crcStart + 2
+      try {
+        results.push(await new Promise<ParsedFit>((resolve, reject) => {
+          this.parseFile(blob.slice(start, end).buffer, (error, data) => {
+            if (error) {
+              reject(error)
+            }
+            else if (data) {
+              resolve(data)
+            }
+          }, true)
+        }))
+      }
+      catch (error) {
+        throw error instanceof Error ? error : new Error(String(error))
+      }
+      start = end
+    } while (start < blob.length)
+
+    return results
+  }
+
   parse(content: ArrayBuffer | Buffer<ArrayBuffer>, callback: FitParserCallback): void {
+    this.parseFile(content, callback)
+  }
+
+  private parseFile(
+    content: ArrayBuffer | Buffer<ArrayBuffer>,
+    callback: FitParserCallback,
+    validateRecordBounds = false,
+  ): void {
     const blob = content instanceof ArrayBuffer
       ? new Uint8Array(content)
       : new Uint8Array(content.buffer, content.byteOffset, content.byteLength)
@@ -199,6 +272,7 @@ export default class FitParser {
       protocolVersion,
     }
     const messages: Record<string, unknown[]> = {}
+    const batteries: ParsedBattery[] = []
 
     let sessions: ParsedSession[] = []
     let laps: ParsedLap[] = []
@@ -278,6 +352,14 @@ export default class FitParser {
         decoderState,
         crcStart,
       )
+      // Complete-file parsing also validates bounds without requiring raw
+      // retention. The single-file API keeps its existing recovery behavior.
+      if (
+        validateRecordBounds
+        && (!Number.isInteger(nextIndex) || nextIndex <= loopIndex || nextIndex > crcStart)
+      ) {
+        throw new Error('Invalid FIT record bounds')
+      }
       loopIndex = nextIndex
 
       if (globalMessageNumber !== undefined) {
@@ -350,6 +432,9 @@ export default class FitParser {
       }
 
       switch (messageType) {
+        case 'battery':
+          batteries.push(message)
+          break
         case 'lap':
           laps.push(message)
           break
@@ -496,6 +581,7 @@ export default class FitParser {
     fitObj.time_in_zone = time_in_zone
     fitObj.activity_metrics = activity_metrics
     fitObj.user_metrics = user_metrics
+    fitObj.batteries = batteries
     fitObj.messages = messages as ParsedFit['messages']
     if (rawDeveloperFields) {
       fitObj.raw_developer_fields = rawDeveloperFields

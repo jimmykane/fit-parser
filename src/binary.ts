@@ -417,6 +417,7 @@ function applyOptions(data: any, field: string, options: any, fields: any): any 
     case 'enhanced_speed':
     case 'vertical_speed':
     case 'avg_speed':
+    case 'avg_grade_adjusted_speed':
     case 'max_speed':
     case 'speed1s':
     case 'ball_speed':
@@ -640,7 +641,12 @@ export function readRecord(
         offset,
         units,
       } = message.getAttributes(blob[fDefIndex])
-      const profileCompatible = areProfileBaseTypesCompatible(
+      // Narrow producer interoperability case: only the shared, non-sentinel
+      // temperature range is decoded below. All original bytes remain unmapped.
+      const unsignedTemperature = mTypeDef.globalMessageNumber === 20
+        && fieldNumber === 13 && fieldSize === 1
+        && profileBaseType === 'sint8' && wireType === 'uint8'
+      const profileCompatible = unsignedTemperature || areProfileBaseTypesCompatible(
         profileBaseType,
         wireType,
       )
@@ -741,8 +747,12 @@ export function readRecord(
       rawData[i] = InvalidFieldData
       continue
     }
+    const unsignedTemperature = messageType.globalMessageNumber === 20
+      && fDef.fDefNo === 13 && fDef.size === 1
+      && fDef.type === 'sint8' && fDef.rawType === 'uint8'
+    const preserveNative = !isOutputFieldName(fDef.name) || unsignedTemperature
     if (
-      (rawFields || (unmappedFields && !isOutputFieldName(fDef.name)))
+      (rawFields || (unmappedFields && preserveNative))
       && readDataFromIndex + fDef.size <= dataEnd
     ) {
       const rawField = {
@@ -754,11 +764,13 @@ export function readRecord(
         )),
       }
       rawFields?.push(rawField)
-      if (!isOutputFieldName(fDef.name)) {
+      if (preserveNative) {
         unmappedFields?.push(rawField)
       }
     }
-    const data = readData(blob, dataView, fDef, readDataFromIndex)
+    const data = unsignedTemperature && blob[readDataFromIndex] >= 127
+      ? InvalidFieldData
+      : readData(blob, dataView, fDef, readDataFromIndex)
 
     if (
       data !== InvalidFieldData
@@ -785,15 +797,20 @@ export function readRecord(
   for (let i = 0; i < developerFieldDefs.length; i++) {
     const developerFieldDef = developerFieldDefs[i]
     const rawDataIndex = messageType.fieldDefs.length + i
-    let rawDeveloperField: RawDeveloperFieldValue | undefined
+    // Resolve before deciding whether raw retention is needed. A resolved
+    // description can still have no usable output name, including after cache use.
+    const fDef = resolveDeveloperFieldDefinition(
+      developerFieldDef,
+      messageType.littleEndian,
+      developerFields,
+      options,
+    )
+    const preserveDeveloper = !fDef || !isOutputFieldName(fDef.name)
     if (
-      (
-        rawDeveloperFields
-        || (unmappedDeveloperFields && developerFieldDef.resolvedFieldDef === undefined)
-      )
+      (rawDeveloperFields || (unmappedDeveloperFields && preserveDeveloper))
       && readDataFromIndex + developerFieldDef.size <= dataEnd
     ) {
-      rawDeveloperField = {
+      const rawDeveloperField: RawDeveloperFieldValue = {
         developerDataIndex: developerFieldDef.developerDataIndex,
         fieldDefinitionNumber: developerFieldDef.fieldDefinitionNumber,
         rawValue: Array.from(blob.subarray(
@@ -802,16 +819,9 @@ export function readRecord(
         )),
       }
       rawDeveloperFields?.push(rawDeveloperField)
-    }
-    const fDef = resolveDeveloperFieldDefinition(
-      developerFieldDef,
-      messageType.littleEndian,
-      developerFields,
-      options,
-    )
-
-    if (!fDef && rawDeveloperField) {
-      unmappedDeveloperFields?.push(rawDeveloperField)
+      if (preserveDeveloper) {
+        unmappedDeveloperFields?.push(rawDeveloperField)
+      }
     }
 
     if (fDef) {

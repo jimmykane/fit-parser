@@ -31,6 +31,23 @@ complete raw representation of selected messages can continue to use
 `includeRawMessages`; `unmapped_messages` stores only the fields the maintained
 table cannot decode.
 
+The unsigned-byte record-temperature interoperability recovery also retains
+the original byte here, even when its unambiguous value is decoded.
+
+## Focused interoperability additions
+
+Session fields 79, 80, 106, 107, 108, and 211; lap fields 27–30, 73, 90, 96,
+97, 155, and 161; and battery message 104 fields 2 and 253 were checked against
+independently observed wire definitions in the external FIT corpus and the
+redistributable interoperability definitions for
+[session](https://github.com/muktihari/fit/blob/126e1a11233f87b7f139254d991bc3d2d952b62c/profile/mesgdef/session_gen.go),
+[lap](https://github.com/muktihari/fit/blob/126e1a11233f87b7f139254d991bc3d2d952b62c/profile/mesgdef/lap_gen.go),
+and [battery](https://github.com/muktihari/fit/blob/126e1a11233f87b7f139254d991bc3d2d952b62c/profile/mesgdef/battery_gen.go).
+The focused mappings expose swimming summaries, segment and shift counts,
+lap bounds, metabolic calories, grade-adjusted speed, and battery samples.
+Synthetic regression tests pin identifiers, wire types, scales, units, invalid
+sentinels, and collection behavior. Other battery fields remain unmapped.
+
 ## Updating the table
 
 Every mapping change requires focused regression coverage. Do not guess
@@ -45,7 +62,13 @@ npm run profile:check
 npm run check
 npm run compatibility:check -- /path/to/reference-package /path/to/fit-corpus
 npm run corpus:check -- ../FIT-test-files --allow-force-recovery
+npm run corpus:check -- ../FIT-test-files --allow-force-recovery --all-files
 ```
 
 `src/fit_types.ts` is generated from the maintained table and must not be
 edited manually.
+
+`--all-files` validates every appended FIT file through `parseFilesAsync()` and
+reports both parsed FIT file counts and concatenated input counts. Recovery
+counts apply to whole inputs; unmapped summaries count each parsed FIT file
+separately in this mode.

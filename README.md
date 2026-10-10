@@ -11,6 +11,7 @@ including developer-defined data.
 ## Features
 
 - Parse Node.js `Buffer` and standard `ArrayBuffer` inputs.
+- Parse concatenated FIT files as separate results with `parseFilesAsync()`.
 - Choose flat lists, nested activity data, or both output shapes.
 - Convert speed, length, temperature, and pressure fields to preferred units.
 - Decode developer fields while preserving record alignment when descriptions
@@ -33,7 +34,7 @@ npm install fit-file-parser
 
 ## Profile coverage
 
-The static profile contains 126 messages, 1,444 fields, 200 types, and 4,403
+The static profile contains 127 messages, 1,462 fields, 200 types, and 4,406
 mapped values. Pass `includeUnmappedMessages: true` to retain fields outside
 that maintained surface by number and exact bytes; applications that need all
 bytes for recognized messages can also opt into `raw_messages`.
@@ -62,6 +63,27 @@ console.log({
 })
 ```
 
+### Concatenated FIT files
+
+Some exports append several complete FIT files into one input. Use
+`parseFilesAsync()` to return a `ParsedFit[]` in file order:
+
+```javascript
+const files = await new FitParser({ force: false }).parseFilesAsync(content)
+for (const file of files) {
+  console.log(file.sessions?.length ?? 0)
+}
+```
+
+Each result has independent message definitions, developer descriptions,
+timestamps, and activity collections. Results are never merged. A single FIT
+file returns a one-element array. Empty input, incomplete files (including
+missing file CRC bytes), and trailing non-FIT bytes reject the entire call,
+even with `force: true`. Records and definitions extending beyond the declared
+data section are also rejected. CRC validation follows the `force` option for every
+file. Failures reject with an `Error`. The existing `parseAsync()` and callback
+APIs continue to parse the first FIT file only.
+
 ### Callback API
 
 ```javascript
@@ -86,8 +108,9 @@ readFile('./activity.fit', (readError, content) => {
 })
 ```
 
-Parser errors are strings. `parseAsync()` rejects with the same value that the
-callback API receives as its first argument.
+The callback reports validation errors as strings. `parseAsync()` rejects with
+those values; decoder failures can reject with an `Error`. `parseFilesAsync()`
+consistently rejects with an `Error`.
 
 ## Parser options
 
@@ -148,8 +171,8 @@ message numbers.
 
 Set `includeUnmappedMessages: true` to return fields that are absent from the
 maintained profile or belong to an unknown global message in
-`unmapped_messages`. Only unmapped fields are retained, so normal known fields
-are not duplicated:
+`unmapped_messages`. Fields without usable developer names are also retained.
+Normal known fields are not duplicated:
 
 ```javascript
 const data = await new FitParser({ includeUnmappedMessages: true })
@@ -168,6 +191,20 @@ for (const message of data.unmapped_messages ?? []) {
 Each entry uses the same wire-level field representation as `raw_messages`.
 This opt-in ensures a newer FIT field cannot disappear merely because it
 does not yet have a reviewed semantic mapping.
+
+For record temperature encoded as one unsigned byte, values from 0 through
+126 can be decoded as Celsius before the selected temperature conversion.
+Values from 127 through 255 remain undecoded. This narrow interoperability
+recovery preserves the original unsigned byte in `unmapped_messages` when
+enabled, including values that also receive a decoded temperature.
+
+### Battery samples
+
+`batteries` retains every battery message in file order, including its
+timestamp and capacity percentage when present. These samples are also
+available in `messages.battery`. Undocumented battery fields remain available
+through `includeUnmappedMessages`; the parser does not infer their device
+association or calculate battery consumption.
 
 ### Lossless selected messages
 

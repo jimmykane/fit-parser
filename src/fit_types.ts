@@ -162,7 +162,7 @@ export type MaxMetCategory = 'generic' | 'cycling' | number
 export type MaxMetHeartRateSource = 'whr' | 'hrm' | number
 export type MaxMetSpeedSource = 'onboard_gps' | 'connected_gps' | 'cadence' | number
 export type MesgCount = 'num_per_file' | 'max_per_file' | 'max_per_file_type' | number
-export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'training_settings' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'ohr_settings' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'monitoring_hr_data' | 'time_in_zone' | 'set' | 'stress_level' | 'max_met_data' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'spo2_data' | 'sleep_level' | 'jump' | 'aad_accel_features' | 'beat_intervals' | 'respiration_rate' | 'hsa_accelerometer_data' | 'hsa_step_data' | 'hsa_spo2_data' | 'hsa_stress_data' | 'hsa_respiration_data' | 'hsa_heart_rate_data' | 'split' | 'split_summary' | 'hsa_body_battery_data' | 'hsa_event' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'sleep_assessment' | 'hrv_status_summary' | 'hrv_value' | 'raw_bbi' | 'device_aux_battery_info' | 'hsa_gyroscope_data' | 'chrono_shot_session' | 'chrono_shot_data' | 'hsa_configuration_data' | 'dive_apnea_alarm' | 'skin_temp_overnight' | 'hsa_wrist_temperature_data' | 'nap_event' | 'sleep_disruption_severity_period' | 'sleep_disruption_overnight_severity' | 'mfg_range_min' | 'mfg_range_max' | 'definition' | number
+export type MesgNum = 'file_id' | 'capabilities' | 'device_settings' | 'user_profile' | 'hrm_profile' | 'sdm_profile' | 'bike_profile' | 'zones_target' | 'hr_zone' | 'power_zone' | 'met_zone' | 'sport' | 'training_settings' | 'goal' | 'session' | 'lap' | 'record' | 'event' | 'device_info' | 'workout' | 'workout_step' | 'schedule' | 'weight_scale' | 'course' | 'course_point' | 'totals' | 'activity' | 'software' | 'file_capabilities' | 'mesg_capabilities' | 'field_capabilities' | 'file_creator' | 'blood_pressure' | 'speed_zone' | 'monitoring' | 'training_file' | 'hrv' | 'user_metrics' | 'ant_rx' | 'ant_tx' | 'ant_channel_id' | 'length' | 'monitoring_info' | 'battery' | 'pad' | 'slave_device' | 'connectivity' | 'weather_conditions' | 'weather_alert' | 'cadence_zone' | 'hr' | 'activity_metrics' | 'segment_lap' | 'memo_glob' | 'segment_id' | 'segment_leaderboard_entry' | 'segment_point' | 'segment_file' | 'workout_session' | 'watchface_settings' | 'gps_metadata' | 'camera_event' | 'timestamp_correlation' | 'gyroscope_data' | 'accelerometer_data' | 'three_d_sensor_calibration' | 'video_frame' | 'obdii_data' | 'nmea_sentence' | 'aviation_attitude' | 'video' | 'video_title' | 'video_description' | 'video_clip' | 'ohr_settings' | 'exd_screen_configuration' | 'exd_data_field_configuration' | 'exd_data_concept_configuration' | 'field_description' | 'developer_data_id' | 'magnetometer_data' | 'barometer_data' | 'one_d_sensor_calibration' | 'monitoring_hr_data' | 'time_in_zone' | 'set' | 'stress_level' | 'max_met_data' | 'dive_settings' | 'dive_gas' | 'dive_alarm' | 'exercise_title' | 'dive_summary' | 'spo2_data' | 'sleep_level' | 'jump' | 'aad_accel_features' | 'beat_intervals' | 'respiration_rate' | 'hsa_accelerometer_data' | 'hsa_step_data' | 'hsa_spo2_data' | 'hsa_stress_data' | 'hsa_respiration_data' | 'hsa_heart_rate_data' | 'split' | 'split_summary' | 'hsa_body_battery_data' | 'hsa_event' | 'climb_pro' | 'tank_update' | 'tank_summary' | 'sleep_assessment' | 'hrv_status_summary' | 'hrv_value' | 'raw_bbi' | 'device_aux_battery_info' | 'hsa_gyroscope_data' | 'chrono_shot_session' | 'chrono_shot_data' | 'hsa_configuration_data' | 'dive_apnea_alarm' | 'skin_temp_overnight' | 'hsa_wrist_temperature_data' | 'nap_event' | 'sleep_disruption_severity_period' | 'sleep_disruption_overnight_severity' | 'mfg_range_min' | 'mfg_range_max' | 'definition' | number
 export interface MessageIndex {
   value: number
   reserved: boolean
@@ -511,6 +511,8 @@ export interface ParsedSession {
   best_lap_index?: number
   min_altitude?: number
   active_time?: number
+  avg_strokes_per_length?: number
+  avg_swolf?: number
   player_score?: number
   opponent_score?: number
   opponent_name?: string
@@ -535,6 +537,9 @@ export interface ParsedSession {
   avg_left_pedal_smoothness?: number
   avg_right_pedal_smoothness?: number
   avg_combined_pedal_smoothness?: number
+  num_segment_laps?: number
+  front_gear_shift_count?: number
+  rear_gear_shift_count?: number
   sport_profile_name?: string
   sport_index?: number
   time_standing?: number
@@ -601,6 +606,7 @@ export interface ParsedSession {
   avg_core_temperature?: number
   min_core_temperature?: number
   max_core_temperature?: number
+  avg_grade_adjusted_speed?: number
   timestamp?: Date
   message_index?: MessageIndex
   laps?: ParsedLap[]
@@ -633,6 +639,10 @@ export interface ParsedLap {
   lap_trigger?: LapTrigger
   sport?: Sport
   event_group?: number
+  nec_lat?: number
+  nec_long?: number
+  swc_lat?: number
+  swc_long?: number
   num_lengths?: number
   normalized_power?: number
   left_right_balance?: LeftRightBalance100
@@ -666,6 +676,7 @@ export interface ParsedLap {
   min_heart_rate?: number
   active_time?: number
   wkt_step_index?: MessageIndex
+  avg_swolf?: number
   opponent_score?: number
   stroke_count?: (number | null)[]
   zone_count?: (number | null)[]
@@ -682,11 +693,14 @@ export interface ParsedLap {
   avg_saturated_hemoglobin_percent?: (number | null)[]
   min_saturated_hemoglobin_percent?: (number | null)[]
   max_saturated_hemoglobin_percent?: (number | null)[]
+  avg_strokes_per_length?: number
   avg_left_torque_effectiveness?: number
   avg_right_torque_effectiveness?: number
   avg_left_pedal_smoothness?: number
   avg_right_pedal_smoothness?: number
   avg_combined_pedal_smoothness?: number
+  front_gear_shift_count?: number
+  rear_gear_shift_count?: number
   time_standing?: number
   stand_count?: number
   avg_left_pco?: number
@@ -723,11 +737,13 @@ export interface ParsedLap {
   jump_count?: number
   avg_grit?: number
   avg_flow?: number
+  metabolic_calories?: number
   total_fractional_ascent?: number
   total_fractional_descent?: number
   avg_core_temperature?: number
   min_core_temperature?: number
   max_core_temperature?: number
+  avg_grade_adjusted_speed?: number
   timestamp?: Date
   message_index?: MessageIndex
   records?: ParsedRecord[]
@@ -1130,6 +1146,10 @@ export interface ParsedMonitoringInfo {
   cycles_to_distance?: (number | null)[]
   cycles_to_calories?: (number | null)[]
   resting_metabolic_rate?: number
+  timestamp?: Date
+}
+export interface ParsedBattery {
+  capacity?: number
   timestamp?: Date
 }
 export interface ParsedPad {
@@ -2023,6 +2043,7 @@ export interface ParsedMessages {
   ant_channel_id?: ParsedAntChannelId[]
   length?: ParsedLength[]
   monitoring_info?: ParsedMonitoringInfo[]
+  battery?: ParsedBattery[]
   pad?: ParsedPad[]
   slave_device?: ParsedSlaveDevice[]
   connectivity?: ParsedConnectivity[]
@@ -2153,6 +2174,7 @@ export interface ParsedFit {
   time_in_zone?: ParsedTimeInZone[]
   activity_metrics?: ParsedActivityMetrics[]
   user_metrics?: ParsedUserMetrics[]
+  batteries?: ParsedBattery[]
   capabilities?: ParsedCapabilities
   hrm_profile?: ParsedHrmProfile
   sdm_profile?: ParsedSdmProfile

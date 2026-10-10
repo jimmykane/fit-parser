@@ -7,15 +7,15 @@ import {
 } from '../src/profile.js'
 
 const expectedCounts = {
-  messages: 126,
-  fields: 1444,
+  messages: 127,
+  fields: 1462,
   types: 200,
-  values: 4405,
+  values: 4406,
   products: 479,
 } as const
 const expectedFingerprints = {
-  messages: '9c64f94fcf30d4c38249ece5159953a9ca2e48997de635b325ef6f0d0cc96ac6',
-  types: 'cf1a7075edbd3c5fe849e2ef2f6370512d2da6671883a68cabbd265e061ac67d',
+  messages: '8e03ebe3f5f985657e0da338c33484c3e7a1a13f8cd397888337bcfb628c53df',
+  types: '1f75037ff85cfda6c68c6a1ac63e187e6204aa0f9cd9fe437ca7ac4ab5387d9d',
 } as const
 const errors: string[] = []
 
