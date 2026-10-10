@@ -76,7 +76,10 @@ export type {
 } from './raw-message-reader.js'
 
 export interface FitParserOptions {
+  /** Skips CRC validation and enables supported best-effort recovery. Defaults to true. */
   force?: boolean
+  /** Requires complete files and records, and rejects trailing bytes. Defaults to false. */
+  strict?: boolean
   speedUnit?: string
   lengthUnit?: string
   temperatureUnit?: string
@@ -95,12 +98,23 @@ export interface FitParserOptions {
 
 type FitParserCallback = (error: string | undefined, data: ParsedFit | undefined) => void
 
+function hasFitHeader(blob: Uint8Array, start: number): boolean {
+  const headerLength = blob[start]
+  return blob.length - start >= headerLength
+    && (headerLength === 12 || headerLength === 14)
+    && blob[start + 8] === 0x2E
+    && blob[start + 9] === 0x46
+    && blob[start + 10] === 0x49
+    && blob[start + 11] === 0x54
+}
+
 export default class FitParser {
   private readonly options: FitParserOptions
 
   constructor(options: FitParserOptions = {}) {
     this.options = {
       force: options.force != null ? options.force : true,
+      strict: options.strict ?? false,
       speedUnit: options.speedUnit || 'm/s',
       lengthUnit: options.lengthUnit || 'm',
       temperatureUnit: options.temperatureUnit || 'celsius',
@@ -128,9 +142,9 @@ export default class FitParser {
   }
 
   /**
-   * Parses every complete FIT file in an input, preserving file order and
-   * independent decoder state. Rejects incomplete files and trailing bytes;
-   * each file uses this parser's options, including its CRC policy.
+   * Parses FIT files in input order with independent decoder state. Uses the
+   * same force and strict policies as parseAsync; strict mode rejects trailing
+   * bytes, while the default ignores a non-FIT suffix after parsed files.
    * Rejects with an Error when any file cannot be parsed.
    */
   async parseFilesAsync(content: ArrayBuffer | Buffer<ArrayBuffer>): Promise<ParsedFit[]> {
@@ -142,10 +156,13 @@ export default class FitParser {
 
     do {
       const remaining = blob.length - start
+      const headerLength = blob[start]
+      if (results.length > 0 && !this.options.strict && !hasFitHeader(blob, start)) {
+        break
+      }
       if (remaining < 12) {
         throw new Error('File to small to be a FIT file')
       }
-      const headerLength = blob[start]
       if (headerLength !== 12 && headerLength !== 14) {
         throw new Error('Incorrect header size')
       }
@@ -163,13 +180,20 @@ export default class FitParser {
       const dataLength = new DataView(blob.buffer, blob.byteOffset + start, remaining)
         .getUint32(4, true)
       const crcStart = start + headerLength + dataLength
-      if (crcStart > blob.length) {
-        throw new Error('File data exceeds input length')
+      // File completeness and CRC checks belong to the shared parser below,
+      // preserving the same validation policy and error order in every API.
+      let end = Math.min(crcStart + 2, blob.length)
+      // Missing CRC bytes can also precede the next file. Check only the
+      // declared boundary and its one-byte CRC variant; never scan activity
+      // payloads for a guessed file boundary.
+      if (this.options.force && !this.options.strict) {
+        if (hasFitHeader(blob, crcStart)) {
+          end = crcStart
+        }
+        else if (hasFitHeader(blob, crcStart + 1)) {
+          end = crcStart + 1
+        }
       }
-      if (crcStart + 2 > blob.length) {
-        throw new Error('File CRC missing')
-      }
-      const end = crcStart + 2
       try {
         results.push(await new Promise<ParsedFit>((resolve, reject) => {
           this.parseFile(blob.slice(start, end).buffer, (error, data) => {
@@ -179,7 +203,7 @@ export default class FitParser {
             else if (data) {
               resolve(data)
             }
-          }, true)
+          })
         }))
       }
       catch (error) {
@@ -198,7 +222,6 @@ export default class FitParser {
   private parseFile(
     content: ArrayBuffer | Buffer<ArrayBuffer>,
     callback: FitParserCallback,
-    validateRecordBounds = false,
   ): void {
     const blob = content instanceof ArrayBuffer
       ? new Uint8Array(content)
@@ -248,8 +271,13 @@ export default class FitParser {
       return
     }
 
-    if (!this.options.force && crcStart + 2 > blob.length) {
+    if ((!this.options.force || this.options.strict) && crcStart + 2 > blob.length) {
       callback('File CRC missing', undefined)
+      return
+    }
+
+    if (this.options.strict && crcStart + 2 < blob.length) {
+      callback('Unexpected bytes after FIT file', undefined)
       return
     }
 
@@ -352,10 +380,8 @@ export default class FitParser {
         decoderState,
         crcStart,
       )
-      // Complete-file parsing also validates bounds without requiring raw
-      // retention. The single-file API keeps its existing recovery behavior.
       if (
-        validateRecordBounds
+        this.options.strict
         && (!Number.isInteger(nextIndex) || nextIndex <= loopIndex || nextIndex > crcStart)
       ) {
         throw new Error('Invalid FIT record bounds')

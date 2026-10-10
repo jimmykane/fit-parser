@@ -1,7 +1,7 @@
 {
   "name": "fit-file-parser",
   "type": "module",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "private": false,
   "description": "JavaScript and TypeScript library for parsing and encoding FIT files, with developer-field support, raw message access, and ESM/CommonJS builds.",
   "author": {

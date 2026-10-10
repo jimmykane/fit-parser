@@ -584,7 +584,7 @@ export function readRecord(
     // is definition message
     // startIndex + 1 is reserved
 
-    if (retainsRawMessages(options) && startIndex + 6 > dataEnd) {
+    if ((options.strict || retainsRawMessages(options)) && startIndex + 6 > dataEnd) {
       throw new Error('Invalid FIT definition bounds')
     }
 
@@ -593,7 +593,7 @@ export function readRecord(
     const numberOfFields = blob[startIndex + 5]
     const nativeDefinitionsEnd = startIndex + 6 + numberOfFields * 3
     if (
-      retainsRawMessages(options)
+      (options.strict || retainsRawMessages(options))
       && (
         (recordHeader & 16) !== 0
         || blob[startIndex + 1] !== 0
@@ -609,7 +609,7 @@ export function readRecord(
       : 0
     const definitionEnd = nativeDefinitionsEnd
       + (hasDeveloperData ? 1 + numberOfDeveloperDataFields * 3 : 0)
-    if (retainsRawMessages(options) && definitionEnd > dataEnd) {
+    if ((options.strict || retainsRawMessages(options)) && definitionEnd > dataEnd) {
       throw new Error('Invalid FIT developer definition bounds')
     }
 
@@ -725,7 +725,7 @@ export function readRecord(
     = options.includeUnmappedMessages ? [] : undefined
   const unmappedDeveloperFields: RawDeveloperFieldValue[] | undefined
     = options.includeUnmappedMessages ? [] : undefined
-  if (retainsRawMessages(options)) {
+  if (options.strict || retainsRawMessages(options)) {
     const nativeSize = messageType.fieldDefs.reduce((total, field, index) => (
       total + (isCompressedTimestamp && index === 0 && field.fDefNo === 253 ? 0 : field.size)
     ), 0)
@@ -896,7 +896,7 @@ export function readRecord(
   if (isCompressedTimestamp) {
     const previousTimestamp = decoderState.lastTimestamp
     if (previousTimestamp === undefined) {
-      if (!options.force) {
+      if (!options.force || options.strict) {
         throw new Error('Compressed timestamp requires a previous timestamp')
       }
     }

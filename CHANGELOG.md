@@ -1,5 +1,29 @@
 # Change Log
 
+## 6.2.1 - 2026-10-10
+
+### Added
+
+- Add the opt-in `strict` parser option to require complete files and records,
+  valid definitions, and no trailing bytes in every parsing API. Checksum
+  validation remains controlled by `force`.
+
+### Fixed
+
+- Apply the same recovery policy to `parseFilesAsync()`, `parseAsync()`, and
+  callback parsing. The all-file API now accepts missing CRC bytes with
+  `force: true` when `strict` is disabled, and ignores a non-FIT suffix.
+- Keep existing decoder behavior, recovery, and output when `strict` is not
+  requested, including handling of malformed records and definitions.
+- Apply additional definition and record bounds checks only in strict mode.
+
+### Compatibility
+
+- `force` still defaults to `true`; `strict` defaults to `false`.
+- `strict: true` requires exactly one file for `parseAsync()` and callback
+  parsing, or complete concatenated files for `parseFilesAsync()`.
+- Temperature mappings and unit conversions are unchanged.
+
 ## 6.2.0 - 2026-10-10
 
 ### Added

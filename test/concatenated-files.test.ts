@@ -129,7 +129,7 @@ describe('concatenated FIT files', () => {
   })
 
   it.each([false, true])('rejects records and definitions crossing the data boundary with force=%s', async (force) => {
-    const parser = new FitParser({ force })
+    const parser = new FitParser({ force, strict: true })
     const malformed = [
       // The record has a header but is missing its one-byte native value.
       wrap([0x40, 0, 0, 20, 0, 1, 3, 1, 2, 0]),
@@ -145,12 +145,12 @@ describe('concatenated FIT files', () => {
     for (const file of malformed) {
       await expect(parser.parseFilesAsync(concatenate(record(120), file)))
         .rejects
-        .toThrow('Invalid FIT record bounds')
+        .toThrow(/Invalid FIT (data record|definition).*|Invalid FIT developer definition bounds/)
     }
   })
 
   it.each([false, true])('rejects empty, truncated, or trailing input with force=%s', async (force) => {
-    const parser = new FitParser({ force })
+    const parser = new FitParser({ force, strict: true })
     const complete = record(120)
     const oversized = complete.slice()
     new DataView(oversized.buffer).setUint32(4, 0xFFFFFFFF, true)

@@ -77,12 +77,23 @@ for (const file of files) {
 
 Each result has independent message definitions, developer descriptions,
 timestamps, and activity collections. Results are never merged. A single FIT
-file returns a one-element array. Empty input, incomplete files (including
-missing file CRC bytes), and trailing non-FIT bytes reject the entire call,
-even with `force: true`. Records and definitions extending beyond the declared
-data section are also rejected. CRC validation follows the `force` option for every
-file. Failures reject with an `Error`. The existing `parseAsync()` and callback
-APIs continue to parse the first FIT file only.
+file returns a one-element array. All parsing APIs share the same `force` and
+`strict` options. By default, complete fields in a partial final record can be
+recovered, and a non-FIT suffix after parsed files is ignored. With `force: true`,
+missing CRC bytes are also accepted, including when the next FIT header starts
+at the declared data boundary or after one CRC byte. The parser never scans
+record payloads for guessed file boundaries.
+
+Use `{ force: false, strict: true }` to require complete files and records,
+valid checksums, and no trailing bytes. `{ force: true, strict: true }` enforces
+the same structure while tolerating known checksum failures. Any file that
+cannot be parsed rejects the whole call with an `Error`. Empty input, invalid
+headers, and declared data beyond the available input
+remain errors in every mode.
+
+The existing `parseAsync()` and callback APIs return the first FIT file only.
+With `strict: true`, they require exactly one file; use `parseFilesAsync()` for
+strict validation of concatenated input.
 
 ### Callback API
 
@@ -120,6 +131,7 @@ All options are optional.
 | --------------------------- | --------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mode`                      | `list`, `cascade`, `both`               | `list`    | Controls whether primary activity collections are returned as root lists, nested data, or both.                                                |
 | `force`                     | `true`, `false`                         | `true`    | Skips header and file CRC validation and enables supported best-effort field recovery. Structural header and data bounds are always validated. |
+| `strict`                    | `true`, `false`                         | `false`   | Requires CRC bytes, complete records, valid definitions, and no trailing bytes. CRC validation remains controlled by `force`.                  |
 | `speedUnit`                 | `m/s`, `km/h`, `mph`                    | `m/s`     | Converts speed-related fields.                                                                                                                 |
 | `lengthUnit`                | `m`, `km`, `mi`                         | `m`       | Converts distance, altitude, and other length-related fields.                                                                                  |
 | `temperatureUnit`           | `celsius`, `°C`, `kelvin`, `fahrenheit` | `celsius` | Converts temperature fields. `°C` remains available as a legacy alias.                                                                         |
@@ -132,6 +144,24 @@ All options are optional.
 `force: true` does not make arbitrary bytes a valid FIT file. Inputs that are
 too short, have an invalid header size or signature, or declare data beyond the
 available bytes are rejected in both modes.
+
+`strict: false` keeps the existing decoder behavior, including its handling of
+malformed records and definitions. `parseAsync()` and callback callers keep
+their current defaults, recovery, and output. `parseFilesAsync()` uses that
+same decoder independently for each file.
+
+`strict: true` adds definition and record bounds checks so CRC bytes cannot be
+decoded as measurements. Full raw-message retention (`includeRawMessages`)
+continues to require complete records as it did before this option was added.
+
+Choose options according to the input you accept:
+
+| Options                          | Policy                                                    |
+| -------------------------------- | --------------------------------------------------------- |
+| Default                          | Best effort, including missing or invalid CRCs.           |
+| `{ force: false }`               | Validate CRCs while keeping existing field recovery.      |
+| `{ force: true, strict: true }`  | Require complete structure while tolerating invalid CRCs. |
+| `{ force: false, strict: true }` | Require complete structure and valid CRCs.                |
 
 ### Lossless developer fields
 

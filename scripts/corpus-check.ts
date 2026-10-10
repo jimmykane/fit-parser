@@ -200,8 +200,8 @@ async function main(): Promise<void> {
         }
       : {}),
   }
-  const strictParser = new FitParser({ ...options, force: false })
-  const recoveryParser = new FitParser({ ...options, force: true })
+  const strictParser = new FitParser({ ...options, force: false, strict: allFiles })
+  const recoveryParser = new FitParser({ ...options, force: true, strict: allFiles })
 
   async function parse(parser: FitParser, content: Buffer<ArrayBuffer>) {
     return allFiles
