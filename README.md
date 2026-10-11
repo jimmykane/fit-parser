@@ -150,6 +150,13 @@ malformed records and definitions. `parseAsync()` and callback callers keep
 their current defaults, recovery, and output. `parseFilesAsync()` uses that
 same decoder independently for each file.
 
+Ordinary decoding tolerates the reserved bit 4 in normal record headers used
+by some existing device files. Messages using this compatibility behavior must
+have complete definitions and payloads inside the declared data section. Bit 5
+in data headers remains invalid. Strict mode, full raw-message retention, and
+the standalone raw reader continue rejecting reserved header bits. Original
+bytes and the caller's checksum policy are unchanged.
+
 `strict: true` adds definition and record bounds checks so CRC bytes cannot be
 decoded as measurements. Full raw-message retention (`includeRawMessages`)
 continues to require complete records as it did before this option was added.

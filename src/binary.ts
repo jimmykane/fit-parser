@@ -26,6 +26,8 @@ export interface MessageTypeDefinition {
   fieldDefs: FieldDefinition[]
   developerFieldDefs?: DeveloperFieldDefinition[]
   rawData?: any[]
+  completeDefinition?: boolean
+  reservedHeaderBit?: boolean
 }
 
 export interface DeveloperFieldDefinition {
@@ -574,6 +576,8 @@ export function readRecord(
   let localMessageType = recordHeader & 15
   const isCompressedTimestamp
     = (recordHeader & CompressedHeaderMask) === CompressedHeaderMask
+  const reservedHeaderBit = !isCompressedTimestamp && (recordHeader & 0x10) !== 0
+  const strictHeaders = options.strict || retainsRawMessages(options)
 
   if (isCompressedTimestamp) {
     // compressed timestamp
@@ -584,7 +588,8 @@ export function readRecord(
     // is definition message
     // startIndex + 1 is reserved
 
-    if ((options.strict || retainsRawMessages(options)) && startIndex + 6 > dataEnd) {
+    const requireCompleteDefinition = strictHeaders || reservedHeaderBit
+    if (requireCompleteDefinition && startIndex + 6 > dataEnd) {
       throw new Error('Invalid FIT definition bounds')
     }
 
@@ -593,9 +598,9 @@ export function readRecord(
     const numberOfFields = blob[startIndex + 5]
     const nativeDefinitionsEnd = startIndex + 6 + numberOfFields * 3
     if (
-      (options.strict || retainsRawMessages(options))
+      requireCompleteDefinition
       && (
-        (recordHeader & 16) !== 0
+        (strictHeaders && reservedHeaderBit)
         || blob[startIndex + 1] !== 0
         || blob[startIndex + 2] > 1
         || nativeDefinitionsEnd > dataEnd
@@ -609,7 +614,7 @@ export function readRecord(
       : 0
     const definitionEnd = nativeDefinitionsEnd
       + (hasDeveloperData ? 1 + numberOfDeveloperDataFields * 3 : 0)
-    if ((options.strict || retainsRawMessages(options)) && definitionEnd > dataEnd) {
+    if (requireCompleteDefinition && definitionEnd > dataEnd) {
       throw new Error('Invalid FIT developer definition bounds')
     }
 
@@ -623,6 +628,13 @@ export function readRecord(
       fieldDefs: [],
       developerFieldDefs: [],
       rawData: [],
+      // A later data header may use the reserved bit with an ordinary
+      // definition. Do not extend legacy partial-record recovery to that case.
+      completeDefinition: startIndex + 6 <= dataEnd
+        && blob[startIndex + 1] === 0
+        && blob[startIndex + 2] <= 1
+        && definitionEnd <= dataEnd,
+      reservedHeaderBit,
     }
 
     const message = getFitMessage(mTypeDef.globalMessageNumber)
@@ -699,13 +711,20 @@ export function readRecord(
     }
   }
 
-  if (!isCompressedTimestamp && (recordHeader & 0x30) !== 0) {
+  // Some existing producer files set bit 4 without changing the record layout.
+  // Recover only that bit in ordinary decoding; bit 5 and strict/raw parsing
+  // retain their previous rejection policy. Never rewrite the source bytes.
+  if (!isCompressedTimestamp && ((recordHeader & 0x20) !== 0 || (strictHeaders && reservedHeaderBit))) {
     throw new Error('Invalid FIT data record header')
   }
 
   const messageType = messageTypes[localMessageType]
   if (!messageType) {
     throw new Error('FIT data record has no local definition')
+  }
+  const reservedHeaderCompatibility = reservedHeaderBit || messageType.reservedHeaderBit
+  if (reservedHeaderCompatibility && !messageType.completeDefinition) {
+    throw new Error('Invalid FIT definition for reserved header compatibility')
   }
 
   let messageSize = 0
@@ -725,7 +744,7 @@ export function readRecord(
     = options.includeUnmappedMessages ? [] : undefined
   const unmappedDeveloperFields: RawDeveloperFieldValue[] | undefined
     = options.includeUnmappedMessages ? [] : undefined
-  if (options.strict || retainsRawMessages(options)) {
+  if (strictHeaders || reservedHeaderCompatibility) {
     const nativeSize = messageType.fieldDefs.reduce((total, field, index) => (
       total + (isCompressedTimestamp && index === 0 && field.fDefNo === 253 ? 0 : field.size)
     ), 0)

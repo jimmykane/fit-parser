@@ -1,5 +1,24 @@
 # Change Log
 
+## 6.2.2 - 2026-10-11
+
+### Fixed
+
+- Restore ordinary decoding of existing Bryton and Magene FIT files whose
+  normal record headers set reserved bit 4. Their activity data was readable
+  before 5.2.0 and is recovered without modifying the original bytes.
+- Require complete definitions and native/developer payloads for messages
+  using reserved-header compatibility, including ordinary data records that
+  reference a definition with the reserved bit set.
+
+### Compatibility
+
+- Strict parsing, full raw-message retention, and the standalone raw reader
+  continue rejecting reserved header bits. Bit 5 in data headers remains
+  invalid in all modes. Checksum behavior still follows `force`.
+- No new options or parsed output fields. Existing successful imports need no
+  migration; retry previously rejected originals with the updated parser.
+
 ## 6.2.1 - 2026-10-10
 
 ### Added
