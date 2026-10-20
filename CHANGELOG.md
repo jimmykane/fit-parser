@@ -1,5 +1,24 @@
 # Change Log
 
+## 6.2.3 - 2026-10-20
+
+### Fixed
+
+- Decode supported numeric FIT base types when a producer omits the endian
+  flag from the type byte. Message architecture still determines byte order.
+- Recover affected timestamps, durations and other numeric values in native
+  fields, arrays and described developer fields without changing their raw
+  type bytes or payloads.
+
+### Compatibility
+
+- No new options, public API or serialized-output fields. Reserved and unknown
+  types, incompatible profile types, field bounds and checksum policy retain
+  their existing validation.
+- Reparse retained source files to recover previously omitted or incorrectly
+  decoded values. Already stored results are not changed by installing this
+  release; correctly decoded files need no migration.
+
 ## 6.2.2 - 2026-10-11
 
 ### Fixed
