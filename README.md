@@ -157,6 +157,11 @@ in data headers remains invalid. Strict mode, full raw-message retention, and
 the standalone raw reader continue rejecting reserved header bits. Original
 bytes and the caller's checksum policy are unchanged.
 
+Numeric base-type IDs that omit the endian flag are decoded using the message
+definition's byte order. Raw output retains the original type codes and bytes;
+reserved/unknown codes and incompatible field types are not reinterpreted.
+Previously affected files need to be parsed again to recover omitted fields.
+
 `strict: true` adds definition and record bounds checks so CRC bytes cannot be
 decoded as measurements. Full raw-message retention (`includeRawMessages`)
 continues to require complete records as it did before this option was added.

@@ -85,7 +85,7 @@ describe('binary decoder allocation regressions', () => {
     })
   })
 
-  it('reads mixed-endian scalars and arrays from one offset DataView', () => {
+  it.each([false, true])('reads mixed-endian scalars and arrays from one offset DataView (omit endian flag: %s)', (omitEndianFlag) => {
     const fieldDefs = [
       field('little_uint16', 'uint16', 2, 132, true),
       field('big_uint32', 'uint32', 4, 134, false, 100),
@@ -98,6 +98,11 @@ describe('binary decoder allocation regressions', () => {
       field('little_uint32z', 'uint32z', 4, 140, true),
       field('big_uint32_values', 'uint32_array', 8, 134, false),
     ]
+    if (omitEndianFlag) {
+      fieldDefs.forEach((item) => {
+        item.baseTypeNo &= 0x7F
+      })
+    }
     const payload = new Uint8Array(1 + fieldDefs.reduce((size, item) => size + item.size, 0))
     const payloadView = new DataView(payload.buffer)
     payload[0] = 0
@@ -280,7 +285,7 @@ describe('binary decoder allocation regressions', () => {
     },
   )
 
-  it('decodes a developer field after its description arrives', () => {
+  it.each([133, 5])('decodes a developer field after its description arrives with base type %s', (baseType) => {
     const messageTypes: MessageTypeDefinition[] = []
     const developerFields: any[] = []
     const definitionRecord = new Uint8Array([
@@ -325,7 +330,7 @@ describe('binary decoder allocation regressions', () => {
     developerFields[2] = []
     developerFields[2][2] = {
       field_name: 'late_developer_value',
-      fit_base_type_id: 133,
+      fit_base_type_id: baseType,
       offset: 1,
       scale: 1000,
       units: 'm/s',
@@ -350,7 +355,7 @@ describe('binary decoder allocation regressions', () => {
       late_developer_value: -1.287,
     })
     expect(messageTypes[0]?.developerFieldDefs?.[0].resolvedFieldDef).toMatchObject({
-      baseTypeNo: 133,
+      baseTypeNo: baseType,
       name: 'late_developer_value',
       offset: -1,
       type: 'sint32',

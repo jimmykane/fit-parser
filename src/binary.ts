@@ -7,6 +7,7 @@ import type { FitOptions, LengthUnits, PressureUnits, SpeedUnits, TemperatureUni
 import { Buffer } from 'buffer'
 import { FIT } from './fit.js'
 import { getFitMessage, getFitMessageBaseType } from './messages.js'
+import { getFitBaseTypeId } from './raw-message-reader.js'
 
 const CompressedLocalMsgNumMask = 0x60 as const
 const CompressedHeaderMask = 0x80 as const
@@ -70,7 +71,14 @@ function retainsRawMessage(options: FitParserOptions, globalMessageNumber: numbe
       && options.includeRawMessages.includes(globalMessageNumber))
 }
 
-function baseTypeSize(type: string | number): number | undefined {
+function getFitBaseType(baseType: number): string | number | undefined {
+  // Some producers omit the endian flag. The definition's architecture still
+  // determines byte order; retain the original type byte for raw consumers.
+  return FIT.types.fit_base_type[baseType]
+    ?? (getFitBaseTypeId(baseType) === null ? undefined : FIT.types.fit_base_type[baseType | 0x80])
+}
+
+function baseTypeSize(type: string | number | undefined): number | undefined {
   switch (type) {
     case 'enum':
     case 'sint8':
@@ -94,14 +102,14 @@ function baseTypeSize(type: string | number): number | undefined {
   }
 }
 
-function requiresBoundedEndianDataView(type: string | number, size: number): boolean {
+function requiresBoundedEndianDataView(type: string | number | undefined, size: number): boolean {
   const elementSize = baseTypeSize(type)
   return elementSize !== undefined && size % elementSize !== 0
 }
 
 function areProfileBaseTypesCompatible(
   profileType: string | number | undefined,
-  wireType: string | number,
+  wireType: string | number | undefined,
 ): boolean {
   if (profileType === undefined || profileType === wireType) {
     return true
@@ -132,7 +140,7 @@ function readData(
   startIndex: number,
 ): any {
   const rawType
-    = fDef.rawType ?? FIT.types.fit_base_type[fDef.baseTypeNo] ?? fDef.type
+    = fDef.rawType ?? getFitBaseType(fDef.baseTypeNo) ?? fDef.type
   if (rawType === 'string') {
     const temp: number[] = []
     for (let i = 0; i < fDef.size; i++) {
@@ -342,7 +350,7 @@ function isInvalidBaseTypeValue(data: any, baseTypeNo: number): boolean {
     return false
   }
 
-  const baseType = FIT.types.fit_base_type[baseTypeNo]
+  const baseType = getFitBaseType(baseTypeNo)
   return typeof baseType === 'string' ? isInvalidValue(data, baseType) : false
 }
 
@@ -361,7 +369,7 @@ function formatFieldValue(
     && !String(fDef.type).endsWith('_array')
     && fDef.type !== 'exercise_category_array'
   ) {
-    const rawType = fDef.rawType ?? FIT.types.fit_base_type[fDef.baseTypeNo]
+    const rawType = fDef.rawType ?? getFitBaseType(fDef.baseTypeNo) ?? fDef.type
     return data.map((item) => {
       if (isInvalidValue(item, rawType)) {
         return null
@@ -503,7 +511,7 @@ function resolveDeveloperFieldDefinition(
     : Number(Object.entries(FIT.types.fit_base_type).find(
         ([, typeName]) => typeName === describedBaseType,
       )?.[0])
-  const type = FIT.types.fit_base_type[baseType]
+  const type = getFitBaseType(baseType)
   if (!Number.isInteger(baseType) || type === undefined) {
     developerFieldDef.resolvedFieldDef = undefined
     developerFieldDef.resolvedFrom = undefined
@@ -643,7 +651,7 @@ export function readRecord(
       const baseType = blob[fDefIndex + 2]
       const fieldNumber = blob[fDefIndex]
       const fieldSize = blob[fDefIndex + 1]
-      const wireType = FIT.types.fit_base_type[baseType]
+      const wireType = getFitBaseType(baseType)
       const {
         field,
         type,
@@ -663,7 +671,7 @@ export function readRecord(
         wireType,
       )
       const fDef: FieldDefinition = {
-        type: profileCompatible ? type : wireType,
+        type: profileCompatible ? type : wireType ?? '',
         rawType: wireType,
         fDefNo: fieldNumber,
         size: fieldSize,
