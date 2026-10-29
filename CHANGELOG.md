@@ -1,5 +1,23 @@
 # Change Log
 
+## 6.2.4 - 2026-10-29
+
+### Fixed
+
+- Add 20 documented Garmin product mappings, including Forerunner 970 and
+  570, newer fēnix and Approach variants, Enduro 4, Cirqa Smart Band and
+  TrainingPeaks Virtual. The maintained table now covers all 499 product
+  identifiers documented in profile 21.218.0.
+
+### Compatibility
+
+- Public lookup helpers can now resolve the added identifiers. Numeric
+  `product` fields, explicit `product_name` fields and activity measurements
+  retain their existing decoding and representation.
+- Existing parsed files need no data migration. Consumers that persist a
+  resolved device label can refresh it from its retained product identifier,
+  or reparse the original file to refresh that label.
+
 ## 6.2.3 - 2026-10-20
 
 ### Fixed

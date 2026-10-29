@@ -10,12 +10,12 @@ const expectedCounts = {
   messages: 127,
   fields: 1462,
   types: 200,
-  values: 4406,
-  products: 479,
+  values: 4426,
+  products: 499,
 } as const
 const expectedFingerprints = {
   messages: '8e03ebe3f5f985657e0da338c33484c3e7a1a13f8cd397888337bcfb628c53df',
-  types: '1f75037ff85cfda6c68c6a1ac63e187e6204aa0f9cd9fe437ca7ac4ab5387d9d',
+  types: '6a2d0aaa321702a49f10dabf544ec6c1ee26a3d06422bc6e0c1d79c96b562557',
 } as const
 const errors: string[] = []
 

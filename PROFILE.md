@@ -36,6 +36,13 @@ the original byte here, even when its unambiguous value is decoded.
 
 ## Focused interoperability additions
 
+The Garmin product table includes all 499 product identifiers documented in
+[Garmin profile 21.218.0](https://github.com/garmin/fit-javascript-sdk/blob/992cfad3b8f99537765d552a75b5e760e442e7f2/src/profile.js).
+The 20 additions in 6.2.4 include Forerunner 970 and 570, newer fēnix and
+Approach variants, Enduro 4, Cirqa Smart Band and TrainingPeaks Virtual.
+Regression tests verify the added lookups and preserve numeric FIT product
+identifiers. This is a checked coverage baseline, not automatic SDK syncing.
+
 Session fields 79, 80, 106, 107, 108, and 211; lap fields 27–30, 73, 90, 96,
 97, 155, and 161; and battery message 104 fields 2 and 253 were checked against
 independently observed wire definitions in the external FIT corpus and the

@@ -48,7 +48,7 @@ describe('fit profile lookup API', () => {
       Object.entries(mappings).map(([name, mapping]) => [name, Object.keys(mapping).length]),
     )).toEqual({
       manufacturers: 243,
-      products: 479,
+      products: 499,
       sports: 82,
       subSports: 114,
     })
@@ -57,7 +57,7 @@ describe('fit profile lookup API', () => {
       Object.entries(mappings).map(([name, mapping]) => [name, fingerprint(mapping)]),
     )).toEqual({
       manufacturers: 'fe6227bce757907f5708e92a743ff0bce2f4a5c7a47ba3ada704727624de0816',
-      products: '6bfe7d5fd3d793c80d7e00ad97e97fb0ce78f1c59075ccb7a28b33a026d3863d',
+      products: 'b54201c64209845342d980e82da3b06c45d32043c6082b17479813802d4a1b82',
       sports: 'c3afd60238fca4f98f6a6de44b4348530124680b9a1b5b8ec710c2d9cf95ed27',
       subSports: 'c0bf27dff0d313b8d490f61dff0c697d2cf4b9157dfe1ed38f4e148c9481f84d',
     })
@@ -139,7 +139,7 @@ describe('fit profile lookup API', () => {
       .sort((left, right) => left - right)
       .map(productId => [productId, getFitGarminProductDisplayName(productId)])
     expect(createHash('sha256').update(JSON.stringify(displayNames)).digest('hex'))
-      .toBe('65e2e48698885b89ee74052e31bf3f9470476a9b47ecfdf764ec61c2bac0cf94')
+      .toBe('8d0719e156754376cfcc893ce028ff291f97acd5881519267449050eff486be0')
   })
 
   it.each([
