@@ -728,7 +728,10 @@ export function readRecord(
 
   const messageType = messageTypes[localMessageType]
   if (!messageType) {
-    throw new Error('FIT data record has no local definition')
+    throw Object.assign(new Error('FIT data record has no local definition'), {
+      byteOffset: startIndex,
+      localMessageType,
+    })
   }
   const reservedHeaderCompatibility = reservedHeaderBit || messageType.reservedHeaderBit
   if (reservedHeaderCompatibility && !messageType.completeDefinition) {

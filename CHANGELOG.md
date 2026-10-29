@@ -1,5 +1,20 @@
 # Change Log
 
+## 6.2.5 - 2026-10-29
+
+### Fixed
+
+- Include `byteOffset` and `localMessageType` on the existing missing-local-definition
+  decoder error. Offsets identify the failing header relative to the caller's
+  input, including preceding files in `parseFilesAsync()` and respecting Buffer views.
+
+### Compatibility
+
+- Existing error messages, callback behavior, successful output and validation
+  are unchanged. Diagnostics report where parsing stopped; they do not locate
+  an earlier malformed record or automatically repair the source.
+- No data migration or historical activity reparse is required.
+
 ## 6.2.4 - 2026-10-29
 
 ### Fixed

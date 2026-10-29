@@ -207,6 +207,9 @@ export default class FitParser {
         }))
       }
       catch (error) {
+        if (error instanceof Error && 'byteOffset' in error && typeof error.byteOffset === 'number') {
+          error.byteOffset += start
+        }
         throw error instanceof Error ? error : new Error(String(error))
       }
       start = end
