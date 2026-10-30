@@ -10,3 +10,6 @@ examples/tempissue2.fit
 
 # Local debug output
 /output.txt
+
+# Generated documentation
+/site/
