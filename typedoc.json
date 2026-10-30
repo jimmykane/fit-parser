@@ -1,0 +1,42 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "docs/api.ts",
+    "docs/decoded-fields.ts"
+  ],
+  "projectDocuments": [
+    "docs/guides/*.md"
+  ],
+  "entryPointStrategy": "resolve",
+  "alwaysCreateEntryPointModule": true,
+  "tsconfig": "tsconfig.docs.json",
+  "out": "site",
+  "readme": "docs/README.md",
+  "name": "FIT Parser",
+  "includeVersion": true,
+  "basePath": ".",
+  "sourceLinkTemplate": "https://github.com/jimmykane/fit-parser/blob/{gitRevision}/{path}#L{line}",
+  "gitRevision": "main",
+  "hostedBaseUrl": "https://jimmykane.github.io/fit-parser/",
+  "useHostedBaseUrlForAbsoluteLinks": true,
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true,
+    "includeFolders": false,
+    "excludeReferences": true
+  },
+  "navigationLinks": {
+    "GitHub": "https://github.com/jimmykane/fit-parser",
+    "npm": "https://www.npmjs.com/package/fit-file-parser"
+  },
+  "cleanOutputDir": true,
+  "treatWarningsAsErrors": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "invalidPath": true,
+    "rewrittenLink": true,
+    "notDocumented": false,
+    "unusedMergeModuleWith": true
+  }
+}

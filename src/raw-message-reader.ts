@@ -51,6 +51,7 @@ export interface FitRawField {
   fieldNumber: number
   size: number
   baseType: number
+  /** Defensive copy of the field's wire bytes, without profile scaling or sentinel filtering. */
   bytes: Uint8Array
 }
 
@@ -83,13 +84,14 @@ export interface FitMessageReaderResult {
   protocolVersion: number
   profileVersion: number
   messages: FitRawMessage[]
+  /** Nonfatal timestamp-interpretation issues; these can refer to unselected messages. */
   issues: FitMessageReaderIssue[]
 }
 
 export interface FitMessageReaderOptions {
   /** Retain only these global message numbers. Omit to retain every message. */
   messageNumbers?: readonly number[]
-  /** Reject larger inputs before allocating retained message data. */
+  /** Reject larger inputs before allocating retained message data. Defaults to no finite limit. */
   maxInputBytes?: number
 }
 
@@ -154,7 +156,11 @@ function isValidFieldDefinition(field: FieldDefinition): boolean {
     && (baseTypeId === 7 || field.size % width === 0)
 }
 
-/** Reads an unsigned one-, two-, or four-byte raw FIT field. */
+/**
+ * Reads an unsigned one-, two-, or four-byte raw field without profile scaling.
+ * @returns The raw value, or undefined for a missing field or FIT invalid sentinel.
+ * @throws TypeError if a present field does not match the expected width/type.
+ */
 export function readFitUnsignedField(
   field: FitRawField | undefined,
   expectedBaseType: number,
@@ -203,7 +209,11 @@ export function readFitUnsignedField(
   return value === invalid ? undefined : value
 }
 
-/** Reads UTF-8 bytes, removes trailing NUL padding, and preserves interior NUL separators. */
+/**
+ * Reads UTF-8 bytes, removes trailing NUL padding, and preserves interior NUL separators.
+ * @returns The decoded string, or undefined when the field is absent or empty after removing trailing NULs.
+ * @throws TypeError for an incompatible field or invalid UTF-8.
+ */
 export function readFitStringField(field: FitRawField | undefined): string | undefined {
   if (!field) {
     return undefined
@@ -277,6 +287,12 @@ function validateOptions(options: FitMessageReaderOptions): {
 /**
  * Strictly validates a FIT file and retains raw fields for selected messages.
  * This entry point does not load the semantic FIT profile or format field values.
+ * It accepts one complete FIT input, including its CRC; there is no force/recovery mode.
+ *
+ * @returns Selected messages in wire order, with defensive byte copies, plus
+ * nonfatal timestamp issues. Native timestamps use FIT seconds rather than Unix time.
+ * @throws FitMessageReaderError for invalid input/options, a size-limit violation,
+ * header/checksum errors or invalid message structure.
  */
 export function readFitMessages(
   input: ArrayBuffer | Uint8Array,
@@ -499,7 +515,10 @@ export function readFitMessages(
   }
 }
 
-/** Converts a native FIT timestamp to a JavaScript epoch millisecond value. */
+/**
+ * Converts a native FIT timestamp to Unix milliseconds, suitable for new Date().
+ * @throws RangeError for a non-integer or a value outside the valid FIT uint32 timestamp range.
+ */
 export function fitTimestampToUnixMilliseconds(timestamp: number): number {
   if (!Number.isSafeInteger(timestamp) || timestamp < 0 || timestamp >= 0xFFFFFFFF) {
     throw new RangeError('FIT timestamp must be an integer between 0 and 4294967294')

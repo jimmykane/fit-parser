@@ -99,7 +99,7 @@
     "profile:check": "npm run codegen:check && tsx scripts/profile-check.ts && npm run profile:budget",
     "compatibility:check": "npm run build && tsx scripts/compatibility-check.ts",
     "corpus:check": "tsx scripts/corpus-check.ts",
-    "check": "npm run profile:check && npm run lint && npm run type-check && npm test -- --run && npm run build",
+    "check": "npm run profile:check && npm run lint && npm run type-check && npm test -- --run && npm run build && npm run docs:build",
     "example-output": "node examples/parse.js examples/example.fit > examples/output-example.json",
     "example-output-tank": "node examples/parse.js examples/example-diving.fit > examples/output-diving.json",
     "example-output-summary-first": "node examples/parse.js examples/triathlon_summary_first.fit > examples/output_summary_first.json",
@@ -112,7 +112,8 @@
     "type-check": "tsc --noEmit",
     "clean": "tsx scripts/clean-dist.ts",
     "build": "npm run clean && tsc --noCheck && tsc --project tsconfig.cjs.json --noCheck && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "docs:build": "typedoc --options typedoc.json && tsx scripts/verify-docs.ts"
   },
   "test": "vitest",
   "dependencies": {
@@ -126,6 +127,7 @@
     "eslint": "^9.10.0",
     "eslint-plugin-format": "^1.1.0",
     "tsx": "^4.21.0",
+    "typedoc": "0.28.20",
     "typescript": "^5.9.3",
     "vitest": "^4.0.13"
   }

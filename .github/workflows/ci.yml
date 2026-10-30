@@ -31,3 +31,16 @@ jobs:
         if: matrix.node-version == '25.x'
       - run: npm run profile:check
         if: matrix.node-version == '25.x'
+
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:build
