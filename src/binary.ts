@@ -554,6 +554,13 @@ function resolveDeveloperFieldDefinition(
   return resolvedFieldDef
 }
 
+function recordError(message: string, byteOffset: number, recordHeader?: number): Error {
+  return Object.assign(new Error(message), {
+    byteOffset,
+    ...(recordHeader === undefined ? {} : { recordHeader }),
+  })
+}
+
 export function readRecord(
   blob: Uint8Array,
   messageTypes: MessageTypeDefinition[],
@@ -578,7 +585,7 @@ export function readRecord(
   unmappedDeveloperFields?: RawDeveloperFieldValue[]
 } {
   if (startIndex < 0 || startIndex >= dataEnd) {
-    throw new Error('Invalid FIT record bounds')
+    throw recordError('Invalid FIT record bounds', startIndex)
   }
   const recordHeader = blob[startIndex]
   let localMessageType = recordHeader & 15
@@ -598,7 +605,7 @@ export function readRecord(
 
     const requireCompleteDefinition = strictHeaders || reservedHeaderBit
     if (requireCompleteDefinition && startIndex + 6 > dataEnd) {
-      throw new Error('Invalid FIT definition bounds')
+      throw recordError('Invalid FIT definition bounds', startIndex, recordHeader)
     }
 
     const hasDeveloperData = (recordHeader & 32) === 32
@@ -615,7 +622,7 @@ export function readRecord(
         || (hasDeveloperData && nativeDefinitionsEnd + 1 > dataEnd)
       )
     ) {
-      throw new Error('Invalid FIT definition')
+      throw recordError('Invalid FIT definition', startIndex, recordHeader)
     }
     const numberOfDeveloperDataFields = hasDeveloperData
       ? blob[startIndex + 5 + numberOfFields * 3 + 1]
@@ -623,7 +630,7 @@ export function readRecord(
     const definitionEnd = nativeDefinitionsEnd
       + (hasDeveloperData ? 1 + numberOfDeveloperDataFields * 3 : 0)
     if (requireCompleteDefinition && definitionEnd > dataEnd) {
-      throw new Error('Invalid FIT developer definition bounds')
+      throw recordError('Invalid FIT developer definition bounds', startIndex, recordHeader)
     }
 
     const mTypeDef: MessageTypeDefinition = {
@@ -723,19 +730,18 @@ export function readRecord(
   // Recover only that bit in ordinary decoding; bit 5 and strict/raw parsing
   // retain their previous rejection policy. Never rewrite the source bytes.
   if (!isCompressedTimestamp && ((recordHeader & 0x20) !== 0 || (strictHeaders && reservedHeaderBit))) {
-    throw new Error('Invalid FIT data record header')
+    throw recordError('Invalid FIT data record header', startIndex, recordHeader)
   }
 
   const messageType = messageTypes[localMessageType]
   if (!messageType) {
-    throw Object.assign(new Error('FIT data record has no local definition'), {
-      byteOffset: startIndex,
+    throw Object.assign(recordError('FIT data record has no local definition', startIndex, recordHeader), {
       localMessageType,
     })
   }
   const reservedHeaderCompatibility = reservedHeaderBit || messageType.reservedHeaderBit
   if (reservedHeaderCompatibility && !messageType.completeDefinition) {
-    throw new Error('Invalid FIT definition for reserved header compatibility')
+    throw recordError('Invalid FIT definition for reserved header compatibility', startIndex, recordHeader)
   }
 
   let messageSize = 0
@@ -761,7 +767,7 @@ export function readRecord(
     ), 0)
     const developerSize = developerFieldDefs.reduce((total, field) => total + field.size, 0)
     if (startIndex + 1 + nativeSize + developerSize > dataEnd) {
-      throw new Error('Invalid FIT data record bounds')
+      throw recordError('Invalid FIT data record bounds', startIndex, recordHeader)
     }
   }
 
@@ -927,7 +933,7 @@ export function readRecord(
     const previousTimestamp = decoderState.lastTimestamp
     if (previousTimestamp === undefined) {
       if (!options.force || options.strict) {
-        throw new Error('Compressed timestamp requires a previous timestamp')
+        throw recordError('Compressed timestamp requires a previous timestamp', startIndex, recordHeader)
       }
     }
     else {
@@ -937,7 +943,7 @@ export function readRecord(
       const timestamp
         = previousTimestamp - previousOffset + timeOffset + rollover
       if (timestamp >= 0xFFFFFFFF) {
-        throw new Error('Compressed timestamp exceeds FIT uint32 range')
+        throw recordError('Compressed timestamp exceeds FIT uint32 range', startIndex, recordHeader)
       }
       decoderState.lastTimestamp = timestamp
       compressedTimestamp = timestamp

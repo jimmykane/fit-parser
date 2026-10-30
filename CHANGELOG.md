@@ -1,5 +1,23 @@
 # Change Log
 
+## 6.2.6 - 2026-10-30
+
+### Fixed
+
+- Include `byteOffset` and the raw `recordHeader` byte on structural record-decoding
+  errors, including invalid headers, definitions, record bounds and compressed
+  timestamp failures. Missing-local-definition errors retain `localMessageType`.
+- Keep offsets relative to the supplied input, including preceding files in
+  `parseFilesAsync()` and respecting Buffer views. Omit `recordHeader` when the
+  attempted position is outside the FIT data section.
+
+### Compatibility
+
+- Existing error messages, callback behavior, successful output and validation
+  are unchanged. Diagnostics describe where decoding stopped; they do not repair
+  malformed input. File-level validation errors keep their existing representation.
+- No data migration or historical activity reparse is required.
+
 ## 6.2.5 - 2026-10-29
 
 ### Fixed

@@ -123,22 +123,28 @@ The callback reports validation errors as strings. `parseAsync()` rejects with
 those values; decoder failures can reject with an `Error`. `parseFilesAsync()`
 consistently rejects with an `Error`.
 
-### Missing local-definition diagnostics
+### Record error diagnostics
 
-The decoder error `FIT data record has no local definition` includes two
-numeric properties: `byteOffset` and `localMessageType`. The offset is the
-zero-based position of the header byte where decoding stopped, including the
-FIT file header. It is relative to the supplied Buffer view or ArrayBuffer;
+Structural errors raised by the record decoder include `byteOffset`, the
+zero-based position of the record header where decoding stopped, including the
+FIT file header. This covers invalid data headers, invalid or incomplete
+definitions, record bounds, missing local definitions and compressed timestamp
+failures. The offset is relative to the supplied Buffer view or ArrayBuffer;
 `parseFilesAsync()` also includes the preceding FIT files in that position.
-The same error can be thrown synchronously by the callback API.
+These errors can be thrown synchronously by the callback API.
+
+`recordHeader` contains the raw header byte (0–255), including its flag bits.
+It is omitted when the attempted position is outside the FIT data section.
+`FIT data record has no local definition` also retains `localMessageType`;
+other errors do not add that property.
 
 ```javascript
 try {
   await parser.parseAsync(content)
 }
 catch (error) {
-  if (error instanceof Error && error.message === 'FIT data record has no local definition') {
-    console.error(error.byteOffset, error.localMessageType)
+  if (error instanceof Error && typeof error.byteOffset === 'number') {
+    console.error(error.message, error.byteOffset, error.recordHeader)
   }
 }
 ```
@@ -147,6 +153,8 @@ The stopping position can follow the malformed record that caused the
 misalignment. These diagnostics do not identify the original cause or repair
 the input. Existing error messages, validation and rejection behavior remain
 unchanged.
+File-level validation errors, such as CRC mismatches, keep their existing
+representation and do not gain record diagnostics.
 
 ## Parser options
 

@@ -7,11 +7,11 @@ const message = 'FIT data record has no local definition'
 const simple = 'DhAVCBMAAAAuRklUVNlBAAAUAAH9BIYBAMqaOwXerb7vhkk='
 const pauseOverrun = 'DhBcCJgBAAAuRklU3zFNAAEAAAUAAQABAoQCAoQDBIwEBIYNBAABBscAEtaHRH/h8EEAAQAUCf0EhgAEhQEEhQIChAUEhgMBAgQBAgcChA0BAUkAAQAVA/0EhgABAAEBAAFEf+HwHmoKeAc/CGsMHAAAAAB4UACWHwFEf+H6HmorFwc/KQsMRAAAJxB4UACWHwFEf+IEHmpLtgc/SaoMbAAATiB4UACWHwlEf+IOAAQJRH/iDgAAAUR/4g4eamxWBz9qSQyUAAB1MHhQ////HwFEf+IYHmqM9Qc/iukMvAAAnEB4UACWHwFEf+IiHmqtlAc/q4gM5AAAw1B4UACWH0IAAQATCP4ChP0EhgIEhgcEhggEhgkEhgABAAEBAAIAAER/4iJEf+HwAADDUAAAw1AAAAAACQFDAAEAEgz+AoT9BIYCBIYHBIYIBIYJBIYFAQAGAQAZAoQaAoQAAQABAQADAABEf+IiRH/h8AAAw1AAAMNQAAAAAAIHAAAAAQgBRAABACIG/QSGAASGAQKEAgEAAwEABAEABER/4iIAAMNQAAEAGgHAcg=='
 
-function coldOverrun(): Buffer<ArrayBuffer> {
+function overrunAtTemperature(temperature: number): Buffer<ArrayBuffer> {
   const bytes = Buffer.from(pauseOverrun, 'base64')
   for (const offset of [120, 144, 168, 207, 231, 255]) {
     expect(bytes[offset]).toBe(31)
-    bytes[offset] = 1
+    bytes[offset] = temperature
   }
   bytes.writeUInt16LE(FitEncoder.calculateCRC(bytes.subarray(0, -2)), bytes.length - 2)
   return bytes
@@ -24,10 +24,10 @@ function validFile(): Uint8Array<ArrayBuffer> {
 }
 
 describe.each([
-  ['simple undefined slot', () => Buffer.from(simple, 'base64'), 28, 5],
-  ['big-endian pause overrun', () => Buffer.from(pauseOverrun, 'base64'), 207, 15],
-  ['delayed failure after an overrun', coldOverrun, 279, 0],
-] as const)('missing local definition: %s', (_name, input, byteOffset, localMessageType) => {
+  ['simple undefined slot', () => Buffer.from(simple, 'base64'), 28, 5, 0x05],
+  ['big-endian pause overrun', () => Buffer.from(pauseOverrun, 'base64'), 207, 15, 0x1F],
+  ['delayed failure after an overrun', () => overrunAtTemperature(1), 279, 0, 0x86],
+] as const)('missing local definition: %s', (_name, input, byteOffset, localMessageType, recordHeader) => {
   it.each([false, true])('rejects async parsing with diagnostics and force=%s', async (force) => {
     const bytes = input()
     const before = Buffer.from(bytes)
@@ -35,6 +35,7 @@ describe.each([
       message,
       byteOffset,
       localMessageType,
+      recordHeader,
     })
     expect(bytes).toEqual(before)
   })
@@ -49,7 +50,7 @@ describe.each([
       failure = error
     }
     expect(failure).toBeInstanceOf(Error)
-    expect(failure).toMatchObject({ message, byteOffset, localMessageType })
+    expect(failure).toMatchObject({ message, byteOffset, localMessageType, recordHeader })
     expect(callback).not.toHaveBeenCalled()
   })
 
@@ -61,6 +62,7 @@ describe.each([
       message,
       byteOffset,
       localMessageType,
+      recordHeader,
     })
   })
 
@@ -69,6 +71,7 @@ describe.each([
       message,
       byteOffset,
       localMessageType,
+      recordHeader,
     })
   })
 
@@ -79,7 +82,7 @@ describe.each([
     const padded = Buffer.concat([Buffer.alloc(13), joined, Buffer.alloc(7)])
     await expect(new FitParser({ force: false }).parseFilesAsync(
       padded.subarray(13, 13 + joined.length),
-    )).rejects.toMatchObject({ message, byteOffset: prefixSize + byteOffset, localMessageType })
+    )).rejects.toMatchObject({ message, byteOffset: prefixSize + byteOffset, localMessageType, recordHeader })
   })
 })
 
@@ -105,9 +108,22 @@ describe('missing local definition validation boundaries', () => {
     const failure = await new FitParser({ force: false, strict: true })
       .parseAsync(Buffer.from(pauseOverrun, 'base64'))
       .catch(error => error)
-    expect(failure).toMatchObject({ message: 'Invalid FIT data record header' })
-    expect(failure).not.toHaveProperty('byteOffset')
+    expect(failure).toMatchObject({ message: 'Invalid FIT data record header', byteOffset: 207, recordHeader: 0x1F })
     expect(failure).not.toHaveProperty('localMessageType')
+  })
+
+  it.each([false, true])('reports the 33°C overrun header with force=%s', async (force) => {
+    const bytes = overrunAtTemperature(33)
+    const before = Buffer.from(bytes)
+    const expected = { message: 'Invalid FIT data record header', byteOffset: 207, recordHeader: 0x21 }
+    const parser = new FitParser({ force })
+    await expect(parser.parseAsync(bytes)).rejects.toMatchObject(expected)
+    const prefix = validFile()
+    await expect(parser.parseFilesAsync(Buffer.concat([prefix, bytes]))).rejects.toMatchObject({
+      ...expected,
+      byteOffset: prefix.length + 207,
+    })
+    expect(bytes).toEqual(before)
   })
 
   it('preserves checksum validation before decoding', async () => {
