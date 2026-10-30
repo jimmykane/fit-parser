@@ -51,8 +51,7 @@ export interface FitEncoderField {
 
 export interface FitEncoderOptions {
   /**
-   * Raw protocol-version header byte; pass 0x20 for FIT 2.0 framing.
-   * The legacy default is 0x02, which the strict raw reader rejects.
+   * Raw protocol-version header byte. Defaults to 0x20 for FIT 2.0 framing.
    */
   protocolVersion?: number
   /** Raw profile-version header value. Defaults to 21188 (21.188). */
@@ -72,7 +71,7 @@ export class FitEncoder {
 
   constructor(options: FitEncoderOptions = {}) {
     this.protocolVersion = FitEncoder.assertIntegerInRange(
-      options.protocolVersion ?? 2,
+      options.protocolVersion ?? 0x20,
       0,
       UINT8_MAX,
       'FIT protocol version',

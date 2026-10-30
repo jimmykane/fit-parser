@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import FitParser, { FitBaseType, FitEncoder } from '../src/fit-parser.js'
+import FitParser, { FitBaseType, FitEncoder, readFitMessages } from '../src/fit-parser.js'
 
 describe('FitEncoder', () => {
   it('writes an integrity-checked FIT Course that FitParser can parse', async () => {
@@ -69,7 +69,19 @@ describe('FitEncoder', () => {
     }).parseAsync(file.buffer)
 
     expect(Array.from(file.slice(8, 12))).toEqual([0x2E, 0x46, 0x49, 0x54])
+    expect(file[1]).toBe(0x20)
     expect(actualCRC).toBe(expectedCRC)
+    expect(readFitMessages(file)).toMatchObject({
+      protocolVersion: 0x20,
+      profileVersion: 21188,
+      messages: [
+        { globalMessageNumber: 0 },
+        { globalMessageNumber: 31 },
+        { globalMessageNumber: 20 },
+        { globalMessageNumber: 20 },
+      ],
+      issues: [],
+    })
     expect(parsed.course).toMatchObject({
       name: 'Encoded Course',
       sport: 'cycling',
@@ -84,6 +96,25 @@ describe('FitEncoder', () => {
       },
       { distance: 123.45 },
     ])
+  })
+
+  it.each([0x10, 0x21])('preserves an explicit protocol header byte %i', (protocolVersion) => {
+    const file = new FitEncoder({ protocolVersion, profileVersion: 21000 }).close()
+
+    expect(file[1]).toBe(protocolVersion)
+    expect(readFitMessages(file)).toMatchObject({ protocolVersion, profileVersion: 21000 })
+  })
+
+  it('keeps explicit legacy protocol values without weakening strict reader validation', async () => {
+    const file = new FitEncoder({ protocolVersion: 0x02 })
+      .writeMessage(20, [{ number: 3, size: 1, baseType: FitBaseType.Uint8, value: 120 }])
+      .close()
+
+    expect(file[1]).toBe(0x02)
+    await expect(new FitParser({ force: false }).parseAsync(file.buffer))
+      .resolves
+      .toMatchObject({ records: [{ heart_rate: 120 }] })
+    expect(() => readFitMessages(file)).toThrow('invalid_header')
   })
 
   it('rejects invalid variable-length field values', () => {
