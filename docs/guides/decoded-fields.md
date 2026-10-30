@@ -18,7 +18,7 @@ Public names use `snake_case` while preserving established alphanumeric tokens
 such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number
 and exact bytes in `unmapped_messages` rather than receiving guessed names.
 
-Only values present in the FIT input are emitted. In particular,
+Named values follow the FIT messages, including FIT compressed-timestamp reconstruction. In particular,
 `product_name` is not inferred from `manufacturer` and `product`, and record
 `elapsed_time` and `timer_time` are added only when `elapsedRecordField: true`
 is requested. Parsed FIT timestamps are `Date` objects, FIT `bool` fields keep
@@ -26,6 +26,42 @@ their numeric wire values, mask fields decode to `{ value, ...flags }` objects,
 unknown enum IDs remain numbers, and invalid entries retained inside FIT arrays
 are `null`. All profile fields are optional because each FIT message definition
 chooses which fields are present.
+
+## Units and missing values
+
+Profile scales are applied before the selected unit conversions. With default options,
+common decoded fields use these representations:
+
+| Fields                                   | Representation    |
+| ---------------------------------------- | ----------------- |
+| `timestamp`, `start_time`                | JavaScript `Date` |
+| `position_lat`, `position_long`          | Degrees           |
+| `distance`, `total_distance`, `altitude` | Metres            |
+| `speed`, `enhanced_speed`, `avg_speed`   | Metres per second |
+| `heart_rate`, `avg_heart_rate`           | Beats per minute  |
+| `power`, `avg_power`                     | Watts             |
+| `temperature`, `avg_temperature`         | Degrees Celsius   |
+| `total_elapsed_time`, `total_timer_time` | Seconds           |
+
+For example, a recorded distance of 1,000 metres and speed of 2.5 m/s decode as
+`1000` and `2.5` with defaults. Selecting `lengthUnit: 'km'` and
+`speedUnit: 'km/h'` produces `1` and `9`. These options affect their converted
+field families; they do not rescale every numeric field. Consult the maintained
+profile for other fields and their units.
+
+Missing or FIT-invalid scalar fields are omitted. A valid zero reading remains zero, while invalid
+entries retained inside arrays are `null`. Keep missing observations distinct
+from a measured zero in downstream calculations.
+
+Root metadata also depends on the file and output mode. Some legacy `ParsedFit`
+declarations mark `file_creator`, `user_profile` or `activity` as required even
+though they can be absent at runtime. Check presence before reading their fields.
+
+`JSON.stringify()` turns `Date` values into strings. Consumers restoring that
+JSON must handle date restoration themselves; the FIT parser reads binary input.
+Keep original FIT bytes or a raw representation when exact wire values are needed.
+
+## Profile lookups
 
 Applications that need profile lookups independently of parsing can use the
 exported manufacturer, Garmin product, sport, sub-sport, and course-point helpers:
@@ -53,6 +89,9 @@ getFitCoursePointId('rest_area') // 29
 These helpers read the same maintained profile used by the decoder. The product
 display helper is opt-in and does not synthesize or overwrite parsed
 `product_name` values.
+
+Unrecognized identifiers or names return `null`; a lookup does not guess the
+nearest product or sport. For example, `getFitSportId('not-a-sport')` returns `null`.
 
 Lookup-only consumers can import the same helpers from
 `fit-file-parser/profile` without loading the parser entry point.

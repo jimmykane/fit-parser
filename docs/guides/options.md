@@ -3,6 +3,17 @@ title: Configure parsing
 summary: Choose units, checksum policy, structural checks and raw retention.
 ---
 
+## Choose a validation policy
+
+| Options                          | Policy                                                    |
+| -------------------------------- | --------------------------------------------------------- |
+| Default                          | Best effort, including missing or invalid CRCs.           |
+| `{ force: false }`               | Validate CRCs while keeping existing field recovery.      |
+| `{ force: true, strict: true }`  | Require complete structure while tolerating invalid CRCs. |
+| `{ force: false, strict: true }` | Require complete structure and valid CRCs.                |
+
+## Options
+
 All options are optional.
 
 | Option                      | Values                                  | Default   | Behavior                                                                                                                      |
@@ -19,6 +30,12 @@ All options are optional.
 | `includeRawMessages`        | `true`, `false`, message-number array   | `false`   | Adds selected FIT messages with exact native/developer bytes and wire metadata at `raw_messages`.                             |
 | `includeUnmappedMessages`   | `true`, `false`                         | `false`   | Retains unmapped native fields and unresolved developer fields by number and exact bytes in `unmapped_messages`.              |
 | `rawMessagesOnly`           | `true`, `false`                         | `false`   | Omits decoded activity collections when a consumer needs only the opt-in raw-message representation.                          |
+
+Use the exact unit strings listed above. Unrecognized unit names currently leave
+values in their base units rather than raising a configuration error. Unit options
+apply to converted field families; see [decoded values and units](decoded-fields.md#units-and-missing-values).
+
+## Compatibility and recovery
 
 `force: true` does not make arbitrary bytes a valid FIT file. Inputs that are
 too short, have an invalid header size or signature, or declare data beyond the
@@ -42,17 +59,10 @@ reserved/unknown codes and incompatible field types are not reinterpreted.
 Previously affected files need to be parsed again to recover omitted fields.
 
 `strict: true` adds definition and record bounds checks so CRC bytes cannot be
-decoded as measurements. Full raw-message retention (`includeRawMessages`)
-continues to require complete records as it did before this option was added.
-
-Choose options according to the input you accept:
-
-| Options                          | Policy                                                    |
-| -------------------------------- | --------------------------------------------------------- |
-| Default                          | Best effort, including missing or invalid CRCs.           |
-| `{ force: false }`               | Validate CRCs while keeping existing field recovery.      |
-| `{ force: true, strict: true }`  | Require complete structure while tolerating invalid CRCs. |
-| `{ force: false, strict: true }` | Require complete structure and valid CRCs.                |
+decoded as measurements. Enabling `includeRawMessages`, including a message-number selection, requires
+complete definitions/records across the file and rejects reserved header bits.
+This also applies to unselected messages. `includeRawDeveloperFields` and
+`includeUnmappedMessages` keep the ordinary structural policy.
 
 See [Handle errors](errors.md) for diagnostics and [Read raw and developer data](raw-data.md)
 for the retention options.

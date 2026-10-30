@@ -8,16 +8,21 @@ It is profile-agnostic: callers provide profile message and field numbers,
 base types, sizes, and values in their raw FIT representation. Applying FIT
 scales and offsets is the caller's responsibility.
 
+For a profile field with a scale and offset, the decoded value is
+`raw / scale - offset`. Reverse that conversion before encoding. For example,
+record distance uses scale `100`: encode `100000` to represent 1,000 metres.
+The parser's display-unit options are separate from these wire values.
+
 ```javascript
 import { FitBaseType, FitEncoder } from 'fit-file-parser/encoder'
 
-const encoder = new FitEncoder()
+const encoder = new FitEncoder({ protocolVersion: 0x20 })
 encoder.writeMessage(0, [
   {
     number: 0,
     size: 1,
     baseType: FitBaseType.Enum,
-    value: 6,
+    value: 6, // file type: course
   },
   {
     number: 4,
@@ -30,10 +35,27 @@ encoder.writeMessage(0, [
 const fitBytes = encoder.close()
 ```
 
+`protocolVersion` is the raw header byte. Pass `0x20` for protocol major version 2.
+In version 6.2.6, the legacy default is `0x02`; that default is accepted by the
+semantic parser but rejected by `readFitMessages()`. Set the value explicitly
+when producing a file for the strict raw reader.
+
+Continuing the example, decode the generated container through the public API:
+
+```javascript
+import FitParser from 'fit-file-parser'
+
+const data = await new FitParser({ force: false, strict: true })
+  .parseAsync(Uint8Array.from(fitBytes).buffer)
+console.log(data.file_ids?.[0]?.type) // "course"
+```
+
 `writeMessage(globalMessageNumber, fields, localMessageNumber?)` accepts local
 message numbers from 0 through 15. Definitions are emitted automatically and
 reused until the shape assigned to that local number changes. `close()` returns
 a `Uint8Array`.
+The global number identifies the message type; the local number is a reusable
+definition slot. They are separate identifiers.
 
 The encoder also provides:
 
@@ -44,6 +66,11 @@ The encoder also provides:
 Scalar 64-bit values use `bigint`. Strings, numeric arrays, and other
 variable-length values use exact-size `Uint8Array` values. Invalid field
 definitions or numeric ranges throw before a partial message is written.
+
+Encoding and semantic decoding have different coverage. In particular, the encoder
+supports 64-bit integer values, while named semantic decoding does not currently
+decode those integer fields. Preserve raw bytes for such values. A decoded
+`ParsedFit` object is not an encoder input or a lossless copy of the source file.
 
 The encoder remains available from the package root; the `/encoder` entry
 point avoids loading the decoder and semantic profile.

@@ -62,9 +62,7 @@ import FitParser from 'fit-file-parser'
 
 const content = await readFile('./activity.fit')
 const parser = new FitParser({
-  mode: 'list',
-  speedUnit: 'km/h',
-  lengthUnit: 'km',
+  force: false,
 })
 
 const data = await parser.parseAsync(content)
@@ -75,6 +73,12 @@ console.log({
   records: data.records?.length ?? 0,
 })
 ```
+
+The example enables CRC checks; the library default `force: true` skips them.
+Default decoded values use metres and metres per second. See the
+[parsing guide](https://jimmykane.github.io/fit-parser/documents/Parse_FIT_files.html)
+for browser file input and [parsing options](https://jimmykane.github.io/fit-parser/documents/Configure_parsing.html)
+for validation policies.
 
 ### Concatenated FIT files
 
@@ -120,7 +124,7 @@ readFile('./activity.fit', (readError, content) => {
     return
   }
 
-  const parser = new FitParser()
+  const parser = new FitParser({ force: false })
   try {
     parser.parse(content, (parseError, data) => {
       if (parseError) {
@@ -161,8 +165,9 @@ try {
   await parser.parseAsync(content)
 }
 catch (error) {
-  if (error instanceof Error && typeof error.byteOffset === 'number') {
-    console.error(error.message, error.byteOffset, error.recordHeader)
+  console.error(error instanceof Error ? error.message : error)
+  if (error instanceof Error && 'byteOffset' in error && typeof error.byteOffset === 'number') {
+    console.error('FIT record offset:', error.byteOffset)
   }
 }
 ```
@@ -269,7 +274,7 @@ maintained profile or belong to an unknown global message in
 Normal known fields are not duplicated:
 
 ```javascript
-const data = await new FitParser({ includeUnmappedMessages: true })
+const data = await new FitParser({ force: false, includeUnmappedMessages: true })
   .parseAsync(content)
 
 for (const message of data.unmapped_messages ?? []) {
@@ -335,7 +340,8 @@ not invented in `fields`; its reconstructed native FIT timestamp is exposed as
 The parser does not apply profile enum formatting, scaling, invalid-sentinel
 filtering, or provider semantics to this opt-in representation. Its normal
 decoded output remains unchanged. Pass `true` to retain every message or a
-global-message-number array to keep memory use bounded. `raw_messages` and
+global-message-number array to limit which raw messages are retained. Selection
+does not impose an input-size limit or disable decoded-output retention. `raw_messages` and
 `raw_developer_fields` are independent opt-ins; enabling `raw_messages` does
 not add the flattened `raw_developer_fields` property. Set `rawMessagesOnly`
 when only this representation is needed; the parser still validates and walks
@@ -380,7 +386,7 @@ Public names use `snake_case` while preserving established alphanumeric tokens
 such as `n2`, `po2`, and `time128`. Unmapped fields remain available by number
 and exact bytes in `unmapped_messages` rather than receiving guessed names.
 
-Only values present in the FIT input are emitted. In particular,
+Named values follow the FIT messages, including compressed-timestamp reconstruction. In particular,
 `product_name` is not inferred from `manufacturer` and `product`, and record
 `elapsed_time` and `timer_time` are added only when `elapsedRecordField: true`
 is requested. Parsed FIT timestamps are `Date` objects, FIT `bool` fields keep
@@ -468,7 +474,7 @@ scales and offsets is the caller's responsibility.
 ```javascript
 import { FitBaseType, FitEncoder } from 'fit-file-parser/encoder'
 
-const encoder = new FitEncoder()
+const encoder = new FitEncoder({ protocolVersion: 0x20 })
 encoder.writeMessage(0, [
   {
     number: 0,
@@ -486,6 +492,11 @@ encoder.writeMessage(0, [
 
 const fitBytes = encoder.close()
 ```
+
+`protocolVersion` is a raw header byte. In 6.2.6 the legacy default is `0x02`,
+which the strict raw reader rejects; the example explicitly selects `0x20`.
+See [encoding guidance](https://jimmykane.github.io/fit-parser/documents/Encode_FIT_files.html)
+for round trips and encoder/decoder coverage.
 
 `writeMessage(globalMessageNumber, fields, localMessageNumber?)` accepts local
 message numbers from 0 through 15. Definitions are emitted automatically and
@@ -509,6 +520,11 @@ point avoids loading the decoder and semantic profile.
 
 The package includes TypeScript declarations and exports
 `FitParserOptions`, `FitEncoderField`, and `FitEncoderOptions`.
+
+File-specific root metadata can be absent at runtime, including some properties
+with legacy required annotations in `ParsedFit`. Check presence before reading
+those fields. The [decoded-field guide](https://jimmykane.github.io/fit-parser/documents/Understand_decoded_fields.html)
+explains units, optional metadata and JSON date restoration.
 
 ESM:
 

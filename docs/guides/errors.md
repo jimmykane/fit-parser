@@ -30,15 +30,25 @@ It is omitted when the attempted position is outside the FIT data section.
 other errors do not add that property.
 
 ```javascript
+import { readFile } from 'node:fs/promises'
+import FitParser from 'fit-file-parser'
+
+const parser = new FitParser({ force: false })
 try {
-  await parser.parseAsync(content)
+  const content = await readFile('./activity.fit')
+  const data = await parser.parseAsync(content)
+  console.log(data.records?.length ?? 0)
 }
 catch (error) {
-  if (error instanceof Error && typeof error.byteOffset === 'number') {
-    console.error(error.message, error.byteOffset, error.recordHeader)
+  console.error(error instanceof Error ? error.message : error)
+  if (error instanceof Error && 'byteOffset' in error && typeof error.byteOffset === 'number') {
+    console.error('FIT record offset:', error.byteOffset)
   }
 }
 ```
+
+This reports validation strings and other errors as well as decoder diagnostics.
+The property guard also works with TypeScript's `unknown` catch variables.
 
 The stopping position can follow the malformed record that caused the
 misalignment. These diagnostics do not identify the original cause or repair

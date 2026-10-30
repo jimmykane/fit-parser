@@ -80,19 +80,32 @@ export interface FitParserOptions {
   force?: boolean
   /** Requires complete files and records, and rejects trailing bytes. Defaults to false. */
   strict?: boolean
+  /** Unit for converted speed fields: `m/s`, `km/h`, or `mph`. Defaults to `m/s`. */
   speedUnit?: string
+  /** Unit for converted distance/altitude fields: `m`, `km`, or `mi`. Defaults to `m`. */
   lengthUnit?: string
+  /** Unit for converted temperatures: `celsius`, `°C`, `kelvin`, or `fahrenheit`. Defaults to `celsius`. */
   temperatureUnit?: string
+  /** Adds elapsed_time and timer_time in seconds to records. Defaults to false. */
   elapsedRecordField?: boolean
+  /** Unit for converted tank pressures: `bar`, `cbar`, or `psi`. Defaults to `bar`. */
   pressureUnit?: string
+  /** Root activity lists (`list`), nested activity collections (`cascade`), or both. Defaults to `list`. */
   mode?: 'list' | 'cascade' | 'both'
-  /** Retains exact developer-field bytes for all or selected global message numbers. */
+  /** Retains exact developer-field bytes for all or selected global message numbers. Defaults to false. */
   includeRawDeveloperFields?: boolean | readonly number[]
-  /** Retains exact native and developer fields for all or selected global message numbers. */
+  /**
+   * Retains exact native and developer fields for all or selected global message numbers.
+   * Enabling this also requires complete definitions/records throughout the file,
+   * including unselected messages. Defaults to false.
+   */
   includeRawMessages?: boolean | readonly number[]
-  /** Retains exact bytes for fields that have no semantic profile mapping. */
+  /** Retains exact bytes for fields that have no semantic profile mapping. Defaults to false. */
   includeUnmappedMessages?: boolean
-  /** Returns only parser metadata and retained raw messages instead of decoded activity collections. */
+  /**
+   * Returns parser metadata and enabled raw collections instead of decoded collections.
+   * Combine with a raw retention option to receive field bytes. Defaults to false.
+   */
   rawMessagesOnly?: boolean
 }
 
@@ -111,6 +124,7 @@ function hasFitHeader(blob: Uint8Array, start: number): boolean {
 export default class FitParser {
   private readonly options: FitParserOptions
 
+  /** Creates a parser with shared options for subsequent calls; decoder state is local to each file. */
   constructor(options: FitParserOptions = {}) {
     this.options = {
       force: options.force != null ? options.force : true,
@@ -128,6 +142,14 @@ export default class FitParser {
     }
   }
 
+  /**
+   * Decodes the first FIT file in a Buffer or ArrayBuffer. Buffer views respect
+   * their byte offset and length. Pass decompressed FIT bytes.
+   *
+   * @returns Profile-named fields and the collections selected by the options.
+   * @throws The promise rejects with a string for file-validation failures, or
+   * an Error for decoder failures. Use parseFilesAsync for concatenated inputs.
+   */
   parseAsync(content: ArrayBuffer | Buffer<ArrayBuffer>): Promise<ParsedFit> {
     return new Promise<ParsedFit>((resolve, reject) => {
       this.parse(content, (error, data) => {
@@ -146,6 +168,10 @@ export default class FitParser {
    * same force and strict policies as parseAsync; strict mode rejects trailing
    * bytes, while the default ignores a non-FIT suffix after parsed files.
    * Rejects with an Error when any file cannot be parsed.
+   *
+   * @returns One result per FIT file, in input order, without merging results.
+   * @throws The promise rejects with an Error if any file fails. Partial results
+   * are not returned. Record byteOffset diagnostics include preceding files.
    */
   async parseFilesAsync(content: ArrayBuffer | Buffer<ArrayBuffer>): Promise<ParsedFit[]> {
     const blob = content instanceof ArrayBuffer
@@ -218,6 +244,13 @@ export default class FitParser {
     return results
   }
 
+  /**
+   * Decodes the first FIT file with a synchronous callback. Success calls
+   * callback(undefined, data); file-validation failure calls callback(message, undefined).
+   *
+   * @throws Decoder errors are thrown synchronously rather than passed to the
+   * callback. Handle both channels, or use parseAsync for promise-based handling.
+   */
   parse(content: ArrayBuffer | Buffer<ArrayBuffer>, callback: FitParserCallback): void {
     this.parseFile(content, callback)
   }

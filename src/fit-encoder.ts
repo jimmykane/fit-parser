@@ -39,14 +39,23 @@ export enum FitBaseType {
 }
 
 export interface FitEncoderField {
+  /** Profile field-definition number (0–255). */
   number: number
+  /** Exact encoded field width in bytes (1–255), including string terminators. */
   size: number
+  /** Wire base-type byte. FitBaseType supplies the supported identifiers. */
   baseType: FitBaseType | number
+  /** Already-scaled raw value; use exact-width bytes for strings and arrays. */
   value: number | bigint | Uint8Array
 }
 
 export interface FitEncoderOptions {
+  /**
+   * Raw protocol-version header byte; pass 0x20 for FIT 2.0 framing.
+   * The legacy default is 0x02, which the strict raw reader rejects.
+   */
   protocolVersion?: number
+  /** Raw profile-version header value. Defaults to 21188 (21.188). */
   profileVersion?: number
 }
 
@@ -76,6 +85,17 @@ export class FitEncoder {
     )
   }
 
+  /**
+   * Writes a definition when needed, then one message using the supplied raw values.
+   * The encoder does not derive fields from decoded objects or apply profile scales.
+   *
+   * @param globalMessageNumber FIT global message number (0–65535).
+   * @param fields Native field definitions and already-scaled values.
+   * @param localMessageNumber Local definition slot (0–15); defaults to zero.
+   * @returns This encoder, for chaining.
+   * @throws TypeError or RangeError for invalid definitions or values, before
+   * appending a partial message.
+   */
   writeMessage(
     globalMessageNumber: number,
     fields: FitEncoderField[],
@@ -99,6 +119,7 @@ export class FitEncoder {
     return this
   }
 
+  /** Returns a new FIT byte array containing the current messages, header and CRCs. */
   close(): Uint8Array {
     if (this.data.length > UINT32_MAX) {
       throw new RangeError('FIT data section cannot exceed 4294967295 bytes')
@@ -128,6 +149,7 @@ export class FitEncoder {
     return new Uint8Array(output)
   }
 
+  /** Encodes UTF-8 with a terminating NUL byte. Use the returned byteLength as the field size. */
   static string(value: string): Uint8Array {
     const bytes = new TextEncoder().encode(value)
     if (bytes.length > UINT8_MAX - 1) {
@@ -140,6 +162,7 @@ export class FitEncoder {
     return output
   }
 
+  /** Converts a Date to whole native FIT seconds; rejects invalid dates and values outside the uint32 range. */
   static toFitTimestamp(date: Date): number {
     if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
       throw new TypeError('FIT timestamp requires a valid Date')
@@ -153,6 +176,7 @@ export class FitEncoder {
     )
   }
 
+  /** Computes the FIT CRC-16 for the supplied byte values. */
   static calculateCRC(bytes: ArrayLike<number>): number {
     let crc = 0
     for (let index = 0; index < bytes.length; index++) {

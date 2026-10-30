@@ -3,7 +3,11 @@ title: Parse FIT files
 summary: Read single or concatenated FIT inputs and choose the output shape.
 ---
 
-The Promise API is the simplest way to parse a file:
+## First parse in Node.js
+
+Install with `npm install fit-file-parser` in your project. Node examples require
+Node 20 or newer. Save the following as `parse.mjs`, place a FIT file at
+`./activity.fit`, and run `node parse.mjs`:
 
 ```javascript
 import { readFile } from 'node:fs/promises'
@@ -11,9 +15,7 @@ import FitParser from 'fit-file-parser'
 
 const content = await readFile('./activity.fit')
 const parser = new FitParser({
-  mode: 'list',
-  speedUnit: 'km/h',
-  lengthUnit: 'km',
+  force: false,
 })
 
 const data = await parser.parseAsync(content)
@@ -25,6 +27,11 @@ console.log({
 })
 ```
 
+This example checks CRCs while retaining the default compatible decoding policy.
+The library default is `force: true`, which skips CRC checks. Choose deliberately
+using [Configure parsing](options.md); `strict` is a separate structural policy.
+Default output uses root lists, metres and metres per second.
+
 ## Inputs
 
 The parser APIs accept:
@@ -32,9 +39,31 @@ The parser APIs accept:
 - Node.js `Buffer`
 - `ArrayBuffer`
 
+Supply decompressed FIT bytes. Unpack gzip or ZIP containers before parsing.
+Pass a Node `Buffer` directly so its byte offset and length are respected.
+For another typed-array view, an exact copy avoids passing unrelated backing-buffer bytes:
+
 ```javascript
-const parsed = await new FitParser().parseAsync(arrayBuffer)
+const arrayBuffer = Uint8Array.from(view).buffer
+const parsed = await new FitParser({ force: false }).parseAsync(arrayBuffer)
 ```
+
+## Browser file input
+
+Use your application's bundler to resolve the npm import. A browser `File`
+provides the `ArrayBuffer` expected by the parser:
+
+```typescript
+import FitParser from 'fit-file-parser'
+
+export async function parseFitUpload(file: File) {
+  const content = await file.arrayBuffer()
+  return new FitParser({ force: false }).parseAsync(content)
+}
+```
+
+The library uses the `buffer` package for string decoding. Browser builds must
+resolve its browser implementation rather than externalize it as a Node builtin.
 
 ## Concatenated FIT files
 
@@ -80,7 +109,7 @@ readFile('./activity.fit', (readError, content) => {
     return
   }
 
-  const parser = new FitParser()
+  const parser = new FitParser({ force: false })
   try {
     parser.parse(content, (parseError, data) => {
       if (parseError) {
@@ -127,6 +156,18 @@ const diveSummaries = data.messages?.dive_summary ?? []
 
 Existing root lists, cascade nesting, and last-message root properties remain
 unchanged.
+
+These collection descriptions apply to decoded output. `rawMessagesOnly: true`
+omits decoded collections, including `messages`; see [Read raw and developer data](raw-data.md).
+The `messages` object groups observations by message name; each array preserves
+that name's file order. It is not one interleaved chronological list.
+Use `raw_messages` or `readFitMessages()` when interleaved wire order matters.
+These collections are alternate views of observations: choose one view for
+aggregation instead of adding root lists, nested collections and `messages` together.
+
+Activity, course and monitoring files can all contain valid FIT messages.
+Inspect available `file_ids` metadata when your application needs a particular
+file type; a successful decode alone does not establish that the input is a workout.
 
 ## TypeScript and module formats
 
