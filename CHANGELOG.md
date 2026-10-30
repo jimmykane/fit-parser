@@ -1,5 +1,20 @@
 # Change Log
 
+## Unreleased
+
+### Fixed
+
+- Write the correct FIT 2.0 protocol header byte (`0x20`) by default in
+  `FitEncoder`, so default output passes the strict raw reader's header and CRC checks.
+
+### Compatibility
+
+- Newly encoded files have a corrected protocol header and header CRC. Message
+  definitions, values, profile version and explicitly supplied protocol bytes
+  are unchanged. Consumers comparing exact encoded bytes must update their expectations.
+- Input parsing and validation are unchanged. No historical activity reparse or
+  data migration is required; regenerate previously encoded exports to correct their headers.
+
 ## 6.2.6 - 2026-10-30
 
 ### Fixed

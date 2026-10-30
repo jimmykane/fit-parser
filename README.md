@@ -474,7 +474,7 @@ scales and offsets is the caller's responsibility.
 ```javascript
 import { FitBaseType, FitEncoder } from 'fit-file-parser/encoder'
 
-const encoder = new FitEncoder({ protocolVersion: 0x20 })
+const encoder = new FitEncoder()
 encoder.writeMessage(0, [
   {
     number: 0,
@@ -493,8 +493,8 @@ encoder.writeMessage(0, [
 const fitBytes = encoder.close()
 ```
 
-`protocolVersion` is a raw header byte. In 6.2.6 the legacy default is `0x02`,
-which the strict raw reader rejects; the example explicitly selects `0x20`.
+`protocolVersion` is a raw header byte and defaults to `0x20` (FIT 2.0).
+Versions through 6.2.6 defaulted to `0x02`, which the strict raw reader rejects.
 See [encoding guidance](https://jimmykane.github.io/fit-parser/documents/Encode_FIT_files.html)
 for round trips and encoder/decoder coverage.
 

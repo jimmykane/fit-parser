@@ -16,7 +16,7 @@ The parser's display-unit options are separate from these wire values.
 ```javascript
 import { FitBaseType, FitEncoder } from 'fit-file-parser/encoder'
 
-const encoder = new FitEncoder({ protocolVersion: 0x20 })
+const encoder = new FitEncoder()
 encoder.writeMessage(0, [
   {
     number: 0,
@@ -35,10 +35,16 @@ encoder.writeMessage(0, [
 const fitBytes = encoder.close()
 ```
 
-`protocolVersion` is the raw header byte. Pass `0x20` for protocol major version 2.
-In version 6.2.6, the legacy default is `0x02`; that default is accepted by the
-semantic parser but rejected by `readFitMessages()`. Set the value explicitly
-when producing a file for the strict raw reader.
+`protocolVersion` is the raw header byte, defaulting to `0x20` for FIT 2.0.
+The major version occupies the high four bits, as defined in
+[Garmin's FIT constants](https://github.com/garmin/fit-c-sdk/blob/main/example-sdk/fit.h),
+so version 2.0 is `0x20`, not `2`.
+Explicit values are written as supplied; for example, `0x10` writes a FIT 1.0 header.
+This option does not validate whether the supplied messages and base types are
+compatible with the selected protocol version.
+Versions through 6.2.6 defaulted to `0x02`, which the semantic parser accepts but
+`readFitMessages()` rejects. Regenerate exports to correct those old headers;
+existing files are not rewritten by upgrading the package.
 
 Continuing the example, decode the generated container through the public API:
 
