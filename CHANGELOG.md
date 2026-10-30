@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 6.2.7 - 2026-10-30
 
 ### Fixed
 
@@ -14,6 +14,11 @@
   are unchanged. Consumers comparing exact encoded bytes must update their expectations.
 - Input parsing and validation are unchanged. No historical activity reparse or
   data migration is required; regenerate previously encoded exports to correct their headers.
+
+### Documentation
+
+- Add the searchable API reference and consumer guides for parsing, options,
+  validation, raw fields, encoding and decoded values.
 
 ## 6.2.6 - 2026-10-30
 
