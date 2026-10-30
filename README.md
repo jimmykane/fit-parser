@@ -47,7 +47,7 @@ npm install fit-file-parser
 
 ## Profile coverage
 
-The static profile contains 127 messages, 1,462 fields, 200 types, and 4,406
+The static profile contains 127 messages, 1,462 fields, 200 types, and 4,426
 mapped values. Pass `includeUnmappedMessages: true` to retain fields outside
 that maintained surface by number and exact bytes; applications that need all
 bytes for recognized messages can also opt into `raw_messages`.
@@ -99,7 +99,7 @@ record payloads for guessed file boundaries.
 
 Use `{ force: false, strict: true }` to require complete files and records,
 valid checksums, and no trailing bytes. `{ force: true, strict: true }` enforces
-the same structure while tolerating known checksum failures. Any file that
+the same structure while skipping checksum validation. Any file that
 cannot be parsed rejects the whole call with an `Error`. Empty input, invalid
 headers, and declared data beyond the available input
 remain errors in every mode.

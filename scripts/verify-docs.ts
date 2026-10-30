@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
-import { access, readdir, readFile } from 'node:fs/promises'
+import { access, readdir, readFile, stat } from 'node:fs/promises'
 import process from 'node:process'
 
 const root = new URL('../', import.meta.url)
 const site = new URL('site/', root)
-const hosted = new URL('https://jimmykane.github.io/fit-parser/')
+const config = JSON.parse(await readFile(new URL('typedoc.json', root), 'utf8'))
+const hosted = new URL(config.hostedBaseUrl)
 const guides = [
   'Parse_FIT_files',
   'Configure_parsing',
@@ -50,18 +51,22 @@ async function checkDirectory(directory = ''): Promise<number> {
     }
     else if (page.endsWith('.html')) {
       count++
-      for (const match of (await html(page)).matchAll(/href="([^"]+)"/g)) {
-        const target = new URL(match[1].replaceAll('&amp;', '&'), new URL(page, hosted))
+      for (const match of (await html(page)).matchAll(/(?:href|src)\s*=\s*(["'])(.*?)\1/g)) {
+        const link = match[2].replaceAll('&amp;', '&')
+        const target = new URL(link, new URL(page, hosted))
         if (target.origin !== hosted.origin || !target.pathname.startsWith(hosted.pathname)) {
           continue
         }
-        const relative = target.pathname.slice(hosted.pathname.length) || 'index.html'
+        let relative = target.pathname.slice(hosted.pathname.length) || 'index.html'
         const local = new URL(relative, site)
-        assert(local.href.startsWith(site.href), `Link escapes site: ${match[1]}`)
-        await access(local)
+        assert(local.href.startsWith(site.href), `Link escapes site: ${link}`)
+        if ((await stat(local)).isDirectory()) {
+          relative += relative.endsWith('/') ? 'index.html' : '/index.html'
+          await access(new URL(relative, site))
+        }
         if (target.hash && relative.endsWith('.html')) {
           const id = decodeURIComponent(target.hash.slice(1))
-          assert((await html(relative)).includes(`id="${id}"`), `Broken anchor from ${page}: ${match[1]}`)
+          assert((await html(relative)).includes(`id="${id}"`), `Broken anchor from ${page}: ${link}`)
         }
       }
     }

@@ -38,8 +38,5 @@
     "rewrittenLink": true,
     "notDocumented": false,
     "unusedMergeModuleWith": true
-  },
-  "intentionallyNotExported": [
-    "FitParserCallback"
-  ]
+  }
 }

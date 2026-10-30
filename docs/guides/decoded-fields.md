@@ -3,10 +3,10 @@ title: Understand decoded fields
 summary: Interpret optional decoded values and use the maintained profile helpers.
 ---
 
-The static profile contains 127 messages, 1,462 fields, 200 types, and 4,406
-mapped values. Pass `includeUnmappedMessages: true` to retain fields outside
-that maintained surface by number and exact bytes; applications that need all
-bytes for recognized messages can also opt into `raw_messages`.
+The static profile supplies the message and field definitions used by the decoder
+and the generated field reference. Pass `includeUnmappedMessages: true` to retain
+fields outside that maintained surface by number and exact bytes; applications
+that need all bytes for recognized messages can also opt into `raw_messages`.
 
 Recognized message names, field names, enum values, wire types, scales,
 offsets, arrays, and units come from the community-maintained profile in

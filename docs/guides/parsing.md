@@ -59,7 +59,7 @@ record payloads for guessed file boundaries.
 
 Use `{ force: false, strict: true }` to require complete files and records,
 valid checksums, and no trailing bytes. `{ force: true, strict: true }` enforces
-the same structure while tolerating known checksum failures. Any file that
+the same structure while skipping checksum validation. Any file that
 cannot be parsed rejects the whole call with an `Error`. Empty input, invalid
 headers, and declared data beyond the available input
 remain errors in every mode.
