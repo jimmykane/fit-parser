@@ -1,5 +1,21 @@
 # Change Log
 
+## 6.2.8 - 2026-11-13
+
+### Security
+
+- Prevent prototype pollution through crafted FIT developer-field metadata by
+  requiring both descriptor-cache indexes to be integer bytes before access.
+  Reported by jhwarnock (GHSA-gjg8-qvmp-pvp2).
+
+### Compatibility
+
+- Invalid descriptor identities are not registered for semantic lookup; decoded
+  metadata and retained raw bytes remain available. Valid developer-field
+  decoding, public APIs and serialized-output fields are unchanged.
+- No historical activity reparse or stored-data migration is required. Consumers
+  accepting untrusted FIT files should upgrade to this release.
+
 ## 6.2.7 - 2026-10-30
 
 ### Fixed

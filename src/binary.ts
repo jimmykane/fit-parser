@@ -957,7 +957,15 @@ export function readRecord(
     fields.timer_time = fields.elapsed_time - pausedTime
   }
 
-  if (message.name === 'field_description') {
+  // Developer fields can overwrite native metadata. Preserve those values in
+  // the output, but never coerce invalid identities into descriptor cache keys.
+  if (
+    message.name === 'field_description'
+    && Number.isInteger(fields.developer_data_index)
+    && fields.developer_data_index >= 0 && fields.developer_data_index <= 0xFF
+    && Number.isInteger(fields.field_definition_number)
+    && fields.field_definition_number >= 0 && fields.field_definition_number <= 0xFF
+  ) {
     developerFields[fields.developer_data_index]
       = developerFields[fields.developer_data_index] || []
     developerFields[fields.developer_data_index][
