@@ -1,5 +1,20 @@
 # Change Log
 
+## Unreleased
+
+### Fixed
+
+- End profile string fields at their null terminator. Devices may leave other
+  bytes in the rest of a fixed-size string field: Garmin watches do in workout
+  step notes, so a note of "Easy" was decoded with the workout's name and other
+  bytes appended.
+
+### Compatibility
+
+- Profile strings with bytes after their terminator now decode without them.
+  Strings that fill their field, or are padded with nulls, are unchanged.
+- Developer-field strings are unchanged: they still keep every non-null byte.
+
 ## 6.2.8 - 2026-11-13
 
 ### Security
