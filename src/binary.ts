@@ -142,10 +142,17 @@ function readData(
   const rawType
     = fDef.rawType ?? getFitBaseType(fDef.baseTypeNo) ?? fDef.type
   if (rawType === 'string') {
+    // Profile strings end at the first null: devices may leave other bytes
+    // after it, e.g. Garmin in workout step notes. Developer strings keep
+    // every non-null byte, as before.
     const temp: number[] = []
     for (let i = 0; i < fDef.size; i++) {
-      if (blob[startIndex + i]) {
-        temp.push(blob[startIndex + i])
+      const byte = blob[startIndex + i]
+      if (byte) {
+        temp.push(byte)
+      }
+      else if (fDef.isDeveloperField !== true) {
+        break
       }
     }
     return Buffer.from(temp).toString('utf-8')
