@@ -54,4 +54,51 @@ describe('string fields', () => {
 
     expect(parsed.workout_step?.notes).toBe('')
   })
+
+  it('preserves multibyte UTF-8 text before the terminator', async () => {
+    const parsed = await parseWorkoutStep(paddedString('Éasy 🏃', 32, 'Leftover'))
+
+    expect(parsed.workout_step?.notes).toBe('Éasy 🏃')
+  })
+
+  it.each(['list', 'cascade', 'both'] as const)(
+    'preserves field boundaries and raw bytes in %s mode',
+    async (mode) => {
+      const notes = paddedString('Éasy 🏃', 32, 'Trailing bytes')
+      const followingNotes = FitEncoder.string('Following step')
+      const encoder = new FitEncoder()
+        .writeMessage(27, [
+          { number: 8, size: notes.length, baseType: FitBaseType.String, value: notes },
+          { number: 254, size: 2, baseType: FitBaseType.Uint16, value: 17 },
+        ])
+        .writeMessage(27, [
+          {
+            number: 8,
+            size: followingNotes.length,
+            baseType: FitBaseType.String,
+            value: followingNotes,
+          },
+          { number: 254, size: 2, baseType: FitBaseType.Uint16, value: 18 },
+        ])
+      const file = encoder.close()
+      const original = file.slice()
+      const options = { force: false, mode, includeRawMessages: true } as const
+      const parsed = await new FitParser(options).parseAsync(file.buffer)
+      const steps = parsed.messages?.workout_step
+
+      expect(steps).toHaveLength(2)
+      expect(steps?.[0]).toMatchObject({ notes: 'Éasy 🏃', message_index: { value: 17 } })
+      expect(steps?.[1]).toMatchObject({ notes: 'Following step', message_index: { value: 18 } })
+      expect(parsed.workout_step).toBe(steps?.[1])
+      expect(parsed.raw_messages?.[0]?.fields).toEqual([
+        { field_definition_number: 8, base_type: FitBaseType.String, raw_value: Array.from(notes) },
+        { field_definition_number: 254, base_type: FitBaseType.Uint16, raw_value: [17, 0] },
+      ])
+
+      const rawOnly = await new FitParser({ ...options, rawMessagesOnly: true }).parseAsync(file.buffer)
+      expect(rawOnly.raw_messages).toEqual(parsed.raw_messages)
+      expect(rawOnly).not.toHaveProperty('messages')
+      expect(file).toEqual(original)
+    },
+  )
 })
