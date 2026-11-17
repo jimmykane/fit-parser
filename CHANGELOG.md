@@ -90,8 +90,8 @@
 
 - Add 20 documented Garmin product mappings, including Forerunner 970 and
   570, newer fēnix and Approach variants, Enduro 4, Cirqa Smart Band and
-  TrainingPeaks Virtual. The maintained table now covers all 499 product
-  identifiers documented in profile 21.218.0.
+  TrainingPeaks Virtual. The maintained table now covers 499 product
+  identifiers.
 
 ### Compatibility
 

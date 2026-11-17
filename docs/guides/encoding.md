@@ -36,9 +36,7 @@ const fitBytes = encoder.close()
 ```
 
 `protocolVersion` is the raw header byte, defaulting to `0x20` for FIT 2.0.
-The major version occupies the high four bits, as defined in
-[Garmin's FIT constants](https://github.com/garmin/fit-c-sdk/blob/main/example-sdk/fit.h),
-so version 2.0 is `0x20`, not `2`.
+The major version occupies the high four bits, so version 2.0 is `0x20`, not `2`.
 Explicit values are written as supplied; for example, `0x10` writes a FIT 1.0 header.
 This option does not validate whether the supplied messages and base types are
 compatible with the selected protocol version.

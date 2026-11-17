@@ -8,7 +8,7 @@ describe('product profile', () => {
     expect(FIT.types.garmin_product).toEqual(PROFILE_TYPES.garmin_product)
   })
 
-  // Product identifiers verified against the documented Garmin profile 21.218.0.
+  // Regression coverage for the product identifiers added in 6.2.4.
   it.each([
     [4565, 'fr970'],
     [4570, 'fr570_large'],
