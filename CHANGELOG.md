@@ -1,5 +1,16 @@
 # Change Log
 
+## 6.2.10 - 2026-11-17
+
+### Documentation
+
+- Simplify profile-maintenance and encoding documentation and update the
+  product-lookup regression comments.
+
+### Compatibility
+
+- Parser behavior, profile mappings, public APIs, and generated types are unchanged.
+
 ## 6.2.9 - 2026-11-14
 
 ### Fixed
